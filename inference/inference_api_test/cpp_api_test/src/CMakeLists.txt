@@ -72,7 +72,7 @@ endif()
 set(EXTERNAL_LIB "-lrt -ldl -lpthread -lprotobuf")
 set(DEPS ${DEPS}
   ${MATH_LIB} ${MKLDNN_LIB} ${NGRAPH_LIB}
-  glog gflags gtest protobuf z xxhash
+  glog gflags protobuf z xxhash
   ${EXTERNAL_LIB})
 
 if(WITH_GPU)

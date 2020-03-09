@@ -1,6 +1,5 @@
 #!/bin/bash
 set -eo pipefail
-export PATH=/opt/compiler/gcc-4.8.2/bin:$PATH
 
 ROOT=`dirname "$0"`
 ROOT=`cd "$ROOT"; pwd`
@@ -31,4 +30,4 @@ cmake $CASE_ROOT/src \
 
 make -j4
 
-exit 0
+

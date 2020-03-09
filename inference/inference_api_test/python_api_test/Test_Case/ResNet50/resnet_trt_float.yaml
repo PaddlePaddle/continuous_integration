@@ -1,9 +1,5 @@
 # confguration for testing gpu inference with tensorrt
 model_name : "resnet50"
-<<<<<<< HEAD
-=======
-model_dir : "/model_data/image_classification/ResNet50_pretrained/"
->>>>>>> ae950b923aea76dfa324568f5e8d0a836404a9af
 model_filename : "__model__"
 params_filename : "__params__"
 use_gpu : true

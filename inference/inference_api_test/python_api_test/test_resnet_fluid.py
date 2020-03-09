@@ -21,7 +21,10 @@ import api_infer
 PYTHON_VERSION = platform.python_version()
 CASE_ROOT = "Test_Case/ResNet50"
 FILE_ROOT = "Data/resnet50/test_image.jpg"
+<<<<<<< HEAD
 MODEL_ROOT = "Data/resnet50/model"
+=======
+>>>>>>> ae950b923aea76dfa324568f5e8d0a836404a9af
 
 
 def parse_case(case_file):
@@ -37,7 +40,11 @@ def parse_case(case_file):
         config = yaml.load(yaml_config, Loader=yaml.FullLoader)
     else:
         config = yaml.load(yaml_config)
+<<<<<<< HEAD
     config['model_dir'] = MODEL_ROOT
+=======
+
+>>>>>>> ae950b923aea76dfa324568f5e8d0a836404a9af
     return config
 
 

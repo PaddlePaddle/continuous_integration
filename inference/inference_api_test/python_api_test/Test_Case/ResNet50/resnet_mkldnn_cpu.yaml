@@ -1,0 +1,7 @@
+# confguration for testing cpu inference with mkldnn
+model_dir : "/model_data/image_classification/ResNet50_pretrained/"
+model_filename : "__model__"
+params_filename : "__params__"
+use_gpu : false
+use_iroptim : true
+use_mkldnn : true

@@ -28,7 +28,7 @@ void SetConfig(AnalysisConfig *cfg) {
   if (FLAGS_use_gpu) {
       cfg->EnableUseGpu(100, 0);
   }
-  
+  cfg->SwitchIrOptim();
   cfg->SwitchSpecifyInputNames();
   if (!FLAGS_use_mkldnn) {
       cfg->EnableMemoryOptim();
@@ -111,7 +111,9 @@ void SetInput(std::vector<std::vector<PaddleTensor>> *inputs,
   for (auto i = 0; i < iterations; i++) {
     auto images = image_reader.NextBatch();
     auto labels = label_reader.NextBatch();
-    inputs->emplace_back(std::vector<PaddleTensor>{std::move(images)});
+    inputs->emplace_back(
+        //std::vector<PaddleTensor>{std::move(images), std::move(labels)});
+        std::vector<PaddleTensor>{std::move(images)});
   }
 }
 

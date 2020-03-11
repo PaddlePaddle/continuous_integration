@@ -20,8 +20,8 @@ import api_infer
 
 PYTHON_VERSION = platform.python_version()
 CASE_ROOT = "Test_Case/ResNet50"
-FILE_ROOT = "Data/resnet50/test_image.jpg"
-MODEL_ROOT = "Data/resnet50/model"
+FILE_ROOT = "Data/python/resnet50/test_image.jpg"
+MODEL_ROOT = "Data/python/resnet50/model"
 
 
 def parse_case(case_file):
@@ -33,10 +33,7 @@ def parse_case(case_file):
         config: a dict that contains configuration
     """
     yaml_config = open(case_file)
-    if PYTHON_VERSION.split('.')[0] == '3':
-        config = yaml.load(yaml_config, Loader=yaml.FullLoader)
-    else:
-        config = yaml.load(yaml_config)
+    config = yaml.load(yaml_config)
     config['model_dir'] = MODEL_ROOT
     return config
 
@@ -57,7 +54,7 @@ def retrive_data(model, data_style="fake"):
     elif data_style == "random":
         input_data = model.load_random_data(1, 3, 224, 224)
     elif data_style == "real":
-        input_data = model.load_real_data(1, 3, 224, 224, FILE_ROOT)
+        input_data = model.load_real_data(FILE_ROOT, 1, 3, 224, 224)
     else:
         raise ValueError(
             "parameter data_style should be 'fake', 'random' or 'real' ")
@@ -152,18 +149,3 @@ class TestResNet50API(object):
         for i in range(len(result1)):
             tools.assert_almost_equal(result1[i], result2[i], delta=precision)
 
-    def test_gpu_trt_result(self, precision=1e-4):
-        """
-        test gpu and gpu trt float infer data
-
-        Args:
-            precision
-        """
-        res1 = run_infer(self.model, CASE_ROOT + "/resnet_fluid_gpu.yaml",
-                         self.input_data)
-        res2 = run_infer(self.model, CASE_ROOT + "/resnet_trt_float.yaml",
-                         self.input_data)
-        result1 = res1[0].data.float_data()
-        result2 = res2[0].data.float_data()
-        for i in range(len(result1)):
-            tools.assert_almost_equal(result1[i], result2[i], delta=precision)

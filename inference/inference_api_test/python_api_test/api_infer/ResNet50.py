@@ -120,11 +120,12 @@ class ResNet50Model(InferAPI.InferApiTest):
         return input_value
 
     def load_real_data(self,
+                       img_path,
                        batch_size=1,
                        channels=3,
                        height=224,
-                       width=224,
-                       img_path):
+                       width=224)
+):
         """
         load real data
         Args:

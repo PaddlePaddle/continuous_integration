@@ -15,7 +15,7 @@ fi
 if [[ $# -eq 1 ]] ; then
     CUDA_LIB="/home/work/cuda-9.0/lib64"
 else
-    PADDLE_LIB_PATH=$1
+    CUDA_LIB=$2
 fi
 
 BUILD=$CASE_ROOT/build

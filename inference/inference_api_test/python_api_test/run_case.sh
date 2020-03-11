@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p ./Data
 cd ./Data
 wget https://sys-p0.bj.bcebos.com/inference/python-infer.tgz
 tar -xvf python-infer.tgz

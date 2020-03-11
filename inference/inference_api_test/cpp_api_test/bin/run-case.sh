@@ -10,7 +10,8 @@ export DATA_ROOT=$ROOT/Data
 export TOOLS_ROOT=$ROOT/tools
 export CASE_ROOT=$ROOT/bin
 
-cd DATA_ROOT
+mkdir -p $DATA_ROOT
+cd $DATA_ROOT
 wget https://sys-p0.bj.bcebos.com/inference/c++-infer.tgz --no-check-certificate
 tar -xvf c++-infer.tgz
 cd -

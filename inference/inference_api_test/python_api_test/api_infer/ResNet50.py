@@ -124,8 +124,7 @@ class ResNet50Model(InferAPI.InferApiTest):
                        batch_size=1,
                        channels=3,
                        height=224,
-                       width=224)
-):
+                       width=224):
         """
         load real data
         Args:

@@ -21,14 +21,6 @@ if [ $? -ne 0 ];then
     echo "install numpy failed!";exit;
 fi
 
-if [ -d "Paddle" ];then rm -rf Paddle
-fi
-#git clone https://github.com/PaddlePaddle/Paddle.git
-#cd Paddle
-
-#git checkout release/${paddle_version}
-if [ -d "build" ];then rm -rf build
-fi
 mkdir build
 cd build
 cmake .. -DPYTHON_EXECUTABLE:FILEPATH=/opt/_internal/cpython-3.7.0/bin/python3.7 \
@@ -47,7 +39,12 @@ if [ $? -ne 0 ];then
     echo -e "\033[33m cmake failed! \033[0m";exit;
     echo -e "\033[33m cmake successfully! \033[0m";
 fi
-make -j$(nproc)
+if [ `nproc` -gt 4 ];then
+  	parallel_number=$(expr `nproc` - 4)
+else 
+  	parallel_number=`nproc`
+fi
+make -j${parallel_number}
 if [ $? -ne 0 ];then
     echo -e "\033[33m make paddle failed! \033[0m";exit;
     echo -e "\033[33m make paddle successfully! \033[0m";

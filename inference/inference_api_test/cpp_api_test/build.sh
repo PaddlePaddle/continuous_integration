@@ -29,5 +29,3 @@ cmake $CASE_ROOT/src \
       -DCUDA_LIB=${CUDA_LIB}
 
 make -j4
-
-

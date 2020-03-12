@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+""" Cases for inference, ResNet50Model. """
 import random
 import numpy as np
 import paddle
@@ -29,9 +29,6 @@ class ResNet50Model(InferAPI.InferApiTest):
     """
 
     def __init__(self):
-        """
-        init
-        """
         super(ResNet50Model, self).__init__("resnet50")
         pass
 

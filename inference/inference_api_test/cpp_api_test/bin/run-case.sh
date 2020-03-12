@@ -15,6 +15,4 @@ cd $DATA_ROOT
 wget https://sys-p0.bj.bcebos.com/inference/c++-infer.tgz --no-check-certificate
 tar -xvf c++-infer.tgz
 cd -
-
 bash $CASE_ROOT/resnet.sh
-

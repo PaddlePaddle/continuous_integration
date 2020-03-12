@@ -45,8 +45,6 @@ DEFINE_bool(test_all_data, false, "Test the all dataset in data file.");
 DEFINE_int32(num_threads, 1, "Running the inference program in multi-threads.");
 DEFINE_bool(use_analysis, true,
             "Running the inference program in analysis mode.");
-// DEFINE_bool(record_benchmark, false,
-//             "Record benchmark after profiling the model");
 DEFINE_double(accuracy, 1e-3, "Result Accuracy.");
 DEFINE_double(quantized_accuracy, 1e-2, "Result Quantized Accuracy.");
 DEFINE_bool(zero_copy, false, "Use ZeroCopy to speedup Feed/Fetch.");

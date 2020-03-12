@@ -12,10 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Cases for inference, ResNet50Model.
-
-"""
+""" Cases for inference, ResNet50Model. """
 import random
 import numpy as np
 import paddle

@@ -111,9 +111,6 @@ class TestResNet50API(object):
     """
 
     def __init__(self):
-        """
-        init
-        """
         self.model = api_infer.ResNet50Model()
         self.input_data = retrive_data(self.model, data_style="real")
 
@@ -122,7 +119,9 @@ class TestResNet50API(object):
         test cpu and gpu infer data
 
         Args:
-            precision
+            precision (float): The precision for checking. 
+
+
         """
         res1 = run_infer(self.model, CASE_ROOT + "/resnet_fluid_gpu.yaml",
                          self.input_data)
@@ -138,7 +137,7 @@ class TestResNet50API(object):
         test cpu and cpu mkldnn infer data
 
         Args:
-            precision
+            precision (float): The precision for checking. 
         """
         res1 = run_infer(self.model, CASE_ROOT + "/resnet_fluid_cpu.yaml",
                          self.input_data)

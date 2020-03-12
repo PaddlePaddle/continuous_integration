@@ -29,9 +29,6 @@ class ResNet50Model(InferAPI.InferApiTest):
     """
 
     def __init__(self):
-        """
-        init
-        """
         super(ResNet50Model, self).__init__("resnet50")
         pass
 
@@ -96,8 +93,7 @@ class ResNet50Model(InferAPI.InferApiTest):
         input_value = [input_tensor]
         return input_value
 
-    def load_random_data(self, batch_size=1, channels=3, height=224,
-                         width=224):
+    def load_random_data(self, batch_size=1, channels=3, height=224, width=224):
         """
         load random data
         Args:

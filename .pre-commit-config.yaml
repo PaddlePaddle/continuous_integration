@@ -18,6 +18,7 @@ repos:
     -   id: detect-private-key
         files: (?!.*third_party)^.*$ | (?!.*book)^.*$
     -   id: end-of-file-fixer
+-   repo: local
     hooks:
     -   id: cpplint-cpp-source
         name: cpplint

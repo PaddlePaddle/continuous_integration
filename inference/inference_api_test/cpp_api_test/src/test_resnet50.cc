@@ -33,10 +33,6 @@ void SetConfig(AnalysisConfig *cfg) {
   if (!FLAGS_use_mkldnn) {
       cfg->EnableMemoryOptim();
   }
-  /*cfg->pass_builder()->DeletePass("conv_bn_fuse_pass");
-  cfg->pass_builder()->DeletePass("fc_fuse_pass");*/
-  /*cfg->pass_builder()->TurnOnDebug();*/
-
   if (!FLAGS_use_gpu) {
       if (FLAGS_use_mkldnn) {
           cfg->SetCpuMathLibraryNumThreads(FLAGS_paddle_num_threads);
@@ -175,7 +171,6 @@ int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     ::google::ParseCommandLineFlags(&argc, &argv, true);
     return RUN_ALL_TESTS(); 
-    //paddle::test::compare();
 }
 
 

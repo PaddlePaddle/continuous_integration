@@ -28,7 +28,7 @@ import time
 
 class TestDistInfer():
     def __init__(self):
-        self.single_data = [0.6168917417526245]
+        self.single_data = [0.0069892979227006435]
 
     def check_data(self, loss, delta=None, expect=None):
         """

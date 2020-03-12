@@ -110,12 +110,9 @@ def run_infer(model_path):
     """run infer"""
     place = fluid.CPUPlace()
     train_generator = py_reader.CriteoDataset(1000001)
-    file_list = [
-        str('./data/ctr_data/test_data') + "/%s" % x
-        for x in os.listdir('./data/ctr_data/test_data')
-    ]
+    file_list = [str('data/dist_data/ctr_data/part-100')] * 2
     test_reader = paddle.batch(train_generator.test(file_list),
-                               batch_size=250)
+                               batch_size=4)
     startup_program = fluid.framework.Program()
     test_program = fluid.framework.Program()
 

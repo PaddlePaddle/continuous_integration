@@ -9,4 +9,3 @@ if [ $? -ne 0 ];then
 fi
 
 sh bin/run-case.sh
-

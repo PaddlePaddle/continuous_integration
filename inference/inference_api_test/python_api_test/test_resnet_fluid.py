@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """ Cases for inference, ResNet50Model. """
- 
+
 import math
 import yaml
 import platform
@@ -148,4 +148,3 @@ class TestResNet50API(object):
         result2 = res2[0].data.float_data()
         for i in range(len(result1)):
             tools.assert_almost_equal(result1[i], result2[i], delta=precision)
-

@@ -97,4 +97,3 @@ add_executable("test_resnet50" test_resnet50.cc)
 target_link_libraries("test_resnet50" ${DEPS})
 
 add_dependencies("test_resnet50" thirdparty_gtest)
-

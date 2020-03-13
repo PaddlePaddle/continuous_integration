@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""tools file."""
 from nose import tools
 import numpy as np
 import math
@@ -19,11 +19,14 @@ import math
 
 def compare(input, expect, delta=1e-8):
     """
-    比较函数
-    :param input: 输入值
-    :param expect: 输出值
-    :param delta: 误差值
-    :return:
+    compare function
+    Args:
+        input(array|float): input data
+        expect(array|float): expect data
+        delta(float): delta
+
+    Returns: Boolean
+
     """
     if type(input) == np.ndarray:
         expect = np.array(expect)
@@ -56,10 +59,11 @@ def compare(input, expect, delta=1e-8):
 
 def sigmoid(x):
     """
-    sigmoid
-    :param x: (float)
-    :return:
+    sigmoid function
+    Args:
+        x: number
+
+    Returns: sigmoid(number)
+
     """
     return 1 / (1 + math.exp(-x))
-
-

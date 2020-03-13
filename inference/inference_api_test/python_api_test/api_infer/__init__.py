@@ -12,14 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-def flip(im):
-    """
-    Return the flipped image.
-    Flip an image along the horizontal direction.
-    im: input image, (K x H x W) ndarrays
-    """
-    if len(im.shape) == 3:
-        return im[:, :, ::-1]
-    else:
-        return im[:, ::-1]
+from .InferAPI import InferApiTest
+from .ResNet50 import ResNet50Model

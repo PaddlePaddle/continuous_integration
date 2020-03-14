@@ -31,10 +31,6 @@ link_directories("${PADDLE_LIB}/paddle/lib")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -std=c++11")
 message("flags" ${CMAKE_CXX_FLAGS})
 
-if(WITH_GPU)
-  set(CUDA_LIB "/usr/local/cuda/lib64/" CACHE STRING "CUDA Library")
-endif()
-
 if (USE_TENSORRT AND WITH_GPU)
   include_directories("${TENSORRT_INCLUDE_DIR}")
   link_directories("${TENSORRT_LIB_DIR}")
@@ -80,20 +76,18 @@ if(WITH_GPU)
       set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer${CMAKE_STATIC_LIBRARY_SUFFIX})
       set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer_plugin${CMAKE_STATIC_LIBRARY_SUFFIX})
     endif()
-    set(DEPS ${DEPS} ${CUDA_LIB}/libcudart${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(DEPS ${DEPS} $ENV{CUDA_LIB})
 endif()
 
 include(ExternalProject)
 include(external-cmake/gtest-cpp.cmake)
+add_executable("test_resnet50" test_resnet50.cc)
+target_link_libraries("test_resnet50" ${DEPS})
+add_dependencies("test_resnet50" thirdparty_gtest)
+
 # link gtest
 set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib64")
 set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")
 target_include_directories("test_resnet50" PRIVATE  ${gtest_src_dir})
 target_include_directories("test_resnet50" PRIVATE ${gtest_lib_dir})
 target_link_libraries("test_resnet50" ${gtest_lib_dir}/libgtest.a)
-
-
-add_executable("test_resnet50" test_resnet50.cc)
-target_link_libraries("test_resnet50" ${DEPS})
-
-add_dependencies("test_resnet50" thirdparty_gtest)

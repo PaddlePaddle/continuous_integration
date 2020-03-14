@@ -12,7 +12,7 @@ else
     PADDLE_LIB_PATH=$1
 fi
 
-export CUDA_LIB=`find / -name libcudart.so`
+export CUDA_LIB=`find /usr/local -name libcudart.so`
 
 BUILD=$CASE_ROOT/build
 mkdir -p $BUILD

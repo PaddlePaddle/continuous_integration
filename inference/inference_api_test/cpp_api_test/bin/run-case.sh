@@ -12,7 +12,7 @@ export CASE_ROOT=$ROOT/bin
 
 mkdir -p $DATA_ROOT
 cd $DATA_ROOT
-wget https://sys-p0.bj.bcebos.com/inference/c++-infer.tgz --no-check-certificate
+wget --no-proxy https://sys-p0.bj.bcebos.com/inference/c++-infer.tgz --no-check-certificate
 tar -xf c++-infer.tgz
 cd -
 bash $CASE_ROOT/resnet.sh

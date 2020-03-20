@@ -16,7 +16,7 @@
 #include <iostream>
 
 #include "gtest/gtest.h"
-#include "test_helper.h"
+#include "test_helper.h" //NOLINT
 
 DEFINE_bool(disable_mkldnn_fc, false, "Disable usage of MKL-DNN's FC op");
 
@@ -24,7 +24,8 @@ namespace paddle {
 namespace test {
 
 void SetConfig(AnalysisConfig *cfg) {
-  cfg->SetModel(FLAGS_infer_model + "/__model__", FLAGS_infer_model + "/__params__");
+  cfg->SetModel(FLAGS_infer_model + "/__model__",
+          FLAGS_infer_model + "/__params__");
   if (FLAGS_use_gpu) {
       cfg->EnableUseGpu(100, 0);
   }
@@ -111,27 +112,6 @@ void SetInput(std::vector<std::vector<PaddleTensor>> *inputs,
   }
 }
 
-// Easy for profiling independently.
-void profile(bool use_mkldnn = false) {
-  AnalysisConfig cfg;
-  SetConfig(&cfg);
-
-  if (use_mkldnn) {
-    cfg.EnableMKLDNN();
-    if (!FLAGS_disable_mkldnn_fc)
-      cfg.pass_builder()->AppendPass("fc_mkldnn_pass");
-  }
-  std::vector<std::vector<PaddleTensor>> outputs;
-
-  std::vector<std::vector<PaddleTensor>> input_slots_all;
-  SetInput(&input_slots_all);
-  TestPrediction(reinterpret_cast<const PaddlePredictor::Config *>(&cfg),
-                 input_slots_all, &outputs, FLAGS_num_threads);
-}
-
-TEST(test_resnet50, profile) { profile(); }
-TEST(test_resnet50, profile_mkldnn) { profile(true /* use_mkldnn */); }
-
 // Compare result of NativeConfig and AnalysisConfig
 void compare(bool use_mkldnn = false) {
   AnalysisConfig cfg;
@@ -161,16 +141,29 @@ void CompareOptimAndOrig(const PaddlePredictor::Config *orig_config,
 
 TEST(test_resnet50, compare) { compare(); }
 
-TEST(test_resnet50, compare_mkldnn) { compare(true /* use_mkldnn */); }
+TEST(test_resnet50, compare_mkldnn) { compare(true); }
+
+TEST(test_resnet50, compare_use_gpu) {
+  AnalysisConfig cfg;
+  cfg.EnableUseGpu(100, 0);
+  cfg.SwitchIrOptim();
+  cfg.SwitchSpecifyInputNames();
+  cfg.EnableMemoryOptim();
+  std::vector<std::vector<PaddleTensor>> input_slots_all;
+  SetInput(&input_slots_all);
+  CompareNativeAndAnalysis(
+      reinterpret_cast<const PaddlePredictor::Config *>(&cfg), input_slots_all);
+}
+
 }  // namespace test
 }  // namespace paddle
 
 
 
-int main(int argc, char** argv) { 
+int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     ::google::ParseCommandLineFlags(&argc, &argv, true);
-    return RUN_ALL_TESTS(); 
+    return RUN_ALL_TESTS();
 }
 
 

@@ -12,7 +12,12 @@ export CASE_ROOT=$ROOT/bin
 
 mkdir -p $DATA_ROOT
 cd $DATA_ROOT
-wget --no-proxy https://sys-p0.bj.bcebos.com/inference/c++-infer.tgz --no-check-certificate
-tar -xf c++-infer.tgz
+
+if [ ! -f c++/resnet50/model/__model__ ]; then
+    echo "==== Download data and models ===="
+    wget --no-proxy https://sys-p0.bj.bcebos.com/inference/c++-infer.tgz --no-check-certificate
+    tar -zxf c++-infer.tgz
+fi
+
 cd -
 bash $CASE_ROOT/resnet.sh

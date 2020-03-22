@@ -145,6 +145,8 @@ TEST(test_resnet50, compare_mkldnn) { compare(true); }
 
 TEST(test_resnet50, compare_use_gpu) {
   AnalysisConfig cfg;
+  cfg.SetModel(FLAGS_infer_model + "/__model__",
+          FLAGS_infer_model + "/__params__");
   cfg.EnableUseGpu(100, 0);
   cfg.SwitchIrOptim();
   cfg.SwitchSpecifyInputNames();

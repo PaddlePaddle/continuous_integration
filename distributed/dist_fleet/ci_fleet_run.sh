@@ -22,7 +22,6 @@ function run(){
                test_dist_fleet_vgg.py"
     elif [[ ${DEVICE_TYPE} == 'CPU' && ${PSLIB} == 'OFF' ]]; then
         cases="test_dist_fleet_ctr.py \
-               test_dist_fleet_deepFM.py \
                test_dist_fleet_save_persistables.py \
                test_dist_fleet_infer.py"
     elif [[ ${DEVICE_TYPE} == 'CPU' && ${PSLIB} == 'ON' ]]; then

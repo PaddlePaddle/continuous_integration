@@ -34,18 +34,18 @@ from paddle.fluid.transpiler.ps_dispatcher import HashName
 from paddle.fluid.incubate.fleet.parameter_server.distribute_transpiler.distributed_strategy import StrategyFactory
 from paddle.fluid.incubate.fleet.parameter_server.distribute_transpiler.distributed_strategy import TrainerRuntimeConfig
 
-
-
 RUN_STEP = 5
 LEARNING_RATE = 0.01
 
 
 class FleetDistRunnerBase(object):
-    """fleet"""
+    """dist fleet case runner base."""
+
     def __init__(self, batch_num=5, batch_size=32):
         self.batch_num = batch_num
         self.batch_size = batch_size
-        self.async_mode = False # 用于1.6的 BuildStrategy构建，后续可随paddle优化改进或者删掉
+        self.async_mode = False  # 用于1.6的 BuildStrategy构建，后续可随paddle优化改进或者删掉
+
     def _set_strategy(self, args):
         """配置运行的distributed_strategy, 
            build_strategy 配置在do_training中"""
@@ -75,8 +75,10 @@ class FleetDistRunnerBase(object):
             # else:
             #    self.strategy.split_method = RoundRobin
             self.strategy.wait_port = args.run_params['wait_port']
-            self.strategy.runtime_split_send_recv = args.run_params['runtime_split_send_recv']
-            self.strategy.use_hierarchical_allreduce = args.run_params['use_hierarchical_allreduce']
+            self.strategy.runtime_split_send_recv = args.run_params[
+                'runtime_split_send_recv']
+            self.strategy.use_hierarchical_allreduce = args.run_params[
+                'use_hierarchical_allreduce']
             self.strategy.geo_sgd_need_push_nums = args.run_params['push_nums']
         else:
             self.strategy = StrategyFactory.create_sync_strategy()
@@ -105,13 +107,20 @@ class FleetDistRunnerBase(object):
             # else:
             #    program_config.split_method = RoundRobin
             program_config.wait_port = args.run_params['wait_port']
-            program_config.runtime_split_send_recv = args.run_params['runtime_split_send_recv']
-            program_config.use_hierarchical_allreduce = args.run_params['use_hierarchical_allreduce']
-            program_config.geo_sgd_need_push_nums = args.run_params['push_nums']
+            program_config.runtime_split_send_recv = args.run_params[
+                'runtime_split_send_recv']
+            program_config.use_hierarchical_allreduce = args.run_params[
+                'use_hierarchical_allreduce']
+            program_config.geo_sgd_need_push_nums = args.run_params[
+                'push_nums']
             # self.strategy.set_trainer_runtime_config(trainer_runtime_config) 
 
     def run_pserver(self, args):
-        """run pserver"""
+        """
+        run pserver process, you don't need to implement it.
+        Args:
+            args (ArgumentParser): run args to config dist fleet.
+        """
         from paddle.fluid.incubate.fleet.parameter_server.distribute_transpiler import fleet
         if args.role.upper() != "PSERVER":
             raise ValueError("args role must be PSERVER")
@@ -130,7 +139,11 @@ class FleetDistRunnerBase(object):
         fleet.run_server()
 
     def run_trainer(self, args):
-        """run trainer"""
+        """
+        run trainer process, you don't need to implement it.
+        Args:
+            args (ArgumentParser): run args to config dist fleet.
+        """
         from paddle.fluid.incubate.fleet.parameter_server.distribute_transpiler import fleet
         if args.role.upper() != "TRAINER":
             raise ValueError("args role must be TRAINER")
@@ -153,7 +166,11 @@ class FleetDistRunnerBase(object):
         print(losses)
 
     def run_nccl_trainer(self, args):
-        """run fleet api"""
+        """
+        run nccl trainer, used for gpu case.
+        Args:
+            args (ArgumentParser): run args to config dist fleet.
+        """
         assert args.update_method == "nccl"
         from paddle.fluid.incubate.fleet.collective import fleet
         exec_strategy = fluid.ExecutionStrategy()
@@ -167,40 +184,53 @@ class FleetDistRunnerBase(object):
         role = role_maker.PaddleCloudRoleMaker(is_collective=True)
         fleet.init(role)
         avg_cost = self.net(args)
-        losses = self.do_training(fleet,args)
+        losses = self.do_training(fleet, args)
         losses = "" if not losses else losses
         print(losses)
 
     def net(self, args=None):
-        """net """
+        """
+        construct model's net. Each model has its own unique network.
+        Args:
+            args (ArgumentParser): run args to config dist fleet.
+        """
         raise NotImplementedError(
             "get_model should be implemented by child classes.")
 
     def do_training(self, fleet, args=None):
-        """training from pyreader"""
+        """
+        training from pyreader.
+        Args:
+            fleet:
+            args (ArgumentParser): run args to config dist fleet.
+        """
         raise NotImplementedError(
             "do_training should be implemented by child classes.")
 
     def do_training_from_dataset(self, fleet, args=None):
-        """training from dataset """
+        """
+        training from dataset.
+        Args:
+            fleet:
+            args (ArgumentParser): run args to config dist fleet.
+        """
         raise NotImplementedError(
             "do_training should be implemented by child classes.")
 
     def py_reader(self):
-        """py reader"""
+        """use py_reader."""
         raise NotImplementedError(
             "py_reader should be implemented by child classes.")
 
     def dataset_reader(self):
-        """dataset reader"""
+        """use dataset_reader."""
         raise NotImplementedError(
             "dataset_reader should be implemented by child classes.")
 
 
 class TestFleetBase(object):
-    """
-    TestDistRun
-    """
+    """TestDistRun."""
+
     def __init__(self, pservers=2, trainers=2):
         self.trainers = trainers
         self.pservers = pservers
@@ -214,6 +244,11 @@ class TestFleetBase(object):
     def start_pserver(self, model_file, check_error_log):
         """
         start_pserver
+        Args:
+            model_file (str):
+            check_error_log (bool): 
+        Returns:
+            ([], [])
         """
         ps_endpoint_list = self.ps_endpoints.split(",")
         ps_pipe_list = []
@@ -231,9 +266,13 @@ class TestFleetBase(object):
                      run_params)
             ps_pipe = subprocess.PIPE
             if check_error_log:
-               # print("ps_cmd:", ps_cmd)
-                ps_pipe = open(os.path.join(os.getenv("LOG_PATH", '/tmp'), "ps%s_err.log" % i), "wb")
-            ps_proc = subprocess.Popen(ps_cmd.split(" "), stdout=subprocess.PIPE, stderr=ps_pipe)
+                # print("ps_cmd:", ps_cmd)
+                ps_pipe = open(
+                    os.path.join(
+                        os.getenv("LOG_PATH", '/tmp'), "ps%s_err.log" % i),
+                    "wb")
+            ps_proc = subprocess.Popen(
+                ps_cmd.split(" "), stdout=subprocess.PIPE, stderr=ps_pipe)
             ps_pipe_list.append(ps_pipe)
             ps_proc_list.append(ps_proc)
         return ps_proc_list, ps_pipe_list
@@ -253,11 +292,22 @@ class TestFleetBase(object):
                                  (e, retry_times))
                 retry_times -= 1
 
-    def get_result(self, model_file, check_error_log=True, update_method="pserver",
-                   gpu_num=0, models_change_env=None):
+    def get_result(self,
+                   model_file,
+                   check_error_log=True,
+                   update_method="pserver",
+                   gpu_num=0,
+                   models_change_env=None):
         """
-        get_result
-        update_method:pserver or nccl
+        get result.
+        Args:
+            model_file (str):
+            check_error_log (bool):
+            update_method (str):
+            gpu_num (int):
+            models_change_env (dict):
+        Returns:
+            list
         """
         required_envs = {
             "PATH": os.getenv("PATH"),
@@ -297,21 +347,36 @@ class TestFleetBase(object):
                     devices_define += "%d," % (i * gpu_num + j)
                 flags_params = json.loads(run_params)
                 if flags_params["push_nums"] == 50:
-                    envs = {"FLAGS_communicator_max_merge_var_num": str(flags_params['F_max_merge']),
-                            "FLAGS_communicator_fake_rpc": str(flags_params['F_fake_rpc']),
-                            "FLAGS_communicator_independent_recv_thread": str(flags_params['F_indept_recv']),
-                            "FLAGS_communicator_merge_sparse_grad": str(flags_params['F_mer_sparse']),
-                            "FLAGS_communicator_min_send_grad_num_before_recv": str(flags_params['F_min_send_grad']),
-                            "FLAGS_communicator_send_queue_size": str(flags_params['F_queue_size']),
-                            "FLAGS_communicator_send_wait_times": str(flags_params['F_s_wait_t']),
-                            "FLAGS_communicator_thread_pool_size": str(flags_params['F_t_pool_size']),
-                            "FLAGS_dist_threadpool_size": str(flags_params['F_thread_pool']),
-                            "FLAGS_rpc_deadline": str(flags_params['F_rpc_deadline']),
-                            "FLAGS_rpc_disable_reuse_port": str(flags_params['F_dis_reuse']),
-                            "FLAGS_rpc_get_thread_num": str(flags_params['F_g_thr_num']),
-                            "FLAGS_rpc_send_thread_num": str(flags_params['F_s_thr_num']),
-                            "FLAGS_rpc_server_profile_path": flags_params['F_profile_path'],
-                            }
+                    envs = {
+                        "FLAGS_communicator_max_merge_var_num":
+                        str(flags_params['F_max_merge']),
+                        "FLAGS_communicator_fake_rpc":
+                        str(flags_params['F_fake_rpc']),
+                        "FLAGS_communicator_independent_recv_thread":
+                        str(flags_params['F_indept_recv']),
+                        "FLAGS_communicator_merge_sparse_grad":
+                        str(flags_params['F_mer_sparse']),
+                        "FLAGS_communicator_min_send_grad_num_before_recv":
+                        str(flags_params['F_min_send_grad']),
+                        "FLAGS_communicator_send_queue_size":
+                        str(flags_params['F_queue_size']),
+                        "FLAGS_communicator_send_wait_times":
+                        str(flags_params['F_s_wait_t']),
+                        "FLAGS_communicator_thread_pool_size":
+                        str(flags_params['F_t_pool_size']),
+                        "FLAGS_dist_threadpool_size":
+                        str(flags_params['F_thread_pool']),
+                        "FLAGS_rpc_deadline":
+                        str(flags_params['F_rpc_deadline']),
+                        "FLAGS_rpc_disable_reuse_port":
+                        str(flags_params['F_dis_reuse']),
+                        "FLAGS_rpc_get_thread_num":
+                        str(flags_params['F_g_thr_num']),
+                        "FLAGS_rpc_send_thread_num":
+                        str(flags_params['F_s_thr_num']),
+                        "FLAGS_rpc_server_profile_path":
+                        flags_params['F_profile_path'],
+                    }
                 else:
                     envs = {}
                 envs.update(required_envs)
@@ -323,13 +388,15 @@ class TestFleetBase(object):
                 for i in range(gpu_num):
                     if all_nodes_devices_endpoints:
                         all_nodes_devices_endpoints += ","
-                    all_nodes_devices_endpoints += "127.0.0.1:617%d" % (trainer_id * gpu_num + i)
+                    all_nodes_devices_endpoints += "127.0.0.1:617%d" % (
+                        trainer_id * gpu_num + i)
             for real_id in range(nranks):
                 envs = {}
                 envs.update(required_envs)
                 envs.update({
                     "PADDLE_TRAINER_ID": "%d" % real_id,
-                    "PADDLE_CURRENT_ENDPOINT": "%s:617%d" % ("127.0.0.1", real_id),
+                    "PADDLE_CURRENT_ENDPOINT":
+                    "%s:617%d" % ("127.0.0.1", real_id),
                     "PADDLE_TRAINERS_NUM": "%d" % nranks,
                     "PADDLE_TRAINER_ENDPOINTS": all_nodes_devices_endpoints,
                     "FLAGS_selected_gpus": "%d" % real_id,
@@ -348,20 +415,25 @@ class TestFleetBase(object):
                           real_id,
                           nranks,
                           run_params)
-                nccl_devs = {"NCCL_SOCKET_IFNAME": "eth0",
-                             "NCCL_P2P_DISABLE": "1",
-                             "NCCL_IB_DISABLE": "0",
-                             "NCCL_IB_CUDA_SUPPORT": "1"}
+                nccl_devs = {
+                    "NCCL_SOCKET_IFNAME": "eth0",
+                    "NCCL_P2P_DISABLE": "1",
+                    "NCCL_IB_DISABLE": "0",
+                    "NCCL_IB_CUDA_SUPPORT": "1"
+                }
                 envs.update(nccl_devs)
                 tr_cmd_lists.append({"cmd": tr_cmd, "envs": envs})
         for real_id, tr_cmd_dict in enumerate(tr_cmd_lists):
             tr_cmd = tr_cmd_dict["cmd"]
             envs = tr_cmd_dict["envs"]
-           # print tr_cmd, envs
+            # print tr_cmd, envs
             tr_pipe = subprocess.PIPE
             if check_error_log:
-            #    print("tr_cmd:", tr_cmd)
-                tr_pipe = open(os.path.join(os.getenv("LOG_PATH", '/tmp'), "tr%s_err.log" % real_id), "wb")
+                #    print("tr_cmd:", tr_cmd)
+                tr_pipe = open(
+                    os.path.join(
+                        os.getenv("LOG_PATH", '/tmp'),
+                        "tr%s_err.log" % real_id), "wb")
             tr_proc = subprocess.Popen(
                 tr_cmd.split(" "),
                 stdout=subprocess.PIPE,
@@ -395,12 +467,15 @@ class TestFleetBase(object):
 def runtime_main(test_class):
     """
     run main test_class
-    :param test_class:
-    :return:
+    Args:
+        test_class (FleetDistRunnerBase):
     """
     parser = argparse.ArgumentParser(description='Run Fleet test.')
     parser.add_argument(
-        '--update_method', type=str, required=True, choices=['pserver', 'nccl'])
+        '--update_method',
+        type=str,
+        required=True,
+        choices=['pserver', 'nccl'])
     parser.add_argument(
         '--role', type=str, required=True, choices=['pserver', 'trainer'])
     parser.add_argument('--endpoints', type=str, required=False, default="")
@@ -420,18 +495,21 @@ def runtime_main(test_class):
 
 
 def run_by_freq(freq):
-    """testcase run by frequency, it contains DAILY, MONTH"""
+    """testcase run by frequency, it contains DAILY, MONTH."""
+
     @decorator.decorator
     def wrapper(func, *args, **kwargs):
         if os.getenv("RUN_FREQUENCY", "DAILY") == freq:
             return func(*args, **kwargs)
         else:
             return
+
     return wrapper
 
 
 @decorator.decorator
 def run_with_compatibility(func, *args, **kwargs):
+    """test case run with compatibility paddle version."""
     os.environ["PADDLE_COMPATIBILITY_CHECK"] = "1"
     func(*args, **kwargs)
     os.environ["PADDLE_COMPATIBILITY_CHECK"] = "0"

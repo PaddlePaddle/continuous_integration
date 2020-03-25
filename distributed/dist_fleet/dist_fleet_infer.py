@@ -26,25 +26,29 @@ import paddle
 import paddle.fluid as fluid
 import math
 import sys
-sys.path.append('./ctr')
+sys.path.append('./thirdparty/ctr')
 import py_reader_generator as py_reader
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("fluid")
 logger.setLevel(logging.INFO)
 
+DATA_PATH = 'thirdparty/data/dist_data/ctr_data/part-100'
+
 
 def input_data():
-    """input data"""
-    dense_input = fluid.layers.data(name="dense_input",
-                                    shape=[13],
-                                    dtype="float32")
+    """
+    input data for ctr model.
+    Returns:
+        list: The return value contains dense_input,sparse_input, label.
+    """
+    dense_input = fluid.layers.data(
+        name="dense_input", shape=[13], dtype="float32")
 
     sparse_input_ids = [
-        fluid.layers.data(name="C" + str(i),
-                          shape=[1],
-                          lod_level=1,
-                          dtype="int64") for i in range(1, 27)
+        fluid.layers.data(
+            name="C" + str(i), shape=[1], lod_level=1, dtype="int64")
+        for i in range(1, 27)
     ]
 
     label = fluid.layers.data(name="label", shape=[1], dtype="int64")
@@ -53,17 +57,22 @@ def input_data():
 
 
 def net():
-    """net struct"""
+    """
+    ctr net struct.
+    Returns:
+        tuple: the return value contains avg_cost, auc_var, batch_auc_var.
+    """
+
     def embedding_layer(input):
-        """embedding layer is sparse"""
+        """embedding layer is sparse."""
         return fluid.layers.embedding(
             input=input,
             is_sparse=True,
             size=[1000001, 10],
             param_attr=fluid.ParamAttr(
                 name="SparseFeatFactors",
-                initializer=fluid.initializer.Uniform()),
-        )
+                initializer=fluid.initializer.Uniform()), )
+
     inputs = input_data()
     sparse_embed_seq = list(map(embedding_layer, inputs[1:-1]))
     concated = fluid.layers.concat(sparse_embed_seq + inputs[0:1], axis=1)
@@ -73,29 +82,25 @@ def net():
         size=400,
         act="relu",
         param_attr=fluid.ParamAttr(initializer=fluid.initializer.Normal(
-            scale=1 / math.sqrt(concated.shape[1]))),
-    )
+            scale=1 / math.sqrt(concated.shape[1]))), )
     fc2 = fluid.layers.fc(
         input=fc1,
         size=400,
         act="relu",
         param_attr=fluid.ParamAttr(initializer=fluid.initializer.Normal(
-            scale=1 / math.sqrt(fc1.shape[1]))),
-    )
+            scale=1 / math.sqrt(fc1.shape[1]))), )
     fc3 = fluid.layers.fc(
         input=fc2,
         size=400,
         act="relu",
         param_attr=fluid.ParamAttr(initializer=fluid.initializer.Normal(
-            scale=1 / math.sqrt(fc2.shape[1]))),
-    )
+            scale=1 / math.sqrt(fc2.shape[1]))), )
     predict = fluid.layers.fc(
         input=fc3,
         size=2,
         act="softmax",
         param_attr=fluid.ParamAttr(initializer=fluid.initializer.Normal(
-            scale=1 / math.sqrt(fc3.shape[1]))),
-    )
+            scale=1 / math.sqrt(fc3.shape[1]))), )
 
     cost = fluid.layers.cross_entropy(input=predict, label=input_data()[-1])
     avg_cost = fluid.layers.reduce_sum(cost)
@@ -107,17 +112,22 @@ def net():
 
 
 def run_infer(model_path):
-    """run infer"""
+    """
+    run infer from existed model file.
+    Args:
+        model_path (str): model save path
+    Returns:
+        list: the losses of trainer
+    """
     place = fluid.CPUPlace()
     train_generator = py_reader.CriteoDataset(1000001)
-    file_list = [str('data/dist_data/ctr_data/part-100')] * 2
-    test_reader = paddle.batch(train_generator.test(file_list),
-                               batch_size=4)
+    file_list = [str(DATA_PATH)] * 2
+    test_reader = paddle.batch(train_generator.test(file_list), batch_size=4)
     startup_program = fluid.framework.Program()
     test_program = fluid.framework.Program()
 
     def set_zero(var_name):
-        """auc set zero"""
+        """auc set zero."""
         param = fluid.global_scope().var(var_name).get_tensor()
         param_array = np.zeros(param._get_dims()).astype("int64")
         param.set(param_array, place)

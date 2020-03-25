@@ -28,6 +28,7 @@ import time
 
 class TestDistInfer():
     """Test dist infer cases."""
+
     def __init__(self):
         self.single_data = [0.0069892979227006435]
 

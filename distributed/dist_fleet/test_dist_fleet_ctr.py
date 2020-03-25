@@ -23,6 +23,7 @@ from dist_base_fleet import run_with_compatibility
 
 class TestDistCTR(TestFleetBase):
     """Test dist ctr cases."""
+
     def __init__(self):
         TestFleetBase.__init__(self, pservers=2, trainers=2)
         self.single_cpu_data = [
@@ -50,6 +51,7 @@ class TestDistCTR(TestFleetBase):
                 tools.assert_equal(loss[i], expect_data[i])
 
     """async"""
+
     def test_ctr_2ps_2tr_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
             self):
         """test_ctr_2ps_2tr_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""

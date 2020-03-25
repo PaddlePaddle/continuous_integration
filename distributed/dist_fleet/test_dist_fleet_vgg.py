@@ -22,6 +22,7 @@ import json
 
 class TestDistVgg16(TestFleetBase):
     """VGG test cases."""
+
     def __init__(self):
         TestFleetBase.__init__(self, pservers=0, trainers=1)
         self.single_sync_gpu_data = [

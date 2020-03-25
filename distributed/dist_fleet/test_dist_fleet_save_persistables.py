@@ -27,6 +27,7 @@ from dist_base_fleet import run_by_freq
 
 class TestDistCTR(TestFleetBase):
     """Test dist save_persitable cases."""
+
     def __init__(self):
         TestFleetBase.__init__(self, pservers=2, trainers=2)
         self.single_cpu_data = [

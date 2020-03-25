@@ -21,6 +21,7 @@ from dist_base_fleet import run_by_freq
 
 class TestDistResNet50(TestFleetBase):
     """Test dist resnet cases."""
+
     def __init__(self):
         TestFleetBase.__init__(self, pservers=0, trainers=1)
         self.single_sync_gpu_data = [

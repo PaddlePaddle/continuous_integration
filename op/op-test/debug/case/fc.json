@@ -1,0 +1,83 @@
+{
+    "[cpu]fc": {
+        "params": [
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 1
+                    },
+                    {   
+                        "type": "default",
+                        "value": 1
+                    },
+                    {   
+                        "type": "default",
+                        "value": 1
+                    },
+                    {   
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable",
+                "name": "input",
+                "tf-name": "inputs"
+            },
+            {   
+                "data_generator": {
+                    "type": "default",
+                    "value": 10
+                },
+                "type": "int",
+                "name": "size",
+                "tf-name": "num_outputs"
+            }
+        ], 
+        "op": "fc", 
+        "gradient": [1],
+        "tf-op": "tf.contrib.layers.fully_connected"
+    },
+    "[gpu]fc": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "inputs"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 10
+                },
+                "type": "int",
+                "name": "size",
+                "tf-name": "num_outputs"
+            }
+        ], 
+        "op": "fc",
+        "gradient": [1],
+        "tf-op": "tf.contrib.layers.fully_connected",
+        "gpu": 1
+    }
+}

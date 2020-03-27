@@ -1,0 +1,83 @@
+{
+    "[cpu]cast": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator":
+                {
+                    "type": "default", 
+                    "value": "float64"
+                },
+                "type": "string", 
+                "name": "dtype",
+                "tf-name": "dtype"
+            }
+        ], 
+        "op": "cast",
+        "tf-op": "tf.cast"
+    },
+    "[gpu]cast": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator":
+                {
+                    "type": "default", 
+                    "value": "float64"
+                },
+                "type": "string", 
+                "name": "dtype",
+                "tf-name": "dtype"
+            }
+        ], 
+        "op": "cast",
+        "tf-op": "tf.cast",
+        "gpu": 1
+    }
+}

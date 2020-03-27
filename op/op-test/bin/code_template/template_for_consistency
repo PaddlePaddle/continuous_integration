@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+################################################################################
+#
+# Copyright (c) 2019 Baidu.com, Inc. All Rights Reserved
+#
+################################################################################
+"""
+this code is automatically generated
+Authors: xuguangyao01(xuguangyao01@baidu.com)
+"""
+
+import unittest
+import paddle.fluid as fluid
+import numpy
+import traceback
+import sys
+
+
+class MyTest(unittest.TestCase):
+    def test_run(self):
+        """ define var """
+{0}
+
+        """ define net """
+{1}        
+
+        """ define executor """
+        if {2}: 
+            core = fluid.core.CUDAPlace(0)
+            exe = fluid.Executor(core)
+            exe.run(fluid.default_startup_program())
+            # cpu core to compare with gpu core
+            cpu_core = fluid.core.CPUPlace()
+            cpu_exe = fluid.Executor(cpu_core)
+            cpu_exe.run(fluid.default_startup_program())
+        else:
+            core = fluid.core.CPUPlace()
+            exe = fluid.Executor(core)
+            exe.run(fluid.default_startup_program())
+
+        outs = []
+        for i in range(10):
+            if i == 1 and {2}:
+                outs.append(cpu_{3})
+            else:
+                outs.append({3})
+        normal = True
+        for i in range(1, 10):
+            if not normal:
+                break
+            print "ASSERT EQUAL {{}} and {{}}".format(0, i)
+            for j in range(len(outs[0])):
+                try:
+                    numpy.testing.assert_allclose(outs[0][j], outs[i][j], atol=0, rtol=1e-6, err_msg="i={{}},j={{}}".format(i, j))
+                except (AssertionError, ValueError, TypeError) as e:
+                    normal = False
+                    traceback.print_exc()
+
+
+if __name__ == '__main__':
+    unittest.main()

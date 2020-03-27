@@ -1,0 +1,111 @@
+{
+    "[cpu]equal": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "y",
+                "tf-name": "y"
+            }
+        ], 
+        "op": "equal",
+        "tf-op": "tf.math.equal"
+    },
+    "[gpu]equal": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "y",
+                "tf-name": "y"
+            }
+        ], 
+        "op": "equal",
+        "tf-op": "tf.math.equal",
+        "gpu": 1
+    }
+}

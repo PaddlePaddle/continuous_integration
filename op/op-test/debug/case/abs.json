@@ -1,0 +1,65 @@
+{
+    "[cpu]abs": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            } 
+        ], 
+        "op": "abs",
+        "tf-op": "tf.abs",
+        "gradient": [1]
+    },
+    "[gpu]abs": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            } 
+        ], 
+        "op": "abs",
+        "tf-op": "tf.abs",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

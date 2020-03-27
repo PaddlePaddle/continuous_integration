@@ -1,0 +1,128 @@
+{
+    "[cpu]pow": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": "2.0"
+                },
+                "type": "float",
+                "name": "factor",
+                "tf-name": "a"
+            }
+        ],
+        "op": "pow",
+        "tf-op": "tf.keras.backend.pow",
+        "gradient": [1]
+    },
+    "[gpu]pow": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": "2.0"
+                },
+                "type": "float",
+                "name": "factor",
+                "tf-name": "a"
+            }
+        ],
+        "op": "pow",
+        "tf-op": "tf.keras.backend.pow",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]pow_tensor": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "x",
+                "tf-name": "x"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": "1"
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "dtype": "float32",
+                "name": "factor",
+                "tf-name": "a"
+            }
+        ],
+        "op": "pow",
+        "tf-op": "tf.keras.backend.pow",
+        "gpu": 1,
+        "gradient": [1, 0]
+    }
+}

@@ -1,0 +1,216 @@
+{
+    "[cpu]expand": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "x",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 2
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 2
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "name": "expand_times",
+                "tf-name": "multiples"
+            }
+        ],
+        "op": "expand",
+        "tf-op": "tf.tile",
+        "gradient": [1]
+    },
+    "[gpu]expand": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 2
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 2
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "name": "expand_times",
+                "tf-name": "multiples"
+            }
+        ], 
+        "op": "expand",
+        "tf-op": "tf.tile",
+        "gradient": [1],
+        "gpu": 1
+    },
+    "[gpu]expand_list": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 2
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 2
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "name": "expand_times",
+                "tf-name": "multiples",
+                "is_tensor": 1
+            }
+        ], 
+        "op": "expand",
+        "tf-op": "tf.tile",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]expand_tensor": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "x",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 4
+                    }
+                ],
+                "dim": 1,
+                "dtype": "int32",
+                "type": "variable",
+                "name": "expand_times",
+                "tf-name": "multiples",
+                "feed": [1, 2, 1, 2]
+            }
+        ],
+        "op": "expand",
+        "tf-op": "tf.tile",
+        "gradient": [1, 0],
+        "gpu": 1
+    }
+}

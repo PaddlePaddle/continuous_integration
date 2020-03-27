@@ -1,0 +1,115 @@
+{
+    "[cpu]logical_and": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4,
+                "dtype": "bool",
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4,
+                "dtype": "bool",
+                "type": "variable", 
+                "name": "y",
+                "tf-name": "y"
+            }
+        ], 
+        "op": "logical_and",
+        "tf-op": "tf.math.logical_and"
+    },
+    "[gpu]logical_and": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4,
+                "dtype": "bool",
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4,
+                "dtype": "bool",
+                "type": "variable", 
+                "name": "y",
+                "tf-name": "y"
+            }
+        ], 
+        "op": "logical_and",
+        "tf-op": "tf.math.logical_and",
+        "gpu": 1
+    }
+}

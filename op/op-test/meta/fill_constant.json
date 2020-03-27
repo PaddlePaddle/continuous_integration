@@ -1,0 +1,39 @@
+{
+    "params": [
+        {
+            "paddle": "shape",
+            "tf": "shape",
+            "type": ["list", "tuple"],
+            "dtype": ["int"],
+            "size": {
+                "type": "range",
+                "value": [1, 5]
+            },
+            "element": {
+                "type": "range",
+                "value": [1, 10]
+            }
+        },
+        {
+            "paddle": "dtype",
+            "tf": "dtype",
+            "type": ["string"],
+            "element": {
+                "type": "choice",
+                "option": ["float32", "float64"]
+            }
+        },
+        {   
+            "paddle": "value",
+            "tf": "value",
+            "type": ["float"],
+            "element": {
+                "type": "range",
+                "value": [-100, 100]
+            }
+        }
+    ],
+    "op": "fill_constant",
+    "tf-op": "tf.constant",
+    "gpu": 0
+}

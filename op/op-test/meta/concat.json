@@ -1,0 +1,35 @@
+{
+    "params": [
+        {
+            "paddle": "input",
+            "tf": "values",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            },
+            "var": {
+                "key": "@1",
+                "value": "dim"
+            }
+        },
+        {
+            "paddle": "axis",
+            "tf": "axis",
+            "type": ["int"],
+            "dtype": ["int32"],
+            "element": {
+                "type": "range",
+                "value": [
+                    {"var": {"key": "@1", "ratio": -1}, "type": "normal"},
+                    {"var": {"key": "@1"}, "type": "normal"}
+                ]
+            }
+        }
+    ],
+    "op": "concat",
+    "tf-op": "tf.concat",
+    "gradient": [1],
+    "gpu": 0
+}

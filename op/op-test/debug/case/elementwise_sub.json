@@ -1,0 +1,224 @@
+{
+    "[cpu]elementwise_sub": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "y",
+                "tf-name": "y"
+            }
+        ], 
+        "op": "elementwise_sub",
+        "tf-op": "tf.math.subtract",
+        "gradient": [1, 1]
+    },
+    "[gpu]elementwise_sub": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "y",
+                "tf-name": "y"
+            }
+        ], 
+        "op": "elementwise_sub",
+        "tf-op": "tf.math.subtract",
+        "gpu": 1,
+        "gradient": [1, 1]
+    },
+    "[cpu]elementwise_sub_broadcast": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "x",
+                "tf-name": "x"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "y",
+                "tf-name": "y"
+            }
+        ],
+        "op": "elementwise_sub",
+        "tf-op": "tf.math.subtract",
+        "gradient": [1,1]
+    },
+    "[gpu]elementwise_sub_broadcast": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "x",
+                "tf-name": "x"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "y",
+                "tf-name": "y"
+            }
+        ],
+        "op": "elementwise_sub",
+        "tf-op": "tf.math.subtract",
+        "gpu": 1,
+        "gradient": [1,1]
+    }
+}

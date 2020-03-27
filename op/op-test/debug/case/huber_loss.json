@@ -1,0 +1,116 @@
+{
+    "[gpu]huber_loss_1": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 1,
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "predictions"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 1, 
+                "type": "variable", 
+                "name": "label",
+                "tf-name": "labels"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "delta",
+                "tf-name": "delta"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": "none"
+                },
+                "type": "string",
+                "tf-name": "reduction"
+            }
+        ], 
+        "op": "huber_loss",
+        "tf-op": "tf.losses.huber_loss",
+        "gpu": 1,
+        "gradient": [1,1]
+    },
+    "[gpu]huber_loss_2": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 3,
+                "type": "variable",
+                "name": "input",
+                "tf-name": "predictions"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 3,
+                "type": "variable",
+                "name": "label",
+                "tf-name": "labels"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "delta",
+                "tf-name": "delta"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": "none"
+                },
+                "type": "string",
+                "tf-name": "reduction"
+            }
+        ],
+        "op": "huber_loss",
+        "tf-op": "tf.losses.huber_loss",
+        "gpu": 1,
+        "gradient": [1,1]
+    }
+}

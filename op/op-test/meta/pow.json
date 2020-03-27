@@ -1,0 +1,28 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "x",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        },
+        {
+            "paddle": "factor",
+            "tf": "a",
+            "type": ["float"],
+            "dtype": ["float32"],
+            "element": {
+                "type": "range",
+                "value": [0, 10]
+            }
+        }
+    ],
+    "op": "pow",
+    "tf-op": "tf.keras.backend.pow",
+    "gpu": 0,
+    "gradient": [1]
+}

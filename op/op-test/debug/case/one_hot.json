@@ -1,0 +1,71 @@
+{
+    "[cpu]one_hot": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 2,
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "indices",
+                "feed": "random.random",
+                "dtype": "int32"
+            }, 
+            {
+                "data_generator":
+                {
+                    "type": "default",
+                    "value": 2
+                },
+                "type": "int", 
+                "name": "depth",
+                "tf-name": "depth"
+            }
+        ], 
+        "op": "fluid.one_hot",
+        "tf-op": "tf.one_hot"
+    },
+    "[gpu]one_hot": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 2,
+                "type": "variable",
+                "name": "input",
+                "tf-name": "indices",
+                "feed": "random.random",
+                "dtype": "int32"
+            },
+            {
+                "data_generator":
+                {
+                    "type": "default",
+                    "value": 2
+                },
+                "type": "int",
+                "name": "depth",
+                "tf-name": "depth"
+            }
+        ],
+        "op": "fluid.one_hot",
+        "tf-op": "tf.one_hot",
+        "gpu": 1
+    }
+}

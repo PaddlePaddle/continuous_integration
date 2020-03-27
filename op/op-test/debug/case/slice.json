@@ -1,0 +1,299 @@
+{
+    "[cpu]slice": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4,
+                "type": "variable", 
+                "name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 0
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    } 
+                ], 
+                "size": 2,
+                "type": "list", 
+                "name": "axes"
+            },
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 1
+                    },  
+                    {   
+                        "type": "default",
+                        "value": 5
+                    } 
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "starts"
+            },
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": -1
+                    },  
+                    {   
+                        "type": "default",
+                        "value": 8
+                    } 
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "ends"
+            }
+        ],
+        "op": "slice",
+        "gradient": [1]
+    },
+    "[gpu]slice": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4,
+                "type": "variable", 
+                "name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 0
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    } 
+                ], 
+                "size": 2,
+                "type": "list", 
+                "name": "axes"
+            },
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 1
+                    },  
+                    {   
+                        "type": "default",
+                        "value": 5
+                    } 
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "starts"
+            },
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": -1
+                    },  
+                    {   
+                        "type": "default",
+                        "value": 8
+                    } 
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "ends"
+            }
+        ],
+        "op": "slice",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]slice_list": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4,
+                "type": "variable", 
+                "name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 0
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    } 
+                ], 
+                "size": 2,
+                "type": "list", 
+                "name": "axes"
+            },
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 1
+                    },  
+                    {   
+                        "type": "default",
+                        "value": 5
+                    } 
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "starts",
+                "is_tensor": 1
+            },
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": -1
+                    },  
+                    {   
+                        "type": "default",
+                        "value": 8
+                    } 
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "ends",
+                "is_tensor": 1
+            }
+        ],
+        "op": "slice",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]slice_tensor": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 0
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "axes"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 2
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "dtype": "int32",
+                "name": "starts",
+                "feed": [1, 5]
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 2
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "dtype": "int32",
+                "name": "ends",
+                "feed": [5, -1]
+            }
+        ],
+        "op": "slice",
+        "gpu": 1,
+        "gradient": [1, 0, 0]
+    }
+}

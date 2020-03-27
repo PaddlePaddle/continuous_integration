@@ -1,0 +1,18 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "x",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        }
+    ],
+    "op": "abs",
+    "tf-op": "tf.math.abs",
+    "gradient": [1],
+    "gpu": 1
+}

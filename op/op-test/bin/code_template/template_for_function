@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+################################################################################
+#
+# Copyright (c) 2019 Baidu.com, Inc. All Rights Reserved
+#
+################################################################################
+"""
+this code is automatically generated
+Authors: xuguangyao01(xuguangyao01@baidu.com)
+"""
+
+import unittest
+import paddle.fluid as fluid
+import tensorflow as tf
+import numpy
+import traceback
+import sys
+
+
+class MyTest(unittest.TestCase):
+    def test_run(self):
+        """ define var """
+{0}
+
+        """ define net """
+{1}        
+
+        """ define executor """
+        if {2}: 
+            core = fluid.core.CUDAPlace(0)
+            exe = fluid.Executor(core)
+            exe.run(fluid.default_startup_program())
+            # cpu core to compare with gpu core
+            cpu_core = fluid.core.CPUPlace()
+            cpu_exe = fluid.Executor(cpu_core)
+            cpu_exe.run(fluid.default_startup_program())
+        else:
+            core = fluid.core.CPUPlace()
+            exe = fluid.Executor(core)
+            exe.run(fluid.default_startup_program())
+
+        outs = []
+        for i in range(10):
+            if i == 1 and {2}:
+                outs.append(cpu_{3})
+            else:
+                outs.append({3})
+        normal = True
+        for i in range(1, 10):
+            if not normal:
+                break
+            print "ASSERT EQUAL {{}} and {{}}".format(0, i)
+            for j in range(len(outs[0])):
+                try:
+                    numpy.testing.assert_allclose(outs[0][j], outs[i][j], atol=0, rtol=1e-6, err_msg="i={{}},j={{}}".format(i, j))
+                except (AssertionError, ValueError, TypeError) as e:
+                    normal = False
+                    traceback.print_exc()
+
+        """ define tf-op """
+{4}
+        sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=True, device_count={5}))
+        sess.run(tf.compat.v1.global_variables_initializer())
+        sess.run(tf.compat.v1.local_variables_initializer())
+{6}
+        paddle_ret = outs[0]
+
+        gradient_count = {7}
+        if gradient_count > 0:
+            paddle_result = paddle_ret[:gradient_count * -1]
+            tf_result = tf_ret[:gradient_count * -1]
+        else:
+            paddle_result = paddle_ret
+            tf_result = tf_ret
+
+        diff_level = {8}
+        while diff_level > 0:
+            paddle_result = paddle_result[0]
+            diff_level -= 1
+        while diff_level < 0:
+            tf_result = tf_result[0]
+            diff_level += 1
+
+        try:
+            numpy.testing.assert_allclose(paddle_result, tf_result, atol=0, rtol=1e-6, err_msg="compared with tf: forward diff")
+        except (AssertionError, ValueError, TypeError) as e:
+            traceback.print_exc()
+
+        if gradient_count > 0:
+            try:
+                for i in range(gradient_count):
+                    numpy.testing.assert_allclose(paddle_ret[-1 - i], tf_ret[-1 - i], atol=0, rtol=1e-6, err_msg="compared with tf: backward diff")
+            except (AssertionError, ValueError, TypeError) as e:
+                traceback.print_exc()
+
+
+if __name__ == '__main__':
+    unittest.main()

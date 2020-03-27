@@ -1,0 +1,59 @@
+{
+    "[cpu]print": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 2,
+                "type": "variable",
+                "name": "input"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": "test"
+                },
+                "type": "string",
+                "name": "message"
+            }
+        ],
+        "op": "Print"
+    },
+    "[gpu]print": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "input"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": "test"
+                },
+                "type": "string",
+                "name": "message"
+            }
+        ],
+        "op": "Print",
+        "gpu": 1
+    }
+}

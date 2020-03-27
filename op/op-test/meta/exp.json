@@ -1,0 +1,18 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "x",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        }
+    ],
+    "op": "exp",
+    "tf-op": "tf.math.exp",
+    "gradient": [1],
+    "gpu": 1
+}

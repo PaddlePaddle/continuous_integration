@@ -1,0 +1,51 @@
+{
+    "params": [
+        {
+            "paddle": "input",
+            "tf": "input_tensor",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            },
+            "var": {
+                "key": "@1",
+                "value": "dim"
+            }
+        },
+        {
+            "paddle": "dim",
+            "tf": "axis",
+            "type": ["list", "int", "None"],
+            "dtype": ["int"],
+            "element": {
+                "type": "range",
+                "value": [
+                    {"var": {"key": "@1", "ratio": -1}, "type": "normal"},
+                    {"var": {"key": "@1"}, "type": "normal"}
+                ]
+            },
+            "default": "None"
+        },
+        {
+            "paddle": "keep_dim",
+            "tf": "keepdims",
+            "type": ["bool"],
+            "element": {
+                "type": "choice",
+                "option": ["False", "True"]
+            },
+            "default": "False",
+            "var": {
+                "key": "@2",
+                "value": "element"
+            }
+        }
+    ],
+    "op": "reduce_min",
+    "tf-op": "tf.math.reduce_min",
+    "level-diff": 0,
+    "gradient": [1],
+    "gpu": 1
+}

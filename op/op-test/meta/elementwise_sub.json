@@ -1,0 +1,23 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "x",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        },
+        {
+            "paddle": "y",
+            "tf": "y",
+            "like": -1
+        }
+    ],
+    "op": "elementwise_sub",
+    "tf-op": "tf.math.subtract",
+    "gradient": [1, 1],
+    "gpu": 1
+}

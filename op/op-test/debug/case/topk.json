@@ -1,0 +1,65 @@
+{
+    "[cpu]topk": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default", 
+                        "value": 10000
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1000
+                },
+                "type": "int",
+                "name": "k",
+                "tf-name": "k"
+            }
+        ],
+        "level-diff": -1,
+        "op": "topk",
+        "tf-op": "tf.nn.top_k",
+        "return": [1, 1]
+    },
+    "[gpu]topk": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10000
+                    }
+                ], 
+                "dim": 1, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1000
+                },
+                "type": "int",
+                "name": "k",
+                "tf-name": "k"
+            } 
+        ], 
+        "level-diff": -1,
+        "op": "topk",
+        "tf-op": "tf.nn.top_k",
+        "gpu": 1,
+        "return": [1, 1]
+    }
+}

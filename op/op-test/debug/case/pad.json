@@ -1,0 +1,141 @@
+{
+    "[cpu]pad": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "tensor"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "size": 4, 
+                "type": "list", 
+                "name": "paddings"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": [10, 10]
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": [10, 10]
+                    }
+                ], 
+                "size": 2, 
+                "type": "list", 
+                "tf-name": "paddings"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "pad_value",
+                "tf-name": "constant_values"
+            }
+        ], 
+        "op": "pad",
+        "tf-op": "tf.pad"
+    },
+    "[gpu]pad": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "tensor"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "size": 4, 
+                "type": "list", 
+                "name": "paddings"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": [10, 10]
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": [10, 10]
+                    }
+                ], 
+                "size": 2, 
+                "type": "list", 
+                "tf-name": "paddings"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "pad_value",
+                "tf-name": "constant_values"
+            }
+        ], 
+        "op": "pad",
+        "tf-op": "tf.pad",
+        "gpu": 1
+    }
+}

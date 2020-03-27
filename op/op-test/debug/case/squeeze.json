@@ -1,0 +1,89 @@
+{
+    "[cpu]squeeze": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "size": 1,
+                "type": "list",
+                "name": "axes",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "squeeze",
+        "tf-op": "tf.squeeze",
+        "gradient": [1]
+    },
+    "[gpu]squeeze": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "size": 1,
+                "type": "list",
+                "name": "axes",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "squeeze",
+        "tf-op": "tf.squeeze",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

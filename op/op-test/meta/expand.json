@@ -1,0 +1,37 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "input",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 7]
+            },
+            "var": {
+                "key": "@1",
+                "value": "dim"
+            }
+        },
+        {
+            "paddle": "expand_times",
+            "tf": "multiples",
+            "type": ["list"],
+            "dtype": ["int"],
+            "size": {
+                "type": "default",
+                "value": {"var": {"key": "@1"}, "type": "normal"}
+            }, 
+            "element": {
+                "type": "range",
+                "value": [0, 10]
+            }
+        }
+    ],
+    "op": "expand",
+    "tf-op": "tf.tile",
+    "level-diff": 0,
+    "gradient": [1],
+    "gpu": 1
+}

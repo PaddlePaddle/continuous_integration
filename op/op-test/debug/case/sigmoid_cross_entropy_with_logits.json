@@ -1,0 +1,115 @@
+{
+    "[cpu]sigmoid_cross_entropy_with_logits": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "logits"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "label",
+                "tf-name": "labels"
+            }
+        ], 
+        "op": "sigmoid_cross_entropy_with_logits",
+        "tf-op": "tf.nn.sigmoid_cross_entropy_with_logits",
+        "places": 6,
+        "gradient": [1, 0]
+    },
+    "[gpu]sigmoid_cross_entropy_with_logits": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "logits"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "label",
+                "tf-name": "labels"
+            }
+        ], 
+        "op": "sigmoid_cross_entropy_with_logits",
+        "tf-op": "tf.nn.sigmoid_cross_entropy_with_logits",
+        "places": 6,
+        "gpu": 1,
+        "gradient": [1, 0]
+    }
+}

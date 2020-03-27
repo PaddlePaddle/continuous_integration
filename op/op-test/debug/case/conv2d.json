@@ -1,0 +1,604 @@
+{
+    "[cpu]conv2d": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "filter_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "stride"
+            },
+            {
+                "data_generator": {
+                    "type": "default", 
+                    "value": 3
+                 
+                }, 
+                "type": "int",
+                "name": "padding"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "num_filters"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "attribute": {
+                    "initializer": "fluid.initializer.Bilinear()"
+                },
+                "type": "param_attr",
+                "name": "param_attr"
+            }
+        ], 
+        "op": "conv2d",
+        "gradient": [1]
+    },
+    "[gpu]conv2d": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "filter_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "stride"
+            },
+            {
+                "data_generator": {
+                    "type": "default", 
+                    "value": 3
+                 
+                }, 
+                "type": "int",
+                "name": "padding"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "num_filters"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "attribute": {
+                    "initializer": "fluid.initializer.Bilinear()"
+                },
+                "type": "param_attr",
+                "name": "param_attr"
+            }
+        ], 
+        "op": "conv2d",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]conv2d_padding_str": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "filter_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "stride"
+            },
+            {
+                "data_generator": {
+                    "type": "choice", 
+                    "option": ["same", "valid"]
+                }, 
+                "type": "string",
+                "name": "padding"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "num_filters"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "attribute": {
+                    "initializer": "fluid.initializer.Bilinear()"
+                },
+                "type": "param_attr",
+                "name": "param_attr"
+            }
+        ], 
+        "op": "conv2d",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]conv2d_padding_list_1": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "filter_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "stride"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 4
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 4
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "name": "padding"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "num_filters"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "attribute": {
+                    "initializer": "fluid.initializer.Bilinear()"
+                },
+                "type": "param_attr",
+                "name": "param_attr"
+            }
+        ], 
+        "op": "conv2d",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]conv2d_padding_list_2": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "filter_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "stride"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": [0, 0]
+                    },
+                    {
+                        "type": "default",
+                        "value": [0, 0]
+                    },
+                    {
+                        "type": "default",
+                        "value": [1, 4]
+                    },
+                    {
+                        "type": "default",
+                        "value": [1, 4]
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "name": "padding"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "num_filters"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "attribute": {
+                    "initializer": "fluid.initializer.Bilinear()"
+                },
+                "type": "param_attr",
+                "name": "param_attr"
+            }
+        ], 
+        "op": "conv2d",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]conv2d_padding_list_3": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "filter_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "stride"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 3
+                    },
+                    {
+                        "type": "default",
+                        "value": 3
+                    }
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "padding"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "num_filters"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "attribute": {
+                    "initializer": "fluid.initializer.Bilinear()"
+                },
+                "type": "param_attr",
+                "name": "param_attr"
+            }
+        ], 
+        "op": "conv2d",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

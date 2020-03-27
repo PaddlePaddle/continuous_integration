@@ -1,0 +1,22 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "x",
+            "type": ["variable"],
+            "dtype": ["bool"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        },
+        {
+            "paddle": "y",
+            "tf": "y",
+            "like": -1
+        }
+    ],
+    "op": "logical_or",
+    "tf-op": "tf.math.logical_or",
+    "gpu": 0
+}

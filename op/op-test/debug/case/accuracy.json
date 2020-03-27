@@ -1,0 +1,83 @@
+{
+    "[cpu]accuracy": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "predictions"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "dtype": "int64",
+                "feed": "ones",
+                "name": "label",
+                "tf-name": "labels"
+            }
+        ], 
+        "op": "accuracy",
+        "tf-op": "tf.metrics.accuracy"
+    },
+    "[gpu]accuracy": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "predictions"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "dtype": "int64",
+                "feed": "random.random",
+                "name": "label",
+                "tf-name": "labels"
+            }
+        ], 
+        "op": "accuracy",
+        "tf-op": "tf.metrics.accuracy",
+        "gpu": 1
+    }
+}

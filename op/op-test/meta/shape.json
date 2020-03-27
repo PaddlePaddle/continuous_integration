@@ -1,0 +1,17 @@
+{
+    "params": [
+        {
+            "paddle": "input",
+            "tf": "input",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        }
+    ],
+    "op": "shape",
+    "tf-op": "tf.shape",
+    "gpu": 1
+}

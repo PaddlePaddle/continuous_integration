@@ -1,0 +1,18 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "inputs",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [2, 5]
+            }
+        }
+    ],
+    "op": "flatten",
+    "tf-op": "tf.layers.flatten",
+    "gradient": [1],
+    "gpu": 1
+}

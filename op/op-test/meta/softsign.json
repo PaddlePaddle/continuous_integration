@@ -1,0 +1,18 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "features",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        }
+    ],
+    "op": "softsign",
+    "tf-op": "tf.math.softsign",
+    "gradient": [1],
+    "gpu": 1
+}

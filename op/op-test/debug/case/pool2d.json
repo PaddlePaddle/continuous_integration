@@ -1,0 +1,515 @@
+{
+    "[cpu]pool2d": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_stride"
+            },
+            {
+                "data_generator": {
+                    "type": "default", 
+                    "value": 1
+                }, 
+                "type": "int",
+                "name": "pool_padding"
+            },
+            {
+                "data_generator": {
+                    "type": "choice",
+                    "option": ["avg", "max"]
+                },
+                "type": "string",
+                "name": "pool_type"
+            }
+        ], 
+        "op": "pool2d",
+        "gradient": [1]
+    },
+    "[gpu]pool2d": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_stride"
+            },
+            {
+                "data_generator": {
+                    "type": "default", 
+                    "value": 1
+                }, 
+                "type": "int",
+                "name": "pool_padding"
+            },
+            {
+                "data_generator": {
+                    "type": "choice",
+                    "option": ["avg", "max"]
+                },
+                "type": "string",
+                "name": "pool_type"
+            }
+        ], 
+        "op": "pool2d",
+        "gradient": [1],
+        "gpu": 1
+    },
+    "[gpu]pool2d_padding_list_1": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_stride"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_padding"
+            },
+            {
+                "data_generator": {
+                    "type": "choice",
+                    "option": ["avg", "max"]
+                },
+                "type": "string",
+                "name": "pool_type"
+            }
+        ], 
+        "op": "pool2d",
+        "gradient": [1],
+        "gpu": 1
+    },
+    "[gpu]pool2d_padding_list_2": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_stride"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 2
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 2
+                    }
+                ], 
+                "size": 4,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_padding"
+            },
+            {
+                "data_generator": {
+                    "type": "choice",
+                    "option": ["avg", "max"]
+                },
+                "type": "string",
+                "name": "pool_type"
+            }
+        ], 
+        "op": "pool2d",
+        "gradient": [1],
+        "gpu": 1
+    },
+    "[gpu]pool2d_padding_list_3": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_stride"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": [0, 0]
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": [0, 0]
+                    },
+                    {
+                        "type": "default",
+                        "value": [1, 2]
+                    },
+                    {
+                        "type": "default",
+                        "value": [1, 2]
+                    }
+                ], 
+                "size": 4,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_padding"
+            },
+            {
+                "data_generator": {
+                    "type": "choice",
+                    "option": ["avg", "max"]
+                },
+                "type": "string",
+                "name": "pool_type"
+            }
+        ], 
+        "op": "pool2d",
+        "gradient": [1],
+        "gpu": 1
+    },
+    "[gpu]pool2d_padding_str": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "size": 2,
+                "type": "list",
+                "dtype": "int",
+                "name": "pool_stride"
+            },
+            {
+                "data_generator": {
+                    "type": "choice", 
+                    "option": ["same", "valid"]
+                }, 
+                "type": "string",
+                "name": "pool_padding"
+            },
+            {
+                "data_generator": {
+                    "type": "choice",
+                    "option": ["avg", "max"]
+                },
+                "type": "string",
+                "name": "pool_type"
+            }
+        ], 
+        "op": "pool2d",
+        "gradient": [1],
+        "gpu": 1
+    }
+}

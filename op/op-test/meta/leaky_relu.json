@@ -1,0 +1,27 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "features",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        },
+        {
+            "paddle": "alpha",
+            "tf": "alpha",
+            "type": ["float"],
+            "dtype": ["float32"],
+            "element": {
+                "type": "range",
+                "value": [0, 1]
+            }
+        }
+    ],
+    "op": "leaky_relu",
+    "tf-op": "tf.nn.leaky_relu",
+    "gpu": 0
+}

@@ -1,0 +1,197 @@
+    <head>
+        <meta charset="utf-8">
+        <title>paddle-op测试平台</title>
+        <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+        <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/node_modules/bootstrap-table/dist/bootstrap-table.min.css">
+        <link rel="stylesheet" href="/node_modules/bootstrap-select/dist/css/bootstrap-select.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+        <link rel="stylesheet" href="/node_modules/codemirror/lib/codemirror.css">
+        <script src="/node_modules/popper.js/dist/umd/popper.min.js"></script>
+        <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
+        <script src="/node_modules/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+        <script src="/node_modules/codemirror/lib/codemirror.js"></script>
+    </head>
+    <body style="margin-left: 40px; margin-right: 40px; margin-top: 20px;">
+        <div align="center">
+            <h1>paddle-op ce</h1>
+        </div>
+        <div id="toolbar">
+            <select id="selectpicker" class="selectpicker" data-live-search="true" onchange="selectOnChange(this.options[this.options.selectedIndex].value)"></select>
+        </div>
+        <table
+            id="table"
+            data-toggle="table"
+            data-toolbar="#toolbar"
+            data-search="true"
+            data-show-refresh="false"
+            data-show-toggle="false"
+            data-show-fullscreen="false"
+            data-show-columns="false"
+            data-detail-view="true"
+            data-show-export="false"
+            data-detail-formatter="detailFormatter"
+            data-minimum-count-columns="2"
+            data-show-pagination-switch="false"
+            data-pagination="false"
+            data-id-field="id"
+            data-unique-id="id"
+            data-show-footer="false"
+            data-response-handler="responseHandler">
+        </table>
+
+        <script>
+            var select = $("#selectpicker"); 
+            var $table = $('#table');
+            var selections = [];
+
+            function getIdSelections() {
+                return $.map($table.bootstrapTable('getSelections'), function (row) {
+                    return row.id;
+                });
+            }
+
+            function responseHandler(res) {
+                $.each(res.rows, function (i, row) {
+                    row.state = $.inArray(row.id, selections) !== -1;
+                });
+                return res;
+            }
+
+            function detailFormatter(index, row) {
+                var html = []
+                html.push('<p2>case</p2>')
+                html.push('<textarea style="width: 100%" id="' + row.op + '">' + row.detail + '</textarea>')
+                html.push('<script>var ' + row.op + '_editor = CodeMirror.fromTextArea($("#' + row.op + '")[0], {mode: "application/json", lineNumbers: true, lint: true, lineWrapping: true});<\/script>')
+                html.push('<p2>console</p2>')
+                html.push('<textarea style="width: 100%" id="' + row.op + '_console">' + row.console + '</textarea>')
+                html.push('<script>var ' + row.op + '_console_editor = CodeMirror.fromTextArea($("#' + row.op + '_console")[0], {mode: "text", lineNumbers: true, readOnly: true, lineWrapping: true})<\/script>')
+                return html.join('');
+            }
+
+            function totalTextFormatter(data) {
+                return 'Total';
+            }
+
+            function totalNameFormatter(data) {
+                return data.length;
+            }
+
+            function getTableInfo(batchId) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/get/ce/table/info',
+                    data: {'batch_id': batchId},
+                    success: function (data) {
+                        updateTable(data.result);
+                    },
+                    dataType: 'json'
+                });
+            }
+            
+            function updateTable(data) {
+                $table.bootstrapTable('destroy').bootstrapTable({
+                    height: '100%',
+                    locale: $('#locale').val(),
+                    columns: [
+                        [{
+                            title: 'id',
+                            field: 'id',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: false,
+                            footerFormatter: totalTextFormatter
+                        }, {
+                            title: 'op_case',
+                            field: 'op',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true,
+                            footerFormatter: totalTextFormatter
+                        }, {
+                            title: '执行结果',
+                            field: 'result',
+                            colspan: 4,
+                            align: 'center',
+                            footerFormatter: totalTextFormatter
+                        }], [{
+                            field: 'function',
+                            title: '功能',
+                            footerFormatter: totalNameFormatter,
+                            align: 'center'
+                        }, {
+                            field: 'performance',
+                            title: '性能',
+                            align: 'center',
+                            footerFormatter: totalNameFormatter,
+                        }, {
+                            field: 'stablity',
+                            title: '一致性（运行10次一致性）',
+                            align: 'center',
+                            footerFormatter: totalNameFormatter,
+                        }, {
+                            field: 'memory',
+                            title: '稳定性（运行1小时后内存增长数）',
+                            align: 'center',
+                            footerFormatter: totalNameFormatter,
+                        }]
+                    ],
+                    data: data
+                });
+                $table.on('check.bs.table uncheck.bs.table ' +
+                    'check-all.bs.table uncheck-all.bs.table',
+                    function () {
+                        //$remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+                        // save your data, here just save the current page
+                        selections = getIdSelections();
+                        // push or splice the selections if you want to save all data selections
+                    })
+                //$table.on('search.bs.table', function (e, name, args) {
+                    //  console.log(name, args);
+                //})
+                $table.on('expand-row.bs.table', function (e, index, row, $detail) {
+                    $detail.html('Loading...');
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get/ce/detail',
+                        data: {'case': row.op, 'batch_id': $('#selectpicker option:selected').text()},
+                        dataType: 'json'
+                    }).then(function (data) {
+                        row.detail = data.result.detail;
+                        row.console = data.result.console;
+                        $detail.html(detailFormatter(index, row));
+                    }, function (data) {
+                        //nothing
+                    });
+                });
+                $table.on('all.bs.table', function (e, name, args) {
+                    console.log(name, args);
+                });
+            }
+            
+            function selectOnChange (selectedOption) { 
+                getTableInfo(selectedOption);
+            }
+            
+            $.ajax({
+                type: 'POST',
+                url: '/get/ce/list',
+                data: '',
+                success: function (data) {
+                    for (var i = 0; i < data.result.length; i++) {
+                        select.append("<option value='" + data.result[i] + "'>" + data.result[i] + "</option>");
+                    }
+                    $('.selectpicker').selectpicker('refresh');
+                    if (data.result.length > 0) {
+                        getTableInfo(data.result[0]);
+                    }
+                },
+                dataType: 'json'
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,86 @@
+{
+    "[cpu]gather": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable",
+                "feed": "ones",
+                "name": "input",
+                "tf-name": "params",
+                "dtype": "int32"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 2
+                    } 
+                ], 
+                "dim": 1, 
+                "type": "variable",
+                "feed": "ones",
+                "name": "index",
+                "tf-name": "indices",
+                "dtype": "int32"
+            }
+        ], 
+        "op": "gather",
+        "tf-op": "tf.gather",
+        "gradient": [1, 0]
+    },
+    "[gpu]gather": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "params"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    } 
+                ], 
+                "dim": 1, 
+                "type": "variable", 
+                "name": "index",
+                "tf-name": "indices",
+                "feed": "random.random",
+                "dtype": "int32"
+            }
+        ], 
+        "op": "gather",
+        "tf-op": "tf.gather",
+        "gpu": 1
+    }
+}

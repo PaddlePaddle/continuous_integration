@@ -1,0 +1,102 @@
+{
+    "[gpu]rank_loss_1": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "dim": 2,
+                "type": "variable", 
+                "name": "label"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "left"
+            },
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 10
+                    },
+                    {   
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable",
+                "name": "right"
+            }
+        ], 
+        "op": "rank_loss",
+        "gradient": [0, 1, 1],
+        "gpu": 1
+    },
+    "[gpu]rank_loss_2": {
+        "params": [
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 10
+                    },  
+                    {   
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "dim": 2,
+                "type": "variable",
+                "name": "label"
+            },  
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 10
+                    }
+                ], 
+                "dim": 1, 
+                "type": "variable",
+                "name": "left"
+            },  
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 10
+                    },  
+                    {   
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable",
+                "name": "right"
+            }
+        ], 
+        "op": "rank_loss", 
+        "gradient": [0, 1, 1],
+        "gpu": 1
+    }
+}

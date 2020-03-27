@@ -1,0 +1,115 @@
+{
+    "[cpu]maxout": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "inputs"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 5
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 2
+                },
+                "type": "int",
+                "tf-name": "num_units"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1
+                },
+                "type": "int",
+                "name": "axis",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "maxout",
+        "tf-op": "tf.contrib.layers.maxout",
+        "gradient": [1]
+    },
+    "[gpu]maxout": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "inputs"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 5
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 2
+                },
+                "type": "int",
+                "tf-name": "num_units"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": -1
+                },
+                "type": "int",
+                "name": "axis",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "maxout",
+        "tf-op": "tf.contrib.layers.maxout",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

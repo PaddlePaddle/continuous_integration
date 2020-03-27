@@ -1,0 +1,182 @@
+{
+    "[cpu]resize_nearest": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 20
+                    },
+                    {
+                        "type": "default",
+                        "value": 20
+                    }
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "out_shape"
+            }
+        ],
+        "op": "resize_nearest",
+        "gradient": [1]
+    },
+    "[gpu]resize_nearest": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 20
+                    },
+                    {
+                        "type": "default",
+                        "value": 20
+                    }
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "out_shape"
+            }
+        ],
+        "op": "resize_nearest",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]resize_nearest_list": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 20
+                    },
+                    {
+                        "type": "default",
+                        "value": 20
+                    }
+                ],
+                "size": 2,
+                "type": "list",
+                "name": "out_shape",
+                "is_tensor": 1
+            }
+        ], 
+        "op": "resize_nearest",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]resize_nearest_tensor": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 2
+                    }
+                ],
+                "dim": 1,
+                "dtype": "int32",
+                "type": "variable",
+                "name": "out_shape",
+                "feed": [20, 20]
+            }
+        ],
+        "op": "resize_nearest",
+        "gradient": [1, 0],
+        "gpu": 1
+    }
+}

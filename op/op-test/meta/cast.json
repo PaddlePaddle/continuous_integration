@@ -1,0 +1,27 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "x",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        },
+        {
+            "paddle": "dtype",
+            "tf": "dtype",
+            "type": ["string"],
+            "element": {
+                "type": "choice",
+                "option": ["int32", "int64", "float32", "float64"]
+            }
+        }
+    ],
+    "op": "cast",
+    "tf-op": "tf.cast",
+    "gpu": 0,
+    "gradient": [1]
+}

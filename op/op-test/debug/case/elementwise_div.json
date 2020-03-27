@@ -1,0 +1,225 @@
+{
+    "[cpu]elementwise_div": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "y",
+                "tf-name": "y"
+            }
+        ], 
+        "op": "elementwise_div",
+        "tf-op": "tf.math.divide",
+        "places": 6,
+        "gradient": [1, 1]
+    },
+    "[gpu]elementwise_div": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }, 
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "y",
+                "tf-name": "y"
+            }
+        ], 
+        "op": "elementwise_div",
+        "tf-op": "tf.math.divide",
+        "gpu": 1,
+        "gradient": [1, 1]
+    },
+    "[cpu]elementwise_div_broadcast": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "x",
+                "tf-name": "x"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "y",
+                "tf-name": "y"
+            }
+        ],
+        "op": "elementwise_div",
+        "tf-op": "tf.math.divide",
+        "gradient": [1,1]
+    },
+    "[gpu]elementwise_div_broadcast": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "x",
+                "tf-name": "x"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "y",
+                "tf-name": "y"
+            }
+        ],
+        "op": "elementwise_div",
+        "tf-op": "tf.math.divide",
+        "gpu": 1,
+        "gradient": [1,1]
+    }
+}

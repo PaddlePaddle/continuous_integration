@@ -1,0 +1,98 @@
+{
+    "[cpu]unstack": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "value"
+            }
+        ], 
+        "op": "unstack",
+        "tf-op": "tf.unstack",
+        "level-diff": -1,
+        "return": [1]
+    },
+    "[gpu]unstack": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "value"
+            }
+        ], 
+        "op": "unstack",
+        "tf-op": "tf.unstack",
+        "gpu": 1,
+        "level-diff": -1,
+        "return": [1]
+    },
+    "[gpu]unstack_bug": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "name": "x",
+                "tf-name": "value"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 0
+                },
+                "type": "int",
+                "name": "axis",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "unstack",
+        "tf-op": "tf.unstack",
+        "gradient": [1],
+        "gpu": 1,
+        "level-diff": -1,
+        "return": [1]
+    }
+}

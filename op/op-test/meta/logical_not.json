@@ -1,0 +1,17 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "x",
+            "type": ["variable"],
+            "dtype": ["bool"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        }
+    ],
+    "op": "logical_not",
+    "tf-op": "tf.math.logical_not",
+    "gpu": 0
+}

@@ -1,0 +1,105 @@
+{
+    "[cpu]clip": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "t"
+            }, 
+            {
+                "data_generator":
+                {
+                    "type": "default", 
+                    "value": -1.0
+                },
+                "type": "float", 
+                "name": "min",
+                "tf-name": "clip_value_min"
+            },
+            {
+                "data_generator":
+                {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "max",
+                "tf-name": "clip_value_max"
+            }
+        ], 
+        "op": "clip",
+        "tf-op": "tf.clip_by_value",
+        "gradient": [1]
+    },
+    "[gpu]clip": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "t"
+            }, 
+            {
+                "data_generator":
+                {
+                    "type": "default", 
+                    "value": -1.0
+                },
+                "type": "float", 
+                "name": "min",
+                "tf-name": "clip_value_min"
+            },
+            {
+                "data_generator":
+                {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "max",
+                "tf-name": "clip_value_max"
+            }
+        ], 
+        "op": "clip",
+        "tf-op": "tf.clip_by_value",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

@@ -1,0 +1,111 @@
+{
+    "[cpu]transpose": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "a"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 2
+                    },
+                    {
+                        "type": "default",
+                        "value": 3
+                    },
+                    {
+                        "type": "default",
+                        "value": 0
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "name": "perm",
+                "tf-name": "perm"
+            }
+        ], 
+        "op": "transpose",
+        "tf-op": "tf.transpose"
+    },
+    "[gpu]transpose": {
+        "params": [
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 10
+                    },
+                    {   
+                        "type": "default",
+                        "value": 10
+                    },
+                    {   
+                        "type": "default",
+                        "value": 10
+                    },
+                    {   
+                        "type": "default",
+                        "value": 10
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable",
+                "name": "x",
+                "tf-name": "a"
+            },
+            {   
+                "data_generator": [
+                    {   
+                        "type": "default",
+                        "value": 2
+                    },
+                    {   
+                        "type": "default",
+                        "value": 3
+                    },
+                    {   
+                        "type": "default",
+                        "value": 0
+                    },
+                    {   
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "name": "perm",
+                "tf-name": "perm"
+            }
+        ], 
+        "op": "transpose",
+        "tf-op": "tf.transpose",
+        "gpu": 1
+    }
+}

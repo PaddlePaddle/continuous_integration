@@ -1,0 +1,36 @@
+{
+    "params": [
+        {
+            "paddle": "input",
+            "tf": "input",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            },
+            "var": {
+                "key": "@1",
+                "value": "dim"
+            }
+        },
+        {
+            "paddle": "axes",
+            "tf": "axis",
+            "type": ["list"],
+            "dtype": ["int"],
+            "size": {
+                "type": "choice",
+                "option": [0, 1]
+            }, 
+            "element": {
+                "type": "range",
+                "value": [0, {"var": {"key": "@1"}, "type": "normal"}]
+            }
+        }
+    ],
+    "op": "squeeze",
+    "tf-op": "tf.squeeze",
+    "gradient": [1],
+    "gpu": 1
+}

@@ -1,0 +1,101 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+################################################################################
+#
+# Copyright (c) 2019 Baidu.com, Inc. All Rights Reserved
+#
+################################################################################
+"""
+this code is automatically generated
+Authors: xuguangyao01(xuguangyao01@baidu.com)
+"""
+
+import unittest
+import paddle.fluid as fluid
+import numpy
+import traceback
+import sys
+import os
+import time
+import json
+
+
+class MyTest(unittest.TestCase):
+    def test_run(self):
+        """ define var """
+{0}
+
+        """ define net """
+{1}        
+
+        """ define executor """
+        if {2}: 
+            core = fluid.core.CUDAPlace(0)
+            exe = fluid.Executor(core)
+            exe.run(fluid.default_startup_program())
+        else:
+            core = fluid.core.CPUPlace()
+            exe = fluid.Executor(core)
+            exe.run(fluid.default_startup_program())
+
+        performance = []
+        for i in range(100):
+            begin_time = time.time()
+            {3}
+            end_time = time.time()
+            performance.append(end_time - begin_time)
+        sorted_performance = sorted(performance)
+        avg_performance = sum(sorted_performance[5:85])/80
+        print sorted_performance
+        print avg_performance
+        performance_result["performance"] = avg_performance
+
+
+    def test_run_forward(self):
+        """ define var """
+{0}
+
+        """ define net """
+{4}
+
+        """ define executor """
+        if {2}:
+            core = fluid.core.CUDAPlace(0)
+            exe = fluid.Executor(core)
+            exe.run(fluid.default_startup_program())
+        else:
+            core = fluid.core.CPUPlace()
+            exe = fluid.Executor(core)
+            exe.run(fluid.default_startup_program())
+
+        performance = []
+        for i in range(100):
+            begin_time = time.time()
+            {5}
+            end_time = time.time()
+            performance.append(end_time - begin_time)
+        sorted_performance = sorted(performance)
+        avg_performance = sum(sorted_performance[5:85])/80
+        print sorted_performance
+        print avg_performance
+        performance_result["performance_forward"] = avg_performance
+
+
+    def tearDown(self):
+        with open("{{}}.result".format(sys.argv[0][:-3]), "w") as f:
+            json.dump(performance_result, f, indent=4)
+
+        
+if __name__ == '__main__':
+    if os.path.exists("{{}}.result".format(sys.argv[0][:-3])):
+        with open("{{}}.result".format(sys.argv[0][:-3]), "r") as f:
+            performance_result = json.load(f)
+    else:
+        performance_result = {{"performance":"-", "performance_forward":"-"}}
+    #unittest.main()
+    suite = unittest.TestSuite()
+    if sys.argv[1] == "both":
+        suite.addTest(MyTest("test_run"))
+    elif sys.argv[1] == "forward":
+        suite.addTest(MyTest("test_run_forward"))
+    unittest.TextTestRunner(verbosity=2).run(suite)

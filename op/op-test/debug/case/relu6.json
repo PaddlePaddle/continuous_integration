@@ -1,0 +1,65 @@
+{
+    "[cpu]relu6": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "features"
+            }
+        ], 
+        "op": "relu6",
+        "tf-op": "tf.nn.relu6",
+        "gradient": [1]
+    },
+    "[gpu]relu6": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "features"
+            }
+        ], 
+        "op": "relu6",
+        "tf-op": "tf.nn.relu6",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

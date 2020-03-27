@@ -1,0 +1,36 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "values",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            },
+            "var": {
+                "key": "@1",
+                "value": "dim"
+            }
+        },
+        {
+            "paddle": "axis",
+            "tf": "axis",
+            "type": ["int"],
+            "dtype": ["int32"],
+            "element": {
+                "type": "range",
+                "value": [
+                    {"var": {"key": "@1", "ratio": -1}, "type": "normal"},
+                    {"var": {"key": "@1"}, "type": "normal"}
+                ]
+            },
+            "default": 0
+        }
+    ],
+    "op": "stack",
+    "tf-op": "tf.stack",
+    "gradient": [1],
+    "gpu": 0
+}

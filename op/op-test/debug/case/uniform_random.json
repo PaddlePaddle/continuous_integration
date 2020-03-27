@@ -1,0 +1,227 @@
+{
+    "[gpu]uniform_random_tensor": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 4
+                    } 
+                ], 
+                "dim": 1,
+                "type": "variable",
+                "dtype": "int64",
+                "feed": [10, 10, 100, 100], 
+                "name": "shape",
+                "tf-name": "shape"
+            },
+            {
+                "data_generator": {
+                    "type": "default", 
+                    "value": 1
+                }, 
+                "type": "int", 
+                "name": "seed",
+                "tf-name": "seed"
+            },
+            {   
+                "data_generator": {
+                    "type": "default",    
+                    "value": -1.0
+                },    
+                "type": "float", 
+                "name": "min",
+                "tf-name": "minval"
+            },
+            {   
+                "data_generator": {
+                    "type": "default",    
+                    "value": 1.0
+                },    
+                "type": "float", 
+                "name": "max",
+                "tf-name": "maxval"
+            }
+        ],
+        "op": "uniform_random",
+        "tf-op": "tf.random.uniform",
+        "gpu": 1
+    },
+    "[gpu]uniform_random_list": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "dtype": "int64",
+                "name": "shape",
+                "tf-name": "shape",
+                "is_tensor": 1
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1
+                },
+                "type": "int",
+                "name": "seed",
+                "tf-name": "seed"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": -1.0
+                },
+                "type": "float",
+                "name": "min",
+                "tf-name": "minval"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "max",
+                "tf-name": "maxval"
+            }
+        ],
+        "op": "uniform_random",
+        "tf-op": "tf.random.uniform",
+        "gpu": 1
+    },
+    "[gpu]uniform_random": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "dtype": "int64",
+                "name": "shape",
+                "tf-name": "shape"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1
+                },
+                "type": "int",
+                "name": "seed",
+                "tf-name": "seed"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": -1.0
+                },
+                "type": "float",
+                "name": "min",
+                "tf-name": "minval"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "max",
+                "tf-name": "maxval"
+            }
+        ],
+        "op": "uniform_random",
+        "tf-op": "tf.random.uniform",
+        "gpu": 1
+    },
+    "[cpu]uniform_random": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    },
+                    {
+                        "type": "default",
+                        "value": 100
+                    }
+                ],
+                "size": 4,
+                "type": "list",
+                "dtype": "int64",
+                "name": "shape",
+                "tf-name": "shape"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1
+                },
+                "type": "int",
+                "name": "seed",
+                "tf-name": "seed"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": -1.0
+                },
+                "type": "float",
+                "name": "min",
+                "tf-name": "minval"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 1.0
+                },
+                "type": "float",
+                "name": "max",
+                "tf-name": "maxval"
+            }
+        ],
+        "op": "uniform_random",
+        "tf-op": "tf.random.uniform"
+    }
+}

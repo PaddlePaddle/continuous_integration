@@ -1,0 +1,222 @@
+{
+    "[cpu]unsqueeze": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "size": 1,
+                "type": "list",
+                "name": "axes",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "unsqueeze",
+        "tf-op": "tf.expand_dims",
+        "gradient": [1]
+    },
+    "[gpu]unsqueeze": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "input",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "size": 1,
+                "type": "list",
+                "name": "axes",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "unsqueeze",
+        "tf-op": "tf.expand_dims",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]unsqueeze_list_tensor": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "input",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "size": 1,
+                "type": "list",
+                "name": "axes",
+                "tf-name": "axis",
+                "is_tensor": 1
+            }
+        ],
+        "op": "unsqueeze",
+        "tf-op": "tf.expand_dims",
+        "gpu": 1,
+        "gradient": [1]
+    },
+    "[gpu]unsqueeze_tensor": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "input",
+                "tf-name": "input"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "dtype": "int32",
+                "feed": [1],
+                "name": "axes",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "unsqueeze",
+        "tf-op": "tf.expand_dims",
+        "gpu": 1,
+        "gradient": [1, 0]
+    },
+    "[gpu]unsqueeze_int": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 4,
+                "type": "variable",
+                "name": "input",
+                "tf-name": "input"
+            },
+            {   
+                "data_generator":
+                {   
+                    "type": "default",
+                    "value": 1
+                },
+                "type": "int",
+                "name": "axes",
+                "tf-name": "axis"
+            }
+        ],
+        "op": "unsqueeze",
+        "tf-op": "tf.expand_dims",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

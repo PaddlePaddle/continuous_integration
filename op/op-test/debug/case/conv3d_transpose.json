@@ -1,0 +1,237 @@
+{
+    "[cpu]conv3d_transpose": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    },
+                    {
+                        "type": "default",
+                        "value": 5
+                    }
+                ], 
+                "dim": 5, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    },
+                    {
+                        "type": "default",
+                        "value": 5
+                    }
+                ], 
+                "size": 3,
+                "type": "list",
+                "dtype": "int",
+                "name": "filter_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "size": 3,
+                "type": "list",
+                "dtype": "int",
+                "name": "stride"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "size": 3,
+                "type": "list",
+                "dtype": "int",
+                "name": "padding"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "num_filters"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "attribute": {
+                    "initializer": "fluid.initializer.Constant()"
+                },
+                "type": "param_attr",
+                "name": "param_attr"
+            }
+        ], 
+        "op": "conv3d_transpose",
+        "gradient": [1]
+    },
+    "[gpu]conv3d_transpose": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    },
+                    {
+                        "type": "default",
+                        "value": 5
+                    }
+                ], 
+                "dim": 5, 
+                "type": "variable", 
+                "name": "input",
+                "is_format": 1
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 5
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 5
+                    },
+                    {
+                        "type": "default",
+                        "value": 5
+                    }
+                ], 
+                "size": 3,
+                "type": "list",
+                "dtype": "int",
+                "name": "filter_size"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "size": 3,
+                "type": "list",
+                "dtype": "int",
+                "name": "stride"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 1
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 1
+                    },
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ], 
+                "size": 3,
+                "type": "list",
+                "dtype": "int",
+                "name": "padding"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "num_filters"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": 3
+                },
+                "type": "int",
+                "name": "groups"
+            },
+            {
+                "attribute": {
+                    "initializer": "fluid.initializer.Constant()"
+                },
+                "type": "param_attr",
+                "name": "param_attr"
+            }
+        ], 
+        "op": "conv3d_transpose",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

@@ -1,0 +1,77 @@
+{
+    "[cpu]sequence_pad": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 10
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 2,
+                "type": "variable",
+                "name": "x",
+                "lod_level": 1,
+                "lod": [[2, 5, 3]]
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "feed": [2],
+                "name": "pad_value"
+            }
+        ],
+        "op": "sequence_pad",
+        "gradient": [1, 0],
+        "return": [1, 0],
+        "return_numpy": 0
+    },
+    "[gpu]sequence_pad": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "x",
+                "lod_level": 1,
+                "lod": [[2, 5, 3]]
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 1
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "feed": [2],
+                "name": "pad_value"
+            }
+        ], 
+        "op": "sequence_pad",
+        "gpu": 1,
+        "gradient": [1, 0],
+        "return": [1, 0],
+        "return_numpy": 0
+    }
+}

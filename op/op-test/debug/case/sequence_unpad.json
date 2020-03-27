@@ -1,0 +1,71 @@
+{
+    "[cpu]sequence_unpad": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 3
+                    },
+                    {
+                        "type": "default",
+                        "value": 10
+                    }
+                ],
+                "dim": 2,
+                "type": "variable",
+                "name": "x"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 3
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "feed": [2, 5, 3],
+                "name": "length",
+                "dtype": "int64"
+            }
+        ],
+        "op": "sequence_unpad",
+        "return_numpy": 0
+    },
+    "[gpu]sequence_unpad": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 3
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }
+                ], 
+                "dim": 2, 
+                "type": "variable", 
+                "name": "x"
+            },
+            {
+                "data_generator": [
+                    {
+                        "type": "default",
+                        "value": 3
+                    }
+                ],
+                "dim": 1,
+                "type": "variable",
+                "feed": [2, 5, 3],
+                "name": "length",
+                "dtype": "int64"
+            }
+        ], 
+        "op": "sequence_unpad",
+        "gpu": 1,
+        "return_numpy": 0
+    }
+}

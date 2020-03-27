@@ -1,0 +1,22 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "x",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        },
+        {
+            "paddle": "y",
+            "tf": "y",
+            "like": -1
+        }
+    ],
+    "op": "equal",
+    "tf-op": "tf.math.equal",
+    "gpu": 1
+}

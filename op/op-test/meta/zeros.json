@@ -1,0 +1,30 @@
+{
+    "params": [
+        {
+            "paddle": "shape",
+            "tf": "shape",
+            "type": ["list", "tuple"],
+            "dtype": ["int"],
+            "size": {
+                "type": "range",
+                "value": [1, 5]
+            },
+            "element": {
+                "type": "range",
+                "value": [1, 50]
+            }
+        },
+        {
+            "paddle": "dtype",
+            "tf": "dtype",
+            "type": ["string"],
+            "element": {
+                "type": "choice",
+                "option": ["float32", "float64"]
+            }
+        }
+    ],
+    "op": "zeros",
+    "tf-op": "tf.zeros",
+    "gpu": 0
+}

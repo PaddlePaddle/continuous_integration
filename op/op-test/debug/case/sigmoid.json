@@ -1,0 +1,67 @@
+{
+    "[cpu]sigmoid": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }
+        ], 
+        "op": "sigmoid",
+        "tf-op": "tf.math.sigmoid",
+        "places": 6,
+        "gradient": [1]
+    },
+    "[gpu]sigmoid": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            }
+        ], 
+        "op": "sigmoid",
+        "tf-op": "tf.math.sigmoid",
+        "places": 6,
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

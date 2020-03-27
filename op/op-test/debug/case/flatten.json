@@ -1,0 +1,65 @@
+{
+    "[cpu]flatten": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "inputs"
+            }
+        ], 
+        "op": "flatten",
+        "tf-op": "tf.layers.flatten",
+        "gradient": [1]
+    },
+    "[gpu]flatten": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "inputs"
+            }
+        ], 
+        "op": "flatten",
+        "tf-op": "tf.layers.flatten",
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

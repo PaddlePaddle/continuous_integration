@@ -1,0 +1,81 @@
+{
+    "[cpu]zeros": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "size": 4, 
+                "type": "list", 
+                "name": "shape",
+                "tf-name": "shape"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": "float32"
+                },
+                "type": "string",
+                "name": "dtype",
+                "tf-name": "dtype"
+            }
+        ], 
+        "op": "zeros",
+        "tf-op": "tf.zeros"
+    },
+    "[gpu]zeros": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "size": 4, 
+                "type": "list", 
+                "name": "shape",
+                "tf-name": "shape"
+            },
+            {
+                "data_generator": {
+                    "type": "default",
+                    "value": "float32"
+                },
+                "type": "string",
+                "name": "dtype",
+                "tf-name": "dtype"
+            }
+        ], 
+        "op": "zeros",
+        "tf-op": "tf.zeros",
+        "gpu": 1
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "[cpu]cos": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            } 
+        ], 
+        "op": "cos",
+        "tf-op": "tf.math.cos",
+        "places": 6,
+        "gradient": [1]
+    },
+    "[gpu]cos": {
+        "params": [
+            {
+                "data_generator": [
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 10
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }, 
+                    {
+                        "type": "default", 
+                        "value": 100
+                    }
+                ], 
+                "dim": 4, 
+                "type": "variable", 
+                "name": "x",
+                "tf-name": "x"
+            } 
+        ], 
+        "op": "cos",
+        "tf-op": "tf.math.cos",
+        "places": 6,
+        "gpu": 1,
+        "gradient": [1]
+    }
+}

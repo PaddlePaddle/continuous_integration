@@ -1,0 +1,39 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "tensor",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            },
+            "var": {
+                "key": "@1",
+                "value": "dim"
+            }
+        },
+        {
+            "paddle": "axis",
+            "tf": "axis",
+            "type": ["list"],
+            "size": {
+                "type": "default",
+                "value": 1
+            },
+            "dtype": ["int32"],
+            "element": {
+                "type": "range",
+                "value": [
+                    {"var": {"key": "@1", "ratio": -1}, "type": "normal"},
+                    {"var": {"key": "@1"}, "type": "normal"}
+                ]
+            }
+        }
+    ],
+    "op": "reverse",
+    "tf-op": "tf.reverse",
+    "gradient": [1],
+    "gpu": 0
+}

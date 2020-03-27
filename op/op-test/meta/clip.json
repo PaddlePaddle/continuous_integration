@@ -1,0 +1,36 @@
+{
+    "params": [
+        {
+            "paddle": "x",
+            "tf": "t",
+            "type": ["variable"],
+            "dtype": ["float32"],
+            "dim": {
+                "type": "range",
+                "value": [1, 5]
+            }
+        },
+        {
+            "paddle": "min",
+            "tf": "clip_value_min",
+            "type": ["float"],
+            "element": {
+                "type": "range",
+                "value": [-10, 10]
+            }
+        },
+        {
+            "paddle": "max",
+            "tf": "clip_value_max",
+            "type": ["float"],
+            "element": {
+                "type": "range",
+                "value": [11, 20]
+            }
+        }
+    ],
+    "op": "clip",
+    "tf-op": "tf.clip_by_value",
+    "gpu": 0,
+    "gradient": [1]
+}

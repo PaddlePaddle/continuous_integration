@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>paddle-op测试平台</title>
+        <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+        <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/node_modules/bootstrap-table/dist/bootstrap-table.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+        <link rel="stylesheet" href="/node_modules/codemirror/lib/codemirror.css">
+        <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
+        <script src="/node_modules/codemirror/lib/codemirror.js"></script>
+    </head>
+    <body style="margin-left: 40px; margin-right: 40px; margin-top: 20px;">
+        <div align="center">
+            <h1>paddle-op测试平台</h1>
+        </div>
+        <div id="toolbar">
+            <input id="op" class="form-control" style="width: auto; display: inline" type="text" placeholder="new op"></input>
+            <button id="add" class="btn btn-danger" style="vertical-align: bottom">添加</button>
+        </div>
+        <table
+            id="table"
+            data-toggle="table"
+            data-toolbar="#toolbar"
+            data-search="true"
+            data-show-refresh="false"
+            data-show-toggle="false"
+            data-show-fullscreen="false"
+            data-show-columns="false"
+            data-detail-view="true"
+            data-show-export="false"
+            data-detail-formatter="detailFormatter"
+            data-minimum-count-columns="2"
+            data-show-pagination-switch="false"
+            data-pagination="false"
+            data-id-field="id"
+            data-unique-id="id"
+            data-show-footer="false"
+            data-response-handler="responseHandler">
+        </table>
+
+        <script>
+            var $table = $('#table');
+            var selections = [];
+
+            function getIdSelections() {
+                return $.map($table.bootstrapTable('getSelections'), function (row) {
+                    return row.id;
+                });
+            }
+
+            function responseHandler(res) {
+                $.each(res.rows, function (i, row) {
+                    row.state = $.inArray(row.id, selections) !== -1;
+                });
+                return res;
+            }
+
+            function detailFormatter(index, row) {
+                var html = []
+                html.push('<p2>case</p2>')
+                html.push('<textarea style="width: 100%" id="' + row.op + '">' + row.detail + '</textarea>')
+                html.push('<script>var ' + row.op + '_editor = CodeMirror.fromTextArea($("#' + row.op + '")[0], {mode: "application/json", lineNumbers: true, lint: true, lineWrapping: true});<\/script>')
+                html.push('<p2>console</p2>')
+                html.push('<textarea style="width: 100%" id="' + row.op + '_console">' + row.console + '</textarea>')
+                html.push('<script>var ' + row.op + '_console_editor = CodeMirror.fromTextArea($("#' + row.op + '_console")[0], {mode: "text", lineNumbers: true, readOnly: true, lineWrapping: true})<\/script>')
+                return html.join('');
+            }
+
+            function operateFormatter(value, row, index) {
+                var run_css = 'fa fa-play';
+                var other_attr = '';
+                if (row.run === 1) {
+                    run_css = 'fa fa-spinner';
+                    other_attr = 'disabled="true" style="pointer-events: none"';
+                }
+                return [
+                    '<a class="run" id="run_' + index + '" href="javascript:void(0)" title="Run"' + other_attr + '>',
+                    '<i id="run_icon_' + index + '" class="' + run_css + '"></i>',
+                    '</a>  ',
+                    '<a class="save id="save_' + index + '" href="javascript:void(0)" title="Save">',
+                    '<i id="save_icon_' + index + '" class="fa fa-save"></i>',
+                    '</a>'
+                ].join('');
+            }
+
+            window.operateEvents = {
+                'click .run': function (e, value, row, index) {
+                    $('#run_' + index).attr('disabled', true);
+                    $('#run_' + index).css('pointer-events', 'none');
+                    $('#run_icon_' + index).attr('class', 'fa fa-spinner');
+                    row.run = 1;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/run',
+                        data: {"op": row.op, "id": row.id},
+                        success: function (data) {
+                            row.run = 0;
+                            $table.bootstrapTable('updateByUniqueId', {id: row.id, row: data.result});
+                        },
+                        dataType: 'json'
+                    });
+                },
+                'click .save': function (e, value, row, index) {
+                    if ($('#' + row.op)[0]) {
+                        row.detail = eval(row.op + '_editor.getValue()');
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: '/save',
+                        data: {'op': row.op, 'detail': row.detail},
+                        success: function (data) {
+                            if (data.status === 0) {
+                                alert(row.op + ' saved success');
+                            } else {
+                                alert(row.op + ' saved occur errors!');
+                            }
+                        },
+                        dataType: 'json'
+                    });
+                }
+            }
+
+            function totalTextFormatter(data) {
+                return 'Total';
+            }
+
+            function totalNameFormatter(data) {
+                return data.length;
+            }
+
+            function getTableInfo() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/get/debug/table/info',
+                    data: '',
+                    success: function (data) {
+                        updateTable(data.result);
+                    },
+                    dataType: 'json'
+                });
+            }
+            
+            function updateTable(data) {
+                $table.bootstrapTable('destroy').bootstrapTable({
+                    height: '100%',
+                    locale: $('#locale').val(),
+                    columns: [
+                        [{
+                            field: 'state',
+                            checkbox: true,
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle'
+                        }, {
+                            title: 'id',
+                            field: 'id',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: false,
+                            footerFormatter: totalTextFormatter
+                        }, {
+                            title: 'op',
+                            field: 'op',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true,
+                            footerFormatter: totalTextFormatter
+                        }, {
+                            title: '执行结果',
+                            field: 'result',
+                            colspan: 4,
+                            align: 'center',
+                            footerFormatter: totalTextFormatter
+                        }, {
+                            title: 'operation',
+                            rowspan: 2,
+                            events: window.operateEvents,
+                            align: 'center',
+                            valign: 'middle',
+                            formatter: operateFormatter
+                        }], [{
+                            field: 'function',
+                            title: '功能',
+                            footerFormatter: totalNameFormatter,
+                            align: 'center'
+                        }, {
+                            field: 'performance',
+                            title: '性能',
+                            align: 'center',
+                            footerFormatter: totalNameFormatter,
+                        }, {
+                            field: 'stablity',
+                            title: '一致性（运行10次一致性）',
+                            align: 'center',
+                            footerFormatter: totalNameFormatter,
+                        }, {
+                            field: 'memory',
+                            title: '稳定性（运行1小时后内存增长数）',
+                            align: 'center',
+                            footerFormatter: totalNameFormatter,
+                        }]
+                    ],
+                    data: data
+                });
+                $table.on('check.bs.table uncheck.bs.table ' +
+                    'check-all.bs.table uncheck-all.bs.table',
+                    function () {
+                        //$remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+                        // save your data, here just save the current page
+                        selections = getIdSelections();
+                        // push or splice the selections if you want to save all data selections
+                    })
+                //$table.on('search.bs.table', function (e, name, args) {
+                    //  console.log(name, args);
+                //})
+                $table.on('expand-row.bs.table', function (e, index, row, $detail) {
+                    $detail.html('Loading...');
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get/debug/detail',
+                        data: {'case': row.op},
+                        dataType: 'json'
+                    }).then(function (data) {
+                        row.detail = data.result.detail;
+                        row.console = data.result.console;
+                        $detail.html(detailFormatter(index, row));
+                    }, function (data) {
+                        //nothing
+                    });
+                });
+                $table.on('all.bs.table', function (e, name, args) {
+                    console.log(name, args);
+                });
+                $('#add').click(function () {
+                    var new_op = $('#op')[0].value;
+                    rows = $table.bootstrapTable('getData');
+                    $table.bootstrapTable('append', [{id: rows.length, op: new_op, detail: '{}'}]);
+                });
+            }
+            getTableInfo();
+        </script>
+    </body>
+</html>

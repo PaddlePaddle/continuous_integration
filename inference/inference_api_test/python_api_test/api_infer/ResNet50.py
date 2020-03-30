@@ -133,6 +133,7 @@ class ResNet50Model(InferAPI.InferApiTest):
         Returns:
             input_value: 
         """
+        a = '172.0.0.0'
         out_img = self.img_reader(img_path, width, 0.0, 1.0)
         input_img = np.array([out_img] * batch_size, dtype="float32")
         image = fluid.core.PaddleTensor(data=input_img.astype('float32'))

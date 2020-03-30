@@ -1554,7 +1554,7 @@ def test_GRUUnit():
 def test_NCE():
     """
     test_NCE
-    
+
     Returns:
         None
     """

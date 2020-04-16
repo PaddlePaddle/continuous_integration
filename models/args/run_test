@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+export OPENBLAS_NUM_THREADS=1
+export CPU_NUM=1
+
+#pip install req
+pip install -r requirements.txt
+
+# get args
+ROOT_PATH=$1
+cd $ROOT_PATH
+
+# run models
+while read line
+do
+        echo ${line}
+	MODEL=`echo ${line} | awk -F [' \t'] '{print $1}'`
+	RUN_PY=`echo ${line} | awk -F [' \t'] '{print $2}'`
+	FUNCTION=`echo ${line} | awk -F [' \t'] '{print $3}'`
+	COM_TYPE=`echo ${line} | awk -F [' \t'] '{print $4}'`
+	TMP=`echo ${MODEL} | awk '{gsub("/", "_"); print $0}'`
+	LOG_NAME=${TMP}-${RUN_PY}-${FUNCTION}-${COM_TYPE}
+
+	cd models/${MODEL}
+        cp ${ROOT_PATH}/run_args.py ./
+        cp ${ROOT_PATH}/run_args_dygraph.py ./
+        cp ${ROOT_PATH}/${MODEL}/run_prepare.sh ./
+        cp ${ROOT_PATH}/${MODEL}/test_args.py ./
+
+	sh run_prepare.sh
+        if [ ${COM_TYPE} == "1" ]; then
+	    python run_args.py ${RUN_PY} ${FUNCTION} ${COM_TYPE} 1>${LOG_NAME}.log 2>${LOG_NAME}.log.wf
+        elif [ ${COM_TYPE} == "2" ]; then
+	    python run_args_dygraph.py ${RUN_PY} ${FUNCTION} ${COM_TYPE} 1>${LOG_NAME}.log 2>${LOG_NAME}.log.wf
+        fi
+        mv ${LOG_NAME}.log ${ROOT_PATH}/log/
+        mv ${LOG_NAME}.log.wf ${ROOT_PATH}/log/
+
+	#/bin/rm -rf *
+	
+        cd ${ROOT_PATH}
+done < ${ROOT_PATH}/conf/changed_models.conf

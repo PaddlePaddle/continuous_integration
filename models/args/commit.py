@@ -9,7 +9,7 @@ def check_models(commit_file):
     models = set()
     commit = []
     with open(commit_file, 'r') as fin:
-        commit =fin.readlines()
+        commit = fin.readlines()
         commit.reverse()
     for item in commit[1:]:
         line = item.strip()

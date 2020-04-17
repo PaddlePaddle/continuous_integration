@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 """
 
@@ -11,6 +10,7 @@ import sys
 
 #self lib
 import test_args
+
 
 def dict2argstr(args_dict):
     """
@@ -43,7 +43,8 @@ def run(run_py, func):
         default_args[arg] = value[0]
 
     current_args = dict2argstr(default_args) 
-    cmd = "export CUDA_VISIBLE_DEVICES=0,1,2,3; python {} {}".format(run_py, current_args)
+    cmd = "export CUDA_VISIBLE_DEVICES=0,1,2,3; python {} {}".format(
+      run_py, current_args)
     status = os.system(cmd)
     if status != 0:
         res[cmd] = "FAIL"
@@ -53,7 +54,8 @@ def run(run_py, func):
     os.system(cmd)
 
     current_args = dict2argstr(default_args) 
-    cmd = "export CUDA_VISIBLE_DEVICES=0; python {} {}".format(run_py, current_args)
+    cmd = "export CUDA_VISIBLE_DEVICES=0; python {} {}".format(
+      run_py, current_args)
     status = os.system(cmd)
     if status != 0:
         res[cmd] = "FAIL"
@@ -69,7 +71,8 @@ def run(run_py, func):
         for item in value[1:]:
             current_args_dict[arg] = item
             current_args = dict2argstr(current_args_dict)
-            cmd = "export CUDA_VISIBLE_DEVICES=0; python {} {}".format(run_py, current_args)
+            cmd = "export CUDA_VISIBLE_DEVICES=0; python {} {}".format(
+              run_py, current_args)
             status = os.system(cmd)
             if status != 0:
                 res[cmd] = "FAIL"

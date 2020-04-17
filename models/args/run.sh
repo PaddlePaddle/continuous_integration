@@ -21,4 +21,3 @@ sh  commit.sh
 
 # run models in docker
 ./run_test `pwd`
-

@@ -37,5 +37,3 @@ if __name__ == "__main__":
     models_file = sys.argv[1]
     register_file = sys.argv[2]
     check_models(models_file, register_file)
-
-

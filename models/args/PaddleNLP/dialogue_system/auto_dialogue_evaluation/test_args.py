@@ -25,11 +25,11 @@ finetune = {
     "epoch": [1, 2],
     "do_train": [True],
     "loss_type": ["CLS", "L2"],
-    "init_from_pretrain_model": 
-     ["args_test_data/saved_models/trained_models/matching_pretrained/params"],
+    "init_from_pretrain_model":
+    ["args_test_data/saved_models/trained_models/matching_pretrained/params"],
     "save_model_path": ["args_test_finetuned"],
     "save_param": ["params"],
-    "training_file": 
+    "training_file":
     ["args_test_data/input/data/label_data/seq2seq_att/train.ids"],
     "print_steps": [10],
     "save_steps": [100, 10],
@@ -47,9 +47,10 @@ finetune = {
 predict = {
     "do_predict": [True],
     "loss_type": ["CLS", "L2"],
-    "init_from_params": 
-    ["args_test_data/saved_models/trained_models/seq2seq_att_finetuned/params"],
-    "predict_file": 
+    "init_from_params": [
+        "args_test_data/saved_models/trained_models/seq2seq_att_finetuned/params"
+    ],
+    "predict_file":
     ["args_test_data/input/data/label_data/seq2seq_att/test.ids"],
     "use_cuda": [True, False],
     "batch_size": [512, 256],
@@ -61,8 +62,7 @@ predict = {
 
 infer = {
     "do_save_inference_model": [True],
-    "init_from_params": 
-    [
+    "init_from_params": [
         "args_test_data/saved_models/trained_models/seq2seq_att_finetuned/params"
     ],
     "inference_model_dir": ["args_test_inference_model"],

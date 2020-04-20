@@ -42,9 +42,9 @@ def run(run_py, func):
     for arg, value in args.items():
         default_args[arg] = value[0]
 
-    current_args = dict2argstr(default_args) 
+    current_args = dict2argstr(default_args)
     cmd = "export CUDA_VISIBLE_DEVICES=0,1,2,3; python {} {}".format(
-      run_py, current_args)
+        run_py, current_args)
     status = os.system(cmd)
     if status != 0:
         res[cmd] = "FAIL"
@@ -53,9 +53,9 @@ def run(run_py, func):
     cmd = "rm -rf checkpoints"
     os.system(cmd)
 
-    current_args = dict2argstr(default_args) 
-    cmd = "export CUDA_VISIBLE_DEVICES=0; python {} {}".format(
-      run_py, current_args)
+    current_args = dict2argstr(default_args)
+    cmd = "export CUDA_VISIBLE_DEVICES=0; python {} {}".format(run_py,
+                                                               current_args)
     status = os.system(cmd)
     if status != 0:
         res[cmd] = "FAIL"
@@ -72,7 +72,7 @@ def run(run_py, func):
             current_args_dict[arg] = item
             current_args = dict2argstr(current_args_dict)
             cmd = "export CUDA_VISIBLE_DEVICES=0; python {} {}".format(
-              run_py, current_args)
+                run_py, current_args)
             status = os.system(cmd)
             if status != 0:
                 res[cmd] = "FAIL"

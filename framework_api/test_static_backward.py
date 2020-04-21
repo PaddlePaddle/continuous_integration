@@ -17,6 +17,7 @@ import paddle.fluid as fluid
 import tools
 use_cuda = False
 
+
 def test_append_backward():
     """
     test_append_backward
@@ -34,10 +35,14 @@ def test_append_backward():
             avg_loss = fluid.layers.mean(loss)
 
             p_g_list1 = fluid.backward.append_backward(loss=avg_loss)
-            p_g_list2 = fluid.backward.append_backward(loss=avg_loss, parameter_list=[p_g_list1[0][0].name])
-            p_g_list3 = fluid.backward.append_backward(loss=avg_loss, no_grad_set=set([p_g_list1[0][0].name]))
-            p_g_list4 = fluid.backward.append_backward(loss=avg_loss, parameter_list=[p_g_list1[0][0].name],
-                                                       no_grad_set=set([p_g_list1[0][0].name]))
+            p_g_list2 = fluid.backward.append_backward(
+                loss=avg_loss, parameter_list=[p_g_list1[0][0].name])
+            p_g_list3 = fluid.backward.append_backward(
+                loss=avg_loss, no_grad_set=set([p_g_list1[0][0].name]))
+            p_g_list4 = fluid.backward.append_backward(
+                loss=avg_loss,
+                parameter_list=[p_g_list1[0][0].name],
+                no_grad_set=set([p_g_list1[0][0].name]))
             tools.compare(p_g_list1[0][0].name, "fc_0.w_0")
             tools.compare(p_g_list1[0][1].name, "fc_0.w_0@GRAD")
             tools.compare(p_g_list1[1][0].name, "fc_0.b_0")
@@ -63,11 +68,10 @@ def test_gradients():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.data(name="x", shape=[2, 2], dtype="float32")
             x.stop_gradient = False
-            y = fluid.layers.fc(
-                input=x,
-                size=3,
-                param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True)
-            )
+            y = fluid.layers.fc(input=x,
+                                size=3,
+                                param_attr=fluid.initializer.Constant(
+                                    value=1.0, force_cpu=True))
             loss = fluid.layers.reduce_sum(y)
             z = fluid.gradients([loss], x)
             tools.compare(z[0].name, "x@GRAD")
@@ -85,18 +89,11 @@ def test_gradients_2():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.data(name="x", shape=[2, 2], dtype="float32")
             x.stop_gradient = True
-            y = fluid.layers.fc(
-                input=x,
-                size=3,
-                param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True)
-            )
+            y = fluid.layers.fc(input=x,
+                                size=3,
+                                param_attr=fluid.initializer.Constant(
+                                    value=1.0, force_cpu=True))
             loss = fluid.layers.reduce_sum(y)
             # t = fluid.data(name="t", shape=[1], dtype="float32")
             z = fluid.gradients([loss], x)
             tools.compare(len(z), 0)
-
-
-
-
-
-

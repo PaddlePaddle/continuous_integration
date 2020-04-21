@@ -20,7 +20,6 @@ import math
 use_cuda = False
 
 
-
 def test_constantInitializer():
     """
     test constant Initializer
@@ -33,16 +32,17 @@ def test_constantInitializer():
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
             initializer = fluid.initializer.ConstantInitializer(value=2.0)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                             feed={"X": x},
-                             fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
         expect = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         tools.compare(res, expect)
 
@@ -59,16 +59,17 @@ def test_constantInitializerAlias():
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
             initializer = fluid.initializer.Constant(value=2.0)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                             feed={"X": x},
-                             fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
         expect = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         tools.compare(res, expect)
 
@@ -83,18 +84,20 @@ def test_constantInitializer1():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.ConstantInitializer(value=2.0, force_cpu=True)
+            initializer = fluid.initializer.ConstantInitializer(
+                value=2.0, force_cpu=True)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                             feed={"X": x},
-                             fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
         expect = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         tools.compare(res, expect)
 
@@ -109,33 +112,38 @@ def test_uniformInitializer():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.UniformInitializer(low=-1.0, high=1.0, seed=33)
+            initializer = fluid.initializer.UniformInitializer(
+                low=-1.0, high=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.UniformInitializer(low=-1.0, high=1.0, seed=33)
+            initializer = fluid.initializer.UniformInitializer(
+                low=-1.0, high=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [-0.99851644, 0.6121416,  0.6892719, -0.15365571, 0.8850763, -0.48047507,
         #           0.9884044, -0.7314464, 0.35180688, 0.07182181]
         tools.compare(res, res1)
@@ -154,31 +162,35 @@ def test_uniformInitializerAlias():
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
             initializer = fluid.initializer.Uniform(low=-1.0, high=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.UniformInitializer(low=-1.0, high=1.0, seed=33)
+            initializer = fluid.initializer.UniformInitializer(
+                low=-1.0, high=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [-0.99851644, 0.6121416,  0.6892719, -0.15365571, 0.8850763, -0.48047507,
         #           0.9884044, -0.7314464, 0.35180688, 0.07182181]
         tools.compare(res, res1)
@@ -195,33 +207,38 @@ def test_uniformInitializer1():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.UniformInitializer(low=-5.0, high=5.0, seed=33)
+            initializer = fluid.initializer.UniformInitializer(
+                low=-5.0, high=5.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.UniformInitializer(low=-5.0, high=5.0, seed=33)
+            initializer = fluid.initializer.UniformInitializer(
+                low=-5.0, high=5.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [-4.9925823, 3.060708, 3.4463596, -0.7682786, 4.4253817, -2.4023752,
         #           4.9420223, -3.6572318, 1.7590342, 0.35910892]
         tools.compare(res, res1)
@@ -238,33 +255,38 @@ def test_uniformInitializer2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.UniformInitializer(low=-1.0, high=1.0, seed=66)
+            initializer = fluid.initializer.UniformInitializer(
+                low=-1.0, high=1.0, seed=66)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.UniformInitializer(low=-1.0, high=1.0, seed=66)
+            initializer = fluid.initializer.UniformInitializer(
+                low=-1.0, high=1.0, seed=66)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [-0.99703294, 0.22428334, 0.37854385, 0.6926886, 0.7701527, 0.03904986,
         #           0.9768088, -0.46289277, -0.29638618, -0.8563564]
         tools.compare(res, res1)
@@ -281,33 +303,38 @@ def test_normalInitializer():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.NormalInitializer(loc=0.0, scale=1.0, seed=33)
+            initializer = fluid.initializer.NormalInitializer(
+                loc=0.0, scale=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.NormalInitializer(loc=0.0, scale=1.0, seed=33)
+            initializer = fluid.initializer.NormalInitializer(
+                loc=0.0, scale=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [-0.25666377, 1.1513476, 0.40487382, 1.9832053, -0.00961026, 0.6131783,
         #           0.6937958, -0.92126787, 1.0037242, 0.08652732]
         tools.compare(res, res1)
@@ -326,31 +353,34 @@ def test_normalInitializerAlias():
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
             initializer = fluid.initializer.Normal(loc=0.0, scale=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
             initializer = fluid.initializer.Normal(loc=0.0, scale=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [-0.25666377, 1.1513476, 0.40487382, 1.9832053, -0.00961026, 0.6131783,
         #           0.6937958, -0.92126787, 1.0037242, 0.08652732]
         tools.compare(res, res1)
@@ -367,33 +397,38 @@ def test_normalInitializer1():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.NormalInitializer(loc=5.0, scale=1.0, seed=33)
+            initializer = fluid.initializer.NormalInitializer(
+                loc=5.0, scale=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.NormalInitializer(loc=5.0, scale=1.0, seed=33)
+            initializer = fluid.initializer.NormalInitializer(
+                loc=5.0, scale=1.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [4.743336, 6.1513476, 5.404874, 6.9832053, 4.99039, 5.6131783,
         #           5.6937957, 4.078732, 6.003724, 5.0865273]
         tools.compare(res, res1)
@@ -410,33 +445,38 @@ def test_normalInitializer2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.NormalInitializer(loc=5.0, scale=5.0, seed=33)
+            initializer = fluid.initializer.NormalInitializer(
+                loc=5.0, scale=5.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.NormalInitializer(loc=5.0, scale=5.0, seed=33)
+            initializer = fluid.initializer.NormalInitializer(
+                loc=5.0, scale=5.0, seed=33)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [3.716681, 10.756739, 7.0243692, 14.916027, 4.9519486, 8.065891,
         #           8.468979, 0.39366055, 10.018621, 5.4326367]
         tools.compare(res, res1)
@@ -453,35 +493,40 @@ def test_normalInitializer3():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.NormalInitializer(loc=5.0, scale=5.0, seed=66)
+            initializer = fluid.initializer.NormalInitializer(
+                loc=5.0, scale=5.0, seed=66)
             param_attrs = fluid.ParamAttr(initializer=initializer)
 
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res = exe.run(compiled_prog, feed={"X": x}, fetch_list=["fc.w_0"])[0][0]
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
-            initializer = fluid.initializer.NormalInitializer(loc=5.0, scale=5.0, seed=66)
+            initializer = fluid.initializer.NormalInitializer(
+                loc=5.0, scale=5.0, seed=66)
             param_attrs = fluid.ParamAttr(initializer=initializer)
 
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
         place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
         numpy.random.seed(11)
         x = numpy.random.random(size=(10, 1)).astype('float32')
         compiled_prog = fluid.compiler.CompiledProgram(train_program)
-        res1 = exe.run(compiled_prog,
-                      feed={"X": x},
-                      fetch_list=["fc.w_0"])[0][0]
+        res1 = exe.run(compiled_prog, feed={"X": x},
+                       fetch_list=["fc.w_0"])[0][0]
         # expect = [9.267591, 7.3321743, 5.258151, 10.091329, 2.0341442, 3.973513,
         #           -3.696248, -4.2336454, 7.097207, 9.274171]
     tools.compare(res, res1)
@@ -504,8 +549,7 @@ def test_BilinearInitializer():
                 learning_rate=0.,
                 regularizer=fluid.regularizer.L2Decay(0.),
                 initializer=fluid.initializer.BilinearInitializer())
-            x = fluid.layers.data(name="data", shape=[4, H, W],
-                                  dtype="float32")
+            x = fluid.layers.data(name="data", shape=[4, H, W], dtype="float32")
             conv_up = fluid.layers.conv2d_transpose(
                 name="conv2d",
                 input=x,
@@ -523,8 +567,8 @@ def test_BilinearInitializer():
             data = numpy.ones(shape=[1, 4, H, W]).astype(numpy.float32)
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
             res = exe.run(compiled_prog,
-                           feed={"data": data},
-                           fetch_list=["conv2d.w_0"])[0][0]
+                          feed={"data": data},
+                          fetch_list=["conv2d.w_0"])[0][0]
     train_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
@@ -536,8 +580,7 @@ def test_BilinearInitializer():
                 learning_rate=0.,
                 regularizer=fluid.regularizer.L2Decay(0.),
                 initializer=fluid.initializer.BilinearInitializer())
-            x = fluid.layers.data(name="data", shape=[4, H, W],
-                                  dtype="float32")
+            x = fluid.layers.data(name="data", shape=[4, H, W], dtype="float32")
             conv_up = fluid.layers.conv2d_transpose(
                 name="conv2d",
                 input=x,
@@ -555,8 +598,8 @@ def test_BilinearInitializer():
             data = numpy.ones(shape=[1, 4, H, W]).astype(numpy.float32)
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
             res1 = exe.run(compiled_prog,
-                          feed={"data": data},
-                          fetch_list=["conv2d.w_0"])[0][0]
+                           feed={"data": data},
+                           fetch_list=["conv2d.w_0"])[0][0]
     tools.compare(res, res1)
     print("[Result] ====> {}".format(res))
 
@@ -577,8 +620,7 @@ def test_BilinearInitializerAlias():
                 learning_rate=0.,
                 regularizer=fluid.regularizer.L2Decay(0.),
                 initializer=fluid.initializer.Bilinear())
-            x = fluid.layers.data(name="data", shape=[4, H, W],
-                                  dtype="float32")
+            x = fluid.layers.data(name="data", shape=[4, H, W], dtype="float32")
             conv_up = fluid.layers.conv2d_transpose(
                 name="conv2d",
                 input=x,
@@ -596,8 +638,8 @@ def test_BilinearInitializerAlias():
             data = numpy.ones(shape=[1, 4, H, W]).astype(numpy.float32)
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
             res = exe.run(compiled_prog,
-                           feed={"data": data},
-                           fetch_list=["conv2d.w_0"])[0][0]
+                          feed={"data": data},
+                          fetch_list=["conv2d.w_0"])[0][0]
     train_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
@@ -609,8 +651,7 @@ def test_BilinearInitializerAlias():
                 learning_rate=0.,
                 regularizer=fluid.regularizer.L2Decay(0.),
                 initializer=fluid.initializer.Bilinear())
-            x = fluid.layers.data(name="data", shape=[4, H, W],
-                                  dtype="float32")
+            x = fluid.layers.data(name="data", shape=[4, H, W], dtype="float32")
             conv_up = fluid.layers.conv2d_transpose(
                 name="conv2d",
                 input=x,
@@ -628,8 +669,8 @@ def test_BilinearInitializerAlias():
             data = numpy.ones(shape=[1, 4, H, W]).astype(numpy.float32)
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
             res1 = exe.run(compiled_prog,
-                          feed={"data": data},
-                          fetch_list=["conv2d.w_0"])[0][0]
+                           feed={"data": data},
+                           fetch_list=["conv2d.w_0"])[0][0]
     tools.compare(res, res1)
     print("[Result] ====> {}".format(res))
 
@@ -649,7 +690,10 @@ def test_MSRAInitializer():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
             param_attr = fluid.initializer.MSRAInitializer(uniform=False)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -669,7 +713,10 @@ def test_MSRAInitializer():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
             param_attr = fluid.initializer.MSRAInitializer(uniform=False)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -677,8 +724,8 @@ def test_MSRAInitializer():
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
 
             res1 = exe.run(compiled_prog,
-                          feed={"data": data},
-                          fetch_list=["fc.w_0"])[0][0]
+                           feed={"data": data},
+                           fetch_list=["fc.w_0"])[0][0]
     tools.compare(res, res1)
     print("[Result] ====> {}".format(res))
 
@@ -698,7 +745,10 @@ def test_MSRAInitializer1():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
             param_attr = fluid.initializer.MSRAInitializer(uniform=True)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -718,7 +768,10 @@ def test_MSRAInitializer1():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
             param_attr = fluid.initializer.MSRAInitializer(uniform=True)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -726,8 +779,8 @@ def test_MSRAInitializer1():
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
 
             res1 = exe.run(compiled_prog,
-                          feed={"data": data},
-                          fetch_list=["fc.w_0"])[0][0]
+                           feed={"data": data},
+                           fetch_list=["fc.w_0"])[0][0]
     tools.compare(res, res1)
     print("[Result] ====> {}".format(res))
 
@@ -746,8 +799,12 @@ def test_MSRAInitializer2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
-            param_attr = fluid.initializer.MSRAInitializer(uniform=False, fan_in="3.3")
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.MSRAInitializer(
+                uniform=False, fan_in="3.3")
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -766,8 +823,12 @@ def test_MSRAInitializer2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
-            param_attr = fluid.initializer.MSRAInitializer(uniform=False, fan_in=3.3)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.MSRAInitializer(
+                uniform=False, fan_in=3.3)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -775,8 +836,8 @@ def test_MSRAInitializer2():
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
 
             res1 = exe.run(compiled_prog,
-                          feed={"data": data},
-                          fetch_list=["fc.w_0"])[0][0]
+                           feed={"data": data},
+                           fetch_list=["fc.w_0"])[0][0]
     tools.compare(res, res1)
     print("[Result] ====> {}".format(res))
 
@@ -795,8 +856,12 @@ def test_MSRAInitializer3():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
-            param_attr = fluid.initializer.MSRAInitializer(uniform=False, fan_in="3.3", seed=33)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.MSRAInitializer(
+                uniform=False, fan_in="3.3", seed=33)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -815,8 +880,12 @@ def test_MSRAInitializer3():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
-            param_attr = fluid.initializer.MSRAInitializer(uniform=False, fan_in=3.3, seed=33)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.MSRAInitializer(
+                uniform=False, fan_in=3.3, seed=33)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -824,8 +893,8 @@ def test_MSRAInitializer3():
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
 
             res1 = exe.run(compiled_prog,
-                          feed={"data": data},
-                          fetch_list=["fc.w_0"])[0][0]
+                           feed={"data": data},
+                           fetch_list=["fc.w_0"])[0][0]
     tools.compare(res, res1)
     print("[Result] ====> {}".format(res))
 
@@ -844,8 +913,12 @@ def test_MSRAInitializerAlias():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
-            param_attr = fluid.initializer.MSRA(uniform=False, fan_in="3.3", seed=33)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.MSRA(
+                uniform=False, fan_in="3.3", seed=33)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -864,8 +937,12 @@ def test_MSRAInitializerAlias():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="data", shape=[32, 32], dtype="float32")
-            param_attr = fluid.initializer.MSRA(uniform=False, fan_in=3.3, seed=33)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.MSRA(
+                uniform=False, fan_in=3.3, seed=33)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -873,8 +950,8 @@ def test_MSRAInitializerAlias():
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
 
             res1 = exe.run(compiled_prog,
-                          feed={"data": data},
-                          fetch_list=["fc.w_0"])[0][0]
+                           feed={"data": data},
+                           fetch_list=["fc.w_0"])[0][0]
     tools.compare(res, res1)
     print("[Result] ====> {}".format(res))
 
@@ -892,8 +969,12 @@ def test_NumpyArrayInitializer():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name="x", shape=[5], dtype='float32')
-            param_attr = fluid.initializer.NumpyArrayInitializer(numpy.ones(shape=[5, 10]))
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.NumpyArrayInitializer(
+                numpy.ones(shape=[5, 10]))
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -901,8 +982,8 @@ def test_NumpyArrayInitializer():
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
 
             res = exe.run(compiled_prog,
-                           feed={"x": data},
-                           fetch_list=["fc.w_0"])[0][0]
+                          feed={"x": data},
+                          fetch_list=["fc.w_0"])[0][0]
             expect = numpy.ones(shape=[10])
             tools.compare(res, expect)
             print("[Result] ====> {}".format(res))
@@ -922,8 +1003,12 @@ def test_TruncatedNormalInitializer():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.TruncatedNormalInitializer(loc=0.0, scale=2.0)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.TruncatedNormalInitializer(
+                loc=0.0, scale=2.0)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -942,8 +1027,12 @@ def test_TruncatedNormalInitializer():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.TruncatedNormalInitializer(loc=0.0, scale=2.0)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.TruncatedNormalInitializer(
+                loc=0.0, scale=2.0)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -971,8 +1060,12 @@ def test_TruncatedNormalInitializer1():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.TruncatedNormalInitializer(loc=1, scale=4)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.TruncatedNormalInitializer(
+                loc=1, scale=4)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -991,8 +1084,12 @@ def test_TruncatedNormalInitializer1():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.TruncatedNormalInitializer(loc=1, scale=4)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.TruncatedNormalInitializer(
+                loc=1, scale=4)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1020,8 +1117,12 @@ def test_TruncatedNormalInitializer2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.TruncatedNormalInitializer(loc=0, scale=2, seed=66)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.TruncatedNormalInitializer(
+                loc=0, scale=2, seed=66)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1040,8 +1141,12 @@ def test_TruncatedNormalInitializer2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.TruncatedNormalInitializer(loc=0, scale=2, seed=66)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.TruncatedNormalInitializer(
+                loc=0, scale=2, seed=66)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1069,8 +1174,12 @@ def test_TruncatedNormalInitializerAlias():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.TruncatedNormal(loc=0, scale=2, seed=66)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.TruncatedNormal(
+                loc=0, scale=2, seed=66)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1089,8 +1198,12 @@ def test_TruncatedNormalInitializerAlias():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.TruncatedNormal(loc=0, scale=2, seed=66)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.TruncatedNormal(
+                loc=0, scale=2, seed=66)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1119,7 +1232,10 @@ def test_XavierInitializer():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
             param_attr = fluid.initializer.XavierInitializer()
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1139,7 +1255,10 @@ def test_XavierInitializer():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
             param_attr = fluid.initializer.XavierInitializer()
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1168,7 +1287,10 @@ def test_XavierInitializer1():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
             param_attr = fluid.initializer.XavierInitializer(uniform=False)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1188,7 +1310,10 @@ def test_XavierInitializer1():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
             param_attr = fluid.initializer.XavierInitializer(uniform=False)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1216,8 +1341,12 @@ def test_XavierInitializer2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.XavierInitializer(uniform=False, seed=66)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.XavierInitializer(
+                uniform=False, seed=66)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1236,8 +1365,12 @@ def test_XavierInitializer2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.XavierInitializer(uniform=False, seed=66)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.XavierInitializer(
+                uniform=False, seed=66)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1265,8 +1398,12 @@ def test_XavierInitializer3():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.XavierInitializer(fan_in=1, fan_out=10)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.XavierInitializer(
+                fan_in=1, fan_out=10)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1284,8 +1421,12 @@ def test_XavierInitializer3():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
-            param_attr = fluid.initializer.XavierInitializer(fan_in=1, fan_out=10)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            param_attr = fluid.initializer.XavierInitializer(
+                fan_in=1, fan_out=10)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1314,7 +1455,10 @@ def test_XavierInitializerAlias():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
             param_attr = fluid.initializer.Xavier(fan_in=1, fan_out=10)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1333,7 +1477,10 @@ def test_XavierInitializerAlias():
         with fluid.program_guard(train_program, startup_program):
             x = fluid.layers.data(name='data', shape=[1], dtype='float32')
             param_attr = fluid.initializer.Xavier(fan_in=1, fan_out=10)
-            fc = fluid.layers.fc(name="fc", input=x, size=10, param_attr=param_attr)
+            fc = fluid.layers.fc(name="fc",
+                                 input=x,
+                                 size=10,
+                                 param_attr=param_attr)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -1345,6 +1492,3 @@ def test_XavierInitializerAlias():
                            fetch_list=["fc.w_0"])[0][0]
     tools.compare(res, res1)
     print("[Result] ====> {}".format(res))
-    
-    
-    

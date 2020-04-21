@@ -15,6 +15,7 @@
 
 import paddle.fluid as fluid
 
+
 def test_name_scope():
     """
     test name_scope

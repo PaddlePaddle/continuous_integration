@@ -16,6 +16,7 @@ class MyDataset(dg.MultiSlotDataGenerator):
         input: a single line
         output: each parsed instance
         """
+
         def data_iter():
             """
             the "real" parse function

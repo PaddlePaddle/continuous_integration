@@ -15,6 +15,7 @@
 import paddle.fluid as fluid
 import numpy as np
 
+
 def test_base_cond():
     """
     a=0.23
@@ -52,7 +53,9 @@ def test_cond_with_elementwise():
     with fluid.program_guard(main_program, startup_program):
         a = fluid.layers.fill_constant(shape=[1], dtype='float32', value=1.23)
         b = fluid.layers.fill_constant(shape=[1], dtype='float32', value=1.24)
-        out = fluid.layers.cond(a < b, lambda: fluid.layers.elementwise_add(a ,b), lambda: fluid.layers.elementwise_mul(a, b))
+        out = fluid.layers.cond(a < b,
+                                lambda: fluid.layers.elementwise_add(a, b),
+                                lambda: fluid.layers.elementwise_mul(a, b))
         place = fluid.CPUPlace()
         exe = fluid.Executor(place)
         exe.run(startup_program)
@@ -75,7 +78,9 @@ def test_cond_with_stop_gradient():
     with fluid.program_guard(main_program, startup_program):
         a = fluid.layers.fill_constant(shape=[1], dtype='float32', value=1.23)
         b = fluid.layers.fill_constant(shape=[1], dtype='float32', value=1.24)
-        out = fluid.layers.cond(a < b, lambda: fluid.layers.elementwise_add(a ,b), lambda: fluid.layers.elementwise_mul(a, b))
+        out = fluid.layers.cond(a < b,
+                                lambda: fluid.layers.elementwise_add(a, b),
+                                lambda: fluid.layers.elementwise_mul(a, b))
         out.stop_gradient = False
         fluid.backward.append_backward(out)
         place = fluid.CPUPlace()
@@ -106,12 +111,12 @@ def test_cond_nest():
     with fluid.program_guard(main_program, startup_program):
         a = fluid.layers.fill_constant(shape=[1], dtype='float32', value=1.23)
         b = fluid.layers.fill_constant(shape=[1], dtype='float32', value=1.24)
-        out = fluid.layers.cond(fluid.layers.less_than(a, b), 
-                                lambda: fluid.layers.cond(a - b < -1, 
-                                                lambda: fluid.layers.elementwise_add(a, b), 
+        out = fluid.layers.cond(fluid.layers.less_than(a, b),
+                                lambda: fluid.layers.cond(a - b < -1,
+                                                lambda: fluid.layers.elementwise_add(a, b),
                                                 lambda: fluid.layers.elementwise_mul(a, b)),
-                                lambda: fluid.layers.cond(fluid.layers.equal(a, b), 
-                                                lambda: fluid.layers.elementwise_sub(a ,b), 
+                                lambda: fluid.layers.cond(fluid.layers.equal(a, b),
+                                                lambda: fluid.layers.elementwise_sub(a ,b),
                                                 lambda: fluid.layers.elementwise_pow(a, b))
                                 )
         place = fluid.CPUPlace()
@@ -142,12 +147,12 @@ def test_cond_nest_with_stop_gradient():
     with fluid.program_guard(main_program, startup_program):
         a = fluid.layers.fill_constant(shape=[1], dtype='float32', value=1.23)
         b = fluid.layers.fill_constant(shape=[1], dtype='float32', value=1.24)
-        out = fluid.layers.cond(fluid.layers.less_than(a, b), 
-                                lambda: fluid.layers.cond(a - b < -1, 
-                                                lambda: fluid.layers.elementwise_add(a, b), 
+        out = fluid.layers.cond(fluid.layers.less_than(a, b),
+                                lambda: fluid.layers.cond(a - b < -1,
+                                                lambda: fluid.layers.elementwise_add(a, b),
                                                 lambda: fluid.layers.elementwise_mul(a, b)),
-                                lambda: fluid.layers.cond(fluid.layers.equal(a, b), 
-                                                lambda: fluid.layers.elementwise_sub(a ,b), 
+                                lambda: fluid.layers.cond(fluid.layers.equal(a, b),
+                                                lambda: fluid.layers.elementwise_sub(a ,b),
                                                 lambda: fluid.layers.elementwise_pow(a, b))
                                 )
         out.stop_gradient = False
@@ -168,28 +173,33 @@ def test_cond_linear():
     startup_program.random_seed = 1
     main_program.random_seed = 1
     with fluid.program_guard(main_program, startup_program):
-        outputs = np.asarray([(1,2,3,4),(5,6,7,8),(9,10,11,12),(13,14,15,16)])
+        outputs = np.asarray(
+            [(1, 2, 3, 4), (5, 6, 7, 8), (9, 10, 11, 12), (13, 14, 15, 16)])
         print(outputs)
         res = []
         for i in range(4):
             # 假设方程式为 y=4a+6b+7c+2d
-            y = 4*outputs[i][0]+6*outputs[i][1]+7*outputs[i][2]+2*outputs[i][3]
+            y = 4 * outputs[i][0] + 6 * outputs[i][1] + 7 * outputs[i][
+                2] + 2 * outputs[i][3]
             res.append([y])
         # 定义数据
-        train_data=np.array(outputs).astype('float32')
+        train_data = np.array(outputs).astype('float32')
         y_true = np.array(res).astype('float32')
         #定义网络
-        x = fluid.layers.data(name="x",shape=[4],dtype='float32')
-        y = fluid.layers.data(name="y",shape=[1],dtype='float32')
-        y_predict = fluid.layers.fc(input=x,size=1,act=None)
+        x = fluid.layers.data(name="x", shape=[4], dtype='float32')
+        y = fluid.layers.data(name="y", shape=[1], dtype='float32')
+        y_predict = fluid.layers.fc(input=x, size=1, act=None)
         #定义损失函数
-        cost = fluid.layers.square_error_cost(input=y_predict,label=y)
+        cost = fluid.layers.square_error_cost(input=y_predict, label=y)
         avg_cost = fluid.layers.mean(cost)
+
         #定义优化方法
         def sgd_optimizer(learning_rate):
             return avg_cost + learning_rate
 
-        avg_cost = fluid.layers.cond(fluid.layers.reduce_sum(x) < 40, lambda: sgd_optimizer(0.05), lambda: sgd_optimizer(0.08))
+        avg_cost = fluid.layers.cond(
+            fluid.layers.reduce_sum(x) < 40, lambda: sgd_optimizer(0.05),
+            lambda: sgd_optimizer(0.08))
         #参数初始化
         place = fluid.CPUPlace()
         exe = fluid.Executor(place)
@@ -197,12 +207,16 @@ def test_cond_linear():
         actual_cost = []
         for i in range(4):
             outs = exe.run(
-                feed={'x':train_data[i:i+1],'y':y_true[i:i+1]},
-                fetch_list=[x, fluid.layers.reduce_sum(x), y_predict.name,avg_cost.name])
+                feed={'x': train_data[i:i + 1],
+                      'y': y_true[i:i + 1]},
+                fetch_list=[
+                    x, fluid.layers.reduce_sum(x), y_predict.name, avg_cost.name
+                ])
             print(outs)
             actual_cost.append(outs[3])
         assert actual_cost == [1919.859, 15255.681, 41295.094, 80038.03]
-    
+
+
 def test_base_cond_in_clone():
     """
     a=0.23
@@ -224,4 +238,3 @@ def test_base_cond_in_clone():
         exe.run(startup_program)
         ret = exe.run(test_program, fetch_list=[out])
         assert ret == [0.47]
-

@@ -20,12 +20,14 @@ import os
 import time
 import platform
 
+
 def test_global_scope():
     """
     test global_scope
     :return:
     """
-    fluid.global_scope().var("data").get_tensor().set(np.ones((1, 2)), fluid.CPUPlace())
+    fluid.global_scope().var("data").get_tensor().set(
+        np.ones((1, 2)), fluid.CPUPlace())
     data = np.array(fluid.global_scope().find_var("data").get_tensor())
     tools.compare(data, [[1, 1]])
 
@@ -37,7 +39,8 @@ def test_scope_guard():
     """
     new_scope = fluid.Scope()
     with fluid.scope_guard(new_scope):
-        fluid.global_scope().var("data").get_tensor().set(np.ones((1, 2)), fluid.CPUPlace())
+        fluid.global_scope().var("data").get_tensor().set(
+            np.ones((1, 2)), fluid.CPUPlace())
         data = np.array(new_scope.find_var("data").get_tensor())
     tools.compare(data, [[1, 1]])
 
@@ -48,7 +51,8 @@ def test_Executor():
     :return:
     """
     try:
-        place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+        place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+        ) else fluid.CPUPlace()
         exe = fluid.Executor(place)
         train_program = fluid.Program()
         startup_program = fluid.Program()
@@ -63,8 +67,8 @@ def test_Executor():
                 x = np.random.random(size=(10, 1)).astype('float32')
                 for i in range(1000):
                     loss_data = exe.run(train_program,
-                                         feed={"X": x},
-                                         fetch_list=[loss.name])
+                                        feed={"X": x},
+                                        fetch_list=[loss.name])
         assert True
     except Exception:
         assert False
@@ -76,7 +80,8 @@ def test_Executor1():
     :return:
     """
     try:
-        place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+        place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+        ) else fluid.CPUPlace()
         exe = fluid.Executor(place)
         train_program = fluid.Program()
         startup_program = fluid.Program()
@@ -90,15 +95,14 @@ def test_Executor1():
                 exe.run(startup_program)
                 x = np.random.random(size=(10, 1)).astype('float32')
                 compiled_prog = compiler.CompiledProgram(
-                    train_program).with_data_parallel(
-                    loss_name=loss.name)
+                    train_program).with_data_parallel(loss_name=loss.name)
                 if not fluid.is_compiled_with_cuda():
                     os.environ["CPU_NUM"] = "2"
 
                 for i in range(1000):
                     loss_data = exe.run(compiled_prog,
-                                         feed={"X": x},
-                                         fetch_list=[loss.name])
+                                        feed={"X": x},
+                                        fetch_list=[loss.name])
         assert True
     except Exception:
         assert False
@@ -110,7 +114,8 @@ def test_Executor2():
     :return:
     """
     try:
-        place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+        place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+        ) else fluid.CPUPlace()
         exe = fluid.Executor(place)
         train_program = fluid.Program()
         startup_program = fluid.Program()
@@ -124,15 +129,14 @@ def test_Executor2():
                 exe.run(startup_program)
                 x = np.random.random(size=(10, 1)).astype('float32')
                 compiled_prog = compiler.CompiledProgram(
-                    train_program).with_data_parallel(
-                    loss_name=loss.name)
+                    train_program).with_data_parallel(loss_name=loss.name)
                 if not fluid.is_compiled_with_cuda():
                     os.environ["CPU_NUM"] = "2"
                 exe.close()
                 for i in range(1000):
                     loss_data = exe.run(compiled_prog,
-                                         feed={"X": x},
-                                         fetch_list=[loss.name])
+                                        feed={"X": x},
+                                        fetch_list=[loss.name])
         assert False
     except Exception:
         assert True
@@ -143,7 +147,8 @@ def test_Executor3():
     test Executor with run()
     :return:
     """
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     exe = fluid.Executor(place)
     train_program = fluid.Program()
     startup_program = fluid.Program()
@@ -160,16 +165,15 @@ def test_Executor3():
             exe.run(startup_program)
             x = np.ones(shape=(10, 1)).astype('float32')
             compiled_prog = compiler.CompiledProgram(
-                train_program).with_data_parallel(
-                loss_name=loss.name)
+                train_program).with_data_parallel(loss_name=loss.name)
             if not fluid.is_compiled_with_cuda():
                 os.environ["CPU_NUM"] = "2"
             else:
                 os.environ["CUDA_VISIBLE_DEVICES"] = "0, 1"
             for i in range(1000):
                 loss_data = exe.run(compiled_prog,
-                                     feed={"X": x},
-                                     fetch_list=[loss.name])[0]
+                                    feed={"X": x},
+                                    fetch_list=[loss.name])[0]
             if platform.system() == "Darwin" or platform.system() == "Linux":
                 tools.compare(loss_data, [-1.9068239, -1.9068239])
             else:
@@ -181,7 +185,8 @@ def test_Executor4():
     test Executor with fetch_var_name feed_var_name
     :return:
     """
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     exe = fluid.Executor(place)
     train_program = fluid.Program()
     startup_program = fluid.Program()
@@ -198,18 +203,17 @@ def test_Executor4():
             exe.run(startup_program)
             x = np.ones(shape=(10, 1)).astype('float32')
             compiled_prog = compiler.CompiledProgram(
-                train_program).with_data_parallel(
-                loss_name=loss.name)
+                train_program).with_data_parallel(loss_name=loss.name)
             if not fluid.is_compiled_with_cuda():
                 os.environ["CPU_NUM"] = "2"
             else:
                 os.environ["CUDA_VISIBLE_DEVICES"] = "0, 1"
             for i in range(1000):
                 loss_data = exe.run(compiled_prog,
-                                     feed={"X": x},
-                                     fetch_list=[loss.name],
-                                     feed_var_name="f",
-                                     fetch_var_name="c")[0]
+                                    feed={"X": x},
+                                    fetch_list=[loss.name],
+                                    feed_var_name="f",
+                                    fetch_var_name="c")[0]
             if platform.system() == "Darwin" or platform.system() == "Linux":
                 tools.compare(loss_data, [-1.9068239, -1.9068239])
             else:
@@ -221,7 +225,8 @@ def test_Executor5():
     test Executor with use_program_cache=True
     :return:
     """
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     exe = fluid.Executor(place)
     train_program = fluid.Program()
     startup_program = fluid.Program()
@@ -250,7 +255,8 @@ def test_Executor5():
             print(end1)
             tools.compare(loss_data, [-1.9068239])
 
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     exe = fluid.Executor(place)
     train_program = fluid.Program()
     startup_program = fluid.Program()
@@ -285,7 +291,8 @@ def test_Executor6():
     test Executor with return_numpy=False
     :return:
     """
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     exe = fluid.Executor(place)
     train_program = fluid.Program()
     startup_program = fluid.Program()
@@ -302,15 +309,14 @@ def test_Executor6():
             exe.run(startup_program)
             x = np.ones(shape=(10, 1)).astype('float32')
             compiled_prog = compiler.CompiledProgram(
-                train_program).with_data_parallel(
-                loss_name=loss.name)
+                train_program).with_data_parallel(loss_name=loss.name)
             if not fluid.is_compiled_with_cuda():
                 os.environ["CPU_NUM"] = "2"
             for i in range(1000):
                 loss_data = exe.run(compiled_prog,
-                                     feed={"X": x},
-                                     fetch_list=[loss.name],
-                                     return_numpy=False)
+                                    feed={"X": x},
+                                    fetch_list=[loss.name],
+                                    return_numpy=False)
             if "paddle.fluid.core_avx.LoDTensor" in loss_data.__str__():
                 assert True
             else:
@@ -322,7 +328,8 @@ def test_Executor7():
     test Executor with scope=newscope
     :return:
     """
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     exe = fluid.Executor(place)
     train_program = fluid.Program()
     startup_program = fluid.Program()
@@ -341,19 +348,18 @@ def test_Executor7():
                 exe.run(startup_program)
                 x = np.ones(shape=(10, 1)).astype('float32')
                 compiled_prog = compiler.CompiledProgram(
-                    train_program).with_data_parallel(
-                    loss_name=loss.name)
+                    train_program).with_data_parallel(loss_name=loss.name)
                 if not fluid.is_compiled_with_cuda():
                     os.environ["CPU_NUM"] = "2"
                 else:
                     os.environ["CUDA_VISIBLE_DEVICES"] = "0, 1"
                 for i in range(1000):
                     loss_data = exe.run(compiled_prog,
-                                         feed={"X": x},
-                                         fetch_list=[loss.name],
-                                         scope=fkscope)[0]
-                if platform.system() == "Darwin" or platform.system() == "Linux":
+                                        feed={"X": x},
+                                        fetch_list=[loss.name],
+                                        scope=fkscope)[0]
+                if platform.system() == "Darwin" or platform.system(
+                ) == "Linux":
                     tools.compare(loss_data, [-1.9068239, -1.9068239])
                 else:
                     tools.compare(loss_data, [-1.9068239])
-

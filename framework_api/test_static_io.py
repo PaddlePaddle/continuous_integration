@@ -43,6 +43,7 @@ def test_batch1():
     test batch with batch_size = 1
     :return:
     """
+
     def reader():
         """reader"""
         for i in range(10):
@@ -61,6 +62,7 @@ def test_batch2():
     test batch with batch_size = 3 drop_last = False
     :return:
     """
+
     def reader():
         """reader"""
         for i in range(10):
@@ -79,6 +81,7 @@ def test_batch3():
     test batch with batch_size = 3 drop_last = True
     :return:
     """
+
     def reader():
         """reader"""
         for i in range(10):
@@ -97,6 +100,7 @@ def test_buffered():
     test buffered with size < 0
     :return:
     """
+
     def reader():
         """reader"""
         for i in range(10):
@@ -117,6 +121,7 @@ def test_buffered1():
     test buffered with size = 0
     :return:
     """
+
     def reader():
         """reader"""
         for i in range(10):
@@ -137,6 +142,7 @@ def test_buffered2():
     test buffered with size > 0
     :return:
     """
+
     def reader():
         """
         reader
@@ -160,6 +166,7 @@ def test_cache():
     test cache
     :return:
     """
+
     def reader():
         """
         reader
@@ -190,6 +197,7 @@ def test_chain():
         :param start:
         :return:
         """
+
         def reader():
             """
             reader
@@ -200,7 +208,8 @@ def test_chain():
 
         return reader
 
-    c = fluid.io.chain(reader_creator_3(0), reader_creator_3(10), reader_creator_3(20))
+    c = fluid.io.chain(
+        reader_creator_3(0), reader_creator_3(10), reader_creator_3(20))
     res = list()
     for e in c():
         res.append(e)
@@ -216,6 +225,7 @@ def test_compose():
 
     def reader1():
         """reader"""
+
         def reader():
             """reader"""
             for i in range(5):
@@ -225,6 +235,7 @@ def test_compose():
 
     def reader2():
         """reader"""
+
         def reader():
             """reader"""
             for i in range(1, 5):
@@ -234,14 +245,17 @@ def test_compose():
 
     def reader3():
         """reader"""
+
         def reader():
             """reader"""
             for i in range(2, 5):
                 yield i
 
         return reader
+
     try:
-        reader = fluid.io.compose(reader1(), reader2(), reader3(), check_alignment=True)
+        reader = fluid.io.compose(
+            reader1(), reader2(), reader3(), check_alignment=True)
         res = list()
         for e in reader():
             res.append(e)
@@ -260,6 +274,7 @@ def test_compose1():
 
     def reader1():
         """reader"""
+
         def reader():
             """reader"""
             for i in range(5):
@@ -287,7 +302,8 @@ def test_compose1():
 
         return reader
 
-    reader = fluid.io.compose(reader1(), reader2(), reader3(), check_alignment=False)
+    reader = fluid.io.compose(
+        reader1(), reader2(), reader3(), check_alignment=False)
     res = list()
     for e in reader():
         res.append(e)
@@ -319,6 +335,7 @@ def test_firstn1():
     test firstn with n > len(range)
     :return:
     """
+
     def reader():
         """reader"""
         for i in range(10):
@@ -337,6 +354,7 @@ def test_map_readers():
     test map_readers
     :return:
     """
+
     def func(x, y):
         """
         mul
@@ -368,6 +386,7 @@ def test_map_readers1():
     test map_readers with no aligned readers
     :return:
     """
+
     def func(x, y):
         """
         mul
@@ -390,7 +409,8 @@ def test_map_readers1():
         tools.compare(res, expect)
     except TypeError as e:
         print(e)
-        assert e.__str__() == "func() missing 1 required positional argument: 'y'"
+        assert e.__str__(
+        ) == "func() missing 1 required positional argument: 'y'"
 
 
 def test_shuffle():
@@ -399,6 +419,7 @@ def test_shuffle():
     :return:
     """
     random.seed(33)
+
     def reader():
         """
         reader
@@ -421,6 +442,7 @@ def test_shuffle1():
     :return:
     """
     random.seed(33)
+
     def reader():
         """
         reader
@@ -443,6 +465,7 @@ def test_shuffle2():
     :return:
     """
     random.seed(33)
+
     def reader():
         """
         reader
@@ -468,6 +491,7 @@ def test_multiprocess_reader():
 
     def fake_reader(start, end):
         """reader"""
+
         def __impl__():
             """
             impl
@@ -481,16 +505,15 @@ def test_multiprocess_reader():
     if platform.system() == "Darwin" or platform.system() == "Linux":
         with fluid.program_guard(fluid.Program(), fluid.Program()):
             place = fluid.CPUPlace()
-            image = fluid.layers.data(
-                name='image', dtype='int64', shape=[1])
+            image = fluid.layers.data(name='image', dtype='int64', shape=[1])
             # fluid.layers.Print(image)
-            reader = fluid.io.PyReader(
-                feed_list=[image], capacity=2)
+            reader = fluid.io.PyReader(feed_list=[image], capacity=2)
             image_p_1 = image + 1
             decorated_reader = fluid.io.multiprocess_reader(
                 [fake_reader(1, 5), fake_reader(6, 10)], False)
 
-            reader.decorate_sample_generator(decorated_reader, batch_size=2, places=[place])
+            reader.decorate_sample_generator(
+                decorated_reader, batch_size=2, places=[place])
 
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
@@ -513,7 +536,6 @@ def test_multiprocess_reader1():
     #
 
 
-
 def test_multiprocess_reader2():
     """
     test multiprocess_reader with use_pipe = False quene_size = 2
@@ -522,6 +544,7 @@ def test_multiprocess_reader2():
 
     def fake_reader(start, end):
         """reader"""
+
         def __impl__():
             """
             impl
@@ -535,16 +558,17 @@ def test_multiprocess_reader2():
     if platform.system() == "Darwin" or platform.system() == "Linux":
         with fluid.program_guard(fluid.Program(), fluid.Program()):
             place = fluid.CPUPlace()
-            image = fluid.layers.data(
-                name='image', dtype='int64', shape=[1])
+            image = fluid.layers.data(name='image', dtype='int64', shape=[1])
             # fluid.layers.Print(image)
-            reader = fluid.io.PyReader(
-                feed_list=[image], capacity=2)
+            reader = fluid.io.PyReader(feed_list=[image], capacity=2)
             image_p_1 = image + 1
             decorated_reader = fluid.io.multiprocess_reader(
-                [fake_reader(1, 5), fake_reader(6, 10)], False, queue_size=False)
+                [fake_reader(1, 5), fake_reader(6, 10)],
+                False,
+                queue_size=False)
 
-            reader.decorate_sample_generator(decorated_reader, batch_size=2, places=[place])
+            reader.decorate_sample_generator(
+                decorated_reader, batch_size=2, places=[place])
 
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
@@ -565,6 +589,7 @@ def test_xmap_readers():
 
     def reader_creator():
         """reader"""
+
         def reader():
             """
             reader
@@ -585,8 +610,8 @@ def test_xmap_readers():
     for t_num in thread_num:
         for size in buffer_size:
             user_reader = fluid.io.xmap_readers(mapper,
-                                              reader_creator(),
-                                              t_num, size, True)
+                                                reader_creator(), t_num, size,
+                                                True)
             res = list()
             for i in user_reader():
                 res.append(i)
@@ -601,6 +626,7 @@ def test_xmap_readers1():
 
     def reader_creator():
         """reader"""
+
         def reader():
             """
             reader
@@ -621,8 +647,8 @@ def test_xmap_readers1():
     for t_num in thread_num:
         for size in buffer_size:
             user_reader = fluid.io.xmap_readers(mapper,
-                                              reader_creator(),
-                                              t_num, size, False)
+                                                reader_creator(), t_num, size,
+                                                False)
             res = list()
             for i in user_reader():
                 res.append(i)
@@ -637,6 +663,7 @@ def test_xmap_readers2():
 
     def reader_creator():
         """reader"""
+
         def reader():
             """
             reader
@@ -655,8 +682,7 @@ def test_xmap_readers2():
     expect = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     for t_num in thread_num:
         user_reader = fluid.io.xmap_readers(mapper,
-                                          reader_creator(),
-                                          t_num, 1, False)
+                                            reader_creator(), t_num, 1, False)
         res = list()
         for i in user_reader():
             res.append(i)
@@ -672,6 +698,7 @@ def test_xmap_readers3():
 
     def reader_creator():
         """reader"""
+
         def reader():
             """
             reader
@@ -690,13 +717,10 @@ def test_xmap_readers3():
     expect = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     for size in buffer_size:
         user_reader = fluid.io.xmap_readers(mapper,
-                                          reader_creator(),
-                                          1, size, False)
+                                            reader_creator(), 1, size, False)
         res = list()
         for i in user_reader():
             res.append(i)
         # print(res)
         tools.compare(res, expect)
         tools.compare(res, expect)
-
-

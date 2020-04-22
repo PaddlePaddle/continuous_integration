@@ -30,23 +30,28 @@ def test_scalar():
     numpy.random.seed(33)
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
-            train_data=numpy.array([[1.0], [2.0], [3.0], [4.0]]).astype('float32')
+            train_data = numpy.array(
+                [[1.0], [2.0], [3.0], [4.0]]).astype('float32')
             y_true = numpy.array([[2.0], [4.0], [6.0], [8.0]]).astype('float32')
-            lr = fluid.layers.data(name="lr", shape=[1], dtype='float32', append_batch_size=False)
+            lr = fluid.layers.data(
+                name="lr", shape=[1], dtype='float32', append_batch_size=False)
             x = fluid.data(name="x", shape=[None, 1], dtype='float32')
             y = fluid.data(name="y", shape=[None, 1], dtype='float32')
             y_predict = fluid.layers.fc(input=x, size=1, act=None)
-            cost = fluid.layers.square_error_cost(input=y_predict,label=y)
+            cost = fluid.layers.square_error_cost(input=y_predict, label=y)
             avg_cost = fluid.layers.mean(cost)
             sgd_optimizer = fluid.optimizer.Adam(learning_rate=lr)
             sgd_optimizer.minimize(avg_cost)
             cpu = fluid.CPUPlace()
             exe = fluid.Executor(cpu)
             exe.run(startup_program)
-            res = exe.run(
-                    feed={'x':train_data, 'y':y_true, 'lr': numpy.asarray([1], dtype=numpy.float32)},
-                    fetch_list=[y_predict, avg_cost])
+            res = exe.run(feed={
+                'x': train_data,
+                'y': y_true,
+                'lr': numpy.asarray(
+                    [1], dtype=numpy.float32)
+            },
+                          fetch_list=[y_predict, avg_cost])
 
             expect = [104.31773]
             tools.compare(res[1], expect)
-

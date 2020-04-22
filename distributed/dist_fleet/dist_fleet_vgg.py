@@ -62,10 +62,8 @@ class TestDistVgg16(FleetDistRunnerBase):
             choices=['pserver', 'nccl'])
         parser.add_argument(
             '--role', type=str, required=True, choices=['pserver', 'trainer'])
-        parser.add_argument(
-            '--endpoints', type=str, required=False, default="")
-        parser.add_argument(
-            '--current_id', type=int, required=False, default=0)
+        parser.add_argument('--endpoints', type=str, required=False, default="")
+        parser.add_argument('--current_id', type=int, required=False, default=0)
         parser.add_argument('--trainers', type=int, required=False, default=1)
         # parser.add_argument('--sync_mode', action='store_true')
         parser.add_argument(

@@ -13,7 +13,6 @@
 # limitations under the License.
 """test static unique name."""
 
-
 import paddle.fluid as fluid
 import tools
 

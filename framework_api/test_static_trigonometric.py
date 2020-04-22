@@ -26,7 +26,8 @@ def test_abs():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.abs(data)
             x = np.array([1, -1]).astype(np.float32)
@@ -49,7 +50,8 @@ def test_abs1():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.abs(data, name="abs")
             x = np.array([1, -1]).astype(np.float32)
@@ -72,7 +74,8 @@ def test_acos():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.acos(data, name="abs")
             x = np.array([-0.8183, 0.4912, -0.6444, 0.0371]).astype(np.float32)
@@ -84,7 +87,8 @@ def test_acos():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=[result.name])[0]
-            tools.compare(res, [2.5292435, 1.0573294, 2.2710347, 1.5336878], 1e-5)
+            tools.compare(res, [2.5292435, 1.0573294, 2.2710347, 1.5336878],
+                          1e-5)
 
 
 def test_acos1():
@@ -95,7 +99,8 @@ def test_acos1():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.acos(data, name="acos")
             x = np.array([-0.8183, 0.4912, -0.6444, 0.0371]).astype(np.float32)
@@ -107,7 +112,8 @@ def test_acos1():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["acos.tmp_0"])[0]
-            tools.compare(res, [2.5292435, 1.0573294, 2.2710347, 1.5336878], 1e-5)
+            tools.compare(res, [2.5292435, 1.0573294, 2.2710347, 1.5336878],
+                          1e-5)
 
 
 def test_asin():
@@ -118,7 +124,8 @@ def test_asin():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.asin(data)
             x = np.array([-0.8183, 0.4912, -0.6444, 0.0371]).astype(np.float32)
@@ -130,7 +137,8 @@ def test_asin():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=[result.name])[0]
-            tools.compare(res, [-0.95844716, 0.51346684, -0.7002384, 0.03710851], 1e-5)
+            tools.compare(
+                res, [-0.95844716, 0.51346684, -0.7002384, 0.03710851], 1e-5)
 
 
 def test_asin1():
@@ -141,7 +149,8 @@ def test_asin1():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.asin(data, name="asin")
             x = np.array([-0.8183, 0.4912, -0.6444, 0.0371]).astype(np.float32)
@@ -153,7 +162,8 @@ def test_asin1():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["asin.tmp_0"])[0]
-            tools.compare(res, [-0.95844716, 0.51346684, -0.7002384, 0.03710851], 1e-5)
+            tools.compare(
+                res, [-0.95844716, 0.51346684, -0.7002384, 0.03710851], 1e-5)
 
 
 def test_atan():
@@ -164,7 +174,8 @@ def test_atan():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.atan(data)
             x = np.array([-0.8183, 0.4912, -0.6444, 0.0371]).astype(np.float32)
@@ -176,7 +187,8 @@ def test_atan():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=[result.name])[0]
-            tools.compare(res, [-0.6858003, 0.45658287, -0.5724284, 0.03708299], 1e-5)
+            tools.compare(
+                res, [-0.6858003, 0.45658287, -0.5724284, 0.03708299], 1e-5)
 
 
 def test_atan1():
@@ -187,7 +199,8 @@ def test_atan1():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.atan(data, name="atan")
             x = np.array([-0.8183, 0.4912, -0.6444, 0.0371]).astype(np.float32)
@@ -199,7 +212,8 @@ def test_atan1():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["atan.tmp_0"])[0]
-            tools.compare(res, [-0.6858003, 0.45658287, -0.5724284, 0.03708299], 1e-5)
+            tools.compare(
+                res, [-0.6858003, 0.45658287, -0.5724284, 0.03708299], 1e-5)
 
 
 def test_ceil():
@@ -210,7 +224,8 @@ def test_ceil():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.ceil(data, name="ceil")
             x = np.array([-0.8183, 0.4912, -0.6444, 0.0371]).astype(np.float32)
@@ -235,10 +250,12 @@ def test_cos():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.cos(data, name="cos")
-            x = np.array([0, math.pi, 2 * math.pi / 3, math.pi / 2]).astype(np.float32)
+            x = np.array(
+                [0, math.pi, 2 * math.pi / 3, math.pi / 2]).astype(np.float32)
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -260,7 +277,8 @@ def test_exp():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.exp(data, name="exp")
             x = np.array([0, 1, 3, -3]).astype(np.float32)
@@ -272,7 +290,7 @@ def test_exp():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["exp.tmp_0"])[0]
-            tools.compare(res, [1, math.e, math.e ** 3, math.e ** -3], 1e-6)
+            tools.compare(res, [1, math.e, math.e**3, math.e**-3], 1e-6)
 
 
 def test_floor():
@@ -285,7 +303,8 @@ def test_floor():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.floor(data, name="floor")
             x = np.array([-0.8183, 0.4912, -0.6444, 0.0371]).astype(np.float32)
@@ -313,7 +332,8 @@ def test_hard_shrink():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.hard_shrink(data, threshold=1)
             x = np.array([-1, -2, 0, 0.3, 2.7, 1.3]).astype(np.float32)
@@ -339,7 +359,8 @@ def test_logsigmoid():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.logsigmoid(data, name="logsigmoid")
             x = np.array([-1, -2, 0, 2.7]).astype(np.float32)
@@ -351,8 +372,12 @@ def test_logsigmoid():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["logsigmoid.tmp_0"])[0]
-            tools.compare(res, [math.log(tools.sigmoid(-1)), math.log(tools.sigmoid(-2)), math.log(tools.sigmoid(0)),
-                                math.log(tools.sigmoid(2.7)), ], 1e-6)
+            tools.compare(res, [
+                math.log(tools.sigmoid(-1)),
+                math.log(tools.sigmoid(-2)),
+                math.log(tools.sigmoid(0)),
+                math.log(tools.sigmoid(2.7)),
+            ], 1e-6)
 
 
 def test_reciprocal():
@@ -365,7 +390,8 @@ def test_reciprocal():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.reciprocal(data, name="reciprocal")
             x = np.array([-2, -1, 0, 1, 5]).astype(np.float32)
@@ -390,7 +416,8 @@ def test_round():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.round(data, name="round")
             x = np.array([-1.5, -0.32, 0, 0.55, 1.3]).astype(np.float32)
@@ -415,7 +442,8 @@ def test_rsqrt():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.rsqrt(data, name="rsqrt")
             x = np.array([0, 1, 4, 16]).astype(np.float32)
@@ -440,7 +468,8 @@ def test_sigmoid():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.sigmoid(data, name="sigmoid")
             x = np.array([-1, -2, 0, 2.7]).astype(np.float32)
@@ -452,7 +481,10 @@ def test_sigmoid():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["sigmoid.tmp_0"])[0]
-            tools.compare(res, [tools.sigmoid(-1), tools.sigmoid(-2), tools.sigmoid(0), tools.sigmoid(2.7)], 1e-6)
+            tools.compare(res, [
+                tools.sigmoid(-1), tools.sigmoid(-2), tools.sigmoid(0),
+                tools.sigmoid(2.7)
+            ], 1e-6)
 
 
 def test_sin():
@@ -465,10 +497,14 @@ def test_sin():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.sin(data, name="sin")
-            x = np.array([math.pi/6, math.pi/3, math.pi/2, 3*math.pi/4, 3*math.pi/2]).astype(np.float32)
+            x = np.array([
+                math.pi / 6, math.pi / 3, math.pi / 2, 3 * math.pi / 4,
+                3 * math.pi / 2
+            ]).astype(np.float32)
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
@@ -487,18 +523,20 @@ def test_softplus():
     expect is ln(1 + ex)
     :return:
     """
+
     def softplus(x):
         """
         ln(1 + ex)
         :param x:
         :return:
         """
-        return math.log(1 + math.e ** x, math.e)
+        return math.log(1 + math.e**x, math.e)
 
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.softplus(data, name="softplus")
             x = np.array([-2, -1, 0, 1, 5]).astype(np.float32)
@@ -510,7 +548,10 @@ def test_softplus():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["softplus.tmp_0"])[0]
-            tools.compare(res, [softplus(-2), softplus(-1), softplus(0), softplus(1), softplus(5)], 1e-6)
+            tools.compare(res, [
+                softplus(-2), softplus(-1), softplus(0), softplus(1),
+                softplus(5)
+            ], 1e-6)
 
 
 def test_softshrink():
@@ -527,7 +568,8 @@ def test_softshrink():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.softshrink(data, alpha=0.5)
             x = np.array([-2, -1, 0, 1, 5]).astype(np.float32)
@@ -553,7 +595,8 @@ def test_softsign():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.softsign(data, "softsign")
             x = np.array([-2, -1, 0, 1, 5]).astype(np.float32)
@@ -579,7 +622,8 @@ def test_sqrt():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.sqrt(data, "sqrt")
             x = np.array([0, 1, 4, 9, 16]).astype(np.float32)
@@ -605,7 +649,8 @@ def test_square():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.square(data, "square")
             x = np.array([-2, -1, 0, 1, 2]).astype(np.float32)
@@ -628,17 +673,20 @@ def test_tanh():
     expect is tanh(x)
     :return:
     """
+
     def tanh(x):
         """
         ex - e-x / ex + e-x
         :param x:
         :return:
         """
-        return (math.e ** x - math.e ** -x) / (math.e ** x + math.e ** -x)
+        return (math.e**x - math.e**-x) / (math.e**x + math.e**-x)
+
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.tanh(data, "tanh")
             x = np.array([-2, -1, 0, 1, 2]).astype(np.float32)
@@ -650,7 +698,8 @@ def test_tanh():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["tanh.tmp_0"])[0]
-            tools.compare(res, [tanh(-2), tanh(-1), tanh(0), tanh(1), tanh(2)], 1e-6)
+            tools.compare(res, [tanh(-2), tanh(-1), tanh(0), tanh(1), tanh(2)],
+                          1e-6)
 
 
 def test_tanh_shrink():
@@ -661,17 +710,20 @@ def test_tanh_shrink():
     expect is tanh(x)
     :return:
     """
+
     def tanh_shrink(x):
         """
         x - (ex - e-x / ex + e-x)
         :param x:
         :return:
         """
-        return x - (math.e ** x - math.e ** -x) / (math.e ** x + math.e ** -x)
+        return x - (math.e**x - math.e**-x) / (math.e**x + math.e**-x)
+
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.tanh_shrink(data, "tanh_shrink")
             x = np.array([-2, -1, 0, 1, 2]).astype(np.float32)
@@ -683,7 +735,10 @@ def test_tanh_shrink():
                 res = exe.run(compiled_prog,
                               feed={"input": x},
                               fetch_list=["tanh_shrink.tmp_0"])[0]
-            tools.compare(res, [tanh_shrink(-2), tanh_shrink(-1), tanh_shrink(0), tanh_shrink(1), tanh_shrink(2)], 1e-6)
+            tools.compare(res, [
+                tanh_shrink(-2), tanh_shrink(-1), tanh_shrink(0),
+                tanh_shrink(1), tanh_shrink(2)
+            ], 1e-6)
 
 
 def test_thresholded_relu():
@@ -698,7 +753,8 @@ def test_thresholded_relu():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[1])
             result = fluid.layers.thresholded_relu(data, 1.5)
             x = np.array([-2, -1, 0, 1, 2]).astype(np.float32)
@@ -722,15 +778,16 @@ def test_uniform_random():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             result = fluid.layers.uniform_random(shape=[3, 3], seed=33)
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          fetch_list=[result])[0]
-            expect = [[-0.99851644, 0.6121416, 0.6892719], [-0.15365571, 0.8850763, -0.48047507],
+            res = exe.run(compiled_prog, fetch_list=[result])[0]
+            expect = [[-0.99851644, 0.6121416, 0.6892719],
+                      [-0.15365571, 0.8850763, -0.48047507],
                       [0.9884044, -0.7314464, 0.35180688]]
             tools.compare(res, expect, 1e-6)
 
@@ -744,15 +801,16 @@ def test_uniform_random1():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             result = fluid.layers.uniform_random(shape=(3, 3), seed=33)
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          fetch_list=[result])[0]
-            expect = [[-0.99851644, 0.6121416, 0.6892719], [-0.15365571, 0.8850763, -0.48047507],
+            res = exe.run(compiled_prog, fetch_list=[result])[0]
+            expect = [[-0.99851644, 0.6121416, 0.6892719],
+                      [-0.15365571, 0.8850763, -0.48047507],
                       [0.9884044, -0.7314464, 0.35180688]]
             tools.compare(res, expect, 1e-6)
 
@@ -766,16 +824,18 @@ def test_uniform_random2():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-            result = fluid.layers.uniform_random(shape=(3, 2), max=2, min=-2, seed=33)
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
+            result = fluid.layers.uniform_random(
+                shape=(3, 2), max=2, min=-2, seed=33)
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          fetch_list=[result])[0]
+            res = exe.run(compiled_prog, fetch_list=[result])[0]
             print(res)
-            expect = [[-1.9970329, 1.2242832], [1.3785439, -0.30731142], [1.7701526, -0.96095014]]
+            expect = [[-1.9970329, 1.2242832], [1.3785439, -0.30731142],
+                      [1.7701526, -0.96095014]]
             tools.compare(res, expect, 1e-6)
 
 
@@ -791,7 +851,8 @@ def test_cumsum():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[3, 2])
             result = fluid.layers.cumsum(data, axis=0)
             x = np.array([[1, 1], [2, 3], [4, 5]]).astype(np.float32)
@@ -799,8 +860,7 @@ def test_cumsum():
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          feed={"input": x},
+            res = exe.run(compiled_prog, feed={"input": x},
                           fetch_list=[result])[0]
             expect = [[1, 1], [3, 4], [7, 9]]
             tools.compare(res, expect, 1e-6)
@@ -818,7 +878,8 @@ def test_cumsum1():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[3, 2])
             result = fluid.layers.cumsum(data, axis=1)
             x = np.array([[1, 1], [2, 3], [4, 5]]).astype(np.float32)
@@ -826,8 +887,7 @@ def test_cumsum1():
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          feed={"input": x},
+            res = exe.run(compiled_prog, feed={"input": x},
                           fetch_list=[result])[0]
             expect = [[1, 2], [2, 5], [4, 9]]
             tools.compare(res, expect, 1e-6)
@@ -845,7 +905,8 @@ def test_cumsum2():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[3, 2])
             result = fluid.layers.cumsum(data)
             x = np.array([[1, 1], [2, 3], [4, 5]]).astype(np.float32)
@@ -853,8 +914,7 @@ def test_cumsum2():
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          feed={"input": x},
+            res = exe.run(compiled_prog, feed={"input": x},
                           fetch_list=[result])[0]
             expect = [[1, 2], [2, 5], [4, 9]]
             tools.compare(res, expect, 1e-6)
@@ -873,7 +933,8 @@ def test_cumsum3():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[3, 2])
             result = fluid.layers.cumsum(data, reverse=True)
             x = np.array([[1, 1], [2, 3], [4, 5]]).astype(np.float32)
@@ -881,8 +942,7 @@ def test_cumsum3():
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          feed={"input": x},
+            res = exe.run(compiled_prog, feed={"input": x},
                           fetch_list=[result])[0]
             expect = [[2, 1], [5, 3], [9, 5]]
             tools.compare(res, expect, 1e-6)
@@ -901,7 +961,8 @@ def test_cumsum4():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[3, 2])
             result = fluid.layers.cumsum(data, axis=0, exclusive=True)
             x = np.array([[1, 1], [2, 3], [4, 5]]).astype(np.float32)
@@ -909,8 +970,7 @@ def test_cumsum4():
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          feed={"input": x},
+            res = exe.run(compiled_prog, feed={"input": x},
                           fetch_list=[result])[0]
             expect = [[0, 0], [1, 1], [3, 4]]
             tools.compare(res, expect, 1e-6)
@@ -930,7 +990,8 @@ def test_cumsum5():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name="input", shape=[3, 2])
             result = fluid.layers.cumsum(data, reverse=True, exclusive=True)
             x = np.array([[1, 1], [2, 3], [4, 5]]).astype(np.float32)
@@ -938,9 +999,7 @@ def test_cumsum5():
             exe = fluid.Executor(place)
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
-            res = exe.run(compiled_prog,
-                          feed={"input": x},
+            res = exe.run(compiled_prog, feed={"input": x},
                           fetch_list=[result])[0]
             expect = [[1, 0], [3, 0], [5, 0]]
             tools.compare(res, expect, 1e-6)
-

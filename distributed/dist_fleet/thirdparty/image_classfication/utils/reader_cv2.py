@@ -20,11 +20,12 @@ import paddle.fluid as fluid
 import random
 
 from img_tool import process_image
-DATA_DIR=""
+DATA_DIR = ""
 
-THREAD=4
-BUF_SIZE=4000
+THREAD = 4
+BUF_SIZE = 4000
 np.random.seed(1)
+
 
 def _reader_creator(settings,
                     file_list,
@@ -39,11 +40,12 @@ def _reader_creator(settings,
             full_lines = [line.strip() for line in flist]
             if shuffle:
                 random.Random(pass_id_as_seed).shuffle(full_lines)
-            
+
             if mode == 'train':
                 trainer_id = int(os.getenv("PADDLE_TRAINER_ID", "0"))
                 if os.getenv("PADDLE_TRAINER_ENDPOINTS"):
-                    trainer_count = len(os.getenv("PADDLE_TRAINER_ENDPOINTS").split(","))
+                    trainer_count = len(
+                        os.getenv("PADDLE_TRAINER_ENDPOINTS").split(","))
                 else:
                     trainer_count = int(os.getenv("PADDLE_TRAINERS", "1"))
 
@@ -74,7 +76,6 @@ def _reader_creator(settings,
                     img_path = os.path.join(data_dir, line)
                     yield [img_path]
 
-
     image_mapper = functools.partial(
         process_image,
         settings=settings,
@@ -86,9 +87,10 @@ def _reader_creator(settings,
         image_mapper, reader, THREAD, BUF_SIZE, order=True)
     return reader
 
+
 def train(settings, data_dir=DATA_DIR, pass_id_as_seed=0):
     file_list = os.path.join(data_dir, 'train.txt')
-    reader =  _reader_creator(
+    reader = _reader_creator(
         settings,
         file_list,
         'train',
@@ -96,17 +98,17 @@ def train(settings, data_dir=DATA_DIR, pass_id_as_seed=0):
         color_jitter=False,
         rotate=False,
         data_dir=data_dir,
-        pass_id_as_seed=pass_id_as_seed,
-        )
+        pass_id_as_seed=pass_id_as_seed, )
     return reader
 
-def val(settings,data_dir=DATA_DIR):
+
+def val(settings, data_dir=DATA_DIR):
     file_list = os.path.join(data_dir, 'val.txt')
-    return _reader_creator(settings,file_list, 'val', shuffle=False,
-            data_dir=data_dir)
+    return _reader_creator(
+        settings, file_list, 'val', shuffle=False, data_dir=data_dir)
 
 
 def test(settings, data_dir=DATA_DIR):
     file_list = os.path.join(data_dir, 'val.txt')
-    return _reader_creator(settings, file_list, 'test', shuffle=False,
-            data_dir=data_dir)
+    return _reader_creator(
+        settings, file_list, 'test', shuffle=False, data_dir=data_dir)

@@ -19,6 +19,7 @@ import math
 
 cpu = fluid.CPUPlace()
 
+
 def test_PiecewiseDecay():
     """
     test PiecewiseDecay
@@ -30,54 +31,66 @@ def test_PiecewiseDecay():
         fluid.default_startup_program().random_seed = seed
         fluid.default_main_program().random_seed = seed
         classdim = 7
-        x = fluid.dygraph.to_variable(np.arange(0, 21).astype('float32').reshape(3, 7))
-        label = fluid.dygraph.to_variable(np.arange(0, 3).astype('int64').reshape(3, 1))
+        x = fluid.dygraph.to_variable(
+            np.arange(0, 21).astype('float32').reshape(3, 7))
+        label = fluid.dygraph.to_variable(
+            np.arange(0, 3).astype('int64').reshape(3, 1))
         # basic test
         boundaries = [10, 20]
         values = [1.0, 0.5, 0.1]
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
-            learning_rate=fluid.dygraph.PiecewiseDecay(boundaries, values, 0), parameter_list=fc.parameters())
+            learning_rate=fluid.dygraph.PiecewiseDecay(boundaries, values, 0),
+            parameter_list=fc.parameters())
         for step in range(30):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
             cost.backward()
             sgd_optimizer.minimize(cost)
             res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1 for i in range(10)] + [0.5 for i in range(10)] + [0.1 for i in range(10)]
+        exp = [1 for i in range(10)] + [0.5 for i in range(10)
+                                        ] + [0.1 for i in range(10)]
         tools.compare(res, exp)
 
         # set step boundaries * 2
         boundaries = [20, 40]
         values = [1.0, 0.5, 0.1]
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
-            learning_rate=fluid.dygraph.PiecewiseDecay(boundaries, values, 0, step=2), parameter_list=fc.parameters())
+            learning_rate=fluid.dygraph.PiecewiseDecay(
+                boundaries, values, 0, step=2),
+            parameter_list=fc.parameters())
         for step in range(30):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
             cost.backward()
             sgd_optimizer.minimize(cost)
             res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1 for i in range(10)] + [0.5 for i in range(10)] + [0.1 for i in range(10)]
+        exp = [1 for i in range(10)] + [0.5 for i in range(10)
+                                        ] + [0.1 for i in range(10)]
         tools.compare(res, exp)
 
         # set begin=5 => 1*5 + 0.5 *10 + 0.1 * 15
         boundaries = [10, 20]
         values = [1.0, 0.5, 0.1]
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
-            learning_rate=fluid.dygraph.PiecewiseDecay(boundaries, values, 5), parameter_list=fc.parameters())
+            learning_rate=fluid.dygraph.PiecewiseDecay(boundaries, values, 5),
+            parameter_list=fc.parameters())
         for step in range(30):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
             cost.backward()
             sgd_optimizer.minimize(cost)
             res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1 for i in range(5)] + [0.5 for i in range(10)] + [0.1 for i in range(15)]
+        exp = [1 for i in range(5)] + [0.5 for i in range(10)
+                                       ] + [0.1 for i in range(15)]
         tools.compare(res, exp)
 
 
@@ -94,17 +107,19 @@ def test_CosineDecay():
         classdim = 7
         # x = fluid.layers.data(name='x', shape=[3, 7], dtype='float32', append_batch_size=False)
         # label = fluid.layers.data(name='label', shape=[3, 1], dtype='int64', append_batch_size=False)
-        x = fluid.dygraph.to_variable(np.arange(0, 21).astype('float32').reshape(3, 7))
-        label = fluid.dygraph.to_variable(np.arange(0, 3).astype('int64').reshape(3, 1))
+        x = fluid.dygraph.to_variable(
+            np.arange(0, 21).astype('float32').reshape(3, 7))
+        label = fluid.dygraph.to_variable(
+            np.arange(0, 3).astype('int64').reshape(3, 1))
         label.stop_gradient = True
         # basic test
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.CosineDecay(
-                learning_rate=1,
-                step_each_epoch=3,
-                epochs=3), parameter_list=fc.parameters())
+                learning_rate=1, step_each_epoch=3, epochs=3),
+            parameter_list=fc.parameters())
         for epoch in range(3):
             for step in range(3):
                 predict = fc(x)
@@ -117,12 +132,12 @@ def test_CosineDecay():
 
         # more epochs
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.CosineDecay(
-                learning_rate=1,
-                step_each_epoch=10,
-                epochs=3), parameter_list=fc.parameters())
+                learning_rate=1, step_each_epoch=10, epochs=3),
+            parameter_list=fc.parameters())
         for epoch in range(3):
             for step in range(10):
                 predict = fc(x)
@@ -130,20 +145,21 @@ def test_CosineDecay():
                 cost.backward()
                 sgd_optimizer.minimize(cost)
                 res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-               0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
-               0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25]
+        exp = [
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
+            0.75, 0.75, 0.75, 0.75, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25,
+            0.25, 0.25, 0.25
+        ]
         tools.compare(res, exp)
 
         # step = 2 allstep = 20
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.CosineDecay(
-                learning_rate=1,
-                step_each_epoch=20,
-                step=2,
-                epochs=3), parameter_list=fc.parameters())
+                learning_rate=1, step_each_epoch=20, step=2, epochs=3),
+            parameter_list=fc.parameters())
         for epoch in range(3):
             for step in range(10):
                 predict = fc(x)
@@ -151,20 +167,21 @@ def test_CosineDecay():
                 cost.backward()
                 sgd_optimizer.minimize(cost)
                 res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-               0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
-               0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25]
+        exp = [
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
+            0.75, 0.75, 0.75, 0.75, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25,
+            0.25, 0.25, 0.25
+        ]
         tools.compare(res, exp)
 
         # step = 2 allstep = 20
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.CosineDecay(
-                learning_rate=1,
-                step_each_epoch=20,
-                step=2,
-                epochs=3), parameter_list=fc.parameters())
+                learning_rate=1, step_each_epoch=20, step=2, epochs=3),
+            parameter_list=fc.parameters())
         for epoch in range(3):
             for step in range(10):
                 predict = fc(x)
@@ -172,20 +189,21 @@ def test_CosineDecay():
                 cost.backward()
                 sgd_optimizer.minimize(cost)
                 res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-               0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
-               0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25]
+        exp = [
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
+            0.75, 0.75, 0.75, 0.75, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25,
+            0.25, 0.25, 0.25
+        ]
         tools.compare(res, exp)
 
         # begin = 5 allstep = 15
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.CosineDecay(
-                learning_rate=1,
-                step_each_epoch=20,
-                step=2,
-                epochs=3), parameter_list=fc.parameters())
+                learning_rate=1, step_each_epoch=20, step=2, epochs=3),
+            parameter_list=fc.parameters())
         for epoch in range(3):
             for step in range(10):
                 predict = fc(x)
@@ -193,9 +211,11 @@ def test_CosineDecay():
                 cost.backward()
                 sgd_optimizer.minimize(cost)
                 res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-               0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
-               0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25]
+        exp = [
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
+            0.75, 0.75, 0.75, 0.75, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25,
+            0.25, 0.25, 0.25
+        ]
         tools.compare(res, exp)
 
 
@@ -210,38 +230,40 @@ def test_ExponentialDecay():
         fluid.default_startup_program().random_seed = seed
         fluid.default_main_program().random_seed = seed
         classdim = 7
-        x = fluid.dygraph.to_variable(np.arange(0, 21).astype('float32').reshape(3, 7))
-        label = fluid.dygraph.to_variable(np.arange(0, 3).astype('int64').reshape(3, 1))
+        x = fluid.dygraph.to_variable(
+            np.arange(0, 21).astype('float32').reshape(3, 7))
+        label = fluid.dygraph.to_variable(
+            np.arange(0, 3).astype('int64').reshape(3, 1))
         label.stop_gradient = True
         # basic test
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.ExponentialDecay(
-                learning_rate=1,
-                decay_steps=3,
-                decay_rate=0.5,
-                staircase=False
-            ), parameter_list=fc.parameters())
+                learning_rate=1, decay_steps=3, decay_rate=0.5,
+                staircase=False),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
             cost.backward()
             sgd_optimizer.minimize(cost)
             res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1.0, 0.7937005, 0.62996054, 0.5, 0.39685026, 0.31498027, 0.25, 0.19842514, 0.15749012]
+        exp = [
+            1.0, 0.7937005, 0.62996054, 0.5, 0.39685026, 0.31498027, 0.25,
+            0.19842514, 0.15749012
+        ]
         tools.compare(res, exp)
 
         # staircase = True
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.ExponentialDecay(
-                learning_rate=1,
-                decay_steps=3,
-                decay_rate=0.5,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                learning_rate=1, decay_steps=3, decay_rate=0.5, staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -253,15 +275,16 @@ def test_ExponentialDecay():
 
         # staircase = True begin = 1 相当于 全局step + begin
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.ExponentialDecay(
                 learning_rate=1,
                 decay_steps=3,
                 decay_rate=0.5,
                 begin=1,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -273,15 +296,16 @@ def test_ExponentialDecay():
 
         # staircase = True step = 2 相当于 全局step*2 + begin
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.ExponentialDecay(
                 learning_rate=1,
                 decay_steps=3,
                 decay_rate=0.5,
                 step=2,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -303,38 +327,40 @@ def test_InverseTimeDecay():
         fluid.default_startup_program().random_seed = seed
         fluid.default_main_program().random_seed = seed
         classdim = 7
-        x = fluid.dygraph.to_variable(np.arange(0, 21).astype('float32').reshape(3, 7))
-        label = fluid.dygraph.to_variable(np.arange(0, 3).astype('int64').reshape(3, 1))
+        x = fluid.dygraph.to_variable(
+            np.arange(0, 21).astype('float32').reshape(3, 7))
+        label = fluid.dygraph.to_variable(
+            np.arange(0, 3).astype('int64').reshape(3, 1))
         label.stop_gradient = True
         # basic test
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.InverseTimeDecay(
-                learning_rate=1,
-                decay_steps=3,
-                decay_rate=0.5,
-                staircase=False
-            ), parameter_list=fc.parameters())
+                learning_rate=1, decay_steps=3, decay_rate=0.5,
+                staircase=False),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
             cost.backward()
             sgd_optimizer.minimize(cost)
             res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1.0, 0.85714287, 0.75, 0.6666667, 0.59999996, 0.54545456, 0.5, 0.4615385, 0.4285714]
+        exp = [
+            1.0, 0.85714287, 0.75, 0.6666667, 0.59999996, 0.54545456, 0.5,
+            0.4615385, 0.4285714
+        ]
         tools.compare(res, exp)
 
         # decay_rate = 1
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.InverseTimeDecay(
-                learning_rate=1,
-                decay_steps=3,
-                decay_rate=1,
-                staircase=False
-            ), parameter_list=fc.parameters())
+                learning_rate=1, decay_steps=3, decay_rate=1, staircase=False),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -350,14 +376,12 @@ def test_InverseTimeDecay():
 
         # staircase = True
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.InverseTimeDecay(
-                learning_rate=1,
-                decay_steps=3,
-                decay_rate=0.5,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                learning_rate=1, decay_steps=3, decay_rate=0.5, staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -369,15 +393,16 @@ def test_InverseTimeDecay():
 
         # begin = 1
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.InverseTimeDecay(
                 learning_rate=1,
                 decay_steps=3,
                 decay_rate=0.5,
                 begin=1,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -389,22 +414,26 @@ def test_InverseTimeDecay():
 
         # step = 2
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.InverseTimeDecay(
                 learning_rate=1,
                 decay_steps=3,
                 decay_rate=0.5,
                 step=2,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
             cost.backward()
             sgd_optimizer.minimize(cost)
             res.append(sgd_optimizer._global_learning_rate().numpy()[0])
-        exp = [1.0, 1.0, 0.6666667, 0.5, 0.5, 0.4, 0.33333334, 0.33333334, 0.2857143]
+        exp = [
+            1.0, 1.0, 0.6666667, 0.5, 0.5, 0.4, 0.33333334, 0.33333334,
+            0.2857143
+        ]
         tools.compare(res, exp)
 
 
@@ -419,19 +448,20 @@ def test_NaturalExpDecay():
         fluid.default_startup_program().random_seed = seed
         fluid.default_main_program().random_seed = seed
         classdim = 7
-        x = fluid.dygraph.to_variable(np.arange(0, 21).astype('float32').reshape(3, 7))
-        label = fluid.dygraph.to_variable(np.arange(0, 3).astype('int64').reshape(3, 1))
+        x = fluid.dygraph.to_variable(
+            np.arange(0, 21).astype('float32').reshape(3, 7))
+        label = fluid.dygraph.to_variable(
+            np.arange(0, 3).astype('int64').reshape(3, 1))
         label.stop_gradient = True
         # basic test
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NaturalExpDecay(
-                learning_rate=1,
-                decay_steps=3,
-                decay_rate=0.5,
-                staircase=False
-            ), parameter_list=fc.parameters())
+                learning_rate=1, decay_steps=3, decay_rate=0.5,
+                staircase=False),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -447,14 +477,12 @@ def test_NaturalExpDecay():
 
         # staircase = True
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NaturalExpDecay(
-                learning_rate=1,
-                decay_steps=3,
-                decay_rate=0.5,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                learning_rate=1, decay_steps=3, decay_rate=0.5, staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -470,14 +498,12 @@ def test_NaturalExpDecay():
 
         # decay_rate = 0.3
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NaturalExpDecay(
-                learning_rate=1,
-                decay_steps=3,
-                decay_rate=0.3,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                learning_rate=1, decay_steps=3, decay_rate=0.3, staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -493,15 +519,16 @@ def test_NaturalExpDecay():
 
         # decay_rate = 0.5 begin = 2
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NaturalExpDecay(
                 learning_rate=1,
                 decay_steps=3,
                 decay_rate=0.5,
                 begin=2,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -517,7 +544,8 @@ def test_NaturalExpDecay():
 
         # decay_rate = 0.5 begin = 2 step = 2
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NaturalExpDecay(
                 learning_rate=1,
@@ -525,8 +553,8 @@ def test_NaturalExpDecay():
                 decay_rate=0.5,
                 begin=2,
                 step=2,
-                staircase=True
-            ), parameter_list=fc.parameters())
+                staircase=True),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -552,19 +580,22 @@ def test_PolynomialDecay():
         fluid.default_startup_program().random_seed = seed
         fluid.default_main_program().random_seed = seed
         classdim = 7
-        x = fluid.dygraph.to_variable(np.arange(0, 21).astype('float32').reshape(3, 7))
-        label = fluid.dygraph.to_variable(np.arange(0, 3).astype('int64').reshape(3, 1))
+        x = fluid.dygraph.to_variable(
+            np.arange(0, 21).astype('float32').reshape(3, 7))
+        label = fluid.dygraph.to_variable(
+            np.arange(0, 3).astype('int64').reshape(3, 1))
         label.stop_gradient = True
         # basic test
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=1,
                 decay_steps=5,
                 end_learning_rate=0,
-                power=1.0,
-            ), parameter_list=fc.parameters())
+                power=1.0, ),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -575,20 +606,21 @@ def test_PolynomialDecay():
         exp = []
         for i in range(9):
             i = min(i, 5)
-            tmp = (1 - 0) * (1 - i / 5) ** 1.0 + 0
+            tmp = (1 - 0) * (1 - i / 5)**1.0 + 0
             exp.append(tmp)
         tools.compare(res, exp)
 
         # power = 2.0
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=1,
                 decay_steps=5,
                 end_learning_rate=0,
-                power=2.0,
-            ), parameter_list=fc.parameters())
+                power=2.0, ),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -599,20 +631,21 @@ def test_PolynomialDecay():
         exp = []
         for i in range(9):
             i = min(i, 5)
-            tmp = (1 - 0) * (1 - i / 5) ** 2.0 + 0
+            tmp = (1 - 0) * (1 - i / 5)**2.0 + 0
             exp.append(tmp)
         tools.compare(res, exp)
 
         # decay_steps = 3.0
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=1,
                 decay_steps=3,
                 end_learning_rate=0,
-                power=1.0,
-            ), parameter_list=fc.parameters())
+                power=1.0, ),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -623,20 +656,21 @@ def test_PolynomialDecay():
         exp = []
         for i in range(9):
             i = min(i, 3)
-            tmp = (1 - 0) * (1 - i / 3) ** 1.0 + 0
+            tmp = (1 - 0) * (1 - i / 3)**1.0 + 0
             exp.append(tmp)
         tools.compare(res, exp)
 
         # end_learning_rate = 0.5
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=1,
                 decay_steps=7,
                 end_learning_rate=0.5,
-                power=1.0,
-            ), parameter_list=fc.parameters())
+                power=1.0, ),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -647,20 +681,21 @@ def test_PolynomialDecay():
         exp = []
         for i in range(9):
             i = min(i, 7)
-            tmp = (1 - 0.5) * (1 - i / 7) ** 1.0 + 0.5
+            tmp = (1 - 0.5) * (1 - i / 7)**1.0 + 0.5
             exp.append(tmp)
         tools.compare(res, exp)
 
         # learning_rate = 2
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=2,
                 decay_steps=7,
                 end_learning_rate=0.5,
-                power=1.0,
-            ), parameter_list=fc.parameters())
+                power=1.0, ),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -671,21 +706,22 @@ def test_PolynomialDecay():
         exp = []
         for i in range(9):
             i = min(i, 7)
-            tmp = (2 - 0.5) * (1 - i / 7) ** 1.0 + 0.5
+            tmp = (2 - 0.5) * (1 - i / 7)**1.0 + 0.5
             exp.append(tmp)
         tools.compare(res, exp)
 
         # learning_rate = 2 begin =1
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=2,
                 decay_steps=7,
                 end_learning_rate=0.5,
                 begin=1,
-                power=1.0
-            ), parameter_list=fc.parameters())
+                power=1.0),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -696,13 +732,14 @@ def test_PolynomialDecay():
         exp = []
         for i in range(9):
             i = min(i + 1, 7)
-            tmp = (2 - 0.5) * (1 - i / 7) ** 1.0 + 0.5
+            tmp = (2 - 0.5) * (1 - i / 7)**1.0 + 0.5
             exp.append(tmp)
         tools.compare(res, exp)
 
         # learning_rate = 2 begin =1 step = 2
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=2,
@@ -710,8 +747,8 @@ def test_PolynomialDecay():
                 end_learning_rate=0.5,
                 begin=1,
                 step=2,
-                power=1.0
-            ), parameter_list=fc.parameters())
+                power=1.0),
+            parameter_list=fc.parameters())
         for step in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -722,21 +759,22 @@ def test_PolynomialDecay():
         exp = []
         for i in range(9):
             i = min(i * 2 + 1, 7)
-            tmp = (2 - 0.5) * (1 - i / 7) ** 1.0 + 0.5
+            tmp = (2 - 0.5) * (1 - i / 7)**1.0 + 0.5
             exp.append(tmp)
         tools.compare(res, exp)
 
         # cycle = True
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=2,
                 decay_steps=7,
                 end_learning_rate=0.5,
                 power=1.0,
-                cycle=True
-            ), parameter_list=fc.parameters())
+                cycle=True),
+            parameter_list=fc.parameters())
         for step in range(20):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -750,13 +788,14 @@ def test_PolynomialDecay():
             if lr == 0:
                 lr = 1
             tmp = 7 * lr
-            tmp = (2 - 0.5) * (1 - i / tmp) ** 1.0 + 0.5
+            tmp = (2 - 0.5) * (1 - i / tmp)**1.0 + 0.5
             exp.append(tmp)
         tools.compare(res, exp)
 
         # cycle = True begin = 2
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=2,
@@ -764,8 +803,8 @@ def test_PolynomialDecay():
                 end_learning_rate=0.5,
                 power=1.0,
                 begin=2,
-                cycle=True
-            ), parameter_list=fc.parameters())
+                cycle=True),
+            parameter_list=fc.parameters())
         for step in range(20):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -779,13 +818,14 @@ def test_PolynomialDecay():
             if lr == 0:
                 lr = 1
             tmp = 7 * lr
-            tmp = (2 - 0.5) * (1 - (i + 2) / tmp) ** 1.0 + 0.5
+            tmp = (2 - 0.5) * (1 - (i + 2) / tmp)**1.0 + 0.5
             exp.append(tmp)
         tools.compare(res, exp)
 
         # cycle = True begin = 2  step = 2
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.PolynomialDecay(
                 learning_rate=2,
@@ -794,8 +834,8 @@ def test_PolynomialDecay():
                 power=1.0,
                 begin=2,
                 step=2,
-                cycle=True
-            ), parameter_list=fc.parameters())
+                cycle=True),
+            parameter_list=fc.parameters())
         for step in range(20):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -809,7 +849,7 @@ def test_PolynomialDecay():
             if lr == 0:
                 lr = 1
             tmp = 7 * lr
-            tmp = (2 - 0.5) * (1 - (i * 2 + 2) / tmp) ** 1.0 + 0.5
+            tmp = (2 - 0.5) * (1 - (i * 2 + 2) / tmp)**1.0 + 0.5
             exp.append(tmp)
         tools.compare(res, exp)
 
@@ -825,8 +865,10 @@ def test_NoamDecay():
         fluid.default_startup_program().random_seed = seed
         fluid.default_main_program().random_seed = seed
         classdim = 7
-        x = fluid.dygraph.to_variable(np.arange(0, 21).astype('float32').reshape(3, 7))
-        label = fluid.dygraph.to_variable(np.arange(0, 3).astype('int64').reshape(3, 1))
+        x = fluid.dygraph.to_variable(
+            np.arange(0, 21).astype('float32').reshape(3, 7))
+        label = fluid.dygraph.to_variable(
+            np.arange(0, 3).astype('int64').reshape(3, 1))
         label.stop_gradient = True
         # basic test
         d_model = 2
@@ -834,14 +876,15 @@ def test_NoamDecay():
         begin = 1
         step = 1
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NoamDecay(
                 d_model=d_model,
                 warmup_steps=warmup_steps,
                 begin=begin,
-                step=step
-            ), parameter_list=fc.parameters())
+                step=step),
+            parameter_list=fc.parameters())
         for i in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -851,8 +894,10 @@ def test_NoamDecay():
         # 衰减算法
         exp = []
         for i in range(9):
-            lr = np.power(d_model, -0.5) * np.min([np.power((i * step + begin), -0.5),
-                        np.power(warmup_steps, -1.5) * (i * step + begin)])
+            lr = np.power(d_model, -0.5) * np.min([
+                np.power((i * step + begin), -0.5),
+                np.power(warmup_steps, -1.5) * (i * step + begin)
+            ])
             exp.append(lr)
         tools.compare(res, exp)
 
@@ -862,14 +907,15 @@ def test_NoamDecay():
         begin = 1
         step = 1
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NoamDecay(
                 d_model=d_model,
                 warmup_steps=warmup_steps,
                 begin=begin,
-                step=step
-            ), parameter_list=fc.parameters())
+                step=step),
+            parameter_list=fc.parameters())
         for i in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -879,8 +925,10 @@ def test_NoamDecay():
         # 衰减算法
         exp = []
         for i in range(9):
-            lr = np.power(d_model, -0.5) * np.min([np.power((i * step + begin), -0.5),
-                                                   np.power(warmup_steps, -1.5) * (i * step + begin)])
+            lr = np.power(d_model, -0.5) * np.min([
+                np.power((i * step + begin), -0.5),
+                np.power(warmup_steps, -1.5) * (i * step + begin)
+            ])
             exp.append(lr)
         tools.compare(res, exp)
 
@@ -890,14 +938,15 @@ def test_NoamDecay():
         begin = 1
         step = 1
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NoamDecay(
                 d_model=d_model,
                 warmup_steps=warmup_steps,
                 begin=begin,
-                step=step
-            ), parameter_list=fc.parameters())
+                step=step),
+            parameter_list=fc.parameters())
         for i in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -907,8 +956,10 @@ def test_NoamDecay():
         # 衰减算法
         exp = []
         for i in range(9):
-            lr = np.power(d_model, -0.5) * np.min([np.power((i * step + begin), -0.5),
-                                                   np.power(warmup_steps, -1.5) * (i * step + begin)])
+            lr = np.power(d_model, -0.5) * np.min([
+                np.power((i * step + begin), -0.5),
+                np.power(warmup_steps, -1.5) * (i * step + begin)
+            ])
             exp.append(lr)
         tools.compare(res, exp)
 
@@ -918,14 +969,15 @@ def test_NoamDecay():
         begin = 3
         step = 2
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NoamDecay(
                 d_model=d_model,
                 warmup_steps=warmup_steps,
                 begin=begin,
-                step=step
-            ), parameter_list=fc.parameters())
+                step=step),
+            parameter_list=fc.parameters())
         for i in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -935,8 +987,10 @@ def test_NoamDecay():
         # 衰减算法
         exp = []
         for i in range(9):
-            lr = np.power(d_model, -0.5) * np.min([np.power((i * step + begin), -0.5),
-                                                   np.power(warmup_steps, -1.5) * (i * step + begin)])
+            lr = np.power(d_model, -0.5) * np.min([
+                np.power((i * step + begin), -0.5),
+                np.power(warmup_steps, -1.5) * (i * step + begin)
+            ])
             exp.append(lr)
         tools.compare(res, exp)
 
@@ -946,14 +1000,15 @@ def test_NoamDecay():
         begin = 1
         step = 1
         res = []
-        fc = fluid.dygraph.Linear(input_dim=7, output_dim=classdim, act='softmax')
+        fc = fluid.dygraph.Linear(
+            input_dim=7, output_dim=classdim, act='softmax')
         sgd_optimizer = fluid.optimizer.SGD(
             learning_rate=fluid.dygraph.NoamDecay(
                 d_model=d_model,
                 warmup_steps=warmup_steps,
                 begin=begin,
-                step=step
-            ), parameter_list=fc.parameters())
+                step=step),
+            parameter_list=fc.parameters())
         for i in range(9):
             predict = fc(x)
             cost = fluid.layers.cross_entropy(input=predict, label=label)
@@ -963,10 +1018,9 @@ def test_NoamDecay():
         # 衰减算法
         exp = []
         for i in range(9):
-            lr = np.power(d_model, -0.5) * np.min([np.power((i * step + begin), -0.5),
-                                                   np.power(warmup_steps, -1.5) * (i * step + begin)])
+            lr = np.power(d_model, -0.5) * np.min([
+                np.power((i * step + begin), -0.5),
+                np.power(warmup_steps, -1.5) * (i * step + begin)
+            ])
             exp.append(lr)
         tools.compare(res, exp)
-
-
-

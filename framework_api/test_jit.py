@@ -26,7 +26,6 @@ from paddle.fluid.dygraph.base import to_variable
 from paddle.fluid.dygraph import TracedLayer
 import tools
 
-
 batch_size = 16
 train_parameters = {
     "input_size": [3, 224, 224],
@@ -50,6 +49,7 @@ def create_reader(is_test=False):
     :param is_test:
     :return:
     """
+
     def train_reader():
         return paddle.dataset.flowers.train(use_xmap=False)
 
@@ -79,7 +79,7 @@ def optimizer_setting(params, parameter_list=None):
         bd = [step * e for e in ls["epochs"]]
         base_lr = params["lr"]
         lr = []
-        lr = [base_lr * (0.1 ** i) for i in range(len(bd) + 1)]
+        lr = [base_lr * (0.1**i) for i in range(len(bd) + 1)]
         if fluid.in_dygraph_mode():
             optimizer = fluid.optimizer.SGD(learning_rate=0.01,
                                             parameter_list=parameter_list)
@@ -93,6 +93,7 @@ class ConvBNLayer(fluid.Layer):
     """
     define ConvBNLayer
     """
+
     def __init__(self,
                  num_channels,
                  num_filters,
@@ -131,6 +132,7 @@ class BottleneckBlock(fluid.Layer):
     """
     define BottleneckBlock
     """
+
     def __init__(self, num_channels, num_filters, stride, shortcut=True):
         super(BottleneckBlock, self).__init__()
 
@@ -183,6 +185,7 @@ class ResNet(fluid.Layer):
     """
     define models
     """
+
     def __init__(self, layers=50, class_dim=102):
         super(ResNet, self).__init__()
 
@@ -201,11 +204,7 @@ class ResNet(fluid.Layer):
         num_filters = [64, 128, 256, 512]
 
         self.conv = ConvBNLayer(
-            num_channels=3,
-            num_filters=64,
-            filter_size=7,
-            stride=2,
-            act='relu')
+            num_channels=3, num_filters=64, filter_size=7, stride=2, act='relu')
         self.pool2d_max = Pool2D(
             pool_size=3, pool_stride=2, pool_padding=1, pool_type='max')
 
@@ -387,7 +386,8 @@ def load_static_graph1(epoch_num):
 
     exe.run(fluid.default_startup_program())
     [inference_program, feed_target_names, fetch_targets] = (
-        fluid.io.load_inference_model(dirname="./infer_dygraph", executor=exe))
+        fluid.io.load_inference_model(
+            dirname="./infer_dygraph", executor=exe))
     image_shape = train_parameters['input_size']
 
     reader = create_reader()
@@ -396,10 +396,9 @@ def load_static_graph1(epoch_num):
             image_np = np.array([np.reshape(x[0], image_shape) for x in data])
             label_np = np.array([x[1] for x in data])
 
-            avg_loss_val, = exe.run(
-                inference_program,
-                feed={feed_target_names[0]: image_np},
-                fetch_list=fetch_targets)
+            avg_loss_val, = exe.run(inference_program,
+                                    feed={feed_target_names[0]: image_np},
+                                    fetch_list=fetch_targets)
             print(avg_loss_val.shape)
             return avg_loss_val
 
@@ -436,7 +435,8 @@ def load_static_graph2(epoch_num):
 
     exe.run(fluid.default_startup_program())
     [inference_program, feed_target_names, fetch_targets] = (
-        fluid.io.load_inference_model(dirname="./infer_static_graph", executor=exe))
+        fluid.io.load_inference_model(
+            dirname="./infer_static_graph", executor=exe))
     image_shape = train_parameters['input_size']
 
     reader = create_reader()
@@ -445,10 +445,9 @@ def load_static_graph2(epoch_num):
             image_np = np.array([np.reshape(x[0], image_shape) for x in data])
             label_np = np.array([x[1] for x in data])
 
-            avg_loss_val, = exe.run(
-                inference_program,
-                feed={feed_target_names[0]: image_np},
-                fetch_list=fetch_targets)
+            avg_loss_val, = exe.run(inference_program,
+                                    feed={feed_target_names[0]: image_np},
+                                    fetch_list=fetch_targets)
             print(avg_loss_val.shape)
             return avg_loss_val
 
@@ -475,4 +474,3 @@ def test_jit():
             if dygraph[i][j] != static[i][j]:
                 print("error")
     tools.compare(dygraph, static)
-

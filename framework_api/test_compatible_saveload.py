@@ -19,11 +19,11 @@ import paddle
 import paddle.fluid as fluid
 import shutil
 
-
 BATCH_SIZE = 64
 PASS_NUM = 1
 use_cuda = True if fluid.core.is_compiled_with_cuda() else False
 predict = 'convolutional_neural_network'
+
 
 def loss_net(hidden, label):
     """
@@ -87,10 +87,10 @@ def convolutional_neural_network(img, label):
 
 
 def train1(nn_type,
-          use_cuda,
-          save_dirname=None,
-          model_filename=None,
-          params_filename=None):
+           use_cuda,
+           save_dirname=None,
+           model_filename=None,
+           params_filename=None):
     """
     train
     :param nn_type:
@@ -114,7 +114,8 @@ def train1(nn_type,
             startup_program.random_seed = 90
             main_program.random_seed = 90
 
-            img = fluid.data(name='img', shape=[None, 1, 28, 28], dtype='float32')
+            img = fluid.data(
+                name='img', shape=[None, 1, 28, 28], dtype='float32')
             label = fluid.data(name='label', shape=[None, 1], dtype='int64')
 
             if nn_type == 'softmax_regression':
@@ -129,6 +130,7 @@ def train1(nn_type,
             test_program1 = main_program.clone(for_test=True)
             optimizer = fluid.optimizer.Adam(learning_rate=0.001)
             optimizer.minimize(avg_loss)
+
             def load(train_test_program, train_test_feed, train_test_reader):
                 """
                 test new load api
@@ -153,8 +155,8 @@ def train1(nn_type,
                 avg_loss_val_mean = numpy.array(avg_loss_set).mean()
                 return avg_loss_val_mean, acc_val_mean
 
-
-            def train_test(train_test_program, train_test_feed, train_test_reader):
+            def train_test(train_test_program, train_test_feed,
+                           train_test_reader):
                 """
                 test
                 :param train_test_program:
@@ -165,8 +167,10 @@ def train1(nn_type,
                 acc_set = []
                 avg_loss_set = []
                 param_path = "./compatible_save_param"
-                fluid.io.load_params(executor=exe, dirname=param_path,
-                                     main_program=train_test_program)
+                fluid.io.load_params(
+                    executor=exe,
+                    dirname=param_path,
+                    main_program=train_test_program)
                 for test_data in train_test_reader():
                     acc_np, avg_loss_np = exe.run(
                         program=train_test_program,
@@ -191,16 +195,16 @@ def train1(nn_type,
             step = 0
             for epoch_id in epochs:
                 for step_id, data in enumerate(train_reader()):
-                    metrics = exe.run(
-                        main_program,
-                        feed=feeder.feed(data),
-                        fetch_list=[avg_loss, acc])
+                    metrics = exe.run(main_program,
+                                      feed=feeder.feed(data),
+                                      fetch_list=[avg_loss, acc])
                     if step % 100 == 0:
                         print("Pass %d, Epoch %d, Cost %f" % (step, epoch_id,
                                                               metrics[0]))
                     step += 1
                 if save_dirname is not None:
-                    fluid.io.save_params(exe, "./compatible_save_param", main_program)
+                    fluid.io.save_params(exe, "./compatible_save_param",
+                                         main_program)
                     # load_param(test_program1)
                     # test for epoch
                     avg_loss_val, acc_val = train_test(
@@ -223,14 +227,15 @@ def train1(nn_type,
             # find the best pass
             best = sorted(lists, key=lambda list: float(list[1]))[0]
             print('Best pass is %s, testing Avgcost is %s' % (best[0], best[1]))
-            print('The classification accuracy is %.2f%%' % (float(best[2]) * 100))
+            print('The classification accuracy is %.2f%%' %
+                  (float(best[2]) * 100))
 
 
 def train2(nn_type,
-          use_cuda,
-          save_dirname=None,
-          model_filename=None,
-          params_filename=None):
+           use_cuda,
+           save_dirname=None,
+           model_filename=None,
+           params_filename=None):
     """
     train
     :param nn_type:
@@ -254,7 +259,8 @@ def train2(nn_type,
             startup_program.random_seed = 90
             main_program.random_seed = 90
 
-            img = fluid.data(name='img', shape=[None, 1, 28, 28], dtype='float32')
+            img = fluid.data(
+                name='img', shape=[None, 1, 28, 28], dtype='float32')
             label = fluid.data(name='label', shape=[None, 1], dtype='int64')
 
             if nn_type == 'softmax_regression':
@@ -269,6 +275,7 @@ def train2(nn_type,
             test_program1 = main_program.clone(for_test=True)
             optimizer = fluid.optimizer.Adam(learning_rate=0.001)
             optimizer.minimize(avg_loss)
+
             def load(train_test_program, train_test_feed, train_test_reader):
                 """
                 test new load api
@@ -293,8 +300,8 @@ def train2(nn_type,
                 avg_loss_val_mean = numpy.array(avg_loss_set).mean()
                 return avg_loss_val_mean, acc_val_mean
 
-
-            def train_test(train_test_program, train_test_feed, train_test_reader):
+            def train_test(train_test_program, train_test_feed,
+                           train_test_reader):
                 """
                 test
                 :param train_test_program:
@@ -305,8 +312,10 @@ def train2(nn_type,
                 acc_set = []
                 avg_loss_set = []
                 param_path = "./compatible_save_persist"
-                fluid.io.load_persistables(executor=exe, dirname=param_path,
-                                     main_program=train_test_program)
+                fluid.io.load_persistables(
+                    executor=exe,
+                    dirname=param_path,
+                    main_program=train_test_program)
                 for test_data in train_test_reader():
                     acc_np, avg_loss_np = exe.run(
                         program=train_test_program,
@@ -331,16 +340,16 @@ def train2(nn_type,
             step = 0
             for epoch_id in epochs:
                 for step_id, data in enumerate(train_reader()):
-                    metrics = exe.run(
-                        main_program,
-                        feed=feeder.feed(data),
-                        fetch_list=[avg_loss, acc])
+                    metrics = exe.run(main_program,
+                                      feed=feeder.feed(data),
+                                      fetch_list=[avg_loss, acc])
                     if step % 100 == 0:
                         print("Pass %d, Epoch %d, Cost %f" % (step, epoch_id,
                                                               metrics[0]))
                     step += 1
                 if save_dirname is not None:
-                    fluid.io.save_persistables(exe, "./compatible_save_persist", main_program)
+                    fluid.io.save_persistables(exe, "./compatible_save_persist",
+                                               main_program)
                     # load_param(test_program1)
                     # test for epoch
                     avg_loss_val, acc_val = train_test(
@@ -363,14 +372,15 @@ def train2(nn_type,
             # find the best pass
             best = sorted(lists, key=lambda list: float(list[1]))[0]
             print('Best pass is %s, testing Avgcost is %s' % (best[0], best[1]))
-            print('The classification accuracy is %.2f%%' % (float(best[2]) * 100))
+            print('The classification accuracy is %.2f%%' %
+                  (float(best[2]) * 100))
 
 
 def train3(nn_type,
-          use_cuda,
-          save_dirname=None,
-          model_filename=None,
-          params_filename=None):
+           use_cuda,
+           save_dirname=None,
+           model_filename=None,
+           params_filename=None):
     """
     train
     :param nn_type:
@@ -394,7 +404,8 @@ def train3(nn_type,
             startup_program.random_seed = 90
             main_program.random_seed = 90
 
-            img = fluid.data(name='img', shape=[None, 1, 28, 28], dtype='float32')
+            img = fluid.data(
+                name='img', shape=[None, 1, 28, 28], dtype='float32')
             label = fluid.data(name='label', shape=[None, 1], dtype='int64')
 
             if nn_type == 'softmax_regression':
@@ -409,7 +420,9 @@ def train3(nn_type,
             test_program1 = main_program.clone(for_test=True)
             optimizer = fluid.optimizer.Adam(learning_rate=0.001)
             optimizer.minimize(avg_loss)
-            def load(train_test_program, train_test_feed, train_test_reader, vars):
+
+            def load(train_test_program, train_test_feed, train_test_reader,
+                     vars):
                 """
                 test new load api
                 :param train_test_program:
@@ -433,8 +446,8 @@ def train3(nn_type,
                 avg_loss_val_mean = numpy.array(avg_loss_set).mean()
                 return avg_loss_val_mean, acc_val_mean
 
-
-            def train_test(train_test_program, train_test_feed, train_test_reader, vars):
+            def train_test(train_test_program, train_test_feed,
+                           train_test_reader, vars):
                 """
                 test
                 :param train_test_program:
@@ -445,8 +458,11 @@ def train3(nn_type,
                 acc_set = []
                 avg_loss_set = []
                 param_path = "./compatible_save_vars"
-                fluid.io.load_vars(executor=exe, dirname=param_path,
-                                     main_program=train_test_program, vars=vars)
+                fluid.io.load_vars(
+                    executor=exe,
+                    dirname=param_path,
+                    main_program=train_test_program,
+                    vars=vars)
                 for test_data in train_test_reader():
                     acc_np, avg_loss_np = exe.run(
                         program=train_test_program,
@@ -471,17 +487,17 @@ def train3(nn_type,
             step = 0
             for epoch_id in epochs:
                 for step_id, data in enumerate(train_reader()):
-                    metrics = exe.run(
-                        main_program,
-                        feed=feeder.feed(data),
-                        fetch_list=[avg_loss, acc])
+                    metrics = exe.run(main_program,
+                                      feed=feeder.feed(data),
+                                      fetch_list=[avg_loss, acc])
                     if step % 100 == 0:
                         print("Pass %d, Epoch %d, Cost %f" % (step, epoch_id,
                                                               metrics[0]))
                     step += 1
                 if save_dirname is not None:
                     vars = fluid.io.get_program_parameter(main_program)
-                    fluid.io.save_vars(exe, "./compatible_save_vars", main_program, vars=vars)
+                    fluid.io.save_vars(
+                        exe, "./compatible_save_vars", main_program, vars=vars)
                     # load_param(test_program1)
                     # test for epoch
                     avg_loss_val, acc_val = train_test(
@@ -506,7 +522,8 @@ def train3(nn_type,
             # find the best pass
             best = sorted(lists, key=lambda list: float(list[1]))[0]
             print('Best pass is %s, testing Avgcost is %s' % (best[0], best[1]))
-            print('The classification accuracy is %.2f%%' % (float(best[2]) * 100))
+            print('The classification accuracy is %.2f%%' %
+                  (float(best[2]) * 100))
 
 
 def main1(use_cuda, nn_type):

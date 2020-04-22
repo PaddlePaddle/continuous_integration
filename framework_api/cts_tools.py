@@ -27,7 +27,8 @@ def check_data(result, expect, delta=None):
     """
     if delta:
         for i in range(len(expect)):
-            tools.assert_almost_equal(result[i], np.float32(expect[i]), delta=delta)
+            tools.assert_almost_equal(
+                result[i], np.float32(expect[i]), delta=delta)
     else:
         for i in range(len(expect)):
             tools.assert_equal(result[i], np.float32(expect[i]))

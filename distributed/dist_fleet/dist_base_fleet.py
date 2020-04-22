@@ -111,8 +111,7 @@ class FleetDistRunnerBase(object):
                 'runtime_split_send_recv']
             program_config.use_hierarchical_allreduce = args.run_params[
                 'use_hierarchical_allreduce']
-            program_config.geo_sgd_need_push_nums = args.run_params[
-                'push_nums']
+            program_config.geo_sgd_need_push_nums = args.run_params['push_nums']
             # self.strategy.set_trainer_runtime_config(trainer_runtime_config) 
 
     def run_pserver(self, args):
@@ -472,9 +471,7 @@ def runtime_main(test_class):
     """
     parser = argparse.ArgumentParser(description='Run Fleet test.')
     parser.add_argument(
-        '--update_method',
-        type=str,
-        required=True,
+        '--update_method', type=str, required=True,
         choices=['pserver', 'nccl'])
     parser.add_argument(
         '--role', type=str, required=True, choices=['pserver', 'trainer'])

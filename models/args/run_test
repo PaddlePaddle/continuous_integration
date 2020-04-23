@@ -27,7 +27,7 @@ do
         cp ${ROOT_PATH}/${MODEL}/run_prepare.sh ./
         cp ${ROOT_PATH}/${MODEL}/test_args.py ./
 
-	sh run_prepare.sh
+	sh run_prepare.sh ${ROOT_PATH}
         if [ ${COM_TYPE} == "1" ]; then
 	    python run_args.py ${RUN_PY} ${FUNCTION} ${COM_TYPE} 1>${LOG_NAME}.log 2>${LOG_NAME}.log.wf
         elif [ ${COM_TYPE} == "2" ]; then

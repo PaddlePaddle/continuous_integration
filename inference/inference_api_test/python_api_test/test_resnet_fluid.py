@@ -124,10 +124,11 @@ class TestResNet50API(object):
 
 
         """
-        res1 = run_infer(self.model, CASE_ROOT + "/resnet_fluid_gpu.yaml",
+        res1 = run_infer(    self.model, CASE_ROOT + "/resnet_fluid_gpu.yaml",
                          self.input_data)
         res2 = run_infer(self.model, CASE_ROOT + "/resnet_fluid_cpu.yaml",
                          self.input_data)
+        a    = 5
         result1 = res1[0].data.float_data()
         result2 = res2[0].data.float_data()
         for i in range(len(result1)):

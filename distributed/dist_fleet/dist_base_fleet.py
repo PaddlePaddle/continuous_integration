@@ -308,6 +308,8 @@ class TestFleetBase(object):
         Returns:
             list
         """
+        run_params = json.dumps(self.run_params).replace(" ", "")
+        flags_params = json.loads(run_params)
         required_envs = {
             "PATH": os.getenv("PATH"),
             "LD_LIBRARY_PATH": os.getenv("LD_LIBRARY_PATH", ''),
@@ -315,11 +317,16 @@ class TestFleetBase(object):
             "FLAGS_fraction_of_gpu_memory_to_use": "0.15",
             "FLAGS_cudnn_deterministic": "1",
             "FLAGS_rpc_deadline": "5000",  # 5sec to fail fast
-            "http_proxy": ""
+            "http_proxy": "",
         }
+        if "run_from_dataset" in flags_params:
+            required_envs["CPU_NUM"] = str(flags_params['cpu_num'])
+        else:
+            required_envs = required_envs
         if check_error_log:
             required_envs["GLOG_v"] = "1"
             required_envs["GLOG_logtostderr"] = "1"
+
         if models_change_env:
             required_envs.update(models_change_env)
         # Run local to get a base line
@@ -330,7 +337,6 @@ class TestFleetBase(object):
         tr_cmd_lists = []
         tr_proc_list = []
         FNULL = open(os.devnull, 'w')
-        run_params = json.dumps(self.run_params).replace(" ", "")
         if update_method == "pserver":
             for i in range(self.trainers):
                 tr_cmd = "{} {} --update_method pserver --role trainer --endpoints {} " \
@@ -344,7 +350,7 @@ class TestFleetBase(object):
                 devices_define = ""
                 for j in range(gpu_num):
                     devices_define += "%d," % (i * gpu_num + j)
-                flags_params = json.loads(run_params)
+
                 if flags_params["push_nums"] == 50:
                     envs = {
                         "FLAGS_communicator_max_merge_var_num":
@@ -446,9 +452,9 @@ class TestFleetBase(object):
         try:
             for tr_proc in tr_proc_list:
                 out, _ = tr_proc.communicate()
-                lines = out.split("\n")[-2]
+                lines = out.split(b"\n")[-2]
                 if lines:
-                    lines = lines[1:-2].split(",")
+                    lines = lines[1:-2].split(b",")
                 loss = [eval(i) for i in lines]
                 train_data.append(loss)
         except Exception:
@@ -459,7 +465,7 @@ class TestFleetBase(object):
                 for ps_proc in ps_proc_list:
                     os.kill(ps_proc.pid, signal.SIGKILL)
             FNULL.close()
-        print train_data
+        print(train_data)
         return train_data
 
 

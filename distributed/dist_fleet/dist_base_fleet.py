@@ -321,8 +321,7 @@ class TestFleetBase(object):
         }
         if "run_from_dataset" in flags_params:
             required_envs["CPU_NUM"] = str(flags_params['cpu_num'])
-        else:
-            required_envs = required_envs
+
         if check_error_log:
             required_envs["GLOG_v"] = "1"
             required_envs["GLOG_logtostderr"] = "1"

@@ -11,3 +11,5 @@ python models.py change_info args_batch.conf >models_info
 cat models_info
 
 cp models_info ../conf/changed_models.conf
+ls -l ../conf/
+cd -

@@ -15,8 +15,8 @@
 from __future__ import print_function
 import nose.tools as tools
 import os
-from dist_base_fleet import TestFleetBase
-from dist_base_fleet import run_by_freq
+from .dist_base_fleet import TestFleetBase
+from .dist_base_fleet import run_by_freq
 
 
 class TestDistResNet50(TestFleetBase):

@@ -15,8 +15,8 @@
 from __future__ import print_function
 import nose.tools as tools
 import os
-from dist_base_fleet import TestFleetBase
-from dist_base_fleet import run_by_freq
+from .dist_base_fleet import TestFleetBase
+from .dist_base_fleet import run_by_freq
 import json
 
 
@@ -375,6 +375,54 @@ class TestDistVgg16(TestFleetBase):
             train_data_list1[0], delta=1e-0, expect=train_data_list2[0])
         self.check_data(
             train_data_list1[1], delta=1e-0, expect=self.single_sync_gpu_data)
+
+    def test_2tr_1gpu_nccl_fp32_Tsvp_Tei_nn1_Tlsgd_mc_cl(self):
+        """test_2tr_1gpu_nccl_fp32_Tsvp_Tei_nn1_Tlsgd_mc_cl."""
+        TestFleetBase.__init__(self, pservers=0, trainers=2)
+        self.run_params = {
+            'fp16': False,
+            'num_threads': 2,
+            'slice_var_up': True,
+            'enable_inplace': True,
+            'fuse_all_reduce_ops': 1,
+            'nccl_comm_num': 1,
+            'use_local_sgd': True,
+            'mode': 'collective',
+            'collective': "local_sgd"
+        }
+        train_data_list1 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=1)
+        train_data_list2 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=1)
+        assert len(train_data_list1) == 2
+        assert len(train_data_list2) == 2
+        self.check_data(
+            train_data_list1[0], delta=1e-0, expect=train_data_list2[0])
+        self.check_data(
+            train_data_list1[1], delta=1e-0, expect=self.single_sync_gpu_data)
+
+    def test_2tr_2gpu_nccl_fp32_Tsvp_Tei_nn1_Tlsgd_mc_cl(self):
+        """test_2tr_2gpu_nccl_fp32_Tsvp_Tei_nn1_Tlsgd_mc_cl."""
+        TestFleetBase.__init__(self, pservers=0, trainers=2)
+        self.run_params = {
+            'fp16': False,
+            'num_threads': 1,
+            'slice_var_up': True,
+            'enable_inplace': True,
+            'fuse_all_reduce_ops': 1,
+            'nccl_comm_num': 1,
+            'use_local_sgd': True,
+            'mode': 'collective',
+            'collective': "local_sgd"
+        }
+        train_data_list1 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=2)
+        train_data_list2 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=2)
+        assert len(train_data_list1) == 4
+        assert len(train_data_list2) == 4
+        self.check_data(
+            train_data_list1[0], delta=1e-0, expect=train_data_list2[0])
 
     """ fp16 """
 
@@ -772,6 +820,54 @@ class TestDistVgg16(TestFleetBase):
         self.check_data(
             train_data_list1[1], delta=1e-0, expect=self.single_sync_gpu_data)
 
+    def test_2tr_1gpu_nccl_fp16_Tsvp_Tei_nn2_Tlsgd_mc_cl(self):
+        """test_2tr_1gpu_nccl_fp16_Tsvp_Tei_nn2_Tlsgd_mc_cl."""
+        TestFleetBase.__init__(self, pservers=0, trainers=2)
+        self.run_params = {
+            'fp16': True,
+            'num_threads': 2,
+            'slice_var_up': True,
+            'enable_inplace': True,
+            'fuse_all_reduce_ops': 1,
+            'nccl_comm_num': 1,
+            'use_local_sgd': True,
+            'mode': 'collective',
+            'collective': "local_sgd"
+        }
+        train_data_list1 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=1)
+        train_data_list2 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=1)
+        assert len(train_data_list1) == 2
+        assert len(train_data_list2) == 2
+        self.check_data(
+            train_data_list1[0], delta=1e-0, expect=train_data_list2[0])
+        self.check_data(
+            train_data_list1[1], delta=1e-0, expect=self.single_sync_gpu_data)
+
+    def test_2tr_2gpu_nccl_fp16_Fsvp_Tei_nn2_Tlsgd_mc_cl(self):
+        """test_2tr_2gpu_nccl_fp16_Fsvp_Tei_nn2_Tlsgd_mc_cl."""
+        TestFleetBase.__init__(self, pservers=0, trainers=2)
+        self.run_params = {
+            'fp16': True,
+            'num_threads': 2,
+            'slice_var_up': False,
+            'enable_inplace': True,
+            'fuse_all_reduce_ops': 1,
+            'nccl_comm_num': 1,
+            'use_local_sgd': True,
+            'mode': 'collective',
+            'collective': "local_sgd"
+        }
+        train_data_list1 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=2)
+        train_data_list2 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=2)
+        assert len(train_data_list1) == 4
+        assert len(train_data_list2) == 4
+        self.check_data(
+            train_data_list1[0], delta=1e-0, expect=train_data_list2[0])
+
     """use_dgc"""
 
     def test_1tr_2gpu_nccl_fp32_Tsvp_Tei_nn2_Tlsgd_mn_cl_dgc(self):
@@ -796,6 +892,60 @@ class TestDistVgg16(TestFleetBase):
             self._model_file, update_method='nccl', gpu_num=2)
         train_data_list2 = self.get_result(
             self._model_file, update_method='nccl', gpu_num=2)
+        assert len(train_data_list1) == 2
+        assert len(train_data_list2) == 2
+        self.check_data(
+            train_data_list1[0], delta=5e-0, expect=train_data_list2[0])
+
+    def test_2tr_2gpu_nccl_fp32_Tsvp_Tei_nn2_Tlsgd_mn_cl_dgc(self):
+        """test_2tr_2gpu_nccl_fp32_Tsvp_Tei_nn2_Tlsgd_mn_cl_dgc."""
+        TestFleetBase.__init__(self, pservers=0, trainers=2)
+        self.run_params = {
+            'sync': True,
+            'async': False,
+            'fp16': False,
+            'num_threads': 2,
+            'slice_var_up': True,
+            'enable_inplace': True,
+            'fuse_all_reduce_ops': 1,
+            'nccl_comm_num': 1,
+            #'use_local_sgd': True, 'mode': 'collective', 'collective': "local_sgd",
+            'use_local_sgd': False,
+            'mode': 'nccl2',
+            'collective': None,
+            'use_dgc': True
+        }
+        train_data_list1 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=2)
+        train_data_list2 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=2)
+        assert len(train_data_list1) == 4
+        assert len(train_data_list2) == 4
+        self.check_data(
+            train_data_list1[0], delta=5e-0, expect=train_data_list2[0])
+
+    def test_2tr_1gpu_nccl_fp32_Tsvp_Tei_nn2_Tlsgd_mn_cl_dgc(self):
+        """test_2tr_1gpu_nccl_fp32_Tsvp_Tei_nn2_Tlsgd_mn_cl_dgc."""
+        TestFleetBase.__init__(self, pservers=0, trainers=2)
+        self.run_params = {
+            'sync': True,
+            'async': False,
+            'fp16': False,
+            'num_threads': 1,
+            'slice_var_up': True,
+            'enable_inplace': True,
+            'fuse_all_reduce_ops': 1,
+            'nccl_comm_num': 1,
+            #'use_local_sgd': True, 'mode': 'collective', 'collective': "local_sgd",
+            'use_local_sgd': False,
+            'mode': 'nccl2',
+            'collective': None,
+            'use_dgc': True
+        }
+        train_data_list1 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=1)
+        train_data_list2 = self.get_result(
+            self._model_file, update_method='nccl', gpu_num=1)
         assert len(train_data_list1) == 2
         assert len(train_data_list2) == 2
         self.check_data(

@@ -17,7 +17,7 @@ fi
 git clone https://github.com/PaddlePaddle/Paddle.git
 
 # get models which changed
-sh  commit.sh
+sh  commit.sh `pwd`
 
 # run models in docker
 ./run_test `pwd`

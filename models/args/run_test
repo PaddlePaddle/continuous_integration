@@ -28,11 +28,15 @@ do
         cp ${ROOT_PATH}/${MODEL}/test_args.py ./
 
 	sh run_prepare.sh ${ROOT_PATH}
+        pwd
+        ls -l
         if [ ${COM_TYPE} == "1" ]; then
 	    python run_args.py ${RUN_PY} ${FUNCTION} ${COM_TYPE} 1>${LOG_NAME}.log 2>${LOG_NAME}.log.wf
         elif [ ${COM_TYPE} == "2" ]; then
 	    python run_args_dygraph.py ${RUN_PY} ${FUNCTION} ${COM_TYPE} 1>${LOG_NAME}.log 2>${LOG_NAME}.log.wf
         fi
+        cat ${LOG_NAME}.log
+        cat ${LOG_NAME}.log.wf
         mv ${LOG_NAME}.log ${ROOT_PATH}/log/
         mv ${LOG_NAME}.log.wf ${ROOT_PATH}/log/
 
@@ -40,3 +44,9 @@ do
 	
         cd ${ROOT_PATH}
 done < ${ROOT_PATH}/conf/changed_models.conf
+
+FF=`cat ${ROOT_PATH}/log/*log | grep "FAIL" | wc -l`
+if [ $FF -gt 0 ]
+then
+    exit 1
+fi

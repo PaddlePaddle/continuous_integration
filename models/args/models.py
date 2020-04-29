@@ -28,7 +28,6 @@ def check_models(models_file, register_file):
     for item in register:
         if item.split()[0] in commit:
             test_case.append(item)
-            print item
 
     return test_case
 

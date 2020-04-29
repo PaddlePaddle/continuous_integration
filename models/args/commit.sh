@@ -8,4 +8,6 @@ git diff `cat commit_id_head` | grep "diff --git" | awk -F ' b/' '{print $2}'  >
 #python commit.py commit_info >change_info
 python models.py change_info args_batch.conf >models_info 
 
+cat models_info
+
 cp models_info ../conf/changed_models.conf

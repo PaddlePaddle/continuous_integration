@@ -45,7 +45,9 @@ do
         cd ${ROOT_PATH}
 done < ${ROOT_PATH}/conf/changed_models.conf
 
-FF=`cat ${ROOT_PATH}/log/*log | grep "FAIL" | wc -l`
+ls -l ${ROOT_PATH}/log/
+
+FF=`cat ${ROOT_PATH}/log/* | grep "FAIL" | wc -l`
 if [ $FF -gt 0 ]
 then
     exit 1

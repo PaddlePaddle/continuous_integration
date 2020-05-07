@@ -14,8 +14,8 @@ def check_models(models_file, register_file):
             register.append(line.strip())
             models.add(line.strip().split()[0])
 
-    #print models
-    #print register
+    #print(models)
+    #print(register)
     commit = set()
     with open(models_file, 'r') as fin:
         for line in fin:
@@ -23,12 +23,14 @@ def check_models(models_file, register_file):
             for item in models:
                 if item in tmp:
                     commit.add(item)
-
+    #print(commit)
     test_case = []
     for item in register:
         if item.split()[0] in commit:
             test_case.append(item)
+            print(item)
 
+    #print(test_case)
     return test_case
 
 

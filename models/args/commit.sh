@@ -7,6 +7,7 @@ git diff `cat commit_id_head` | grep "diff --git" | awk -F ' b/' '{print $2}'  >
 git rev-parse HEAD
 git rev-parse HEAD^^^
 git diff `git rev-parse HEAD^^^` | grep "diff --git" | awk -F ' b/' '{print $2}'
+git diff `cat commit_id_head` | grep "diff --git" | awk -F ' b/' '{print $2}'
 
 #python commit.py commit_info >change_info
 python models.py change_info args_batch.conf >models_info 

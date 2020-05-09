@@ -7,7 +7,8 @@ if [ -e models ]
 then
 	sudo /bin/rm -rf models
 fi
-git clone https://github.com/PaddlePaddle/models.git
+#git clone https://github.com/PaddlePaddle/models.git
+git clone https://github.com/zhengya01/models.git
 
 # clone Paddle repo from gitbub
 if [ -e Paddle ]

@@ -7,9 +7,8 @@ if [ -e args_test_data ]
 then
     echo "args_test_data has already existed"
     rm args_test_data
-else
-    ln -s ${ROOT_PATH}/data/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data args_test_data
 fi
+ln -s ${ROOT_PATH}/data/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data args_test_data
 
 pwd
 ls -l

@@ -179,7 +179,7 @@ TEST(test_resnet50, use_static_optim) {
   cfg.EnableUseGpu(100, 0);
   cfg.SwitchIrOptim();
   cfg.SwitchSpecifyInputNames();
-  cfg.EnableMemoryOptim(true, true);
+  cfg.EnableMemoryOptim();
   std::vector<std::vector<PaddleTensor>> input_slots_all;
   SetInput(&input_slots_all);
   CompareNativeAndAnalysis(

@@ -8,7 +8,8 @@ then
     echo "args_test_data has already existed"
     rm args_test_data
 fi
-ln -s ${ROOT_PATH}/data/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data args_test_data
+#ln -s ${ROOT_PATH}/data/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data args_test_data
+ln -s ${ROOT_PATH}/data args_test_data
 
 #pwd
 #ls -l

@@ -7,7 +7,7 @@ if [ -e data ]
 then
    rm -rf data
 fi
-wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/similarity_net/data.tgz
+wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/similarity_net/data.tgz --no-check-certificate
 tar -zxf data.tgz
 
 #prepare data

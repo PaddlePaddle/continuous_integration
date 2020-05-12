@@ -6,7 +6,7 @@ if [ -e data ]
 then
    rm -rf data
 fi
-wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data.tgz
+wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data.tgz --no-check-certificate
 tar -zxf data.tgz
 
 #prepare data

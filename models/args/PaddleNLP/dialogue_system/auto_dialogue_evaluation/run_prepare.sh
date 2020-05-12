@@ -4,9 +4,12 @@ ROOT_PATH=$1
 
 if [ -e data ]
 then
-   rm -rf data
+   mv data data.bak
 fi
-wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data.tgz --no-check-certificate
+if [ ! -e data.tgz]
+then
+    wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data.tgz --no-check-certificate
+fi
 tar -zxf data.tgz
 
 #prepare data

@@ -3,6 +3,13 @@
 
 ROOT_PATH=$1
 
+if [ -e data ]
+then
+   rm -rf data
+fi
+wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/similarity_net/data.tgz
+tar -zxf data.tgz
+
 #prepare data
 if [ -e args_test_data ]
 then
@@ -10,7 +17,7 @@ then
 else
     #ln -s /ssd3/models_test/models_args/PaddleNLP/similarity_net/data args_test_data
     #ln -s ${ROOT_PATH}/data/PaddleNLP/similarity_net/data args_test_data
-    ln -s ${ROOT_PATH}/data args_test_data
+    ln -s data args_test_data
 fi
 
 #prepare pre_model
@@ -20,7 +27,7 @@ then
 else
     #ln -s /ssd3/models_test/models_args/PaddleNLP/similarity_net/model_files args_test_model_files
     #ln -s ${ROOT_PATH}/data/PaddleNLP/similarity_net/model_files args_test_model_files
-    ln -s ${ROOT_PATH}/data args_test_model_files
+    ln -s data args_test_model_files
 fi
 
 #

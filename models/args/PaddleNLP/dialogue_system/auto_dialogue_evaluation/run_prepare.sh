@@ -2,6 +2,13 @@
 
 ROOT_PATH=$1
 
+if [ -e data ]
+then
+   rm -rf data
+fi
+wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data.tgz
+tar -zxf data.tgz
+
 #prepare data
 if [ -e args_test_data ]
 then
@@ -9,7 +16,7 @@ then
     rm args_test_data
 fi
 #ln -s ${ROOT_PATH}/data/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data args_test_data
-ln -s ${ROOT_PATH}/data args_test_data
+ln -s data args_test_data
 
 #pwd
 #ls -l

@@ -6,7 +6,7 @@ if [ -e data ]
 then
    mv data data.bak
 fi
-if [ ! -e data.tgz]
+if [ ! -e data.tgz ]
 then
     wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/dialogue_system/auto_dialogue_evaluation/data.tgz --no-check-certificate
 fi

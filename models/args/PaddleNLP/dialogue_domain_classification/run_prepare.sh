@@ -3,8 +3,6 @@
 
 ROOT_PATH=$1
 
-export https_proxy=http://172.19.56.199:3128
-export http_proxy=http://172.19.56.199:3128
 
 #prepare data
 if [ -e data/input ]

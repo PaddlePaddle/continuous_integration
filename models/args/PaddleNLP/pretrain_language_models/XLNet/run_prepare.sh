@@ -16,4 +16,3 @@ then
 else
     ln -s /ssd3/models_test/models_args/PaddleNLP/PaddleLARK/XLNet/xlnet_cased_L-12_H-768_A-12 xlnet_cased_L-12_H-768_A-12
 fi
-

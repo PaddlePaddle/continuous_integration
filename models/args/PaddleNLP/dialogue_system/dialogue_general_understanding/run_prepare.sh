@@ -18,4 +18,3 @@ rm -rf args_test_inference_model
 mkdir args_test_inference_model
 
 #prepare pre_model
-

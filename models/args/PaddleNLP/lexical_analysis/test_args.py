@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 this is LAC args
 """
@@ -17,8 +16,7 @@ train_base = {
     "test_data": ["args_test_data/test.tsv"],
     "infer_data": ["args_test_data/test.tsv"],
     "model_save_dir": ["output"],
-    }
-
+}
 
 eval_base = {
     "init_checkpoint": ["./args_test_model_baseline"],
@@ -27,8 +25,7 @@ eval_base = {
     "word_dict_path": ["./conf/word.dic"],
     "label_dict_path": ["./conf/tag.dic"],
     "test_data": ["args_test_data/test.tsv"],
-    }
-
+}
 
 infer_base = {
     "init_checkpoint": ["./args_test_model_baseline"],
@@ -37,8 +34,7 @@ infer_base = {
     "word_dict_path": ["./conf/word.dic"],
     "label_dict_path": ["./conf/tag.dic"],
     "infer_data": ["args_test_data/test.tsv"],
-    }
-
+}
 
 train_ernie = {
     "ernie_config_path": ["args_test_pretrained/ernie_config.json"],
@@ -55,8 +51,7 @@ train_ernie = {
     "test_data": ["args_test_data/test.tsv"],
     "infer_data": ["args_test_data/test.tsv"],
     "model_save_dir": ["output"],
-    }
-
+}
 
 eval_ernie = {
     "ernie_config_path": ["args_test_pretrained/ernie_config.json"],
@@ -68,8 +63,7 @@ eval_ernie = {
     "max_seq_len": [128],
     "do_lower_case": [True, False],
     "test_data": ["args_test_data/test.tsv"],
-    }
-
+}
 
 infer_ernie = {
     "ernie_config_path": ["args_test_pretrained/ernie_config.json"],
@@ -82,4 +76,4 @@ infer_ernie = {
     "max_seq_len": [128],
     "do_lower_case": [True, False],
     "test_data": ["args_test_data/test.tsv"],
-    }
+}

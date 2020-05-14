@@ -24,4 +24,3 @@ else
 fi
 
 #prepare pre_model
-

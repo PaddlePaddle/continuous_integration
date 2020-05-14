@@ -20,4 +20,3 @@ fi
 
 rm -rf args_test_output
 mkdir args_test_output
-

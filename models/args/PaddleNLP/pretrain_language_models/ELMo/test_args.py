@@ -1,5 +1,4 @@
 #!/usr/env/bin python
-
 """
 this is elmo args
 """
@@ -13,4 +12,3 @@ train = {
     "all_train_tokens": ["35479"],
     "local": ["True $@"],
 }
-

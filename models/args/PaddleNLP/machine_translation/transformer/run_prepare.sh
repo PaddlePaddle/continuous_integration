@@ -2,13 +2,23 @@
 
 ROOT_PATH=$1
 
+if [ -e data ]
+then
+   mv data data.bak
+fi
+if [ ! -e data.tgz ]
+then
+    wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/machine_translation/transformer/data.tgz --no-check-certificate
+fi
+tar -zxf data.tgz
+
 #prepare data
 if [ -e args_test_data ]
 then
     echo "args_test_data has already existed"
 else
     #ln -s /ssd3/models_test/models_args/PaddleNLP/PaddleMT/transformer/data args_test_data
-    ln -s ${ROOT_PATH}/data/PaddleNLP/machine_translation/transformer/data args_test_data
+    ln -s data args_test_data
 fi
 
 rm -rf args_test_inference_model
@@ -24,5 +34,5 @@ then
     echo "args_test_model has already existed"
 else
     #ln -s /ssd3/models_test/models_args/PaddleNLP/PaddleMT/transformer/args_test_model args_test_model
-    ln -s ${ROOT_PATH}/data/PaddleNLP/machine_translation/transformer/args_test_model args_test_model
+    ln -s data/args_test_model args_test_model
 fi

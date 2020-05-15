@@ -1,17 +1,27 @@
 #!/bin/bash
 
+if [ -e data ]
+then
+   mv data data.bak
+fi
+if [ ! -e data.tgz ]
+then
+    wget https://sys-p0.bj.bcebos.com/models/PaddleNLP/language_model/data.tgz --no-check-certificate
+fi
+tar -zxf data.tgz
+
 #prepare data
 if [ -e args_test_data_1 ]
 then
     echo "args_test_data_1 has already existed"
 else
-    ln -s /ssd3/models_test/models_args/PaddleNLP/language_model/data args_test_data_1 
+    ln -s data args_test_data_1 
 fi
 if [ -e args_test_data_2 ]
 then
     echo "args_test_data_2 has already existed"
 else
-    ln -s /ssd3/models_test/models_args/PaddleNLP/language_model/data args_test_data_2 
+    ln -s data args_test_data_2 
 fi
 
 if [ -e models_1 ]

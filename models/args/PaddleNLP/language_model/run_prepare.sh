@@ -1,5 +1,9 @@
 #!/bin/bash
 
+ROOT_PATH=$1
+
+#prepare data
+
 if [ -e data ]
 then
    mv data data.bak
@@ -10,7 +14,7 @@ then
 fi
 tar -zxf data.tgz
 
-#prepare data
+
 if [ -e args_test_data_1 ]
 then
     echo "args_test_data_1 has already existed"
@@ -34,3 +38,4 @@ else
 fi
 
 #prepare pre_model
+

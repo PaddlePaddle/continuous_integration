@@ -3,7 +3,7 @@
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 #======================================================================
 #
-# Copyright (c) 2017 Baidu.com, Inc. All Rights Reserved
+# Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
 #
 #======================================================================
 """

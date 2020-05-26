@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""test static backward."""
+"""static backward testcase."""
 import numpy as np
 import paddle.fluid as fluid
 import tools
@@ -44,10 +44,10 @@ def test_append_backward():
             tools.compare(p_g_list1[1][1].name, "fc_0.b_0@GRAD")
 
             tools.compare(p_g_list2[0][0].name, "fc_0.w_0")
-            tools.compare(p_g_list2[0][1].name, "fc_0.w_0@GRAD_0")
+            tools.compare(p_g_list2[0][1].name, "grad/grad/fc_0.w_0@GRAD")
 
             tools.compare(p_g_list3[0][0].name, "fc_0.b_0")
-            tools.compare(p_g_list3[0][1].name, "fc_0.b_0@GRAD_1")
+            tools.compare(p_g_list3[0][1].name, "grad/grad/grad/fc_0.b_0@GRAD")
             tools.compare(len(p_g_list4), 0)
 
 

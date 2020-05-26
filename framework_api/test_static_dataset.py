@@ -27,10 +27,12 @@ def test_mnist_dataset():
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
-            train = paddle.batch(paddle.dataset.mnist.train(), batch_size=1, drop_last=True)
+            train = paddle.batch(
+                paddle.dataset.mnist.train(), batch_size=1, drop_last=True)
             length = len(list(enumerate(train())))
             assert length == 60000
-            test = paddle.batch(paddle.dataset.mnist.test(), batch_size=1, drop_last=True)
+            test = paddle.batch(
+                paddle.dataset.mnist.test(), batch_size=1, drop_last=True)
             length = len(list(enumerate(test())))
             assert length == 10000
 
@@ -44,19 +46,28 @@ def test_cifar_dataset():
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
-            train = paddle.batch(paddle.dataset.cifar.train100(), batch_size=1, drop_last=True)
+            train = paddle.batch(
+                paddle.dataset.cifar.train100(), batch_size=1, drop_last=True)
             length = len(list(enumerate(train())))
             assert length == 50000
-            test = paddle.batch(paddle.dataset.cifar.test100(), batch_size=1, drop_last=True)
+            test = paddle.batch(
+                paddle.dataset.cifar.test100(), batch_size=1, drop_last=True)
             length = len(list(enumerate(test())))
             assert length == 10000
-            train = paddle.batch(paddle.dataset.cifar.train10(), batch_size=1, drop_last=True)
+            train = paddle.batch(
+                paddle.dataset.cifar.train10(), batch_size=1, drop_last=True)
             length = len(list(enumerate(train())))
             assert length == 50000
-            test = paddle.batch(paddle.dataset.cifar.test10(cycle=False), batch_size=1, drop_last=True)
+            test = paddle.batch(
+                paddle.dataset.cifar.test10(cycle=False),
+                batch_size=1,
+                drop_last=True)
             length = len(list(enumerate(test())))
             assert length == 10000
-            test = paddle.batch(paddle.dataset.cifar.test10(cycle=True), batch_size=1, drop_last=True)
+            test = paddle.batch(
+                paddle.dataset.cifar.test10(cycle=True),
+                batch_size=1,
+                drop_last=True)
             length = 0
             for t in test():
                 length = length + 1
@@ -79,7 +90,8 @@ def test_conll05_dataset():
             # test paddle.dataset.conll05.get_embedding()
             assert type(paddle.dataset.conll05.get_embedding()) == str
             # test testdataset
-            test = paddle.batch(paddle.dataset.conll05.test(), batch_size=1, drop_last=True)
+            test = paddle.batch(
+                paddle.dataset.conll05.test(), batch_size=1, drop_last=True)
             length = len(list(enumerate(test())))
             assert length == 5267
 
@@ -159,10 +171,14 @@ def test_uci_housing_dataset():
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
-            train = paddle.batch(paddle.dataset.uci_housing.train(), batch_size=1, drop_last=True)
+            train = paddle.batch(
+                paddle.dataset.uci_housing.train(),
+                batch_size=1,
+                drop_last=True)
             length = len(list(enumerate(train())))
             assert length == 404
-            test = paddle.batch(paddle.dataset.uci_housing.test(), batch_size=1, drop_last=True)
+            test = paddle.batch(
+                paddle.dataset.uci_housing.test(), batch_size=1, drop_last=True)
             length = len(list(enumerate(test())))
             assert length == 102
 

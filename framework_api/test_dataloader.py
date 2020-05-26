@@ -24,6 +24,7 @@ def reader_decorator(reader):
     :param reader:
     :return:
     """
+
     def __reader__():
         """
         __reader__
@@ -33,6 +34,7 @@ def reader_decorator(reader):
             img = np.array(item[0]).astype('float32').reshape(1, 28, 28)
             label = np.array(item[1]).astype('int64').reshape(1)
             yield img, label
+
     return __reader__
 
 
@@ -43,19 +45,19 @@ def test_single_process_data_loader():
     """
     with fluid.dygraph.guard():
         train_reader = paddle.batch(
-                    reader_decorator(
-                        paddle.dataset.mnist.train()),
-                        batch_size=1,
-                        drop_last=True)
+            reader_decorator(paddle.dataset.mnist.train()),
+            batch_size=1,
+            drop_last=True)
         train_loader = fluid.io.DataLoader.from_generator(capacity=10)
-        train_loader.set_sample_list_generator(train_reader, places=fluid.CPUPlace())
+        train_loader.set_sample_list_generator(
+            train_reader, places=fluid.CPUPlace())
         stime = time.time()
         a = list(train_reader())
         time1 = time.time()
         b = list(train_loader())
         time2 = time.time()
-        print(time1-stime)
-        print(time2-time1)
+        print(time1 - stime)
+        print(time2 - time1)
         assert len(a) == len(b)
         for i in range(len(a)):
             if a[i][0][1][0] != b[i][1].numpy()[0][0]:
@@ -82,12 +84,13 @@ def test_multi_process_data_loader():
     """
     with fluid.dygraph.guard():
         train_reader = paddle.batch(
-                    reader_decorator(
-                        paddle.dataset.mnist.train()),
-                        batch_size=1,
-                        drop_last=True)
-        train_loader = fluid.io.DataLoader.from_generator(capacity=2, use_multiprocess=True)
-        train_loader.set_sample_list_generator(train_reader, places=fluid.CPUPlace())
+            reader_decorator(paddle.dataset.mnist.train()),
+            batch_size=1,
+            drop_last=True)
+        train_loader = fluid.io.DataLoader.from_generator(
+            capacity=2, use_multiprocess=True)
+        train_loader.set_sample_list_generator(
+            train_reader, places=fluid.CPUPlace())
         a = list(train_reader())
         train_loader_iter = train_loader.__iter__()
         for i in range(len(a)):

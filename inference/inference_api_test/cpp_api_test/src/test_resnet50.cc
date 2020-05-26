@@ -157,6 +157,35 @@ TEST(test_resnet50, compare_use_gpu) {
       reinterpret_cast<const PaddlePredictor::Config *>(&cfg), input_slots_all);
 }
 
+TEST(test_resnet50, compare_disable_gpu) {
+  AnalysisConfig cfg;
+  cfg.SetModel(FLAGS_infer_model + "/__model__",
+          FLAGS_infer_model + "/__params__");
+  cfg.DisableGpu();
+  ASSERT_FALSE(cfg.use_gpu());
+  cfg.SwitchIrOptim();
+  cfg.SwitchSpecifyInputNames();
+  cfg.EnableMemoryOptim();
+  std::vector<std::vector<PaddleTensor>> input_slots_all;
+  SetInput(&input_slots_all);
+  CompareNativeAndAnalysis(
+      reinterpret_cast<const PaddlePredictor::Config *>(&cfg), input_slots_all);
+}
+
+TEST(test_resnet50, use_static_optim) {
+  AnalysisConfig cfg;
+  cfg.SetModel(FLAGS_infer_model + "/__model__",
+          FLAGS_infer_model + "/__params__");
+  cfg.EnableUseGpu(100, 0);
+  cfg.SwitchIrOptim();
+  cfg.SwitchSpecifyInputNames();
+  cfg.EnableMemoryOptim();
+  std::vector<std::vector<PaddleTensor>> input_slots_all;
+  SetInput(&input_slots_all);
+  CompareNativeAndAnalysis(
+      reinterpret_cast<const PaddlePredictor::Config *>(&cfg), input_slots_all);
+}
+
 }  // namespace test
 }  // namespace paddle
 

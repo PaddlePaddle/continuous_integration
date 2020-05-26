@@ -24,6 +24,7 @@ import functools
 import math
 import json
 
+
 def set_paddle_flags(flags):
     for key, value in flags.items():
         if os.environ.get(key, None) is None:
@@ -446,7 +447,7 @@ def train(args):
                 if use_mixup:
                     loss, lr = train_exe.run(train_prog, fetch_list=train_fetch_list)
                 else:
-		    loss, acc1, acc5, lr = train_exe.run(train_prog, fetch_list=train_fetch_list)
+                    loss, acc1, acc5, lr = train_exe.run(train_prog, fetch_list=train_fetch_list)
 
                     acc1 = np.mean(np.array(acc1))
                     acc5 = np.mean(np.array(acc5))
@@ -519,11 +520,11 @@ def train(args):
             test_acc1 = np.array(test_info[1]).mean()
             test_acc5 = np.array(test_info[2]).mean()
             if trainer_id == 0:
-            	model_path = os.path.join(model_save_dir + '/' + model_name, str(pass_id))
-            	if not os.path.isdir(model_path):
+                model_path = os.path.join(model_save_dir + '/' + model_name, str(pass_id))
+                if not os.path.isdir(model_path):
                     os.makedirs(model_path)
 
-            	fluid.io.save_persistables(exe, model_path, main_program=fleet._origin_program)
+                fluid.io.save_persistables(exe, model_path, main_program=fleet._origin_program)
                 if args.benchmark_test:
                     if not os.path.isdir("./benchmark_logs/"):
                         os.makedirs("./benchmark_logs/")

@@ -1,0 +1,22 @@
+一、args_batch.conf
+
+存放运行模型所必须的参数
+
+1、文件格式：
+
+路径\t执行文件xx.py\t执行功能\t模式
+
+路径：模型在https://github.com/PaddlePaddle/models/ 中的路径
+
+执行文件：运行模型的py文件
+
+执行的功能：所要测试的功能，train、evaluate、infer等，与每个模型的test_args.py中的词典名相对应
+
+模式：预留参数，默认设置为1
+
+
+2、例如：
+
+PaddleNLP/emotion_detection    run_classifier.py    train_textcnn    1
+
+表示测试模型及路径为PaddleNLP/emotion_detection，测试时将运行run_classifier.py，所测功能是train_textcnn

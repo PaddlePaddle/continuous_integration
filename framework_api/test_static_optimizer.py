@@ -33,8 +33,11 @@ def test_SGDOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.SGDOptimizer(learning_rate=0.001)
             optimizer.minimize(out)
@@ -44,12 +47,9 @@ def test_SGDOptimizer():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.992, 0.992, 0.992], [0.98800004, 0.98800004, 0.98800004]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.992, 0.992, 0.992],
+                        [0.98800004, 0.98800004, 0.98800004]]
             expect_b = [-0.004, -0.004, -0.004]
             expect_res = [29.831999]
             tools.compare(res[0], expect_w)
@@ -69,8 +69,11 @@ def test_SGDOptimizer_lr_float():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.SGDOptimizer(learning_rate=0.000001)
             optimizer.minimize(out)
@@ -80,12 +83,9 @@ def test_SGDOptimizer_lr_float():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.999992, 0.999992, 0.999992], [0.99998796, 0.99998796, 0.99998796]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.999992, 0.999992, 0.999992],
+                        [0.99998796, 0.99998796, 0.99998796]]
             expect_b = [-4.e-06, -4.e-06, -4.e-06]
             expect_res = [29.999832]
             tools.compare(res[0], expect_w)
@@ -105,10 +105,18 @@ def test_SGDOptimizer_lr_var():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            lr = fluid.layers.create_global_var(shape=[1], value=0.000001, dtype='float32', persistable=True, name="lr")
+            lr = fluid.layers.create_global_var(
+                shape=[1],
+                value=0.000001,
+                dtype='float32',
+                persistable=True,
+                name="lr")
             optimizer = fluid.optimizer.SGDOptimizer(learning_rate=lr)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
@@ -117,12 +125,9 @@ def test_SGDOptimizer_lr_var():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.999992, 0.999992, 0.999992], [0.99998796, 0.99998796, 0.99998796]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.999992, 0.999992, 0.999992],
+                        [0.99998796, 0.99998796, 0.99998796]]
             expect_b = [-4.e-06, -4.e-06, -4.e-06]
             expect_res = [29.999832]
             tools.compare(res[0], expect_w)
@@ -142,25 +147,27 @@ def test_SGDOptimizer_regularization():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                    param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.SGDOptimizer(
                 learning_rate=0.001,
-                regularization=fluid.regularizer.L2Decay(regularization_coeff=0.01))
+                regularization=fluid.regularizer.L2Decay(
+                    regularization_coeff=0.01))
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(2):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0@GRAD",
-                                  "fc.b_0@GRAD",
-                                  out.name
-                              ])
-            expect_w = [[4.0099597, 4.0099597, 4.0099597], [6.0099397, 6.0099397, 6.0099397]]
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=["fc.w_0@GRAD", "fc.b_0@GRAD", out.name])
+            expect_w = [[4.0099597, 4.0099597, 4.0099597],
+                        [6.0099397, 6.0099397, 6.0099397]]
             expect_b = [1.99998, 1.99998, 1.99998]
             expect_res = [29.8317]
             tools.compare(res[0], expect_w)
@@ -181,8 +188,11 @@ def test_SGDOptimizer_minimize_parameter_list():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.SGDOptimizer(learning_rate=0.001)
             optimizer.minimize(out, parameter_list=["fc.w_0"])
@@ -192,12 +202,9 @@ def test_SGDOptimizer_minimize_parameter_list():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.992, 0.992, 0.992], [0.98800004, 0.98800004, 0.98800004]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.992, 0.992, 0.992],
+                        [0.98800004, 0.98800004, 0.98800004]]
             expect_b = [0., 0., 0.]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -216,8 +223,11 @@ def test_SGDOptimizer_minimize_no_grad_set():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.SGDOptimizer(learning_rate=0.001)
             optimizer.minimize(out, no_grad_set=["fc.w_0"])
@@ -227,11 +237,7 @@ def test_SGDOptimizer_minimize_no_grad_set():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[1., 1., 1.], [1., 1., 1.]]
             expect_b = [-0.004, -0.004, -0.004]
             tools.compare(res[0], expect_w)
@@ -252,8 +258,11 @@ def test_AdagradOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.AdagradOptimizer(learning_rate=0.2)
             optimizer.minimize(out)
@@ -263,12 +272,9 @@ def test_AdagradOptimizer():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.65857875, 0.65857875, 0.65857875], [0.65857863, 0.65857863, 0.65857863]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.65857875, 0.65857875, 0.65857875],
+                        [0.65857863, 0.65857863, 0.65857863]]
             expect_b = [-0.34142125, -0.34142125, -0.34142125]
             expect_res = [22.800003]
             tools.compare(res[0], expect_w)
@@ -288,8 +294,11 @@ def test_AdagradOptimizer_learning_rate():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.AdagradOptimizer(learning_rate=0.01)
             optimizer.minimize(out)
@@ -299,11 +308,7 @@ def test_AdagradOptimizer_learning_rate():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[0.99, 0.99, 0.99], [0.99, 0.99, 0.99]]
             expect_b = [-0.01, -0.01, -0.01]
             expect_res = [30]
@@ -324,10 +329,18 @@ def test_AdagradOptimizer_learning_rate_var():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            lr = fluid.layers.create_global_var(shape=[1], value=0.01, dtype='float32', persistable=True, name="lr")
+            lr = fluid.layers.create_global_var(
+                shape=[1],
+                value=0.01,
+                dtype='float32',
+                persistable=True,
+                name="lr")
             optimizer = fluid.optimizer.AdagradOptimizer(learning_rate=lr)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
@@ -336,11 +349,7 @@ def test_AdagradOptimizer_learning_rate_var():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[0.99, 0.99, 0.99], [0.99, 0.99, 0.99]]
             expect_b = [-0.01, -0.01, -0.01]
             expect_res = [30]
@@ -362,10 +371,14 @@ def test_AdagradOptimizer_epsilon():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.AdagradOptimizer(learning_rate=0.2, epsilon=0.0)
+            optimizer = fluid.optimizer.AdagradOptimizer(
+                learning_rate=0.2, epsilon=0.0)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -373,11 +386,7 @@ def test_AdagradOptimizer_epsilon():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[0.8, 0.8, 0.8], [0.8, 0.8, 0.8]]
             expect_b = [-0.2, -0.2, -0.2]
             expect_res = [30]
@@ -399,25 +408,25 @@ def test_AdagradOptimizer_regularization():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.AdagradOptimizer(
                 learning_rate=0.2,
-                regularization=fluid.regularizer.L2Decay(regularization_coeff=0.1)
-            )
+                regularization=fluid.regularizer.L2Decay(
+                    regularization_coeff=0.1))
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(2):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0@GRAD",
-                                  "fc.b_0@GRAD",
-                                  out.name
-                              ])
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=["fc.w_0@GRAD", "fc.b_0@GRAD", out.name])
             expect_w = [[4.08, 4.08, 4.08], [6.08, 6.08, 6.08]]
             expect_b = [1.98, 1.98, 1.98]
             expect_res = [22.800003]
@@ -439,10 +448,14 @@ def test_AdagradOptimizer_initial_accumulator_value():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.AdagradOptimizer(learning_rate=0.2, initial_accumulator_value=1.0, epsilon=0.0)
+            optimizer = fluid.optimizer.AdagradOptimizer(
+                learning_rate=0.2, initial_accumulator_value=1.0, epsilon=0.0)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -450,12 +463,9 @@ def test_AdagradOptimizer_initial_accumulator_value():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.8059715, 0.8059715, 0.8059715], [0.8027212, 0.8027212, 0.8027212]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.8059715, 0.8059715, 0.8059715],
+                        [0.8027212, 0.8027212, 0.8027212]]
             expect_b = [-0.17888544, -0.17888544, -0.17888544]
             expect_res = [30.]
             tools.compare(res[0], expect_w)
@@ -476,8 +486,11 @@ def test_AdagradOptimizer_minimize_parameter_list():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.AdagradOptimizer(learning_rate=0.2)
             optimizer.minimize(out, parameter_list=["fc.w_0"])
@@ -487,12 +500,9 @@ def test_AdagradOptimizer_minimize_parameter_list():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.65857875, 0.65857875, 0.65857875], [0.65857863, 0.65857863, 0.65857863]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.65857875, 0.65857875, 0.65857875],
+                        [0.65857863, 0.65857863, 0.65857863]]
             expect_b = [0., 0., 0.]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -511,8 +521,11 @@ def test_AdagradOptimizer_minimize_no_grad_set():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                    param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.AdagradOptimizer(learning_rate=0.2)
             optimizer.minimize(out, no_grad_set=["fc.w_0"])
@@ -522,11 +535,7 @@ def test_AdagradOptimizer_minimize_no_grad_set():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[1., 1., 1.], [1., 1., 1.]]
             expect_b = [-0.34142125, -0.34142125, -0.34142125]
             tools.compare(res[0], expect_w)
@@ -547,10 +556,14 @@ def test_MomentumOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             moment_optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(fluid.CPUPlace())
@@ -560,12 +573,9 @@ def test_MomentumOptimizer():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.9884, 0.9884, 0.9884], [0.98260003, 0.98260003, 0.98260003]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.9884, 0.9884, 0.9884],
+                        [0.98260003, 0.98260003, 0.98260003]]
             expect_b = [-0.0058, -0.0058, -0.0058]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -583,22 +593,22 @@ def test_MomentumOptimizer_lr_float():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.01, momentum=0.9)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.01, momentum=0.9)
             moment_optimizer.minimize(out)
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[0.884, 0.884, 0.884], [0.826, 0.826, 0.826]]
             expect_b = [-0.058, -0.058, -0.058]
             tools.compare(res[0], expect_w)
@@ -617,23 +627,28 @@ def test_MomentumOptimizer_lr_var():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
-            lr = fluid.layers.create_global_var(shape=[1], value=0.01, dtype='float32', persistable=True, name="lr")
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=lr, momentum=0.9)
+            lr = fluid.layers.create_global_var(
+                shape=[1],
+                value=0.01,
+                dtype='float32',
+                persistable=True,
+                name="lr")
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=lr, momentum=0.9)
             moment_optimizer.minimize(out)
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[0.884, 0.884, 0.884], [0.826, 0.826, 0.826]]
             expect_b = [-0.058, -0.058, -0.058]
             tools.compare(res[0], expect_w)
@@ -652,10 +667,14 @@ def test_MomentumOptimizer_momentum():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.0)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.0)
             moment_optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -663,12 +682,9 @@ def test_MomentumOptimizer_momentum():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.992, 0.992, 0.992], [0.98800004, 0.98800004, 0.98800004]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.992, 0.992, 0.992],
+                        [0.98800004, 0.98800004, 0.98800004]]
             expect_b = [-0.004, -0.004, -0.004]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -686,23 +702,24 @@ def test_MomentumOptimizer_use_nesterov():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9, use_nesterov=True)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9, use_nesterov=True)
             moment_optimizer.minimize(out)
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.98156, 0.98156, 0.98156], [0.97234, 0.97234, 0.97234]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.98156, 0.98156, 0.98156],
+                        [0.97234, 0.97234, 0.97234]]
             expect_b = [-0.00922, -0.00922, -0.00922]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -720,10 +737,14 @@ def test_MomentumOptimizer_use_nesterov_momentum():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.0, use_nesterov=True)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.0, use_nesterov=True)
             moment_optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -731,12 +752,9 @@ def test_MomentumOptimizer_use_nesterov_momentum():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.992, 0.992, 0.992], [0.98800004, 0.98800004, 0.98800004]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.992, 0.992, 0.992],
+                        [0.98800004, 0.98800004, 0.98800004]]
             expect_b = [-0.004, -0.004, -0.004]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -754,26 +772,28 @@ def test_MomentumOptimizer_regularization():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.MomentumOptimizer(
                 learning_rate=0.001,
                 momentum=0.9,
-                regularization=fluid.regularizer.L2Decay(regularization_coeff=0.01))
+                regularization=fluid.regularizer.L2Decay(
+                    regularization_coeff=0.01))
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(2):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0@GRAD",
-                                  "fc.b_0@GRAD",
-                                  out.name
-                              ])
-            expect_w = [[4.009959, 4.009959, 4.009959], [6.009939, 6.009939, 6.009939]]
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=["fc.w_0@GRAD", "fc.b_0@GRAD", out.name])
+            expect_w = [[4.009959, 4.009959, 4.009959],
+                        [6.009939, 6.009939, 6.009939]]
             expect_b = [1.99998, 1.99998, 1.99998]
             expect_res = [29.8317]
             tools.compare(res[0], expect_w)
@@ -794,10 +814,14 @@ def test_MomentumOptimizer_minimize_parameter_list():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             optimizer.minimize(out, parameter_list=["fc.w_0"])
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -805,12 +829,9 @@ def test_MomentumOptimizer_minimize_parameter_list():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.9884, 0.9884, 0.9884], [0.98260003, 0.98260003, 0.98260003]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.9884, 0.9884, 0.9884],
+                        [0.98260003, 0.98260003, 0.98260003]]
             expect_b = [0., 0., 0.]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -829,10 +850,14 @@ def test_MomentumOptimizer_minimize_no_grad_set():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             optimizer.minimize(out, no_grad_set=["fc.w_0"])
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -840,11 +865,7 @@ def test_MomentumOptimizer_minimize_no_grad_set():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[1., 1., 1.], [1., 1., 1.]]
             expect_b = [-0.0058, -0.0058, -0.0058]
             tools.compare(res[0], expect_w)
@@ -865,10 +886,14 @@ def test_DecayedAdagradOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.DecayedAdagradOptimizer(learning_rate=0.2)
+            optimizer = fluid.optimizer.DecayedAdagradOptimizer(
+                learning_rate=0.2)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -876,12 +901,9 @@ def test_DecayedAdagradOptimizer():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[-0.53493816, -0.53493816, -0.53493816], [-0.5349387, -0.5349387, -0.5349387]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[-0.53493816, -0.53493816, -0.53493816],
+                        [-0.5349387, -0.5349387, -0.5349387]]
             expect_b = [-1.5349367, -1.5349367, -1.5349367]
             expect_res = [-2.1993403]
             tools.compare(res[0], expect_w)
@@ -901,10 +923,14 @@ def test_DecayedAdagradOptimizer_learning_rate_float():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.DecayedAdagradOptimizer(learning_rate=0.01)
+            optimizer = fluid.optimizer.DecayedAdagradOptimizer(
+                learning_rate=0.01)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -912,12 +938,9 @@ def test_DecayedAdagradOptimizer_learning_rate_float():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.9552787, 0.9552787, 0.9552787], [0.9552787, 0.9552787, 0.9552787]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.9552787, 0.9552787, 0.9552787],
+                        [0.9552787, 0.9552787, 0.9552787]]
             expect_b = [-0.04472125, -0.04472125, -0.04472125]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -935,11 +958,20 @@ def test_DecayedAdagradOptimizer_learning_rate_var():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            lr = fluid.layers.create_global_var(shape=[1], value=0.01, dtype='float32', persistable=True, name="lr")
-            optimizer = fluid.optimizer.DecayedAdagradOptimizer(learning_rate=lr)
+            lr = fluid.layers.create_global_var(
+                shape=[1],
+                value=0.01,
+                dtype='float32',
+                persistable=True,
+                name="lr")
+            optimizer = fluid.optimizer.DecayedAdagradOptimizer(
+                learning_rate=lr)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -947,12 +979,9 @@ def test_DecayedAdagradOptimizer_learning_rate_var():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.9552787, 0.9552787, 0.9552787], [0.9552787, 0.9552787, 0.9552787]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.9552787, 0.9552787, 0.9552787],
+                        [0.9552787, 0.9552787, 0.9552787]]
             expect_b = [-0.04472125, -0.04472125, -0.04472125]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -970,21 +999,24 @@ def test_DecayedAdagradOptimizer_decay():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.DecayedAdagradOptimizer(learning_rate=0.2, decay=0.6, epsilon=0.0)
+            optimizer = fluid.optimizer.DecayedAdagradOptimizer(
+                learning_rate=0.2, decay=0.6, epsilon=0.0)
             optimizer.minimize(out)
 
             exe = fluid.Executor(fluid.CPUPlace())
             exe.run(fluid.default_startup_program())
             for i in range(5):
-                res = exe.run(feed={"inp": np_inp}, fetch_list=[
-                "fc.w_0_moment_0",
-                "fc.b_0_moment_0",
-                "fc.w_0",
-                "fc.b_0"
-                ])
+                res = exe.run(feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0_moment_0", "fc.b_0_moment_0",
+                                  "fc.w_0", "fc.b_0"
+                              ])
                 # print(res[0])
 
 
@@ -1001,10 +1033,14 @@ def test_DecayedAdagradOptimizer_epsilon():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.DecayedAdagradOptimizer(learning_rate=0.2, epsilon=0.0)
+            optimizer = fluid.optimizer.DecayedAdagradOptimizer(
+                learning_rate=0.2, epsilon=0.0)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -1012,12 +1048,9 @@ def test_DecayedAdagradOptimizer_epsilon():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[-0.5349397, -0.5349397, -0.5349397], [-0.5349397, -0.5349397, -0.5349397]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[-0.5349397, -0.5349397, -0.5349397],
+                        [-0.5349397, -0.5349397, -0.5349397]]
             expect_b = [-1.5349398, -1.5349398, -1.5349398]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -1036,27 +1069,28 @@ def test_DecayedAdagradOptimizer_regularization():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             # out = fluid.layers.fc(inp, size=3)
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.DecayedAdagradOptimizer(
                 learning_rate=0.2,
-                regularization=fluid.regularizer.L2Decay(regularization_coeff=0.1)
-            )
+                regularization=fluid.regularizer.L2Decay(
+                    regularization_coeff=0.1))
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(2):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0@GRAD",
-                                  "fc.b_0@GRAD",
-                                  out.name
-                              ])
-            expect_w = [[4.010557, 4.010557, 4.010557], [6.010557, 6.010557, 6.010557]]
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=["fc.w_0@GRAD", "fc.b_0@GRAD", out.name])
+            expect_w = [[4.010557, 4.010557, 4.010557],
+                        [6.010557, 6.010557, 6.010557]]
             expect_b = [1.9105575, 1.9105575, 1.9105575]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -1075,10 +1109,14 @@ def test_DecayedAdagradOptimizer_minimize_parameter_list():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.DecayedAdagradOptimizer(learning_rate=0.2)
+            optimizer = fluid.optimizer.DecayedAdagradOptimizer(
+                learning_rate=0.2)
             optimizer.minimize(out, parameter_list=["fc.w_0"])
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -1086,12 +1124,9 @@ def test_DecayedAdagradOptimizer_minimize_parameter_list():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.10557389, 0.10557389, 0.10557389], [0.10557353, 0.10557353, 0.10557353]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.10557389, 0.10557389, 0.10557389],
+                        [0.10557353, 0.10557353, 0.10557353]]
             expect_b = [0., 0., 0.]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -1110,10 +1145,14 @@ def test_DecayedAdagradOptimizer_minimize_no_grad_set():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                    param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.DecayedAdagradOptimizer(learning_rate=0.2)
+            optimizer = fluid.optimizer.DecayedAdagradOptimizer(
+                learning_rate=0.2)
             optimizer.minimize(out, no_grad_set=["fc.w_0"])
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -1121,11 +1160,7 @@ def test_DecayedAdagradOptimizer_minimize_no_grad_set():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[1., 1., 1.], [1., 1., 1.]]
             expect_b = [-0.8944251, -0.8944251, -0.8944251]
             tools.compare(res[0], expect_w)
@@ -1147,8 +1182,11 @@ def test_RMSPropOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.RMSPropOptimizer(learning_rate=0.1)
             optimizer.minimize(out)
@@ -1156,12 +1194,11 @@ def test_RMSPropOptimizer():
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                    out.name
-                ])
-            expect_w = [[0.5527867, 0.5527867, 0.5527867], [0.5527866, 0.5527866, 0.5527866]]
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.5527867, 0.5527867, 0.5527867],
+                        [0.5527866, 0.5527866, 0.5527866]]
             expect_b = [-0.44721246, -0.44721246, -0.44721246]
             expect_res = [30.0]
             tools.compare(res[0], expect_w)
@@ -1182,8 +1219,11 @@ def test_RMSPropOptimizer_learning_rate_float():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.RMSPropOptimizer(learning_rate=0.01)
             optimizer.minimize(out)
@@ -1191,12 +1231,11 @@ def test_RMSPropOptimizer_learning_rate_float():
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                    out.name
-                ])
-            expect_w = [[0.9552787, 0.9552787, 0.9552787], [0.95527864, 0.95527864, 0.95527864]]
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.9552787, 0.9552787, 0.9552787],
+                        [0.95527864, 0.95527864, 0.95527864]]
             expect_b = [-0.04472124, -0.04472124, -0.04472124]
             expect_res = [30.0]
             tools.compare(res[0], expect_w)
@@ -1217,21 +1256,24 @@ def test_RMSPropOptimizer_rho():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.RMSPropOptimizer(learning_rate=0.1, rho=0.1, epsilon=0.0)
+            optimizer = fluid.optimizer.RMSPropOptimizer(
+                learning_rate=0.1, rho=0.1, epsilon=0.0)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                    out.name
-                ])
-            expect_w = [[0.89459074, 0.89459074, 0.89459074], [0.89459074, 0.89459074, 0.89459074]]
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.89459074, 0.89459074, 0.89459074],
+                        [0.89459074, 0.89459074, 0.89459074]]
             expect_b = [-0.10540926, -0.10540926, -0.10540926]
             expect_res = [30.0]
             tools.compare(res[0], expect_w)
@@ -1252,21 +1294,24 @@ def test_RMSPropOptimizer_epsilon():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.RMSPropOptimizer(learning_rate=0.1, epsilon=1.0)
+            optimizer = fluid.optimizer.RMSPropOptimizer(
+                learning_rate=0.1, epsilon=1.0)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                    out.name
-                ])
-            expect_w = [[0.70185757, 0.70185757, 0.70185757], [0.64143145, 0.64143145, 0.64143145]]
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.70185757, 0.70185757, 0.70185757],
+                        [0.64143145, 0.64143145, 0.64143145]]
             expect_b = [-0.18257418, -0.18257418, -0.18257418]
             expect_res = [30.0]
             tools.compare(res[0], expect_w)
@@ -1287,21 +1332,24 @@ def test_RMSPropOptimizer_momentum():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.RMSPropOptimizer(learning_rate=0.1, momentum=1.0)
+            optimizer = fluid.optimizer.RMSPropOptimizer(
+                learning_rate=0.1, momentum=1.0)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(2):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                    out.name
-                ])
-            expect_w = [[-0.21468276, -0.21468276, -0.21468276], [-0.21468306, -0.21468306, -0.21468306]]
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[-0.21468276, -0.21468276, -0.21468276],
+                        [-0.21468306, -0.21468306, -0.21468306]]
             expect_b = [-1.2146808, -1.2146808, -1.2146808]
             expect_res = [13.900324]
             tools.compare(res[0], expect_w)
@@ -1322,21 +1370,24 @@ def test_RMSPropOptimizer_centered():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.RMSPropOptimizer(learning_rate=0.1, centered=True)
+            optimizer = fluid.optimizer.RMSPropOptimizer(
+                learning_rate=0.1, centered=True)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                    out.name
-                ])
-            expect_w =[[0.54116887, 0.54116887, 0.54116887], [0.5411687, 0.5411687, 0.5411687]]
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.54116887, 0.54116887, 0.54116887],
+                        [0.5411687, 0.5411687, 0.5411687]]
             expect_b = [-0.4588302, -0.4588302, -0.4588302]
             expect_res = [30.]
             tools.compare(res[0], expect_w)
@@ -1357,23 +1408,25 @@ def test_RMSPropOptimizer_regularization():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.RMSPropOptimizer(
                 learning_rate=0.1,
-                regularization=fluid.regularizer.L2Decay(regularization_coeff=0.1)
-            )
+                regularization=fluid.regularizer.L2Decay(
+                    regularization_coeff=0.1))
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0@GRAD",
-                    "fc.b_0@GRAD",
-                    out.name
-                ])
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=["fc.w_0@GRAD", "fc.b_0@GRAD", out.name])
             expect_w = [[4.1, 4.1, 4.1], [6.1, 6.1, 6.1]]
             expect_b = [2., 2., 2.]
             expect_res = [30.]
@@ -1395,8 +1448,11 @@ def test_RMSPropOptimizer_minimize_parameter_list():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.RMSPropOptimizer(learning_rate=0.1)
             optimizer.minimize(out, parameter_list=["fc.w_0"])
@@ -1406,12 +1462,9 @@ def test_RMSPropOptimizer_minimize_parameter_list():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.5527867, 0.5527867, 0.5527867], [0.5527866, 0.5527866, 0.5527866]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.5527867, 0.5527867, 0.5527867],
+                        [0.5527866, 0.5527866, 0.5527866]]
             expect_b = [0., 0., 0.]
             tools.compare(res[0], expect_w)
             tools.compare(res[1], expect_b)
@@ -1433,7 +1486,8 @@ def test_RMSPropOptimizer_minimize_no_grad_set():
             out = fluid.layers.fc(name="fc",
                                   input=inp,
                                   size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.RMSPropOptimizer(learning_rate=0.1)
             optimizer.minimize(out, no_grad_set=["fc.w_0"])
@@ -1443,11 +1497,7 @@ def test_RMSPropOptimizer_minimize_no_grad_set():
             for i in range(1):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
             expect_w = [[1., 1., 1.], [1., 1., 1.]]
             expect_b = [-0.44721246, -0.44721246, -0.44721246]
             tools.compare(res[0], expect_w)
@@ -1468,41 +1518,56 @@ def test_ModelAverage():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
 
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             moment_optimizer.minimize(out)
 
-            model_average = fluid.optimizer.ModelAverage(average_window_rate=1.0, min_average_window=2, max_average_window=3)
+            model_average = fluid.optimizer.ModelAverage(
+                average_window_rate=1.0,
+                min_average_window=2,
+                max_average_window=3)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(3):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0",
+                                  "fc.b_0",
+                              ])
             expect_w_restore = res[0]
             expect_b_restore = res[1]
 
-            inference_program = fluid.default_main_program().clone(for_test=True)
+            inference_program = fluid.default_main_program().clone(
+                for_test=True)
             with model_average.apply(exe, need_restore=True):
-                res = exe.run(inference_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
-            expect_w_apply = [[0.98732, 0.98732, 0.98732], [0.98098, 0.98098, 0.98098]]
+                res = exe.run(inference_program,
+                              feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0",
+                                  "fc.b_0",
+                              ])
+            expect_w_apply = [[0.98732, 0.98732, 0.98732],
+                              [0.98098, 0.98098, 0.98098]]
             expect_b_apply = [-0.00634, -0.00634, -0.00634]
             tools.compare(res[0], expect_w_apply)
             tools.compare(res[1], expect_b_apply)
 
             model_average.restore(exe)
-            res = exe.run(inference_program, feed={"inp": np_inp}, fetch_list=[
-                "fc.w_0",
-                "fc.b_0",
-            ])
+            res = exe.run(inference_program,
+                          feed={"inp": np_inp},
+                          fetch_list=[
+                              "fc.w_0",
+                              "fc.b_0",
+                          ])
             tools.compare(res[0], expect_w_restore)
             tools.compare(res[1], expect_b_restore)
 
@@ -1521,11 +1586,15 @@ def test_ModelAverage_average_window_rate():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
 
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             moment_optimizer.minimize(out)
 
             model_average = fluid.optimizer.ModelAverage(
@@ -1536,29 +1605,37 @@ def test_ModelAverage_average_window_rate():
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(3):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0",
+                                  "fc.b_0",
+                              ])
             expect_w_restore = res[0]
             expect_b_restore = res[1]
             #
-            inference_program = fluid.default_main_program().clone(for_test=True)
+            inference_program = fluid.default_main_program().clone(
+                for_test=True)
             with model_average.apply(exe, need_restore=True):
-                res = exe.run(inference_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
-            expect_w_apply = [[0.98732, 0.98732, 0.98732], [0.98098, 0.98098, 0.98098]]
+                res = exe.run(inference_program,
+                              feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0",
+                                  "fc.b_0",
+                              ])
+            expect_w_apply = [[0.98732, 0.98732, 0.98732],
+                              [0.98098, 0.98098, 0.98098]]
             expect_b_apply = [-0.00634, -0.00634, -0.00634]
             tools.compare(res[0], expect_w_apply)
             tools.compare(res[1], expect_b_apply)
 
             model_average.restore(exe)
-            res = exe.run(inference_program, feed={"inp": np_inp}, fetch_list=[
-                "fc.w_0",
-                "fc.b_0",
-            ])
+            res = exe.run(inference_program,
+                          feed={"inp": np_inp},
+                          fetch_list=[
+                              "fc.w_0",
+                              "fc.b_0",
+                          ])
             tools.compare(res[0], expect_w_restore)
             tools.compare(res[1], expect_b_restore)
 
@@ -1575,11 +1652,15 @@ def test_ModelAverage_need_restore():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
 
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             moment_optimizer.minimize(out)
 
             model_average = fluid.optimizer.ModelAverage(
@@ -1590,29 +1671,37 @@ def test_ModelAverage_need_restore():
             exe = fluid.Executor(fluid.CPUPlace())
             exe.run(fluid.default_startup_program())
             for i in range(3):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0",
+                                  "fc.b_0",
+                              ])
             expect_w_restore = res[0]
             expect_b_restore = res[1]
 
-            inference_program = fluid.default_main_program().clone(for_test=True)
+            inference_program = fluid.default_main_program().clone(
+                for_test=True)
             with model_average.apply(exe, need_restore=False):
-                res = exe.run(inference_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
-            expect_w_apply = [[0.98732, 0.98732, 0.98732], [0.98098, 0.98098, 0.98098]]
+                res = exe.run(inference_program,
+                              feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0",
+                                  "fc.b_0",
+                              ])
+            expect_w_apply = [[0.98732, 0.98732, 0.98732],
+                              [0.98098, 0.98098, 0.98098]]
             expect_b_apply = [-0.00634, -0.00634, -0.00634]
             tools.compare(res[0], expect_w_apply)
             tools.compare(res[1], expect_b_apply)
 
             model_average.restore(exe)
-            res = exe.run(inference_program, feed={"inp": np_inp}, fetch_list=[
-                "fc.w_0",
-                "fc.b_0",
-            ])
+            res = exe.run(inference_program,
+                          feed={"inp": np_inp},
+                          fetch_list=[
+                              "fc.w_0",
+                              "fc.b_0",
+                          ])
             tools.compare(res[0], expect_w_restore)
             tools.compare(res[1], expect_b_restore)
 
@@ -1630,40 +1719,47 @@ def test_ExponentialMovingAverage():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             test_program = fluid.default_main_program().clone(for_test=True)
 
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             moment_optimizer.minimize(out)
 
-            EMA = fluid.optimizer.ExponentialMovingAverage(
-                decay=0.999
-            )
+            EMA = fluid.optimizer.ExponentialMovingAverage(decay=0.999)
             EMA.update()
 
             exe = fluid.Executor(fluid.CPUPlace())
             exe.run(fluid.default_startup_program())
             for i in range(3):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0",
+                                  "fc.b_0",
+                              ])
                 # print(res)
             # expect_w_restore = [[0.97756, 0.97756, 0.97756], [0.96634, 0.96634, 0.96634]]
             # expect_b_restore = [-0.01122, -0.01122, -0.01122]
             with EMA.apply(exe, need_restore=True):
-                res = exe.run(test_program, feed={"inp": np_inp}, fetch_list=[
-                    # "learning_rate_0",
-                    # "scheduled_ema_decay_rate",
-                    # "fc.w_0.ema_tmp_0",
-                    # "fc.b_0.ema_tmp_0",
-                    "fc.w_0_ema_0",
-                    "fc.b_0_ema_0",
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
+                res = exe.run(
+                    test_program,
+                    feed={"inp": np_inp},
+                    fetch_list=[
+                        # "learning_rate_0",
+                        # "scheduled_ema_decay_rate",
+                        # "fc.w_0.ema_tmp_0",
+                        # "fc.b_0.ema_tmp_0",
+                        "fc.w_0_ema_0",
+                        "fc.b_0_ema_0",
+                        "fc.w_0",
+                        "fc.b_0",
+                    ])
                 # print(res)
                 # print()
             # expect_w_apply =
@@ -1694,41 +1790,53 @@ def test_ExponentialMovingAverage_thres_steps():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             test_program = fluid.default_main_program().clone(for_test=True)
 
-            moment_optimizer = fluid.optimizer.MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            moment_optimizer = fluid.optimizer.MomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             moment_optimizer.minimize(out)
-            ts = fluid.layers.create_global_var(shape=[1], value=1.0, dtype='float32', persistable=True, name="ts")
+            ts = fluid.layers.create_global_var(
+                shape=[1],
+                value=1.0,
+                dtype='float32',
+                persistable=True,
+                name="ts")
             EMA = fluid.optimizer.ExponentialMovingAverage(
-                decay=0.999,
-                thres_steps=ts
-            )
+                decay=0.999, thres_steps=ts)
             EMA.update()
 
             exe = fluid.Executor(fluid.CPUPlace())
             exe.run(fluid.default_startup_program())
             for i in range(2):
-                res = exe.run(train_program, feed={"inp": np_inp}, fetch_list=[
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
+                res = exe.run(train_program,
+                              feed={"inp": np_inp},
+                              fetch_list=[
+                                  "fc.w_0",
+                                  "fc.b_0",
+                              ])
                 # print(res)
             # expect_w_restore = res[0]
             # expect_b_restore = res[1]
             with EMA.apply(exe, need_restore=True):
-                res = exe.run(test_program, feed={"inp": np_inp}, fetch_list=[
-                    # "learning_rate_0",
-                    # "scheduled_ema_decay_rate",
-                    # "fc.w_0.ema_tmp_0",
-                    # "fc.b_0.ema_tmp_0",
-                    "fc.w_0_ema_0",
-                    "fc.b_0_ema_0",
-                    "fc.w_0",
-                    "fc.b_0",
-                ])
+                res = exe.run(
+                    test_program,
+                    feed={"inp": np_inp},
+                    fetch_list=[
+                        # "learning_rate_0",
+                        # "scheduled_ema_decay_rate",
+                        # "fc.w_0.ema_tmp_0",
+                        # "fc.b_0.ema_tmp_0",
+                        "fc.w_0_ema_0",
+                        "fc.b_0_ema_0",
+                        "fc.w_0",
+                        "fc.b_0",
+                    ])
                 # print()
                 # print(res)
             # expect_w_apply =
@@ -1745,7 +1853,7 @@ def test_ExponentialMovingAverage_thres_steps():
             # tools.compare(res[1], expect_b_restore)
 
 
-#  LarsMomentumOptimizer
+            #  LarsMomentumOptimizer
 def test_LarsMomentumOptimizer():
     """
     test LarsMomentumOptimizer
@@ -1759,10 +1867,14 @@ def test_LarsMomentumOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.LarsMomentumOptimizer(learning_rate=0.001, momentum=0.9)
+            optimizer = fluid.optimizer.LarsMomentumOptimizer(
+                learning_rate=0.001, momentum=0.9)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -1770,12 +1882,9 @@ def test_LarsMomentumOptimizer():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.99999774, 0.99999774, 0.99999774], [0.99999654, 0.99999654, 0.99999654]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.99999774, 0.99999774, 0.99999774],
+                        [0.99999654, 0.99999654, 0.99999654]]
             expect_b = [-0.0038, -0.0038, -0.0038]
             expect_res = [29.98797]
             tools.compare(res[0], expect_w)
@@ -1796,10 +1905,14 @@ def test_LarsMomentumOptimizer_learning_rate_float():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.LarsMomentumOptimizer(learning_rate=0.1, momentum=0.9)
+            optimizer = fluid.optimizer.LarsMomentumOptimizer(
+                learning_rate=0.1, momentum=0.9)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -1807,12 +1920,9 @@ def test_LarsMomentumOptimizer_learning_rate_float():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.99977252, 0.99977252, 0.99977252], [0.99965878, 0.99965878, 0.99965878]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.99977252, 0.99977252, 0.99977252],
+                        [0.99965878, 0.99965878, 0.99965878]]
             expect_b = [-0.38002, -0.38002, -0.38002]
             expect_res = [28.79694]
             tools.compare(res[0], expect_w)
@@ -1833,10 +1943,14 @@ def test_LarsMomentumOptimizer_moment():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.LarsMomentumOptimizer(learning_rate=0.1, momentum=0.1)
+            optimizer = fluid.optimizer.LarsMomentumOptimizer(
+                learning_rate=0.1, momentum=0.1)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -1849,7 +1963,8 @@ def test_LarsMomentumOptimizer_moment():
                                   "fc.b_0",
                                   out.name,
                               ])
-            expect_w = [[0.99983525, 0.99983525, 0.99983525], [0.99975294, 0.99975294, 0.99975294]]
+            expect_w = [[0.99983525, 0.99983525, 0.99983525],
+                        [0.99975294, 0.99975294, 0.99975294]]
             expect_b = [-0.22002, -0.22002, -0.22002]
             expect_res = [28.79694]
             tools.compare(res[0], expect_w)
@@ -1870,10 +1985,14 @@ def test_LarsMomentumOptimizer_lars_coeff():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.LarsMomentumOptimizer(learning_rate=0.1, momentum=0.9, lars_coeff=0.1)
+            optimizer = fluid.optimizer.LarsMomentumOptimizer(
+                learning_rate=0.1, momentum=0.9, lars_coeff=0.1)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -1881,14 +2000,11 @@ def test_LarsMomentumOptimizer_lars_coeff():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
                 # print(res)
                 # print()
-            expect_w = [[0.9773268, 0.9773268, 0.9773268], [0.9659917 , 0.9659917 , 0.9659917 ]]
+            expect_w = [[0.9773268, 0.9773268, 0.9773268],
+                        [0.9659917, 0.9659917, 0.9659917]]
             expect_b = [-0.3819998, -0.3819998, -0.3819998]
             expect_res = [28.49406]
             tools.compare(res[0], expect_w)
@@ -1909,10 +2025,14 @@ def test_LarsMomentumOptimizer_lars_weight_decay():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.LarsMomentumOptimizer(learning_rate=0.1, momentum=0.9, lars_weight_decay=0.1)
+            optimizer = fluid.optimizer.LarsMomentumOptimizer(
+                learning_rate=0.1, momentum=0.9, lars_weight_decay=0.1)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -1920,12 +2040,9 @@ def test_LarsMomentumOptimizer_lars_weight_decay():
             for i in range(2):
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
-                              fetch_list=[
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.9997713, 0.9997713, 0.9997713], [0.9996598, 0.9996598, 0.9996598]]
+                              fetch_list=["fc.w_0", "fc.b_0", out.name])
+            expect_w = [[0.9997713, 0.9997713, 0.9997713],
+                        [0.9996598, 0.9996598, 0.9996598]]
             expect_b = [-0.3800196, -0.3800196, -0.3800196]
             expect_res = [28.796944]
             tools.compare(res[0], expect_w)
@@ -1947,8 +2064,11 @@ def test_LookaheadOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             sgd = fluid.optimizer.SGD(learning_rate=0.01)
             optimizer = fluid.optimizer.LookaheadOptimizer(sgd, alpha=0.5, k=5)
@@ -1960,11 +2080,8 @@ def test_LookaheadOptimizer():
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
                               fetch_list=[
-                                  "fc.w_0@SLOW",
-                                  "fc.b_0@SLOW",
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
+                                  "fc.w_0@SLOW", "fc.b_0@SLOW", "fc.w_0",
+                                  "fc.b_0", out.name
                               ])
             expect_w_slow = [[0.9, 0.9, 0.9], [0.85, 0.85, 0.85]]
             expect_b_slow = [-0.05, -0.05, -0.05]
@@ -1991,11 +2108,15 @@ def test_LookaheadOptimizer_adagrad():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             adagrad = fluid.optimizer.AdagradOptimizer(learning_rate=0.2)
-            optimizer = fluid.optimizer.LookaheadOptimizer(adagrad, alpha=0.5, k=5)
+            optimizer = fluid.optimizer.LookaheadOptimizer(
+                adagrad, alpha=0.5, k=5)
             optimizer.minimize(out)
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -2004,15 +2125,14 @@ def test_LookaheadOptimizer_adagrad():
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
                               fetch_list=[
-                                  "fc.w_0@SLOW",
-                                  "fc.b_0@SLOW",
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
+                                  "fc.w_0@SLOW", "fc.b_0@SLOW", "fc.w_0",
+                                  "fc.b_0", out.name
                               ])
-            expect_w_slow = [[0.67683303, 0.67683303, 0.67683303], [0.67683303, 0.67683303, 0.67683303]]
+            expect_w_slow = [[0.67683303, 0.67683303, 0.67683303],
+                             [0.67683303, 0.67683303, 0.67683303]]
             expect_b_slow = [-0.32316697, -0.32316697, -0.32316697]
-            expect_w_fast = [[0.67683303, 0.67683303, 0.67683303], [0.67683303, 0.67683303, 0.67683303]]
+            expect_w_fast = [[0.67683303, 0.67683303, 0.67683303],
+                             [0.67683303, 0.67683303, 0.67683303]]
             expect_b_fats = [-0.32316697, -0.32316697, -0.32316697]
             expect_res = [9.951912]
             tools.compare(res[0], expect_w_slow)
@@ -2035,8 +2155,11 @@ def test_LookaheadOptimizer_alpha():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             sgd = fluid.optimizer.SGD(learning_rate=0.01)
             optimizer = fluid.optimizer.LookaheadOptimizer(sgd, alpha=1.0, k=5)
@@ -2048,11 +2171,8 @@ def test_LookaheadOptimizer_alpha():
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
                               fetch_list=[
-                                  "fc.w_0@SLOW",
-                                  "fc.b_0@SLOW",
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
+                                  "fc.w_0@SLOW", "fc.b_0@SLOW", "fc.w_0",
+                                  "fc.b_0", out.name
                               ])
             expect_w_slow = [[0.8, 0.8, 0.8], [0.7, 0.7, 0.7]]
             expect_b_slow = [-0.1, -0.1, -0.1]
@@ -2079,8 +2199,11 @@ def test_LookaheadOptimizer_k():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             sgd = fluid.optimizer.SGD(learning_rate=0.01)
             optimizer = fluid.optimizer.LookaheadOptimizer(sgd, alpha=0.5, k=10)
@@ -2092,11 +2215,8 @@ def test_LookaheadOptimizer_k():
                 res = exe.run(train_program,
                               feed={"inp": np_inp},
                               fetch_list=[
-                                  "fc.w_0@SLOW",
-                                  "fc.b_0@SLOW",
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
+                                  "fc.w_0@SLOW", "fc.b_0@SLOW", "fc.w_0",
+                                  "fc.b_0", out.name
                               ])
             expect_w_slow = [[0.8, 0.8, 0.8], [0.7, 0.7, 0.7]]
             expect_b_slow = [-0.1, -0.1, -0.1]
@@ -2125,8 +2245,11 @@ def test_AdamOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.AdamOptimizer(learning_rate=0.1)
             optimizer.minimize(out)
@@ -2135,27 +2258,25 @@ def test_AdamOptimizer():
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  "learning_rate_0",  # 0
-
-                                  "fc.w_0@GRAD",   # 1
-                                  "fc.b_0@GRAD",  # 2
-
-                                  "fc.w_0_beta1_pow_acc_0",  # 3
-                                  "fc.w_0_beta2_pow_acc_0",  # 4
-                                  "fc.b_0_beta1_pow_acc_0",  # 5
-                                  "fc.b_0_beta2_pow_acc_0",  # 6
-
-                                  "fc.w_0_moment1_0",  # 7
-                                  "fc.w_0_moment2_0",  # 8
-                                  "fc.b_0_moment1_0",  # 9
-                                  "fc.b_0_moment2_0",  # 10
-                                  "fc.w_0",  # 11
-                                  "fc.b_0",  # 12
-                                  out.name
-                              ])
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=[
+                        "learning_rate_0",  # 0
+                        "fc.w_0@GRAD",  # 1
+                        "fc.b_0@GRAD",  # 2
+                        "fc.w_0_beta1_pow_acc_0",  # 3
+                        "fc.w_0_beta2_pow_acc_0",  # 4
+                        "fc.b_0_beta1_pow_acc_0",  # 5
+                        "fc.b_0_beta2_pow_acc_0",  # 6
+                        "fc.w_0_moment1_0",  # 7
+                        "fc.w_0_moment2_0",  # 8
+                        "fc.b_0_moment1_0",  # 9
+                        "fc.b_0_moment2_0",  # 10
+                        "fc.w_0",  # 11
+                        "fc.b_0",  # 12
+                        out.name
+                    ])
             # expect_w = [[0.92558715, 0.92558715, 0.92558715], [0.92558696, 0.92558696, 0.92558696]]
             # expect_b = [-0.07441226, -0.07441226, -0.07441226]
             # expect_res = [30.0]
@@ -2164,7 +2285,7 @@ def test_AdamOptimizer():
             # tools.compare(res[4], expect_res)
 
 
-# AdamaxOptimizer
+            # AdamaxOptimizer
 def test_AdamaxOptimizer():
     """
     test AdamaxOptimizer : http://newicafe.baidu.com/issue/DLTP-3198/show?cid=5
@@ -2178,41 +2299,41 @@ def test_AdamaxOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
-            optimizer = fluid.optimizer.AdamaxOptimizer(learning_rate=0.001, beta1=0.1, beta2=0.9, epsilon=0.0)
+            optimizer = fluid.optimizer.AdamaxOptimizer(
+                learning_rate=0.001, beta1=0.1, beta2=0.9, epsilon=0.0)
             optimizer.minimize(out)
 
             place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  "learning_rate_0", # 0
-
-                                  "fc.w_0@GRAD",  # 1
-                                  "fc.b_0@GRAD",  # 2
-
-                                  "fc.w_0_beta1_pow_acc_0",  # 3
-                                  "fc.b_0_beta1_pow_acc_0",  # 4
-
-                                  "fc.w_0_moment_0",  # 5
-                                  "fc.b_0_moment_0",  # 6
-
-                                  "fc.w_0_inf_norm_0",  # 7
-                                  "fc.b_0_inf_norm_0",  # 8
-
-                                  "fc.w_0",  # 9
-                                  "fc.b_0",  # 10
-                                  out.name
-                              ])
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=[
+                        "learning_rate_0",  # 0
+                        "fc.w_0@GRAD",  # 1
+                        "fc.b_0@GRAD",  # 2
+                        "fc.w_0_beta1_pow_acc_0",  # 3
+                        "fc.b_0_beta1_pow_acc_0",  # 4
+                        "fc.w_0_moment_0",  # 5
+                        "fc.b_0_moment_0",  # 6
+                        "fc.w_0_inf_norm_0",  # 7
+                        "fc.b_0_inf_norm_0",  # 8
+                        "fc.w_0",  # 9
+                        "fc.b_0",  # 10
+                        out.name
+                    ])
                 # print(res[9], res[10])
 
 
-# AdadeltaOptimizer
+            # AdadeltaOptimizer
 def test_AdadeltaOptimizer():
     """
     test AdadeltaOptimizer : http://newicafe.baidu.com/issue/DLTP-3199/show?cid=5
@@ -2227,8 +2348,11 @@ def test_AdadeltaOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.AdadeltaOptimizer(learning_rate=0.01, )
             optimizer.minimize(out)
@@ -2237,24 +2361,25 @@ def test_AdadeltaOptimizer():
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
             for i in range(1):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  "learning_rate_0", # 0
-                                  "fc.w_0@GRAD", # 1
-                                  "fc.b_0@GRAD", # 2
-                                  "fc.w_0__avg_squared_update_0", # 3
-                                  "fc.b_0__avg_squared_update_0", # 4
-                                  "fc.w_0__avg_squared_grad_0", # 5
-                                  "fc.b_0__avg_squared_grad_0", # 6
-                                  "fc.w_0",  # 7
-                                  "fc.b_0",  # 8
-                                  out.name # 9
-                              ])
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=[
+                        "learning_rate_0",  # 0
+                        "fc.w_0@GRAD",  # 1
+                        "fc.b_0@GRAD",  # 2
+                        "fc.w_0__avg_squared_update_0",  # 3
+                        "fc.b_0__avg_squared_update_0",  # 4
+                        "fc.w_0__avg_squared_grad_0",  # 5
+                        "fc.b_0__avg_squared_grad_0",  # 6
+                        "fc.w_0",  # 7
+                        "fc.b_0",  # 8
+                        out.name  # 9
+                    ])
             # print(res[7], res[8])
 
 
-#  LambOptimizer
+            #  LambOptimizer
 def test_LambOptimizer():
     """
     test LambOptimizer ：
@@ -2269,8 +2394,11 @@ def test_LambOptimizer():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
             optimizer = fluid.optimizer.LambOptimizer(learning_rate=0.001)
             optimizer.minimize(out)
@@ -2279,20 +2407,21 @@ def test_LambOptimizer():
             exe.run(fluid.default_startup_program())
 
             for i in range(2):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  # "fc.w_0_moment1_0",
-                                  # "fc.b_0_moment1_0",
-                                  #
-                                  # "fc.w_0_moment2_0",
-                                  # "fc.b_0_moment2_0",
-
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.998001, 0.998001, 0.998001], [0.998001, 0.998001, 0.998001]]
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=[
+                        # "fc.w_0_moment1_0",
+                        # "fc.b_0_moment1_0",
+                        #
+                        # "fc.w_0_moment2_0",
+                        # "fc.b_0_moment2_0",
+                        "fc.w_0",
+                        "fc.b_0",
+                        out.name
+                    ])
+            expect_w = [[0.998001, 0.998001, 0.998001],
+                        [0.998001, 0.998001, 0.998001]]
             expect_b = [-0.00316541, -0.00316541, -0.00316541]
             expect_res = [29.951027]
             tools.compare(res[0], expect_w)
@@ -2313,8 +2442,11 @@ def test_LambOptimizer_learning_rate_float():
             np_inp = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
             inp = fluid.layers.data(
                 name="inp", shape=[2, 2], append_batch_size=False)
-            out = fluid.layers.fc(name="fc", input=inp, size=3,
-                                  param_attr=fluid.initializer.Constant(value=1.0, force_cpu=True))
+            out = fluid.layers.fc(name="fc",
+                                  input=inp,
+                                  size=3,
+                                  param_attr=fluid.initializer.Constant(
+                                      value=1.0, force_cpu=True))
             out = fluid.layers.reduce_sum(out)
 
             optimizer = fluid.optimizer.LambOptimizer(learning_rate=0.1)
@@ -2324,20 +2456,21 @@ def test_LambOptimizer_learning_rate_float():
             exe.run(fluid.default_startup_program())
 
             for i in range(2):
-                res = exe.run(train_program,
-                              feed={"inp": np_inp},
-                              fetch_list=[
-                                  # "fc.w_0_moment1_0",
-                                  # "fc.b_0_moment1_0",
-                                  #
-                                  # "fc.w_0_moment2_0",
-                                  # "fc.b_0_moment2_0",
-
-                                  "fc.w_0",
-                                  "fc.b_0",
-                                  out.name
-                              ])
-            expect_w = [[0.81000024, 0.81000024, 0.81000024], [0.80999977, 0.80999977, 0.80999977]]
+                res = exe.run(
+                    train_program,
+                    feed={"inp": np_inp},
+                    fetch_list=[
+                        # "fc.w_0_moment1_0",
+                        # "fc.b_0_moment1_0",
+                        #
+                        # "fc.w_0_moment2_0",
+                        # "fc.b_0_moment2_0",
+                        "fc.w_0",
+                        "fc.b_0",
+                        out.name
+                    ])
+            expect_w = [[0.81000024, 0.81000024, 0.81000024],
+                        [0.80999977, 0.80999977, 0.80999977]]
             expect_b = [-0.34784739, -0.34784739, -0.34784739]
             expect_res = [25.10265]
             tools.compare(res[0], expect_w)

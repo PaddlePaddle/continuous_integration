@@ -21,6 +21,7 @@ import distutils.util
 import numpy as np
 import six
 
+
 def print_arguments(args):
     """Print argparse's arguments.
 
@@ -61,6 +62,7 @@ def add_arguments(argname, type, default, help, argparser, **kwargs):
         help=help + ' Default: %(default)s.',
         **kwargs)
 
+
 def check_gpu(use_gpu):
     """
     Log error and exit when set use_gpu=true in paddlepaddle
@@ -78,4 +80,3 @@ def check_gpu(use_gpu):
             sys.exit(1)
     except Exception as e:
         pass
-

@@ -28,18 +28,12 @@ def test_argmax():
      [1, 1, 1, 1],
      [0, 0, 0, 1]]
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
-                     [1, 7, 0, 6]]])
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9], [1, 7, 0, 6]]])
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
         res = fluid.layers.argmax(x=x, axis=0)
-        expect = [[0, 0, 0, 0],
-                  [1, 1, 1, 1],
-                  [0, 0, 0, 1]]
+        expect = [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 1]]
         tools.compare(res.numpy(), expect)
         # [[2 3 1]
         #  [0 3 1]]
@@ -61,17 +55,12 @@ def test_argmax1():
     expect = [[2, 2, 0, 1],
                   [0, 1, 1, 1]]
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
-                     [1, 7, 0, 6]]])
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9], [1, 7, 0, 6]]])
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
         res = fluid.layers.argmax(x=x, axis=1)
-        expect = [[2, 2, 0, 1],
-                  [0, 1, 1, 1]]
+        expect = [[2, 2, 0, 1], [0, 1, 1, 1]]
         tools.compare(res.numpy(), expect)
 
 
@@ -85,17 +74,12 @@ def test_argmax2():
                   [0, 3, 1]]
     """
 
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
-                     [1, 7, 0, 6]]])
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9], [1, 7, 0, 6]]])
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
         res = fluid.layers.argmax(x=x, axis=2)
-        expect = [[2, 3, 1],
-                  [0, 3, 1]]
+        expect = [[2, 3, 1], [0, 3, 1]]
         tools.compare(res.numpy(), expect)
 
 
@@ -109,17 +93,12 @@ def test_argmax3():
                   [0, 3, 1]]
     """
 
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
-                     [1, 7, 0, 6]]])
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9], [1, 7, 0, 6]]])
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
         res = fluid.layers.argmax(x=x, axis=-1)
-        expect = [[2, 3, 1],
-                  [0, 3, 1]]
+        expect = [[2, 3, 1], [0, 3, 1]]
         tools.compare(res.numpy(), expect)
 
 
@@ -131,12 +110,8 @@ def test_argmin():
         None
 
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
-                     [1, 7, 0, 6]]])
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9], [1, 7, 0, 6]]])
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
         res = fluid.layers.argmin(x=x, axis=-1)
@@ -152,12 +127,8 @@ def test_argmin1():
         None
 
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
-                     [1, 7, 0, 6]]])
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9], [1, 7, 0, 6]]])
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
         res = fluid.layers.argmin(x=x, axis=0)
@@ -173,12 +144,8 @@ def test_argmin2():
         None
 
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
-                     [1, 7, 0, 6]]])
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9], [1, 7, 0, 6]]])
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
         res = fluid.layers.argmin(x=x, axis=1)
@@ -194,17 +161,14 @@ def test_argmin3():
         None
 
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
-                     [1, 7, 0, 6]]])
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9], [1, 7, 0, 6]]])
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
         res = fluid.layers.argmin(x=x, axis=2)
         expect = [[0, 0, 2], [1, 0, 2]]
         tools.compare(res.numpy(), expect)
+
 
 def test_argsort():
     """
@@ -213,11 +177,8 @@ def test_argsort():
     Returns:
         None
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9],
                      [1, 7, 0, 6]]]).astype(np.float32)
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
@@ -237,15 +198,13 @@ def test_argsort1():
     Returns:
         None
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9],
                      [1, 7, 0, 6]]]).astype(np.float32)
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
-        res = fluid.layers.argsort(input=x, axis=-1, descending=True)  # same as axis==2
+        res = fluid.layers.argsort(
+            input=x, axis=-1, descending=True)  # same as axis==2
         expect = [[[9, 8, 5, 5], [7, 1, 0, 0], [9, 6, 4, 2]],
                   [[5, 4, 2, 2], [9, 7, 7, 4], [7, 6, 1, 0]]]
         index = [[[2, 1, 0, 3], [3, 2, 0, 1], [1, 0, 3, 2]],
@@ -261,11 +220,8 @@ def test_argsort2():
     Returns:
         None
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9],
                      [1, 7, 0, 6]]]).astype(np.float32)
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
@@ -282,11 +238,8 @@ def test_argsort3():
     Returns:
         None
     """
-    in1 = np.array([[[5, 8, 9, 5],
-                     [0, 0, 1, 7],
-                     [6, 9, 2, 4]],
-                    [[5, 2, 4, 2],
-                     [4, 7, 7, 9],
+    in1 = np.array([[[5, 8, 9, 5], [0, 0, 1, 7], [6, 9, 2, 4]],
+                    [[5, 2, 4, 2], [4, 7, 7, 9],
                      [1, 7, 0, 6]]]).astype(np.float32)
     with fluid.dygraph.guard():
         x = fluid.dygraph.to_variable(in1)
@@ -304,12 +257,14 @@ def test_assign():
         None
     """
     with fluid.dygraph.guard():
-        data = fluid.layers.fill_constant(shape=[3, 2], value=2.5, dtype='float64')
+        data = fluid.layers.fill_constant(
+            shape=[3, 2], value=2.5, dtype='float64')
         result1 = fluid.layers.create_tensor(dtype='float64')
         fluid.layers.assign(data, result1)
         result2 = fluid.layers.assign(data)
-        result3 = fluid.layers.assign(np.array([[2.5, 2.5], [2.5, 2.5], [2.5, 2.5]],
-                                               dtype='float32'))
+        result3 = fluid.layers.assign(
+            np.array(
+                [[2.5, 2.5], [2.5, 2.5], [2.5, 2.5]], dtype='float32'))
         expect = [[2.5, 2.5], [2.5, 2.5], [2.5, 2.5]]
         tools.compare(result1.numpy(), expect)
         tools.compare(result2.numpy(), expect)
@@ -334,10 +289,17 @@ def test_cast():
             exe = fluid.Executor(place)
             exe.run(startup_program)
             x_i_lod = fluid.core.LoDTensor()
-            x_i_lod.set(np.array([[1.3, -2.4], [0, 4]]).astype("float32"), place)
+            x_i_lod.set(
+                np.array([[1.3, -2.4], [0, 4]]).astype("float32"), place)
             x_i_lod.set_recursive_sequence_lengths([[0, 2]])
-            res1 = exe.run(train_program, feed={'x': x_i_lod}, fetch_list=[cast_res1], return_numpy=False)
-            res2 = exe.run(train_program, feed={'x': x_i_lod}, fetch_list=[cast_res2], return_numpy=False)
+            res1 = exe.run(train_program,
+                           feed={'x': x_i_lod},
+                           fetch_list=[cast_res1],
+                           return_numpy=False)
+            res2 = exe.run(train_program,
+                           feed={'x': x_i_lod},
+                           fetch_list=[cast_res2],
+                           return_numpy=False)
             expect1 = [[1, 254], [0, 4]]
             assert np.array(res1[0]).dtype == np.uint8
             tools.compare(np.array(res1[0]), expect1)
@@ -353,12 +315,9 @@ def test_concat():
     Returns:
         None
     """
-    in1 = np.array([[1, 2, 3],
-                    [4, 5, 6]])
-    in2 = np.array([[11, 12, 13],
-                    [14, 15, 16]])
-    in3 = np.array([[21, 22],
-                    [23, 24]])
+    in1 = np.array([[1, 2, 3], [4, 5, 6]])
+    in2 = np.array([[11, 12, 13], [14, 15, 16]])
+    in3 = np.array([[21, 22], [23, 24]])
     with fluid.dygraph.guard():
         x1 = fluid.dygraph.to_variable(in1)
         x2 = fluid.dygraph.to_variable(in2)
@@ -367,7 +326,7 @@ def test_concat():
         out2 = fluid.layers.concat(input=[x1, x2], axis=0)
         expect1 = [[1, 2, 3, 11, 12, 13, 21, 22], [4, 5, 6, 14, 15, 16, 23, 24]]
         tools.compare(out1.numpy(), expect1)
-        expect2 = [[1, 2, 3], [4, 5, 6], [11, 12, 13], [14, 15 ,16]]
+        expect2 = [[1, 2, 3], [4, 5, 6], [11, 12, 13], [14, 15, 16]]
         tools.compare(out2.numpy(), expect2)
 
 
@@ -379,8 +338,13 @@ def test_create_global_var():
         None
     """
     with fluid.dygraph.guard():
-        var = fluid.layers.create_global_var(shape=[2, 3], value=1.0, dtype='float32',
-                                       persistable=True, force_cpu=True, name='new_var')
+        var = fluid.layers.create_global_var(
+            shape=[2, 3],
+            value=1.0,
+            dtype='float32',
+            persistable=True,
+            force_cpu=True,
+            name='new_var')
         expect = [[1, 1, 1], [1, 1, 1]]
         tools.compare(var.numpy(), expect)
 
@@ -410,7 +374,8 @@ def test_fill_constant():
         data1 = fluid.layers.fill_constant(shape=[2, 2], value=0, dtype='int64')
         expect1 = [[0, 0], [0, 0]]
         tools.compare(data1.numpy(), expect1)
-        data2 = fluid.layers.fill_constant(shape=[2, 2], value=5, dtype='int64', out=data1)
+        data2 = fluid.layers.fill_constant(
+            shape=[2, 2], value=5, dtype='int64', out=data1)
         expect2 = [[5, 5], [5, 5]]
         tools.compare(data2.numpy(), expect2)
 
@@ -455,7 +420,8 @@ def test_has_inf():
         None
     """
     with fluid.dygraph.guard():
-        data = fluid.dygraph.to_variable(np.asarray([1, 2, 3]).astype("float32"))
+        data = fluid.dygraph.to_variable(
+            np.asarray([1, 2, 3]).astype("float32"))
         res = fluid.layers.has_inf(data).numpy()
         assert not res[0]
 
@@ -507,7 +473,8 @@ def test_has_nan():
         None
     """
     with fluid.dygraph.guard():
-        data = fluid.dygraph.to_variable(np.asarray([1, 2, 3]).astype("float32"))
+        data = fluid.dygraph.to_variable(
+            np.asarray([1, 2, 3]).astype("float32"))
         res = fluid.layers.has_nan(data).numpy()
         assert not res[0]
 
@@ -559,7 +526,8 @@ def test_isfinite():
         None
     """
     with fluid.dygraph.guard():
-        data = fluid.dygraph.to_variable(np.asarray([1, 2, 3]).astype("float32"))
+        data = fluid.dygraph.to_variable(
+            np.asarray([1, 2, 3]).astype("float32"))
         res = fluid.layers.isfinite(data).numpy()
         assert res[0]
 
@@ -660,7 +628,8 @@ def test_reverse():
     """
     with fluid.dygraph.guard():
         data = fluid.layers.assign(
-            np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8]], dtype='float32'))
+            np.array(
+                [[0, 1, 2], [3, 4, 5], [6, 7, 8]], dtype='float32'))
         result1 = fluid.layers.reverse(data, 0)
         result2 = fluid.layers.reverse(data, [0, 1])
         expect1 = [[6, 7, 8], [3, 4, 5], [0, 1, 2]]
@@ -698,19 +667,22 @@ def tensor_array_to_tensor():
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
-            a = np.array([[0.6, 0.1, 0.3],
-                           [0.5, 0.3, 0.2]])
+            a = np.array([[0.6, 0.1, 0.3], [0.5, 0.3, 0.2]])
             b = np.array([[1.3], [1.8]])
-            c = np.array([[2.3, 2.1],
-                           [2.5, 2.4]])
+            c = np.array([[2.3, 2.1], [2.5, 2.4]])
             A = fluid.LoDTensor()
             B = fluid.LoDTensor()
             C = fluid.LoDTensor()
-            res = fluid.layers.tensor_array_to_tensor([A, B, C], axis=1, use_stack=False)
+            res = fluid.layers.tensor_array_to_tensor(
+                [A, B, C], axis=1, use_stack=False)
             exe = fluid.Executor(fluid.CPUPlace())
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
-            res = exe.run(compiled_prog, feed={A: a, B: b, C: c}, fetch_list=[res])
+            res = exe.run(compiled_prog,
+                          feed={A: a,
+                                B: b,
+                                C: c},
+                          fetch_list=[res])
             print(res)
 
 
@@ -739,5 +711,3 @@ def test_zeros_like():
         res = fluid.layers.zeros_like(x)
         expect = [[0, 0], [0, 0], [0, 0]]
         tools.compare(res.numpy(), expect)
-
-

@@ -13,7 +13,6 @@
 # limitations under the License.
 """test static profiler."""
 
-
 import paddle.fluid as fluid
 import paddle.fluid.profiler as profiler
 import numpy as np
@@ -31,11 +30,14 @@ def test_profiler():
     startup_program = fluid.Program()
     with profiler.profiler('CPU', 'total', './profile') as prof:
         with fluid.unique_name.guard():
-            with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+            with fluid.program_guard(
+                    main_program=main_program, startup_program=startup_program):
                 epoc = 30
                 dshape = [4, 3, 28, 28]
-                data = fluid.layers.data(name='data', shape=[3, 28, 28], dtype='float32')
-                conv = fluid.layers.conv2d(data, 20, 3, stride=[1, 1], padding=[1, 1])
+                data = fluid.layers.data(
+                    name='data', shape=[3, 28, 28], dtype='float32')
+                conv = fluid.layers.conv2d(
+                    data, 20, 3, stride=[1, 1], padding=[1, 1])
 
                 place = fluid.CPUPlace()
                 exe = fluid.Executor(place)
@@ -61,11 +63,14 @@ def test_profiler1():
     startup_program = fluid.Program()
     with profiler.profiler('CPU', sorted_key, './profile') as prof:
         with fluid.unique_name.guard():
-            with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+            with fluid.program_guard(
+                    main_program=main_program, startup_program=startup_program):
                 epoc = 30
                 dshape = [4, 3, 28, 28]
-                data = fluid.layers.data(name='data', shape=[3, 28, 28], dtype='float32')
-                conv = fluid.layers.conv2d(data, 20, 3, stride=[1, 1], padding=[1, 1])
+                data = fluid.layers.data(
+                    name='data', shape=[3, 28, 28], dtype='float32')
+                conv = fluid.layers.conv2d(
+                    data, 20, 3, stride=[1, 1], padding=[1, 1])
 
                 place = fluid.CPUPlace()
                 exe = fluid.Executor(place)
@@ -89,12 +94,15 @@ def test_start_profiler():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             profiler.start_profiler('CPU')
             epoc = 30
             dshape = [4, 3, 28, 28]
-            data = fluid.layers.data(name='data', shape=[3, 28, 28], dtype='float32')
-            conv = fluid.layers.conv2d(data, 20, 3, stride=[1, 1], padding=[1, 1])
+            data = fluid.layers.data(
+                name='data', shape=[3, 28, 28], dtype='float32')
+            conv = fluid.layers.conv2d(
+                data, 20, 3, stride=[1, 1], padding=[1, 1])
 
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -105,7 +113,7 @@ def test_start_profiler():
             # for iter in range(10):
             #     if iter == 2:
             #         profiler.reset_profiler()
-                # except each iteration
+            # except each iteration
             profiler.stop_profiler('total', './profile')
     if os.path.exists("./profile"):
         assert True
@@ -123,12 +131,15 @@ def test_start_profiler1():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             profiler.start_profiler('GPU')
             epoc = 30
             dshape = [4, 3, 28, 28]
-            data = fluid.layers.data(name='data', shape=[3, 28, 28], dtype='float32')
-            conv = fluid.layers.conv2d(data, 20, 3, stride=[1, 1], padding=[1, 1])
+            data = fluid.layers.data(
+                name='data', shape=[3, 28, 28], dtype='float32')
+            conv = fluid.layers.conv2d(
+                data, 20, 3, stride=[1, 1], padding=[1, 1])
 
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -139,7 +150,7 @@ def test_start_profiler1():
             # for iter in range(10):
             #     if iter == 2:
             #         profiler.reset_profiler()
-                # except each iteration
+            # except each iteration
             profiler.stop_profiler('total', './profile')
     if os.path.exists("./profile"):
         assert True
@@ -157,12 +168,15 @@ def test_start_profiler2():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             profiler.start_profiler('All')
             epoc = 30
             dshape = [4, 3, 28, 28]
-            data = fluid.layers.data(name='data', shape=[3, 28, 28], dtype='float32')
-            conv = fluid.layers.conv2d(data, 20, 3, stride=[1, 1], padding=[1, 1])
+            data = fluid.layers.data(
+                name='data', shape=[3, 28, 28], dtype='float32')
+            conv = fluid.layers.conv2d(
+                data, 20, 3, stride=[1, 1], padding=[1, 1])
 
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -173,7 +187,7 @@ def test_start_profiler2():
             # for iter in range(10):
             #     if iter == 2:
             #         profiler.reset_profiler()
-                # except each iteration
+            # except each iteration
             profiler.stop_profiler('total', './profile')
     if os.path.exists("./profile"):
         assert True
@@ -191,13 +205,16 @@ def test_start_profiler3():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             try:
                 profiler.start_profiler('nothing')
                 epoc = 30
                 dshape = [4, 3, 28, 28]
-                data = fluid.layers.data(name='data', shape=[3, 28, 28], dtype='float32')
-                conv = fluid.layers.conv2d(data, 20, 3, stride=[1, 1], padding=[1, 1])
+                data = fluid.layers.data(
+                    name='data', shape=[3, 28, 28], dtype='float32')
+                conv = fluid.layers.conv2d(
+                    data, 20, 3, stride=[1, 1], padding=[1, 1])
 
                 place = fluid.CPUPlace()
                 exe = fluid.Executor(place)
@@ -208,7 +225,7 @@ def test_start_profiler3():
                 # for iter in range(10):
                 #     if iter == 2:
                 #         profiler.reset_profiler()
-                    # except each iteration
+                # except each iteration
                 profiler.stop_profiler('total', './profile')
             except ValueError as e:
                 print(e)
@@ -225,12 +242,15 @@ def test_reset_profiler():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             profiler.start_profiler('All')
             epoc = 30
             dshape = [4, 3, 28, 28]
-            data = fluid.layers.data(name='data', shape=[3, 28, 28], dtype='float32')
-            conv = fluid.layers.conv2d(data, 20, 3, stride=[1, 1], padding=[1, 1])
+            data = fluid.layers.data(
+                name='data', shape=[3, 28, 28], dtype='float32')
+            conv = fluid.layers.conv2d(
+                data, 20, 3, stride=[1, 1], padding=[1, 1])
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
             exe.run(fluid.default_startup_program())
@@ -245,4 +265,3 @@ def test_reset_profiler():
         assert True
     else:
         assert False
-

@@ -13,7 +13,6 @@
 # limitations under the License.
 """test static fluid."""
 
-
 import paddle.fluid as fluid
 import os
 import numpy as np
@@ -58,12 +57,13 @@ def test_create_lod_tensor():
     res = list()
     for i in range(10):
         for j in range(10):
-            for k in range(i+j):
+            for k in range(i + j):
                 res.append([1])
-            t = fluid.create_lod_tensor(np.array(res), [[i, j]], fluid.CPUPlace())
-            lod = [[0, i, i+j]]
+            t = fluid.create_lod_tensor(
+                np.array(res), [[i, j]], fluid.CPUPlace())
+            lod = [[0, i, i + j]]
             tools.compare(t.lod(), lod)
-            expect = [[1]] * (i+j)
+            expect = [[1]] * (i + j)
             tools.compare(res, expect)
             # print(t.lod())
             res = list()
@@ -77,13 +77,14 @@ def test_create_lod_tensor1():
     res = list()
     for i in range(10):
         for j in range(10):
-            for k in range(i+j):
+            for k in range(i + j):
                 res.append([1])
-            t = fluid.create_lod_tensor(np.array(res), [[i, j]], fluid.CPUPlace())
+            t = fluid.create_lod_tensor(
+                np.array(res), [[i, j]], fluid.CPUPlace())
             t = fluid.create_lod_tensor(t, [[i, j]], fluid.CPUPlace())
-            lod = [[0, i, i+j]]
+            lod = [[0, i, i + j]]
             tools.compare(t.lod(), lod)
-            expect = [[1]] * (i+j)
+            expect = [[1]] * (i + j)
             tools.compare(res, expect)
             # print(t.lod())
             res = list()
@@ -99,7 +100,8 @@ def test_create_lod_tensor2():
     print(t)
     lod = [[0, 3, 4, 8]]
     tools.compare(t.lod(), lod)
-    tools.compare(np.array(t.__array__()).flatten(), np.array([1, 2, 3, 1, 2, 4, 5, 6]))
+    tools.compare(
+        np.array(t.__array__()).flatten(), np.array([1, 2, 3, 1, 2, 4, 5, 6]))
 
 
 def test_create_random_int_lodtensor():
@@ -111,8 +113,12 @@ def test_create_random_int_lodtensor():
     for i in range(10):
         for j in range(10):
             for shape in range(10):
-                t = fluid.create_random_int_lodtensor(recursive_seq_lens=[[i, j]], base_shape=[shape], place=fluid.CPUPlace(), low=0,
-                                                      high=10)
+                t = fluid.create_random_int_lodtensor(
+                    recursive_seq_lens=[[i, j]],
+                    base_shape=[shape],
+                    place=fluid.CPUPlace(),
+                    low=0,
+                    high=10)
                 tools.compare(t.shape(), [i + j, shape])
                 for key in list(t.__array__().flatten()):
                     if key >= 0 or key <= 10:
@@ -134,12 +140,11 @@ def test_data():
 
     exe = fluid.Executor(fluid.CPUPlace())
     res = exe.run(fluid.default_main_program(),
-                  feed={
-                      'x': feed_data,
-                      'y': feed_data
-                  },
+                  feed={'x': feed_data,
+                        'y': feed_data},
                   fetch_list=[z.name])[0]
-    expect = np.array([[[2.], [2.]], [[2.], [2.]], [[2.], [2.]]]).astype(np.float32)
+    expect = np.array(
+        [[[2.], [2.]], [[2.], [2.]], [[2.], [2.]]]).astype(np.float32)
     tools.compare(res, expect)
 
 
@@ -158,12 +163,11 @@ def test_data1():
 
     exe = fluid.Executor(fluid.CPUPlace())
     res = exe.run(fluid.default_main_program(),
-                  feed={
-                      'x': feed_data,
-                      'y': feed_data
-                  },
+                  feed={'x': feed_data,
+                        'y': feed_data},
                   fetch_list=[z.name])[0]
-    expect = np.array([[[2.], [2.]], [[2.], [2.]], [[2.], [2.]]]).astype(np.float32)
+    expect = np.array(
+        [[[2.], [2.]], [[2.], [2.]], [[2.], [2.]]]).astype(np.float32)
     tools.compare(res, expect)
 
 
@@ -185,10 +189,8 @@ def test_data2():
 
         exe = fluid.Executor(fluid.CPUPlace())
         res = exe.run(fluid.default_main_program(),
-                      feed={
-                          'x': feed_data,
-                          'y': feed_data
-                      },
+                      feed={'x': feed_data,
+                            'y': feed_data},
                       fetch_list=[z.name])[0]
         expect = np.array([[[2.], [2.]], [[2.], [2.]], [[2.], [2.]]]).astype(i)
         tools.compare(res, expect)
@@ -209,7 +211,8 @@ def test_DataFeeder():
             feeder = fluid.DataFeeder([img, label], place)
             result = feeder.feed([([0] * 784, [9]), ([1] * 784, [1])])
             expect_label = [[9], [1]]
-            expect_image = np.array([[0] * 784, [1] * 784]).reshape(2, 1, 28, 28)
+            expect_image = np.array([[0] * 784, [1] * 784]).reshape(2, 1, 28,
+                                                                    28)
             tools.compare(result["label"].__array__(), expect_label)
             tools.compare(result["image"].__array__(), expect_image)
 
@@ -228,9 +231,11 @@ def test_DataFeeder1():
             label = fluid.layers.data(name='label', shape=[1], dtype='int64')
             value = fluid.layers.data(name='value', shape=[1, 2, 2])
             feeder = fluid.DataFeeder([img, label, value], place)
-            result = feeder.feed([([0] * 784, [9], [33] * 4), ([1] * 784, [1], [25] * 4)])
+            result = feeder.feed(
+                [([0] * 784, [9], [33] * 4), ([1] * 784, [1], [25] * 4)])
             expect_label = [[9], [1]]
-            expect_image = np.array([[0] * 784, [1] * 784]).reshape(2, 1, 28, 28)
+            expect_image = np.array([[0] * 784, [1] * 784]).reshape(2, 1, 28,
+                                                                    28)
             expect_value = np.array([[33] * 4, [25] * 4]).reshape(2, 1, 2, 2)
             tools.compare(result["label"].__array__(), expect_label)
             tools.compare(result["image"].__array__(), expect_image)
@@ -250,10 +255,13 @@ def test_DataFeeder2():
             img = fluid.layers.data(name='image', shape=[1, 28, 28])
             label = fluid.layers.data(name='label', shape=[1], dtype='int64')
             value = fluid.layers.data(name='value', shape=[1, 2, 2])
-            feeder = fluid.DataFeeder([img, label, value], place, program=train_program)
-            result = feeder.feed([([0] * 784, [9], [33] * 4), ([1] * 784, [1], [25] * 4)])
+            feeder = fluid.DataFeeder(
+                [img, label, value], place, program=train_program)
+            result = feeder.feed(
+                [([0] * 784, [9], [33] * 4), ([1] * 784, [1], [25] * 4)])
             expect_label = [[9], [1]]
-            expect_image = np.array([[0] * 784, [1] * 784]).reshape(2, 1, 28, 28)
+            expect_image = np.array([[0] * 784, [1] * 784]).reshape(2, 1, 28,
+                                                                    28)
             expect_value = np.array([[33] * 4, [25] * 4]).reshape(2, 1, 2, 2)
             tools.compare(result["label"].__array__(), expect_label)
             tools.compare(result["image"].__array__(), expect_image)
@@ -270,7 +278,8 @@ def test_default_main_program():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             # 示例网络:
-            data = fluid.layers.data(name='image', shape=[3, 224, 224], dtype='float32')
+            data = fluid.layers.data(
+                name='image', shape=[3, 224, 224], dtype='float32')
             label = fluid.layers.data(name='label', shape=[1], dtype='int64')
 
             conv1 = fluid.layers.conv2d(data, 4, 5, 1, act=None)
@@ -310,8 +319,10 @@ def test_default_startup_program():
             z = fluid.layers.fc(name="fc", input=x, size=10, act="relu")
 
             # print("main program is: {}".format(type(fluid.default_main_program())))
-            tools.compare(type(fluid.default_main_program()), fluid.framework.Program)
-            tools.compare(type(fluid.default_startup_program()), fluid.framework.Program)
+            tools.compare(
+                type(fluid.default_main_program()), fluid.framework.Program)
+            tools.compare(
+                type(fluid.default_startup_program()), fluid.framework.Program)
             # print("start up program is: {}".format(fluid.default_startup_program()))
 
 
@@ -338,9 +349,10 @@ def test_ExecutionStrategy():
             exec_strategy.num_iteration_per_drop_scope = 1
             exec_strategy.num_iteration_per_run = 10
             for i in range(100):
-                train_exe = fluid.ParallelExecutor(use_cuda=False,
-                                               loss_name=avg_loss.name,
-                                               exec_strategy=exec_strategy)
+                train_exe = fluid.ParallelExecutor(
+                    use_cuda=False,
+                    loss_name=avg_loss.name,
+                    exec_strategy=exec_strategy)
 
 
 def test_global_scope():
@@ -352,7 +364,8 @@ def test_global_scope():
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
-            fluid.global_scope().var("data").get_tensor().set(np.ones((1, 2)), fluid.CPUPlace())
+            fluid.global_scope().var("data").get_tensor().set(
+                np.ones((1, 2)), fluid.CPUPlace())
             data = np.array(fluid.global_scope().find_var("data").get_tensor())
             tools.compare(data, [[1, 1]])
             # print(data)  # [[1. 1.]]
@@ -379,7 +392,8 @@ def test_gradients():
             x1 = np.ones(shape=(10, 1), dtype=np.float32)
             y1 = np.ones(shape=(10, 1), dtype=np.float32) * 5
             res = exe.run(compiled_prog,
-                          feed={"x": x1, "y": y1},
+                          feed={"x": x1,
+                                "y": y1},
                           fetch_list=["x@GRAD"])[0][0]
             tools.compare(res, [5])
 
@@ -405,7 +419,8 @@ def test_gradients1():
             x1 = np.ones(shape=(10, 1), dtype=np.float32)
             y1 = np.ones(shape=(10, 1), dtype=np.float32) * 5
             res = exe.run(compiled_prog,
-                          feed={"x": x1, "y": y1},
+                          feed={"x": x1,
+                                "y": y1},
                           fetch_list=["x@GRAD"])[0][0]
             # print(res)
             tools.compare(res, [5])
@@ -432,7 +447,8 @@ def test_gradients2():
                 x1 = np.ones(shape=(10, 1), dtype=np.float32)
                 y1 = np.ones(shape=(10, 1), dtype=np.float32) * 5
                 res = exe.run(compiled_prog,
-                              feed={"x": x1, "y": y1},
+                              feed={"x": x1,
+                                    "y": y1},
                               fetch_list=["x@GRAD"])[0][0]
                 # print(res)
                 tools.compare(res, [5])
@@ -461,7 +477,8 @@ def test_gradients3():
             x1 = np.ones(shape=(10, 1), dtype=np.float32)
             y1 = np.ones(shape=(10, 1), dtype=np.float32) * 5
             res = exe.run(compiled_prog,
-                          feed={"x": x1, "y": y1},
+                          feed={"x": x1,
+                                "y": y1},
                           fetch_list=["x@GRAD"])[0][0]
             tools.compare(res, [5])
 
@@ -487,7 +504,8 @@ def test_gradients4():
             x1 = np.ones(shape=(10, 1), dtype=np.float32)
             y1 = np.ones(shape=(10, 1), dtype=np.float32) * 5
             res = exe.run(compiled_prog,
-                          feed={"x": x1, "y": y1},
+                          feed={"x": x1,
+                                "y": y1},
                           fetch_list=["x@GRAD"])[0][0]
             tools.compare(res, [25])
 
@@ -594,7 +612,8 @@ def test_one_hot():
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
-            label = fluid.layers.data(name="label", shape=[4], append_batch_size=False, dtype="int64")
+            label = fluid.layers.data(
+                name="label", shape=[4], append_batch_size=False, dtype="int64")
             one_hot_label = fluid.one_hot(input=label, depth=4)
             exe = fluid.Executor(fluid.CPUPlace())
             exe.run(startup_program)
@@ -602,12 +621,10 @@ def test_one_hot():
             x1 = np.array([[1, 1, 3, 0]])
 
             res = exe.run(compiled_prog,
-                          feed={"label": x1}, fetch_list=["one_hot_v2_0.tmp_0"]
-                          )[0][0]
-            expect = [[0., 1., 0., 0.],
-                        [0., 1., 0., 0.],
-                        [0., 0., 0., 1.],
-                        [1., 0., 0., 0.]]
+                          feed={"label": x1},
+                          fetch_list=["one_hot_v2_0.tmp_0"])[0][0]
+            expect = [[0., 1., 0., 0.], [0., 1., 0., 0.], [0., 0., 0., 1.],
+                      [1., 0., 0., 0.]]
             tools.compare(res, expect)
 
 
@@ -620,20 +637,20 @@ def test_one_hot1():
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
-            label = fluid.layers.data(name="label", shape=[4], append_batch_size=False, dtype="int64")
-            one_hot_label = fluid.one_hot(input=label, depth=4, allow_out_of_range=True)
+            label = fluid.layers.data(
+                name="label", shape=[4], append_batch_size=False, dtype="int64")
+            one_hot_label = fluid.one_hot(
+                input=label, depth=4, allow_out_of_range=True)
             exe = fluid.Executor(fluid.CPUPlace())
             exe.run(startup_program)
             compiled_prog = fluid.compiler.CompiledProgram(train_program)
             x1 = np.array([[1, 1, 5, 0]])
 
             res = exe.run(compiled_prog,
-                          feed={"label": x1}, fetch_list=["one_hot_v2_0.tmp_0"]
-                          )[0][0]
-            expect = [[0., 1., 0., 0.],
-                        [0., 1., 0., 0.],
-                        [0., 0., 0., 0.],
-                        [1., 0., 0., 0.]]
+                          feed={"label": x1},
+                          fetch_list=["one_hot_v2_0.tmp_0"])[0][0]
+            expect = [[0., 1., 0., 0.], [0., 1., 0., 0.], [0., 0., 0., 0.],
+                      [1., 0., 0., 0.]]
             tools.compare(res, expect)
 
 
@@ -647,20 +664,23 @@ def test_one_hot2():
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             try:
-                label = fluid.layers.data(name="label", shape=[4], append_batch_size=False, dtype="int64")
-                one_hot_label = fluid.one_hot(input=label, depth=4, allow_out_of_range=True)
+                label = fluid.layers.data(
+                    name="label",
+                    shape=[4],
+                    append_batch_size=False,
+                    dtype="int64")
+                one_hot_label = fluid.one_hot(
+                    input=label, depth=4, allow_out_of_range=True)
                 exe = fluid.Executor(fluid.CPUPlace())
                 exe.run(startup_program)
                 compiled_prog = fluid.compiler.CompiledProgram(train_program)
                 x1 = np.array([[1, 1, 5, 0]])
 
                 res = exe.run(compiled_prog,
-                              feed={"label": x1}, fetch_list=["one_hot_v2_0.tmp_0"]
-                              )[0][0]
-                expect = [[0., 1., 0., 0.],
-                            [0., 1., 0., 0.],
-                            [0., 0., 0., 0.],
-                            [1., 0., 0., 0.]]
+                              feed={"label": x1},
+                              fetch_list=["one_hot_v2_0.tmp_0"])[0][0]
+                expect = [[0., 1., 0., 0.], [0., 1., 0., 0.], [0., 0., 0., 0.],
+                          [1., 0., 0., 0.]]
                 tools.compare(res, expect)
                 assert False
             except Exception as e:
@@ -675,13 +695,15 @@ def test_Program():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             x = fluid.layers.data(name="x", shape=[-1, 784], dtype='float32')
             y = fluid.layers.data(name="y", shape=[-1, 1], dtype='int32')
             z = fluid.layers.fc(name="fc", input=x, size=10, act="relu")
             # print("main program is: {}".format(main_program))
             # print("start up program is: {}".format(startup_program))
-            tools.compare(len(startup_program.__dict__), len(main_program.__dict__))
+            tools.compare(
+                len(startup_program.__dict__), len(main_program.__dict__))
 
 
 def test_Program1():
@@ -692,11 +714,18 @@ def test_Program1():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-            a = fluid.layers.data(name="X", shape=[2, 3], dtype="float32", append_batch_size=False)
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
+            a = fluid.layers.data(
+                name="X",
+                shape=[2, 3],
+                dtype="float32",
+                append_batch_size=False)
             c = fluid.layers.fc(a, size=3)
-            prog_string = main_program.to_string(throw_on_error=True, with_details=False)
-            prog_string_with_details = main_program.to_string(throw_on_error=False, with_details=True)
+            prog_string = main_program.to_string(
+                throw_on_error=True, with_details=False)
+            prog_string_with_details = main_program.to_string(
+                throw_on_error=False, with_details=True)
             assert "optimize_attr" not in prog_string
             assert "optimize_attr" in prog_string_with_details
             # print(prog_string)
@@ -712,15 +741,20 @@ def test_Program2():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             data = fluid.layers.data(name='X', shape=[1], dtype='float32')
             label = fluid.layers.data(name="Y", shape=[1], dtype='int64')
             initializer = fluid.initializer.Constant(value=2.0)
             param_attrs = fluid.ParamAttr(initializer=initializer)
-            y_predict = fluid.layers.fc(name="fc", input=data, size=10, param_attr=param_attrs)
+            y_predict = fluid.layers.fc(name="fc",
+                                        input=data,
+                                        size=10,
+                                        param_attr=param_attrs)
             cost = fluid.layers.cross_entropy(input=y_predict, label=label)
             sum_cost = fluid.layers.reduce_mean(cost)
-            optimizer = fluid.optimizer.Momentum(learning_rate=0.1, momentum=0.1)
+            optimizer = fluid.optimizer.Momentum(
+                learning_rate=0.1, momentum=0.1)
             optimizer.minimize(sum_cost)
             place = fluid.CPUPlace()
             exe = fluid.Executor(place)
@@ -730,7 +764,8 @@ def test_Program2():
             compiled_prog = fluid.compiler.CompiledProgram(main_program)
             for i in range(10):
                 res = exe.run(compiled_prog,
-                              feed={"X": x, "Y": y},
+                              feed={"X": x,
+                                    "Y": y},
                               fetch_list=["fc.w_0"])[0][0]
             clone_z = main_program.clone(for_test=True)
             clone = main_program.clone(for_test=False)
@@ -749,18 +784,26 @@ def test_Program3():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             x = fluid.layers.data(
-                name='X', shape=[1000, 784], dtype='float32', append_batch_size=False)
+                name='X',
+                shape=[1000, 784],
+                dtype='float32',
+                append_batch_size=False)
 
             y = fluid.layers.data(
-                name='Y', shape=[784, 100], dtype='float32', append_batch_size=False)
+                name='Y',
+                shape=[784, 100],
+                dtype='float32',
+                append_batch_size=False)
 
             z = fluid.layers.mul(x=x, y=y)
 
             binary_str = main_program.desc.serialize_to_string()
             prog_restored = main_program.parse_from_string(binary_str)
-            assert operator.eq(main_program.__dict__['blocks'].sort(), prog_restored.__dict__['blocks'].sort())
+            assert operator.eq(main_program.__dict__['blocks'].sort(),
+                               prog_restored.__dict__['blocks'].sort())
 
 
 def test_Program4():
@@ -771,7 +814,8 @@ def test_Program4():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             tools.compare(main_program.num_blocks, 1)
 
 
@@ -783,7 +827,8 @@ def test_Program5():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             tools.compare(main_program.random_seed, 0)
 
 
@@ -795,7 +840,8 @@ def test_Program6():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             try:
                 gb_block = main_program.global_block()
                 print(gb_block.__str__)
@@ -812,7 +858,8 @@ def test_Program7():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             try:
                 gb_block = main_program.block(0)
                 print(gb_block)
@@ -829,7 +876,8 @@ def test_Program8():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             try:
                 gb_block = main_program.current_block()
                 print(gb_block)
@@ -846,9 +894,12 @@ def test_Program9():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-            img = fluid.layers.data(name='img', shape=[1, 28, 28], dtype='float32')
-            label = fluid.layers.data(name='label', shape=[128, 1], dtype='int64')
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
+            img = fluid.layers.data(
+                name='img', shape=[1, 28, 28], dtype='float32')
+            label = fluid.layers.data(
+                name='label', shape=[128, 1], dtype='int64')
             List = list(enumerate(main_program.list_vars()))
             tools.compare(len(List), 2)
 
@@ -860,7 +911,8 @@ def test_scope_guard():
     """
     new_scope = fluid.Scope()
     with fluid.scope_guard(new_scope):
-        fluid.global_scope().var("data").get_tensor().set(np.ones((1, 2)), fluid.CPUPlace())
+        fluid.global_scope().var("data").get_tensor().set(
+            np.ones((1, 2)), fluid.CPUPlace())
         data = np.array(new_scope.find_var("data").get_tensor())
         tools.compare(data, [[1, 1]])
 
@@ -888,11 +940,11 @@ def test_Variable():
     main_program = fluid.Program()
     startup_program = fluid.Program()
     with fluid.unique_name.guard():
-        with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with fluid.program_guard(
+                main_program=main_program, startup_program=startup_program):
             cur_block = main_program.current_block()
-            new_variable = cur_block.create_var(name="X",
-                                                shape=[-1, 23, 48],
-                                                dtype='float32')
+            new_variable = cur_block.create_var(
+                name="X", shape=[-1, 23, 48], dtype='float32')
 
 
 def test_Variable1():
@@ -960,11 +1012,13 @@ def test_DataFeedDesc():
         assert True
     else:
         assert False
-    if "is_dense: true" in data_feed.desc() and "is_dense: false" in data_feed.desc():
+    if "is_dense: true" in data_feed.desc(
+    ) and "is_dense: false" in data_feed.desc():
         assert True
     else:
         assert False
-    if "is_used: true" in data_feed.desc() and "is_used: false" in data_feed.desc():
+    if "is_used: true" in data_feed.desc(
+    ) and "is_used: false" in data_feed.desc():
         assert True
     else:
         assert False
@@ -982,7 +1036,8 @@ def test_ParallelExecutor():
     else:
         os.environ["CUDA_VISIBLE_DEVICES"] = "6, 7"
     use_cuda = fluid.is_compiled_with_cuda()
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
 
     train_program = fluid.Program()
     startup_program = fluid.Program()
@@ -1000,19 +1055,22 @@ def test_ParallelExecutor():
 
                 exe.run(startup_program)
 
-                train_exe = fluid.ParallelExecutor(use_cuda=use_cuda,
-                                                   main_program=train_program,
-                                                   loss_name=loss.name)
+                train_exe = fluid.ParallelExecutor(
+                    use_cuda=use_cuda,
+                    main_program=train_program,
+                    loss_name=loss.name)
                 # 注意：如果此处不设置share_vars_from=train_exe，测试过程中用的参数与训练使用的参数是不一致
-                test_exe = fluid.ParallelExecutor(use_cuda=use_cuda,
-                                                  main_program=test_program,
-                                                  share_vars_from=train_exe)
+                test_exe = fluid.ParallelExecutor(
+                    use_cuda=use_cuda,
+                    main_program=test_program,
+                    share_vars_from=train_exe)
 
                 train_data = np.ones(shape=(10, 1)).astype('float32')
                 loss_data, = train_exe.run(feed={"X": train_data},
                                            fetch_list=[loss.name])
                 print(loss_data)
-                if platform.system() == "Darwin" or platform.system() == "Linux":
+                if platform.system() == "Darwin" or platform.system(
+                ) == "Linux":
                     tools.compare(loss_data, [0.09116864, 0.09116864])
                 else:
                     tools.compare(loss_data, [0.09116864])
@@ -1020,7 +1078,8 @@ def test_ParallelExecutor():
                 loss_data, = test_exe.run(feed={"X": test_data},
                                           fetch_list=[loss.name])
                 print(loss_data)
-                if platform.system() == "Darwin" or platform.system() == "Linux":
+                if platform.system() == "Darwin" or platform.system(
+                ) == "Linux":
                     tools.compare(loss_data, [0.08916866, 0.08916866])
                 else:
                     tools.compare(loss_data, [0.08916866])
@@ -1034,7 +1093,8 @@ def test_ParallelExecutor1():
     :return:
     """
     use_cuda = fluid.is_compiled_with_cuda()
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     if not fluid.is_compiled_with_cuda():
         os.environ['CPU_NUM'] = str(2)
     else:
@@ -1055,19 +1115,22 @@ def test_ParallelExecutor1():
 
                 exe.run(startup_program)
 
-                train_exe = fluid.ParallelExecutor(use_cuda=use_cuda,
-                                                   main_program=train_program,
-                                                   loss_name=loss.name)
+                train_exe = fluid.ParallelExecutor(
+                    use_cuda=use_cuda,
+                    main_program=train_program,
+                    loss_name=loss.name)
                 # 注意：如果此处不设置share_vars_from=train_exe，测试过程中用的参数与训练使用的参数是不一致
-                test_exe = fluid.ParallelExecutor(use_cuda=use_cuda,
-                                                  main_program=test_program,
-                                                  share_vars_from=train_exe)
+                test_exe = fluid.ParallelExecutor(
+                    use_cuda=use_cuda,
+                    main_program=test_program,
+                    share_vars_from=train_exe)
 
                 train_data = np.ones(shape=(10, 1)).astype('float32')
                 loss_data, = train_exe.run(feed={"X": train_data},
                                            fetch_list=[loss.name])
                 print(loss_data)
-                if platform.system() == "Darwin" or platform.system() == "Linux":
+                if platform.system() == "Darwin" or platform.system(
+                ) == "Linux":
                     tools.compare(loss_data, [0.09116864, 0.09116864])
                 else:
                     tools.compare(loss_data, [0.09116864])
@@ -1076,7 +1139,8 @@ def test_ParallelExecutor1():
                 loss_data, = test_exe.run(feed={"X": test_data},
                                           fetch_list=[loss.name])
                 print(loss_data)
-                if platform.system() == "Darwin" or platform.system() == "Linux":
+                if platform.system() == "Darwin" or platform.system(
+                ) == "Linux":
                     tools.compare(loss_data, [0.08916866, 0.08916866])
                 else:
                     tools.compare(loss_data, [0.08916866])
@@ -1093,7 +1157,8 @@ def test_CompiledProgram():
     startup_program = fluid.Program()
     train_program.random_seed = 33
     startup_program.random_seed = 33
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     with fluid.unique_name.guard():
         with fluid.program_guard(train_program, startup_program):
             exe = fluid.Executor(place)
@@ -1104,8 +1169,7 @@ def test_CompiledProgram():
             exe.run(startup_program)
             build_strategy = fluid.BuildStrategy()
             compiled_prog = fluid.CompiledProgram(
-                train_program,
-                build_strategy=build_strategy)
+                train_program, build_strategy=build_strategy)
             x = np.ones(shape=(10, 1)).astype('float32')
             loss_data, = exe.run(compiled_prog,
                                  feed={"X": x},
@@ -1122,7 +1186,8 @@ def test_CompiledProgram1():
     startup_program = fluid.Program()
     train_program.random_seed = 33
     startup_program.random_seed = 33
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     if not fluid.is_compiled_with_cuda():
         os.environ['CPU_NUM'] = str(2)
     with fluid.unique_name.guard():
@@ -1139,11 +1204,11 @@ def test_CompiledProgram1():
             build_strategy.fuse_all_reduce_ops = True
             compiled_train_prog = fluid.CompiledProgram(
                 train_program).with_data_parallel(
-                loss_name=loss.name, build_strategy=build_strategy)
+                    loss_name=loss.name, build_strategy=build_strategy)
             # 注意：如果此处不设置share_vars_from=compiled_train_prog，测试过程中用的参数与训练使用的参数是不一致
             compiled_test_prog = fluid.CompiledProgram(
                 test_program).with_data_parallel(
-                share_vars_from=compiled_train_prog)
+                    share_vars_from=compiled_train_prog)
 
             train_data = np.ones(shape=(10, 1)).astype('float32')
             loss_data, = exe.run(compiled_train_prog,
@@ -1175,7 +1240,8 @@ def test_BuildStrategy():
     startup_program = fluid.Program()
     train_program.random_seed = 33
     startup_program.random_seed = 33
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     if not fluid.is_compiled_with_cuda():
         os.environ['CPU_NUM'] = str(2)
     with fluid.unique_name.guard():
@@ -1197,8 +1263,7 @@ def test_BuildStrategy():
             build_strategy.remove_unnecessary_lock = True
             build_strategy.sync_batch_norm = True
             compiled_prog = fluid.CompiledProgram(
-                train_program,
-                build_strategy=build_strategy)
+                train_program, build_strategy=build_strategy)
             x = np.ones(shape=(10, 1)).astype('float32')
             loss_data, = exe.run(compiled_prog,
                                  feed={"X": x},
@@ -1212,7 +1277,8 @@ def test_BuildStrategy1():
     :return:
     """
     use_cuda = fluid.is_compiled_with_cuda()
-    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda() else fluid.CPUPlace()
+    place = fluid.CUDAPlace(0) if fluid.is_compiled_with_cuda(
+    ) else fluid.CPUPlace()
     if not fluid.is_compiled_with_cuda():
         os.environ['CPU_NUM'] = str(2)
     else:
@@ -1242,20 +1308,23 @@ def test_BuildStrategy1():
                 build_strategy.reduce_strategy = fluid.BuildStrategy.ReduceStrategy.Reduce
                 build_strategy.remove_unnecessary_lock = True
                 build_strategy.sync_batch_norm = True
-                train_exe = fluid.ParallelExecutor(use_cuda=use_cuda,
-                                                   main_program=train_program,
-                                                   build_strategy=build_strategy,
-                                                   loss_name=loss.name)
+                train_exe = fluid.ParallelExecutor(
+                    use_cuda=use_cuda,
+                    main_program=train_program,
+                    build_strategy=build_strategy,
+                    loss_name=loss.name)
                 # 注意：如果此处不设置share_vars_from=train_exe，测试过程中用的参数与训练使用的参数是不一致
-                test_exe = fluid.ParallelExecutor(use_cuda=use_cuda,
-                                                  main_program=test_program,
-                                                  share_vars_from=train_exe)
+                test_exe = fluid.ParallelExecutor(
+                    use_cuda=use_cuda,
+                    main_program=test_program,
+                    share_vars_from=train_exe)
 
                 train_data = np.ones(shape=(10, 1)).astype('float32')
                 loss_data, = train_exe.run(feed={"X": train_data},
                                            fetch_list=[loss.name])
                 print(loss_data)
-                if platform.system() == "Darwin" or platform.system() == "Linux":
+                if platform.system() == "Darwin" or platform.system(
+                ) == "Linux":
                     tools.compare(loss_data, [0.09116864, 0.09116864])
                 else:
                     tools.compare(loss_data, [0.09116864])
@@ -1263,7 +1332,8 @@ def test_BuildStrategy1():
                 loss_data, = test_exe.run(feed={"X": test_data},
                                           fetch_list=[loss.name])
                 print(loss_data)
-                if platform.system() == "Darwin" or platform.system() == "Linux":
+                if platform.system() == "Darwin" or platform.system(
+                ) == "Linux":
                     tools.compare(loss_data, [0.08916866, 0.08916866])
                 else:
                     tools.compare(loss_data, [0.08916866])

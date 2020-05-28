@@ -127,6 +127,3 @@ foreach(testsourcefile ${TestFiles})
   target_link_libraries( ${testname} ${gtest_lib_dir}/libgtest.a)
   
 endforeach()
-
-
-

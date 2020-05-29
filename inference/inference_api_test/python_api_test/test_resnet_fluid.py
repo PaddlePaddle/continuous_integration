@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+""" Cases for inference, ResNet50Model. """
 
 import math
 import yaml
@@ -111,9 +112,6 @@ class TestResNet50API(object):
     """
 
     def __init__(self):
-        """
-        init
-        """
         self.model = api_infer.ResNet50Model()
         self.input_data = retrive_data(self.model, data_style="real")
 
@@ -122,7 +120,9 @@ class TestResNet50API(object):
         test cpu and gpu infer data
 
         Args:
-            precision
+            precision (float): The precision for checking. 
+
+
         """
         res1 = run_infer(self.model, CASE_ROOT + "/resnet_fluid_gpu.yaml",
                          self.input_data)
@@ -138,7 +138,7 @@ class TestResNet50API(object):
         test cpu and cpu mkldnn infer data
 
         Args:
-            precision
+            precision (float): The precision for checking. 
         """
         res1 = run_infer(self.model, CASE_ROOT + "/resnet_fluid_cpu.yaml",
                          self.input_data)
@@ -148,4 +148,3 @@ class TestResNet50API(object):
         result2 = res2[0].data.float_data()
         for i in range(len(result1)):
             tools.assert_almost_equal(result1[i], result2[i], delta=precision)
-

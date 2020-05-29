@@ -81,13 +81,30 @@ endif()
 
 include(ExternalProject)
 include(external-cmake/gtest-cpp.cmake)
-add_executable("test_resnet50" test_resnet50.cc)
-target_link_libraries("test_resnet50" ${DEPS})
-add_dependencies("test_resnet50" thirdparty_gtest)
 
-# link gtest
-set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib64")
-set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")
-target_include_directories("test_resnet50" PRIVATE  ${gtest_src_dir})
-target_include_directories("test_resnet50" PRIVATE ${gtest_lib_dir})
-target_link_libraries("test_resnet50" ${gtest_lib_dir}/libgtest.a)
+set(TestFiles "test_resnet50.cc";
+              "test_bert.cc";
+              "test_ocr.cc";
+              "test_text_classification.cc")
+
+foreach(testsourcefile ${TestFiles})
+  message("====> ${testsourcefile} will be compiled")
+  # add executable for all test files
+  string( REPLACE ".cc" "" testname ${testsourcefile} )
+  add_executable( ${testname} ${testsourcefile} )
+
+  # link libs
+  target_link_libraries( ${testname} ${DEPS})
+  add_dependencies( ${testname} thirdparty_gtest)
+
+  # link gtest
+  set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib64")
+  set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")
+  target_include_directories( ${testname} PRIVATE  ${gtest_src_dir})
+  target_include_directories( ${testname} PRIVATE ${gtest_lib_dir})
+  target_link_libraries( ${testname} ${gtest_lib_dir}/libgtest.a)
+  
+endforeach()
+
+
+

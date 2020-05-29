@@ -9,6 +9,20 @@ if(NOT DEFINED PADDLE_LIB)
   message(FATAL_ERROR "please set PADDLE_LIB with -DPADDLE_LIB=/path/paddle/lib")
 endif()
 
+# check file system
+file(READ "/etc/issue" ETC_ISSUE)
+string(REGEX MATCH "Debian|Ubuntu|CentOS" DIST ${ETC_ISSUE})
+
+if(DIST STREQUAL "Debian")
+  message(STATUS ">>>> Found Debian <<<<")
+elseif(DIST STREQUAL "Ubuntu")
+  message(STATUS ">>>> Found Ubuntu <<<<")
+elseif(DIST STREQUAL "CentOS")
+  message(STATUS ">>>> Found CentOS <<<<")
+else()
+  message(STATUS ">>>> Found unknown distribution <<<<")
+endif()
+
 include_directories("${PADDLE_LIB}/")
 set(PADDLE_LIB_THIRD_PARTY_PATH "${PADDLE_LIB}/third_party/install/")
 include_directories("${PADDLE_LIB_THIRD_PARTY_PATH}protobuf/include")
@@ -82,6 +96,16 @@ endif()
 include(ExternalProject)
 include(external-cmake/gtest-cpp.cmake)
 
+# if CentOS, gtest libs are under lib64
+# if Ubuntu, gtest libs are under lib
+if(DIST MATCHES "CentOS")
+  set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib64")
+else()
+  set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib")
+endif()
+
+set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")
+
 set(TestFiles "test_resnet50.cc";
               "test_bert.cc";
               "test_ocr.cc";
@@ -98,8 +122,6 @@ foreach(testsourcefile ${TestFiles})
   add_dependencies( ${testname} thirdparty_gtest)
 
   # link gtest
-  set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib64")
-  set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")
   target_include_directories( ${testname} PRIVATE  ${gtest_src_dir})
   target_include_directories( ${testname} PRIVATE ${gtest_lib_dir})
   target_link_libraries( ${testname} ${gtest_lib_dir}/libgtest.a)

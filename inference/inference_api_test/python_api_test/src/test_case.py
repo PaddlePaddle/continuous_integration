@@ -47,13 +47,7 @@ class DeployConfig(object):
             self.combined_model = False
             self.param_file = model_path
 
-        # 2. set gpu for native config
-        if fluid.is_compiled_with_cuda:
-            self.use_gpu = True
-        else:
-            self.use_gpu = False
-
-        # 3. set trt default config
+        # 2. set trt default config
         self.batch_size = 1
         self.min_subgraph_size = 3
     
@@ -104,7 +98,7 @@ class DeployConfig(object):
         predictor_config.switch_use_feed_fetch_ops(False)
         return predictor_config
 
-    def native_config(self):
+    def native_config(self, config_type):
         """
         init native predictor configuration
         Return:
@@ -113,7 +107,12 @@ class DeployConfig(object):
         predictor_config = fluid.core.NativeConfig()
         predictor_config.prog_file = self.model_file
         predictor_config.param_file = self.param_file
-        predictor_config.use_gpu = self.use_gpu
+        if config_type == 'cpu':
+            predictor_config.use_gpu = False
+        elif config_type == 'gpu':
+            predictor_config.use_gpu = True
+        else:
+            raise Exception('Config type [%s] invalid for native config!' % config_type)
         predictor_config.device = 0
         predictor_config.fraction_of_gpu_memory = 0
         return predictor_config
@@ -135,7 +134,7 @@ class Predictor(object):
             config_type(strings): describe analysis prediction configuration
         """
         analysis_predictor_config = DeployConfig(model_path).analysis_config(config_type)
-        native_predictor_config = DeployConfig(model_path).native_config()
+        native_predictor_config = DeployConfig(model_path).native_config(config_type)
         logger.info(analysis_predictor_config)
         logger.info(native_predictor_config)
         try:
@@ -153,7 +152,7 @@ class Predictor(object):
                 self.native_predictor = fluid.core.create_paddle_predictor(native_predictor_config)
         except:
             raise EOFError("fail to create predictor")
-    
+
     def analysis_predict(self, json_dir, repeats=1):
         """
         use zero copy and analysis config to predict
@@ -169,6 +168,7 @@ class Predictor(object):
         input_names = self.predictor.get_input_names()
         for i, input_data_name in enumerate(input_names):
             record = Record().load_data_from_json(input_info[i])
+            record = next(record)
             logger.info("====> input_names[{0}] = {1} <====".format(i, input_names[i]))
             input_tensor = self.predictor.get_input_tensor(input_data_name)
             input_tensor.copy_from_cpu(record.data)
@@ -213,6 +213,7 @@ class Predictor(object):
         Tensors = []
         for i, input_data_name in enumerate(input_names):
             record = Record().load_data_from_json(input_info[i])
+            record = next(record)
             logger.info("====> input_names[{0}] = {1} <====".format(i, input_data_name))
             input_tensor = fluid.core.PaddleTensor(name=input_data_name, data=record.data)
             if hasattr(record, 'lod'):

@@ -55,7 +55,7 @@ class Record(object):
                     yield batch_data
                     batch_data = []
 
-    def load_data_from_json(self, json_info, sample_size=1):
+    def load_data_from_json(self, json_info, end_line=1, sample_size=1):
         """
         load one record
         Args:
@@ -69,15 +69,16 @@ class Record(object):
         file_name = json_info.data
         for id, value in enumerate(self.process_file(file_name, sample_size)):
             data = np.array(value).reshape(json_info.shape).astype(json_info.dtype)
-            if id == 1:
+            logger.info("input is {} line of data file".format(id))
+            if id == end_line:
                 break
-        record.data = data
-        # init shape
-        record.shape = json_info.shape
-        if hasattr(json_info, 'lod'):
-            # init lod
-            record.lod = json_info.lod
-        return record
+            record.data = data
+            # init shape
+            record.shape = json_info.shape
+            if hasattr(json_info, 'lod'):
+                # init lod
+                record.lod = json_info.lod
+            yield record
 
 
 class JsonInfo(object):

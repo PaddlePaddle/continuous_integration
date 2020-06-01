@@ -36,15 +36,15 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path', type=str, default='', help='A path to infer model.')
     parser.add_argument('--data_path', type=str, default='', help='A path to a data.json')
-    parser.add_argument('--delta', type=float, default=1e-5, help='compare results delta')
+    parser.add_argument('--delta', type=float, default=1e-4, help='compare results delta')
 
     test_args, args = parser.parse_known_args(namespace=unittest)
     return test_args, sys.argv[:1] + args
 
 
-class TestCvModelInference(unittest.TestCase):
+class TestModelInferenceGPU(unittest.TestCase):
     """
-    TestCvModelInference
+    TestModelInferenceGPU
     Args:
     Return:
     """
@@ -71,11 +71,11 @@ class TestCvModelInference(unittest.TestCase):
         """
         model_path = test_case_args.model_path
         data_path = test_case_args.data_path
-        AnalysisPredictor = Predictor(model_path, predictor_mode="Analysis", config_type="cpu")
+        AnalysisPredictor = Predictor(model_path, predictor_mode="Analysis", config_type="gpu")
         res, ave_time = AnalysisPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
-        NativePredictor = Predictor(model_path, predictor_mode="Native")
+        NativePredictor = Predictor(model_path, predictor_mode="Native", config_type="gpu")
         exp, ave_time = NativePredictor.native_predict(data_path)
         logger.info(ave_time)
 

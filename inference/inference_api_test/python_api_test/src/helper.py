@@ -17,13 +17,15 @@ import logging
 import numpy as np
 
 FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-logging.basicConfig(level = logging.INFO, format=FORMAT)
+logging.basicConfig(level=logging.INFO, format=FORMAT)
 logger = logging.getLogger(__name__)
+
 
 class Record(object):
     """
     one record for one sample
     """
+
     def __init__(self):
         """
         __init__
@@ -32,10 +34,7 @@ class Record(object):
         shape = None
         lod = None
 
-    def process_file(self,
-                     file_name,
-                     sample_size,
-                     sep=' '):
+    def process_file(self, file_name, sample_size, sep=' '):
         """
         process txt file by using generator
         Args:
@@ -47,7 +46,9 @@ class Record(object):
             batch_data = []
             for i, block in enumerate(file_handler.readlines()):
                 if i == file_handler.tell():
-                    logger.info("file handler reach end of the file, length is [%s]" % i)
+                    logger.info(
+                        "file handler reach end of the file, length is [%s]" %
+                        i)
                     break
                 data = np.array(block.strip().split(sep), dtype="float32")
                 batch_data.append(data)
@@ -60,7 +61,8 @@ class Record(object):
         load one record
         Args:
             json_info(class|JsonInfo): a class whith json information
-            sample_size(int): if data.txt has multiple lines, use sample_size to control
+            sample_size(int): if data.txt has multiple lines, read sample_size lines one time
+            end_line(int): end line id
         Returns:
             record(class|Record): a class describes all info needed by Tensor
         """
@@ -68,7 +70,8 @@ class Record(object):
         # init data
         file_name = json_info.data
         for id, value in enumerate(self.process_file(file_name, sample_size)):
-            data = np.array(value).reshape(json_info.shape).astype(json_info.dtype)
+            data = np.array(value).reshape(json_info.shape).astype(
+                json_info.dtype)
             logger.info("input is {} line of data file".format(id))
             if id == end_line:
                 break
@@ -85,6 +88,7 @@ class JsonInfo(object):
     """
     Store whole Json Information
     """
+
     def __init__(self):
         """
         __init__
@@ -103,14 +107,16 @@ class JsonInfo(object):
             inputs_info(list|[JsonInfo, JsonInfo]): a list contain several JsonInfo
         """
         if not os.path.exists(json_dir):
-            raise Exception('data json file path [%s] invalid! file do not exist' % json_dir)
+            raise Exception(
+                'data json file path [%s] invalid! file do not exist' %
+                json_dir)
         inputs_info = []
         with open(json_dir, 'r') as f:
             sample = json.load(f)
-        
+
         # split json path
         json_path = os.path.split(json_dir)[0]
-        
+
         for key in sample.keys():
             json_info = JsonInfo()
             # path of data0.txt should be the same with data.json

@@ -1,3 +1,17 @@
+// Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include <iostream>
 #include <fstream>
 
@@ -36,11 +50,11 @@ Record ProcessALine(const std::string &line) {
 void SetConfig(AnalysisConfig *cfg) {
     cfg->SetModel(FLAGS_infer_model + "/__model__",
                 FLAGS_infer_model + "/__params__");
-    //cfg->DisableGpu();
+    // cfg->DisableGpu();
     cfg->EnableUseGpu(100, 0);
-    //cfg->EnableTensorRtEngine();
-    //cfg->SwitchIrDebug();
-    //cfg->SwitchSpecifyInputNames(false);
+    // cfg->EnableTensorRtEngine();
+    // cfg->SwitchIrDebug();
+    // cfg->SwitchSpecifyInputNames(false);
     cfg->SwitchSpecifyInputNames(true);
     // TODO(TJ): fix fusion gru
     cfg->pass_builder()->DeletePass("fc_gru_fuse_pass");
@@ -63,7 +77,7 @@ void SetInput(std::vector<std::vector<PaddleTensor>> *inputs) {
     (*inputs).emplace_back(input_slots);
 }
 // Easy for profiling independently.
-//  ocr, mobilenet and se_resnext50
+// ocr, mobilenet and se_resnext50
 void profile(bool use_mkldnn = false) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
@@ -83,14 +97,14 @@ void profile(bool use_mkldnn = false) {
         std::getline(file, line);
         auto refer = ProcessALine(line);
         file.close();
-        //PADDLE_ENFORCE_GT(outputs.size(), 0);
+        // PADDLE_ENFORCE_GT(outputs.size(), 0);
         auto &output = outputs.back().front();
         size_t numel = output.data.length() / PaddleDtypeSize(output.dtype);
         CHECK_EQ(numel, refer.data.size());
         for (size_t i = 0; i < numel; ++i) {
-            EXPECT_NEAR(static_cast<float *>(output.data.data())[i], refer.data[i],
-                        1e-5);
-        }   
+            EXPECT_NEAR(static_cast<float *>(output.data.data())[i],
+                        refer.data[i], 1e-5);
+        }
     }
 }
 // Compare result of NativeConfig and AnalysisConfig
@@ -103,7 +117,8 @@ void compare(bool use_mkldnn = false) {
     std::vector<std::vector<PaddleTensor>> input_slots_all;
     SetInput(&input_slots_all);
     CompareNativeAndAnalysis(
-        reinterpret_cast<const PaddlePredictor::Config *>(&cfg), input_slots_all);
+        reinterpret_cast<const PaddlePredictor::Config *>(&cfg),
+        input_slots_all);
 }
 
 // comapre native and analysis predictor
@@ -118,9 +133,9 @@ TEST(Analyzer_vis, profile_mkldnn) { profile(true /* use_mkldnn */); }
 }  // namespace test
 }  // namespace paddle
 
-int main(int argc, char** argv) { 
+int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     ::google::ParseCommandLineFlags(&argc, &argv, true);
-    return RUN_ALL_TESTS(); 
-    //paddle::test::profile();
+    return RUN_ALL_TESTS();
+    // paddle::test::profile();
 }

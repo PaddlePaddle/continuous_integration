@@ -25,18 +25,24 @@ sys.path.append("..")
 from src.test_case import Predictor
 
 FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-logging.basicConfig(level = logging.INFO, format=FORMAT)
+logging.basicConfig(level=logging.INFO, format=FORMAT)
 logger = logging.getLogger(__name__)
 
 
 def parse_args():
     """
     parse input arguments
+    Return:
+        test_args(argparse)
+        remaining_args(argparse)
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', type=str, default='', help='A path to infer model.')
-    parser.add_argument('--data_path', type=str, default='', help='A path to a data.json')
-    parser.add_argument('--delta', type=float, default=1e-4, help='compare results delta')
+    parser.add_argument(
+        '--model_path', type=str, default='', help='A path to infer model.')
+    parser.add_argument(
+        '--data_path', type=str, default='', help='A path to a data.json')
+    parser.add_argument(
+        '--delta', type=float, default=1e-4, help='compare results delta')
 
     test_args, args = parser.parse_known_args(namespace=unittest)
     return test_args, sys.argv[:1] + args
@@ -48,34 +54,40 @@ class TestModelInferenceCPU(unittest.TestCase):
     Args:
     Return:
     """
+
     def check_data(self, result, expect):
         """
         check result
         Args:
-            result:
-            expect:
+            result(list): list of result data
+            expect(list): list of expect data
+        Return:
+            None
         """
         delta = test_case_args.delta
         logger.info("current comparison delta is : {0}".format(delta))
         assert len(expect) == len(result)
         for i in range(0, len(expect)):
             self.assertAlmostEqual(expect[i], result[i], delta=delta)
-    
+
     def test_inference(self):
         """
         Inference and check value
         Args:
-            model_path:
-            data_path:
+            model_path(string): parent path of __model__ file
+            data_path(string): path of data.json
         Return:
+            None
         """
         model_path = test_case_args.model_path
         data_path = test_case_args.data_path
-        AnalysisPredictor = Predictor(model_path, predictor_mode="Analysis", config_type="cpu")
+        AnalysisPredictor = Predictor(
+            model_path, predictor_mode="Analysis", config_type="cpu")
         res, ave_time = AnalysisPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
-        NativePredictor = Predictor(model_path, predictor_mode="Native", config_type="cpu")
+        NativePredictor = Predictor(
+            model_path, predictor_mode="Native", config_type="cpu")
         exp, ave_time = NativePredictor.native_predict(data_path)
         logger.info(ave_time)
 
@@ -87,4 +99,4 @@ class TestModelInferenceCPU(unittest.TestCase):
 if __name__ == '__main__':
     global test_case_args
     test_case_args, remaining_args = parse_args()
-    unittest.main(argv=remaining_args)
+    test_suite = unittest.main(argv=remaining_args)

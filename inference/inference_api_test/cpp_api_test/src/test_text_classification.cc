@@ -1,3 +1,17 @@
+// Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "test_helper.h"
 
 namespace paddle {
@@ -6,7 +20,7 @@ struct DataReader {
     explicit DataReader(const std::string &path)
         : file(new std::ifstream(path)) {}
     bool NextBatch(std::vector<PaddleTensor> *input, int batch_size) {
-        //PADDLE_ENFORCE_EQ(batch_size, 1);
+        // PADDLE_ENFORCE_EQ(batch_size, 1);
         std::string line;
         PaddleTensor tensor;
         tensor.dtype = PaddleDType::INT64;
@@ -33,7 +47,7 @@ struct DataReader {
 
 void SetConfig(AnalysisConfig *cfg) {
     cfg->SetModel(FLAGS_infer_model);
-    //cfg->EnableUseGpu(100, 0);
+    // cfg->EnableUseGpu(100, 0);
     cfg->SwitchSpecifyInputNames();
     cfg->SwitchIrOptim();
 }
@@ -61,7 +75,7 @@ TEST(Analyzer_Text_Classification, profile) {
                     input_slots_all, &outputs, FLAGS_num_threads);
     if (FLAGS_num_threads == 1) {
         // Get output
-        //PADDLE_ENFORCE_GT(outputs.size(), 0);
+        // PADDLE_ENFORCE_GT(outputs.size(), 0);
         LOG(INFO) << "get outputs " << outputs.back().size();
         for (auto &output : outputs.back()) {
         LOG(INFO) << "output.shape: " << to_string(output.shape);
@@ -90,7 +104,8 @@ TEST(Analyzer_Text_Classification, compare) {
     std::vector<std::vector<PaddleTensor>> input_slots_all;
     SetInput(&input_slots_all);
     CompareNativeAndAnalysis(
-        reinterpret_cast<const PaddlePredictor::Config *>(&cfg), input_slots_all);
+        reinterpret_cast<const PaddlePredictor::Config *>(&cfg),
+        input_slots_all);
 }
 
 TEST(Analyzer_Text_Classification, compare_against_embedding_fc_lstm_fused) {
@@ -101,15 +116,16 @@ TEST(Analyzer_Text_Classification, compare_against_embedding_fc_lstm_fused) {
     std::vector<std::vector<PaddleTensor>> input_slots_all;
     SetInput(&input_slots_all);
     CompareNativeAndAnalysis(
-        reinterpret_cast<const PaddlePredictor::Config *>(&cfg), input_slots_all);
+        reinterpret_cast<const PaddlePredictor::Config *>(&cfg),
+        input_slots_all);
 }
 
 }  // namespace test
 }  // namespace paddle
 
-int main(int argc, char** argv) { 
+int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     ::google::ParseCommandLineFlags(&argc, &argv, true);
-    return RUN_ALL_TESTS(); 
-    //paddle::test::compare();
+    return RUN_ALL_TESTS();
+    // paddle::test::compare();
 }

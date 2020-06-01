@@ -1,3 +1,17 @@
+// Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include <algorithm>
 #include <vector>
 #include <unordered_map>
@@ -15,12 +29,12 @@
 
 namespace paddle {
 namespace test {
-void SetConfig(AnalysisConfig *config) { 
-    //config->EnableUseGpu(100, 0);
-    //config->SwitchIrDebug(true);
-    //config->SwitchIrOptim(true);
+void SetConfig(AnalysisConfig *config) {
+    // config->EnableUseGpu(100, 0);
+    // config->SwitchIrDebug(true);
+    // config->SwitchIrOptim(true);
     config->SetModel(FLAGS_infer_model);
-    //config->EnableTensorRtEngine();
+    // config->EnableTensorRtEngine();
 }
 
 // Compare result of NativeConfig and AnalysisConfig
@@ -29,7 +43,6 @@ void compare(bool use_mkldnn = false) {
     SetConfig(&cfg);
     if (use_mkldnn) {
         cfg.EnableMKLDNN();
-        cfg.pass_builder()->AppendPass("fc_mkldnn_pass");
     }
     std::vector<std::vector<PaddleTensor>> inputs;
     LoadInputData(&inputs);
@@ -42,7 +55,6 @@ void profile(bool use_mkldnn = false) {
     SetConfig(&config);
     if (use_mkldnn) {
         config.EnableMKLDNN();
-        config.pass_builder()->AppendPass("fc_mkldnn_pass");
     }
     std::vector<std::vector<PaddleTensor>> outputs;
     std::vector<std::vector<PaddleTensor>> inputs;
@@ -53,28 +65,17 @@ void profile(bool use_mkldnn = false) {
 
 // compare native and analysis predictor
 TEST(test_bert, compare_fluid) { compare(); }
-// compare native and mkldnn
-// TODO
-/*
-TEST(test_bert, compare_mkldnn) { compare(true, false); }
-// compare native and ngraph
-TEST(test_bert, compare_ngraph) { compare(false, true); }
-*/
-// multi thread 
+
+// multi thread
 TEST(test_bert, profile) { profile(); }
-// multi thread with mkldnn
-// TODO
-/*
-TEST(test_bert, profile_mkldnn) { profile(true, false); }
-// multi thread with ngraph
-TEST(Analyzer_bert, profile_ngraph) { profile(false, true); }
-*/
-}  // namespace test 
+
+}  // namespace test
 }  // namespace paddle
 
-int main(int argc, char** argv) { 
+int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     ::google::ParseCommandLineFlags(&argc, &argv, true);
-    return RUN_ALL_TESTS(); 
-    //paddle::test::compare(false, true);
+    return RUN_ALL_TESTS();
+    // paddle::test::compare(false, true);
 }
+

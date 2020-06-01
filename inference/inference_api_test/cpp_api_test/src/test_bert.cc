@@ -30,10 +30,14 @@
 namespace paddle {
 namespace test {
 void SetConfig(AnalysisConfig *config) {
-    // config->EnableUseGpu(100, 0);
+    config->SetModel(FLAGS_infer_model);
+    if (FLAGS_use_gpu) {
+        config->EnableUseGpu(100, 0);
+    } else {
+        config->DisableGpu();
+    }
     // config->SwitchIrDebug(true);
     // config->SwitchIrOptim(true);
-    config->SetModel(FLAGS_infer_model);
     // config->EnableTensorRtEngine();
 }
 
@@ -41,8 +45,13 @@ void SetConfig(AnalysisConfig *config) {
 void compare(bool use_mkldnn = false) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
-    if (use_mkldnn) {
-        cfg.EnableMKLDNN();
+    if (FLAGS_use_gpu) {
+        cfg.EnableMemoryOptim();
+    } else {
+        if (use_mkldnn) {
+            cfg.EnableMKLDNN();
+            cfg.SetCpuMathLibraryNumThreads(FLAGS_paddle_num_threads);
+        }
     }
     std::vector<std::vector<PaddleTensor>> inputs;
     LoadInputData(&inputs);

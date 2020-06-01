@@ -51,7 +51,11 @@ void SetConfig(AnalysisConfig *cfg) {
     cfg->SetModel(FLAGS_infer_model + "/__model__",
                 FLAGS_infer_model + "/__params__");
     // cfg->DisableGpu();
-    cfg->EnableUseGpu(100, 0);
+    if (FLAGS_use_gpu) {
+        cfg->EnableUseGpu(100, 0);
+    } else {
+        cfg->DisableGpu();
+    }
     // cfg->EnableTensorRtEngine();
     // cfg->SwitchIrDebug();
     // cfg->SwitchSpecifyInputNames(false);
@@ -81,8 +85,13 @@ void SetInput(std::vector<std::vector<PaddleTensor>> *inputs) {
 void profile(bool use_mkldnn = false) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
-    if (use_mkldnn) {
-        cfg.EnableMKLDNN();
+    if (FLAGS_use_gpu) {
+        cfg.EnableMemoryOptim();
+    } else {
+        if (use_mkldnn) {
+            cfg.EnableMKLDNN();
+            cfg.SetCpuMathLibraryNumThreads(FLAGS_paddle_num_threads);
+        }
     }
     // cfg.pass_builder()->TurnOnDebug();
     std::vector<std::vector<PaddleTensor>> outputs;
@@ -111,8 +120,13 @@ void profile(bool use_mkldnn = false) {
 void compare(bool use_mkldnn = false) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
-    if (use_mkldnn) {
-        cfg.EnableMKLDNN();
+    if (FLAGS_use_gpu) {
+        cfg.EnableMemoryOptim();
+    } else {
+        if (use_mkldnn) {
+            cfg.EnableMKLDNN();
+            cfg.SetCpuMathLibraryNumThreads(4);
+        }
     }
     std::vector<std::vector<PaddleTensor>> input_slots_all;
     SetInput(&input_slots_all);

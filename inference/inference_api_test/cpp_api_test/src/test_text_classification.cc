@@ -47,7 +47,11 @@ struct DataReader {
 
 void SetConfig(AnalysisConfig *cfg) {
     cfg->SetModel(FLAGS_infer_model);
-    // cfg->EnableUseGpu(100, 0);
+    if (FLAGS_use_gpu) {
+        cfg->EnableUseGpu(100, 0);
+    } else {
+        cfg->DisableGpu();
+    }
     cfg->SwitchSpecifyInputNames();
     cfg->SwitchIrOptim();
 }
@@ -67,7 +71,7 @@ void SetInput(std::vector<std::vector<PaddleTensor>> *inputs) {
 TEST(Analyzer_Text_Classification, profile) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
-    cfg.SwitchIrDebug();
+    // cfg.SwitchIrDebug();
     std::vector<std::vector<PaddleTensor>> outputs;
     std::vector<std::vector<PaddleTensor>> input_slots_all;
     SetInput(&input_slots_all);
@@ -112,7 +116,9 @@ TEST(Analyzer_Text_Classification, compare_against_embedding_fc_lstm_fused) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
     // Enable embedding_fc_lstm_fuse_pass (disabled by default)
-    cfg.pass_builder()->InsertPass(2, "embedding_fc_lstm_fuse_pass");
+    if (!FLAGS_use_gpu) {
+        cfg.pass_builder()->InsertPass(2, "embedding_fc_lstm_fuse_pass");
+    }
     std::vector<std::vector<PaddleTensor>> input_slots_all;
     SetInput(&input_slots_all);
     CompareNativeAndAnalysis(

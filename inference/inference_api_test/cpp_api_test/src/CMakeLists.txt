@@ -114,19 +114,16 @@ set(TestFiles "test_resnet50.cc";
 foreach(testsourcefile ${TestFiles})
   message("====> ${testsourcefile} will be compiled")
   # add executable for all test files
-  string( REPLACE ".cc" "" testname ${testsourcefile} )
-  add_executable( ${testname} ${testsourcefile} )
+  string(REPLACE ".cc" "" testname ${testsourcefile})
+  add_executable(${testname} ${testsourcefile})
 
   # link libs
-  target_link_libraries( ${testname} ${DEPS})
-  add_dependencies( ${testname} thirdparty_gtest)
+  target_link_libraries(${testname} ${DEPS})
+  add_dependencies(${testname} thirdparty_gtest)
 
   # link gtest
-  target_include_directories( ${testname} PRIVATE  ${gtest_src_dir})
-  target_include_directories( ${testname} PRIVATE ${gtest_lib_dir})
+  target_include_directories(${testname} PRIVATE ${gtest_src_dir})
+  target_include_directories(${testname} PRIVATE ${gtest_lib_dir})
   target_link_libraries( ${testname} ${gtest_lib_dir}/libgtest.a)
   
 endforeach()
-
-
-

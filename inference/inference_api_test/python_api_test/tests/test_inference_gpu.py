@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import unittest
 import os
 import sys
 import argparse
@@ -19,6 +18,7 @@ import logging
 import struct
 import six
 
+import nose
 import numpy as np
 
 sys.path.append("..")
@@ -29,74 +29,245 @@ logging.basicConfig(level=logging.INFO, format=FORMAT)
 logger = logging.getLogger(__name__)
 
 
-def parse_args():
-    """
-    parse input arguments
-    Return:
-        test_args(argparse)
-        remaining_args(argparse)
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--model_path', type=str, default='', help='A path to infer model.')
-    parser.add_argument(
-        '--data_path', type=str, default='', help='A path to a data.json')
-    parser.add_argument(
-        '--delta', type=float, default=1e-4, help='compare results delta')
-
-    test_args, args = parser.parse_known_args(namespace=unittest)
-    return test_args, sys.argv[:1] + args
-
-
-class TestModelInferenceGPU(unittest.TestCase):
+class TestModelInferenceGPU(object):
     """
     TestModelInferenceGPU
     Args:
     Return:
     """
 
-    def check_data(self, result, expect):
+    def __init__(self):
+        """
+        __init__
+        """
+        project_path = os.environ.get("project_path")
+        self.model_root = os.path.join(project_path, "Data/python-model-infer")
+
+    def check_data(self, result, expect, delta):
         """
         check result
         Args:
             result(list): list of result data
             expect(list): list of expect data
+            delta(float): e.g. 0.001
         Return:
             None
         """
-        delta = test_case_args.delta
         logger.info("current comparison delta is : {0}".format(delta))
-        assert len(expect) == len(result)
+        nose.tools.assert_equal(
+            len(expect), len(result), msg="output length not equal")
         for i in range(0, len(expect)):
-            self.assertAlmostEqual(expect[i], result[i], delta=delta)
+            nose.tools.assert_almost_equal(expect[i], result[i], delta=delta)
 
-    def test_inference(self):
+    def get_infer_results(self, model_path, data_path):
         """
-        Inference and check value
+        get native and analysis infer results
+        gpu
         Args:
             model_path(string): parent path of __model__ file
             data_path(string): path of data.json
         Return:
-            None
+            res(numpy array): analysis cf outputs
+            exp(numpy array): native cfg outputs
         """
-        model_path = test_case_args.model_path
-        data_path = test_case_args.data_path
         AnalysisPredictor = Predictor(
             model_path, predictor_mode="Analysis", config_type="gpu")
         res, ave_time = AnalysisPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
-        NativePredictor = Predictor(
-            model_path, predictor_mode="Native", config_type="gpu")
-        exp, ave_time = NativePredictor.native_predict(data_path)
-        logger.info(ave_time)
+        try:
+            NativePredictor = Predictor(
+                model_path, predictor_mode="Native", config_type="gpu")
+            exp, ave_time = NativePredictor.native_predict(data_path)
+            logger.info(ave_time)
+        except RuntimeError:
+            logger.info("native prediction is out of gpu memory \
+                         , use cpu native infer instead")
+            NativePredictor = Predictor(
+                model_path, predictor_mode="Native", config_type="cpu")
+            exp, ave_time = NativePredictor.native_predict(data_path)
+            logger.info(ave_time)
 
-        assert len(exp) == len(res)
+        nose.tools.assert_equal(
+            len(exp), len(res), msg="num of output tensor not equal")
+        return res, exp
+
+    def test_inference_mobilenetv1_gpu(self):
+        """
+        Inference and check value
+        mobilenetv1 gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "MobileNetV1_pretrained"
+        tmp_path = os.path.join(self.model_root, "classification")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.0001
+
+        res, exp = self.get_infer_results(model_path, data_path)
+
         for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten())
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
+    def test_inference_resnet50_gpu(self):
+        """
+        Inference and check value
+        resnet50 gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "ResNet50_pretrained"
+        tmp_path = os.path.join(self.model_root, "classification")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.001
 
-if __name__ == '__main__':
-    global test_case_args
-    test_case_args, remaining_args = parse_args()
-    unittest.main(argv=remaining_args)
+        res, exp = self.get_infer_results(model_path, data_path)
+
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+
+    def test_inference_seresnext50_gpu(self):
+        """
+        Inference and check value
+        seresnext50 gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "SE_ResNeXt50_32x4d_pretrained"
+        tmp_path = os.path.join(self.model_root, "classification")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.0001
+
+        res, exp = self.get_infer_results(model_path, data_path)
+
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+
+    def test_inference_xception41_gpu(self):
+        """
+        Inference and check value
+        xception41 gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "Xception_41_pretrained"
+        tmp_path = os.path.join(self.model_root, "classification")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.0001
+
+        res, exp = self.get_infer_results(model_path, data_path)
+
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+
+    def test_inference_blazeface_gpu(self):
+        """
+        Inference and check value
+        blazeface gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "blazeface_nas_128"
+        tmp_path = os.path.join(self.model_root, "Detection")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.0001
+
+        res, exp = self.get_infer_results(model_path, data_path)
+
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+
+    def test_inference_faster_rcnn_gpu(self):
+        """
+        Inference and check value
+        faster_rcnn gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "faster_rcnn_r50_1x"
+        tmp_path = os.path.join(self.model_root, "Detection")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.001
+
+        res, exp = self.get_infer_results(model_path, data_path)
+
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+
+    def test_inference_mask_rcnn_gpu(self):
+        """
+        Inference and check value
+        mask_rcnn gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "mask_rcnn_r50_1x"
+        tmp_path = os.path.join(self.model_root, "Detection")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.001
+
+        res, exp = self.get_infer_results(model_path, data_path)
+
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+
+    def test_inference_yolov3_gpu(self):
+        """
+        Inference and check value
+        yolov3 gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "yolov3_darknet"
+        tmp_path = os.path.join(self.model_root, "Detection")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.001
+
+        res, exp = self.get_infer_results(model_path, data_path)
+
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+
+    def test_inference_deeplabv3_gpu(self):
+        """
+        Inference and check value
+        deeplabv3_mobilenetv2 gpu model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "deeplabv3_mobilenetv2"
+        tmp_path = os.path.join(self.model_root, "segmentation")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.0001
+
+        res, exp = self.get_infer_results(model_path, data_path)
+
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)

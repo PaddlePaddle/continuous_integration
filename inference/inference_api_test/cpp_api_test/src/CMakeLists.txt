@@ -33,6 +33,7 @@ include_directories("${PADDLE_LIB_THIRD_PARTY_PATH}zlib/include")
 include_directories("${PADDLE_LIB}/third_party/boost")
 include_directories("${PADDLE_LIB}/third_party/eigen3")
 include_directories("${PADDLE_LIB}/paddle/include")
+include_directories("${PADDLE_LIB}/paddle")
 
 link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}zlib/lib")
 link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}protobuf/lib")
@@ -109,7 +110,8 @@ set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")
 set(TestFiles "test_resnet50.cc";
               "test_bert.cc";
               "test_ocr.cc";
-              "test_text_classification.cc")
+              "test_text_classification.cc";
+              "test_multi_thread.cc")
 
 foreach(testsourcefile ${TestFiles})
   message("====> ${testsourcefile} will be compiled")

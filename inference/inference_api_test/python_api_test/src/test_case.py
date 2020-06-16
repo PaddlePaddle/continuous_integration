@@ -75,12 +75,18 @@ class DeployConfig(object):
 
         if config_type == 'cpu':
             predictor_config.disable_gpu()
+        elif config_type == 'cpu_no_ir':
+            predictor_config.disable_gpu()
+            predictor_config.switch_ir_optim(False)
         elif config_type == 'mkldnn':
             predictor_config.disable_gpu()
             predictor_config.enable_mkldnn()
             predictor_config.set_cpu_math_library_num_threads(4)
         elif config_type == 'gpu':
             predictor_config.enable_use_gpu(100, 0)
+        elif config_type == 'gpu_no_ir':
+            predictor_config.enable_use_gpu(100, 0)
+            predictor_config.switch_ir_optim(False)
         elif config_type == 'lite':
             predictor_config.enable_lite_engine()
         elif config_type in trt_precision_map.keys():
@@ -94,7 +100,7 @@ class DeployConfig(object):
                 use_calib_mode=True if config_type == 'trt_int8' else False)
         else:
             raise Exception('Config type [%s] invalid!' % config_type)
-        predictor_config.switch_ir_optim(True)
+        # predictor_config.switch_ir_optim(True)
         predictor_config.switch_specify_input_names(True)
         predictor_config.enable_memory_optim()
         predictor_config.switch_use_feed_fetch_ops(False)

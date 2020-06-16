@@ -79,9 +79,9 @@ class TestModelInferenceTrtFp32(object):
         res, ave_time = AnalysisPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
-        NativePredictor = Predictor(
-            model_path, predictor_mode="Native", config_type="cpu")
-        exp, ave_time = NativePredictor.native_predict(data_path)
+        NoIrPredictor = Predictor(
+            model_path, predictor_mode="Analysis", config_type="gpu_no_ir")
+        exp, ave_time = NoIrPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
         nose.tools.assert_equal(

@@ -6,67 +6,52 @@ if [ -d "Data" ];then rm -rf Data
 fi
 mkdir -p ./Data
 cd ./Data
-wget https://sys-p0.bj.bcebos.com/inference/python-infer.tgz --no-check-certificate
+wget -q https://sys-p0.bj.bcebos.com/inference/python-infer.tgz --no-check-certificate
 tar -xvf python-infer.tgz
-wget https://sys-p0.bj.bcebos.com/inference/python-model-infer.tgz --no-check-certificate
+wget -q https://sys-p0.bj.bcebos.com/inference/python-model-infer.tgz --no-check-certificate
 tar -xvf python-model-infer.tgz
 cd -
 
 echo ${PADDLE_ROOT}
-python -m pip install ${PADDLE_ROOT}/build/python/dist/*-cp37-cp37m-linux_x86_64.whl;
-python -m pip install nose
+#python3.7 -m pip install ${PADDLE_ROOT}/build/python/dist/*-cp37-cp37m-linux_x86_64.whl;
+#python3.7 -m pip install nose
 
 if [ -d "result" ];then rm -rf result
 fi
 mkdir result
 
 export CUDA_VISIBLE_DEVICES=0
-cases="test_resnet_fluid.py"
+cases="test_resnet_fluid"
 
 for file in ${cases}
 do
-    echo "====> ${file} case start"
-    python -m nose -s -v --with-xunit --xunit-file=result/${file}_single.xml ${file}
-    echo "====> ${file} case finish"
+    echo " "
+    echo "\033[33m ====> ${file} case start \033[0m"
+    python3.7 -m nose -s -v --with-xunit --xunit-file=result/${file}.xml ${file}.py
+    echo "\033[33m ====> ${file} case finish \033[0m"
+    echo " "
 done
 
-class_models="MobileNetV1_pretrained \
-              ResNet50_pretrained \
-              SE_ResNeXt50_32x4d_pretrained \
-              Xception_41_pretrained"
+model_cases="test_inference_cpu \
+             test_inference_gpu \
+             test_inference_mkldnn \
+             test_inference_trt_fp32"
 
-detect_models="blazeface_nas_128 \
-               faster_rcnn_r50_1x \
-               mask_rcnn_r50_1x \
-               yolov3_darknet"
-
-seg_models="deeplabv3_mobilenetv2"
-
+export project_path
+echo -e "\033[33m project_path is : ${project_path} \033[0m"
 cd tests
-for model in ${class_models}
+if [ -d "result" ];then rm -rf result
+fi
+mkdir result
+for file in ${model_cases}
 do
-    echo "====> ${model} case start"
-    model_path=${project_path}/Data/python-model-infer/classification
-    python test_inference_cpu.py --model_path=${model_path}/${model}/model \
-                                       --data_path=${model_path}/${model}/data/data.json
-    echo "====> ${model} case finish"
-done
-
-for model in ${detect_models}
-do
-    echo "====> ${model} case start"
-    model_path=${project_path}/Data/python-model-infer/Detection
-    python test_inference_cpu.py --model_path=${model_path}/${model}/model \
-                                       --data_path=${model_path}/${model}/data/data.json
-    echo "====> ${model} case finish"
-done
-
-for model in ${seg_models}
-do
-    echo "====> ${model} case start"
-    model_path=${project_path}/Data/python-model-infer/segmentation
-    python test_inference_cpu.py --model_path=${model_path}/${model}/model \
-                                       --data_path=${model_path}/${model}/data/data.json
-    echo "====> ${model} case finish"
+    
+    echo " "
+    echo -e "\033[33m ====> ${file} case start \033[0m"
+    python3.7 -m nose -s -v --with-xunit --xunit-file=result/${file}.xml ${file}.py
+    echo -e "\033[33m ====> ${file} case finish \033[0m"
+    echo " "
 done
 cd -
+
+echo -e "\033[33m finish all cases \033[0m"

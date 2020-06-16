@@ -11,9 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 #pragma once
-
 #include <algorithm>
 #include <vector>
 #include <unordered_map>
@@ -23,13 +21,14 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <utility>
 #include <thread>  // NOLINT
 
 #include "gflags/gflags.h"
 #include "glog/logging.h"
 #include "gtest/gtest.h"
 
-#include "paddle_inference_api.h"
+#include "include/paddle_inference_api.h"
 
 
 DEFINE_string(model_name, "", "model name");
@@ -66,7 +65,9 @@ using paddle::PaddleTensor;
 
 template <typename T>
 int VecReduceToInt(const std::vector<T> &v) {
-      return std::accumulate(v.begin(), v.end(), 1, [](T a, T b) { return a * b; });
+      return std::accumulate(v.begin(), v.end(), 1, [](T a, T b) {
+        return a * b;
+        });
 }
 
 template <typename T>
@@ -148,16 +149,16 @@ static T convert(const std::string &item,
     std::string message =
         "invalid_argument exception when try to convert : " + item;
     LOG(ERROR) << message;
-    //PADDLE_THROW(message);
+    // PADDLE_THROW(message);
   } catch (std::out_of_range &e) {
     std::string message =
         "out_of_range exception when try to convert : " + item;
     LOG(ERROR) << message;
-    //PADDLE_THROW(message);
+    // PADDLE_THROW(message);
   } catch (...) {
     std::string message = "unexpected exception when try to convert " + item;
     LOG(ERROR) << message;
-    //PADDLE_THROW(message);
+    // PADDLE_THROW(message);
   }
   return res;
 }
@@ -265,7 +266,8 @@ std::unique_ptr<PaddlePredictor> CreateTestPredictor(
     return CreatePaddlePredictor<AnalysisConfig>(*analysis_config);
   }
   auto native_config = analysis_config->ToNativeConfig();
-  return CreatePaddlePredictor<NativeConfig, paddle::PaddleEngineKind::kNative>(native_config);
+  return CreatePaddlePredictor<NativeConfig,
+         paddle::PaddleEngineKind::kNative>(native_config);
 }
 
 // Print config
@@ -273,11 +275,10 @@ void PrintConfig(const PaddlePredictor::Config *config, bool use_analysis) {
   const auto *analysis_config =
       reinterpret_cast<const AnalysisConfig *>(config);
   if (use_analysis) {
-    //LOG(INFO) << *analysis_config;
+    // LOG(INFO) << *analysis_config;
     return;
   }
-  //LOG(INFO) << analysis_config->ToNativeConfig();
-
+  // LOG(INFO) << analysis_config->ToNativeConfig();
 }
 
 // Test One Thread
@@ -385,5 +386,17 @@ void TestPrediction(const PaddlePredictor::Config *config,
   }
 }
 
-}  // namespace test 
+// Compare result between two vector
+template<typename T>
+void CompareVectors(const std::vector<T> &outputs,
+                   const std::vector<T> &ref_outputs) {
+    for (size_t j = 0; j < outputs.size(); ++j) {
+        // LOG(INFO) << "outputs [" << j << "]
+        // = " << outputs[j] << " ref_outputs[" << j << "] =
+        // " << ref_outputs[j];
+        CHECK_LE(std::abs(outputs[j] - ref_outputs[j]), FLAGS_accuracy);
+    }
+}
+
+}  // namespace test
 }  // namespace paddle

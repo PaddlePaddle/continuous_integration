@@ -32,7 +32,7 @@ class DeployConfig(object):
     deploy config
     """
 
-    def __init__(self, model_path):
+    def __init__(self, model_path, batch_size=1, min_subgraph_size=3):
         """
         Args:
             model_path(string): the path of test model
@@ -50,8 +50,8 @@ class DeployConfig(object):
             self.param_file = model_path
 
         # 2. set trt default config
-        self.batch_size = 1
-        self.min_subgraph_size = 3
+        self.batch_size = batch_size
+        self.min_subgraph_size = min_subgraph_size
 
     def analysis_config(self, config_type):
         """
@@ -78,7 +78,7 @@ class DeployConfig(object):
         elif config_type == 'mkldnn':
             predictor_config.disable_gpu()
             predictor_config.enable_mkldnn()
-            predictor_config.cpu_math_library_num_threads(4)
+            predictor_config.set_cpu_math_library_num_threads(4)
         elif config_type == 'gpu':
             predictor_config.enable_use_gpu(100, 0)
         elif config_type == 'lite':
@@ -128,8 +128,12 @@ class Predictor(object):
     init predictor
     """
 
-    def __init__(self, model_path, predictor_mode="Analysis",
-                 config_type="cpu"):
+    def __init__(self,
+                 model_path,
+                 predictor_mode="Analysis",
+                 config_type="cpu",
+                 batch_size=1,
+                 min_subgraph_size=1):
         """
         init configuration of predictor
         Args:
@@ -137,12 +141,10 @@ class Predictor(object):
             predictor_mode(strings): create native or analysis predictor
             config_type(strings): describe analysis prediction configuration
         """
-        analysis_predictor_config = DeployConfig(model_path).analysis_config(
-            config_type)
-        native_predictor_config = DeployConfig(model_path).native_config(
-            config_type)
+        configs = DeployConfig(model_path, min_subgraph_size=min_subgraph_size)
+        analysis_predictor_config = configs.analysis_config(config_type)
+
         logger.info(analysis_predictor_config)
-        logger.info(native_predictor_config)
         try:
             if predictor_mode == "Analysis":
                 logger.info("current config is Analysis config")
@@ -151,6 +153,9 @@ class Predictor(object):
                 # clone main predictor to test predictor.clone api
                 self.predictor = predictor0.clone()
             elif predictor_mode == "Native":
+                native_predictor_config = DeployConfig(
+                    model_path).native_config(config_type)
+                logger.info(native_predictor_config)
                 logger.info("current config is Native config")
                 # use analysis predictor to retrive number of inputs
                 analysis_predictor_config.disable_glog_info()
@@ -170,6 +175,7 @@ class Predictor(object):
             repeats(int)
         Return:
             outputs(list|[numpy.array, numpy.array]): list of numpy array
+            ave_time(float): infer speed
         """
         # parse json from data file
         input_info = JsonInfo().parse_json(json_dir)
@@ -216,6 +222,7 @@ class Predictor(object):
             repeats(int)
         Return:
             outputs(list|numpy.array): numpy array
+            ave_time(float): infer speed
         """
         # parse json from data file
         input_info = JsonInfo().parse_json(json_dir)

@@ -29,9 +29,9 @@ logging.basicConfig(level=logging.INFO, format=FORMAT)
 logger = logging.getLogger(__name__)
 
 
-class TestModelInferenceCPU(object):
+class TestModelInferenceTrtFp32(object):
     """
-    TestModelInferenceCPU
+    TestModelInferenceTrtFp32
     Args:
     Return:
     """
@@ -59,19 +59,23 @@ class TestModelInferenceCPU(object):
         for i in range(0, len(expect)):
             nose.tools.assert_almost_equal(expect[i], result[i], delta=delta)
 
-    def get_infer_results(self, model_path, data_path):
+    def get_infer_results(self, model_path, data_path, min_subgraph_size=3):
         """
         get native and analysis infer results
-        cpu
+        trt_fp32
         Args:
             model_path(string): parent path of __model__ file
             data_path(string): path of data.json
+            min_subgraph_size(int): tensorrt subgraph size
         Return:
             res(numpy array): analysis cf outputs
             exp(numpy array): native cfg outputs
         """
         AnalysisPredictor = Predictor(
-            model_path, predictor_mode="Analysis", config_type="cpu")
+            model_path,
+            predictor_mode="Analysis",
+            config_type="trt_fp32",
+            min_subgraph_size=min_subgraph_size)
         res, ave_time = AnalysisPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
@@ -84,10 +88,10 @@ class TestModelInferenceCPU(object):
             len(exp), len(res), msg="num of output tensor not equal")
         return res, exp
 
-    def test_inference_mobilenetv1_cpu(self):
+    def test_inference_mobilenetv1_trt_fp32(self):
         """
         Inference and check value
-        mobilenetv1 cpu model
+        mobilenetv1 trt_fp32 model
         Args:
             None
         Return:
@@ -104,10 +108,10 @@ class TestModelInferenceCPU(object):
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    def test_inference_resnet50_cpu(self):
+    def test_inference_resnet50_trt_fp32(self):
         """
         Inference and check value
-        resnet50 cpu model
+        resnet50 trt_fp32 model
         Args:
             None
         Return:
@@ -124,10 +128,10 @@ class TestModelInferenceCPU(object):
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    def test_inference_seresnext50_cpu(self):
+    def test_inference_seresnext50_trt_fp32(self):
         """
         Inference and check value
-        seresnext50 cpu model
+        seresnext50 trt_fp32 model
         Args:
             None
         Return:
@@ -144,10 +148,10 @@ class TestModelInferenceCPU(object):
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    def test_inference_xception41_cpu(self):
+    def test_inference_xception41_trt_fp32(self):
         """
         Inference and check value
-        xception41 cpu model
+        xception41 trt_fp32 model
         Args:
             None
         Return:
@@ -164,10 +168,10 @@ class TestModelInferenceCPU(object):
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    def test_inference_blazeface_cpu(self):
+    def test_inference_blazeface_trt_fp32(self):
         """
         Inference and check value
-        blazeface cpu model
+        blazeface trt_fp32 model
         Args:
             None
         Return:
@@ -184,10 +188,10 @@ class TestModelInferenceCPU(object):
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    def test_inference_faster_rcnn_cpu(self):
+    def test_inference_faster_rcnn_trt_fp32(self):
         """
         Inference and check value
-        faster_rcnn cpu model
+        faster_rcnn trt_fp32 model
         Args:
             None
         Return:
@@ -197,17 +201,19 @@ class TestModelInferenceCPU(object):
         tmp_path = os.path.join(self.model_root, "Detection")
         model_path = os.path.join(tmp_path, model_name, "model")
         data_path = os.path.join(tmp_path, model_name, "data/data.json")
-        delta = 0.0001
+        delta = 0.001
+        min_subgraph_size = 40
 
-        res, exp = self.get_infer_results(model_path, data_path)
+        res, exp = self.get_infer_results(model_path, data_path,
+                                          min_subgraph_size)
 
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    def test_inference_mask_rcnn_cpu(self):
+    def test_inference_mask_rcnn_trt_fp32(self):
         """
         Inference and check value
-        mask_rcnn cpu model
+        mask_rcnn trt_fp32 model
         Args:
             None
         Return:
@@ -217,17 +223,19 @@ class TestModelInferenceCPU(object):
         tmp_path = os.path.join(self.model_root, "Detection")
         model_path = os.path.join(tmp_path, model_name, "model")
         data_path = os.path.join(tmp_path, model_name, "data/data.json")
-        delta = 0.0001
+        delta = 0.001
+        min_subgraph_size = 40
 
-        res, exp = self.get_infer_results(model_path, data_path)
+        res, exp = self.get_infer_results(model_path, data_path,
+                                          min_subgraph_size)
 
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    def test_inference_yolov3_cpu(self):
+    def test_inference_yolov3_trt_fp32(self):
         """
         Inference and check value
-        yolov3 cpu model
+        yolov3 trt_fp32 model
         Args:
             None
         Return:
@@ -244,10 +252,10 @@ class TestModelInferenceCPU(object):
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    def test_inference_deeplabv3_cpu(self):
+    def test_inference_deeplabv3_trt_fp32(self):
         """
         Inference and check value
-        deeplabv3_mobilenetv2 cpu model
+        deeplabv3_mobilenetv2 trt_fp32 model
         Args:
             None
         Return:

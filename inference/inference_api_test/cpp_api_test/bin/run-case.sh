@@ -14,13 +14,13 @@ mkdir -p $DATA_ROOT
 cd $DATA_ROOT
 if [ ! -f c++/resnet50/model/__model__ ]; then
     echo "==== Download data and models ===="
-    wget --no-proxy https://sys-p0.bj.bcebos.com/inference/c++-infer.tgz --no-check-certificate
+    wget --no-proxy -q https://sys-p0.bj.bcebos.com/inference/c++-infer.tgz --no-check-certificate
     tar -zxf c++-infer.tgz
 fi
 
 if [ ! -f  cpp-model-infer/bert_emb128/model/__model__ ]; then
     echo "==== Download bert, ocr, text data and models ===="
-    wget --no-proxy https://sys-p0.bj.bcebos.com/inference/cpp-model-infer.tgz --no-check-certificate
+    wget --no-proxy -q https://sys-p0.bj.bcebos.com/inference/cpp-model-infer.tgz --no-check-certificate
     tar -zxf cpp-model-infer.tgz
 fi
 

@@ -204,25 +204,25 @@ class TestModelInferenceMKLDNN(object):
         for i in range(len(res)):
             self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-    # def test_inference_mask_rcnn_mkldnn(self):
-    #     """
-    #     Inference and check value
-    #     mask_rcnn mkldnn model
-    #     Args:
-    #         None
-    #     Return:
-    #         None
-    #     """
-    #     model_name = "mask_rcnn_r50_1x"
-    #     tmp_path = os.path.join(self.model_root, "Detection")
-    #     model_path = os.path.join(tmp_path, model_name, "model")
-    #     data_path = os.path.join(tmp_path, model_name, "data/data.json")
-    #     delta = 0.0001
+    def test_inference_mask_rcnn_mkldnn(self):
+        """
+        Inference and check value
+        mask_rcnn mkldnn model
+        Args:
+            None
+        Return:
+            None
+        """
+        model_name = "mask_rcnn_r50_1x"
+        tmp_path = os.path.join(self.model_root, "Detection")
+        model_path = os.path.join(tmp_path, model_name, "model")
+        data_path = os.path.join(tmp_path, model_name, "data/data.json")
+        delta = 0.0001
 
-    #     res, exp = self.get_infer_results(model_path, data_path)
+        res, exp = self.get_infer_results(model_path, data_path)
 
-    #     for i in range(len(res)):
-    #         self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+        for i in range(len(res)):
+            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
     def test_inference_yolov3_mkldnn(self):
         """

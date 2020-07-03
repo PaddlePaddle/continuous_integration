@@ -217,7 +217,7 @@ class TestModelInferenceCPU(object):
         tmp_path = os.path.join(self.model_root, "Detection")
         model_path = os.path.join(tmp_path, model_name, "model")
         data_path = os.path.join(tmp_path, model_name, "data/data.json")
-        delta = 0.001
+        delta = 0.0001
 
         res, exp = self.get_infer_results(model_path, data_path)
 

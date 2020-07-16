@@ -76,7 +76,7 @@ class TestModelInferenceTrtFp32(object):
             predictor_mode="Analysis",
             config_type="trt_fp32",
             min_subgraph_size=min_subgraph_size)
-        res, ave_time = AnalysisPredictor.analysis_predict(data_path)
+        res, ave_time = AnalysisPredictor.analysis_predict(data_path, repeats=10)
         logger.info(ave_time)
 
         NoIrPredictor = Predictor(

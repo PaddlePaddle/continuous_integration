@@ -72,7 +72,7 @@ class TestModelInferenceMKLDNN(object):
         """
         AnalysisPredictor = Predictor(
             model_path, predictor_mode="Analysis", config_type="mkldnn")
-        res, ave_time = AnalysisPredictor.analysis_predict(data_path)
+        res, ave_time = AnalysisPredictor.analysis_predict(data_path, repeats=10)
         logger.info(ave_time)
 
         NativePredictor = Predictor(

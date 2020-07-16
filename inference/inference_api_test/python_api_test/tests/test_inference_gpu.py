@@ -72,7 +72,7 @@ class TestModelInferenceGPU(object):
         """
         AnalysisPredictor = Predictor(
             model_path, predictor_mode="Analysis", config_type="gpu")
-        res, ave_time = AnalysisPredictor.analysis_predict(data_path)
+        res, ave_time = AnalysisPredictor.analysis_predict(data_path, repeats=10)
         logger.info(ave_time)
 
         try:

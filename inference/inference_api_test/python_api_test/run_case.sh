@@ -36,8 +36,7 @@ do
 done
 
 declare -A ModelCase
-ModelCase["cpu"]"test_blazeface_cpu \
-                 test_cpu_helper \
+ModelCase["cpu"]="test_blazeface_cpu \
                  test_deeplabv3_cpu \
                  test_faster_rcnn_cpu \
                  test_mask_rcnn_cpu \
@@ -48,7 +47,6 @@ ModelCase["cpu"]"test_blazeface_cpu \
                  test_yolov3_cpu"
 
 ModelCase["gpu"]="test_blazeface_gpu \
-                  test_gpu_helper \
                   test_deeplabv3_gpu \
                   test_faster_rcnn_gpu \
                   test_mask_rcnn_gpu \
@@ -59,7 +57,6 @@ ModelCase["gpu"]="test_blazeface_gpu \
                   test_yolov3_gpu"
 
 ModelCase["mkldnn"]="test_blazeface_mkldnn \
-                  test_mkldnn_helper \
                   test_deeplabv3_mkldnn \
                   test_faster_rcnn_mkldnn \
                   test_mask_rcnn_mkldnn \
@@ -71,7 +68,6 @@ ModelCase["mkldnn"]="test_blazeface_mkldnn \
                   test_det_mv3_db_mkldnn"
 
 ModelCase["trt_fp32"]="test_blazeface_trt_fp32 \
-                  test_trt_fp32_helper \
                   test_deeplabv3_trt_fp32 \
                   test_faster_rcnn_trt_fp32 \
                   test_mask_rcnn_trt_fp32 \

@@ -1,0 +1,94 @@
+# Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+import os
+import sys
+import argparse
+import logging
+import struct
+import six
+
+import nose
+import numpy as np
+
+sys.path.append("../..")
+from src.test_case import Predictor
+
+FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(level=logging.INFO, format=FORMAT)
+logger = logging.getLogger(__name__)
+
+
+class TestModelInferenceGPU(object):
+    """
+    TestModelInferenceGPU
+    Args:
+    Return:
+    """
+
+    def __init__(self):
+        """
+        __init__
+        """
+        project_path = os.environ.get("project_path")
+        self.model_root = os.path.join(project_path, "Data/python-model-infer")
+
+    def check_data(self, result, expect, delta):
+        """
+        check result
+        Args:
+            result(list): list of result data
+            expect(list): list of expect data
+            delta(float): e.g. 0.001
+        Return:
+            None
+        """
+        logger.info("current comparison delta is : {0}".format(delta))
+        nose.tools.assert_equal(
+            len(expect), len(result), msg="output length not equal")
+        for i in range(0, len(expect)):
+            nose.tools.assert_almost_equal(expect[i], result[i], delta=delta)
+
+    def get_infer_results(self, model_path, data_path):
+        """
+        get native and analysis infer results
+        gpu
+        Args:
+            model_path(string): parent path of __model__ file
+            data_path(string): path of data.json
+        Return:
+            res(numpy array): analysis cf outputs
+            exp(numpy array): native cfg outputs
+        """
+        AnalysisPredictor = Predictor(
+            model_path, predictor_mode="Analysis", config_type="gpu")
+        res, ave_time = AnalysisPredictor.analysis_predict(
+            data_path, repeats=10)
+        logger.info(ave_time)
+
+        try:
+            NativePredictor = Predictor(
+                model_path, predictor_mode="Native", config_type="gpu")
+            exp, ave_time = NativePredictor.native_predict(data_path)
+            logger.info(ave_time)
+        except RuntimeError:
+            logger.info("native prediction is out of gpu memory \
+                         , use cpu native infer instead")
+            NativePredictor = Predictor(
+                model_path, predictor_mode="Native", config_type="cpu")
+            exp, ave_time = NativePredictor.native_predict(data_path)
+            logger.info(ave_time)
+
+        nose.tools.assert_equal(
+            len(exp), len(res), msg="num of output tensor not equal")
+        return res, exp

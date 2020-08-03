@@ -10,6 +10,9 @@ wget -q https://sys-p0.bj.bcebos.com/inference/python-infer.tgz --no-check-certi
 tar -xvf python-infer.tgz
 wget -q https://sys-p0.bj.bcebos.com/inference/python-model-infer.tgz --no-check-certificate
 tar -xvf python-model-infer.tgz
+# download ocr models
+wget -q https://sys-p0.bj.bcebos.com/inference/python-ocr-infer.tgz --no-check-certificate
+tar -xvf python-ocr-infer.tgz
 cd -
 
 echo ${PADDLE_ROOT}

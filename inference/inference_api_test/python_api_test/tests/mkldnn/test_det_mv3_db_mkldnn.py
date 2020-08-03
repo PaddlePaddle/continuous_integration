@@ -47,7 +47,7 @@ class TestDetMv3DbInferenceMKLDNN(TestModelInferenceMKLDNN):
             None
         """
         model_name = "det_mv3_db"
-        tmp_path = os.path.join(self.model_root, "PaddleOCR")
+        tmp_path = os.path.join(self.model_root, "python-ocr-infer")
         model_path = os.path.join(tmp_path, model_name)
         data_path = os.path.join(tmp_path, "word_det_data", "data.json")
         delta = 0.0001

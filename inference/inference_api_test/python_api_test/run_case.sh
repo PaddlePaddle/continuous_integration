@@ -19,21 +19,7 @@ echo ${PADDLE_ROOT}
 #python3.7 -m pip install ${PADDLE_ROOT}/build/python/dist/*-cp37-cp37m-linux_x86_64.whl;
 #python3.7 -m pip install nose
 
-if [ -d "result" ];then rm -rf result
-fi
-mkdir result
-
 export CUDA_VISIBLE_DEVICES=0
-cases="test_resnet_fluid"
-
-for file in ${cases}
-do
-    echo " "
-    echo "\033[33m ====> ${file} case start \033[0m"
-    python3.7 -m nose -s -v --with-xunit --xunit-file=result/${file}.xml ${file}.py
-    echo "\033[33m ====> ${file} case finish \033[0m"
-    echo " "
-done
 
 declare -A ModelCase
 ModelCase["cpu"]="test_blazeface_cpu \

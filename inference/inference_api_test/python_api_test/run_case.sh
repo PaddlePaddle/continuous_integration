@@ -37,14 +37,14 @@ done
 
 declare -A ModelCase
 ModelCase["cpu"]="test_blazeface_cpu \
-                 test_deeplabv3_cpu \
-                 test_faster_rcnn_cpu \
-                 test_mask_rcnn_cpu \
-                 test_mobilenetv1_cpu \
-                 test_resnet50_cpu \
-                 test_seresnext50_cpu \
-                 test_xception41_cpu \
-                 test_yolov3_cpu"
+                  test_deeplabv3_cpu \
+                  test_faster_rcnn_cpu \
+                  test_mask_rcnn_cpu \
+                  test_mobilenetv1_cpu \
+                  test_resnet50_cpu \
+                  test_seresnext50_cpu \
+                  test_xception41_cpu \
+                  test_yolov3_cpu"
 
 ModelCase["gpu"]="test_blazeface_gpu \
                   test_deeplabv3_gpu \
@@ -57,25 +57,27 @@ ModelCase["gpu"]="test_blazeface_gpu \
                   test_yolov3_gpu"
 
 ModelCase["mkldnn"]="test_blazeface_mkldnn \
-                  test_deeplabv3_mkldnn \
-                  test_faster_rcnn_mkldnn \
-                  test_mask_rcnn_mkldnn \
-                  test_mobilenetv1_mkldnn \
-                  test_resnet50_mkldnn \
-                  test_seresnext50_mkldnn \
-                  test_xception41_mkldnn \
-                  test_yolov3_mkldnn \
-                  test_det_mv3_db_mkldnn"
+                     test_deeplabv3_mkldnn \
+                     test_faster_rcnn_mkldnn \
+                     test_mask_rcnn_mkldnn \
+                     test_mobilenetv1_mkldnn \
+                     test_resnet50_mkldnn \
+                     test_seresnext50_mkldnn \
+                     test_xception41_mkldnn \
+                     test_yolov3_mkldnn \
+                     test_det_mv3_db_mkldnn \
+                     test_det_mv3_east_mkldnn.py \
+                     test_rec_chinese_common_train_mkldnn.py"
 
 ModelCase["trt_fp32"]="test_blazeface_trt_fp32 \
-                  test_deeplabv3_trt_fp32 \
-                  test_faster_rcnn_trt_fp32 \
-                  test_mask_rcnn_trt_fp32 \
-                  test_mobilenetv1_trt_fp32 \
-                  test_resnet50_trt_fp32 \
-                  test_seresnext50_trt_fp32 \
-                  test_xception41_trt_fp32 \
-                  test_yolov3_trt_fp32"
+                       test_deeplabv3_trt_fp32 \
+                       test_faster_rcnn_trt_fp32 \
+                       test_mask_rcnn_trt_fp32 \
+                       test_mobilenetv1_trt_fp32 \
+                       test_resnet50_trt_fp32 \
+                       test_seresnext50_trt_fp32 \
+                       test_xception41_trt_fp32 \
+                       test_yolov3_trt_fp32"
 
 export project_path
 echo -e "\033[33m project_path is : ${project_path} \033[0m"

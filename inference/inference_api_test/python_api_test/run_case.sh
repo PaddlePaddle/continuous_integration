@@ -52,8 +52,8 @@ ModelCase["mkldnn"]="test_blazeface_mkldnn \
                      test_xception41_mkldnn \
                      test_yolov3_mkldnn \
                      test_det_mv3_db_mkldnn \
-                     test_det_mv3_east_mkldnn.py \
-                     test_rec_chinese_common_train_mkldnn.py"
+                     test_det_mv3_east_mkldnn \
+                     test_rec_chinese_common_train_mkldnn"
 
 ModelCase["trt_fp32"]="test_blazeface_trt_fp32 \
                        test_deeplabv3_trt_fp32 \

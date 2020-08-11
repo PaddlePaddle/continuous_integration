@@ -30,7 +30,10 @@ ModelCase["cpu"]="test_blazeface_cpu \
                   test_resnet50_cpu \
                   test_seresnext50_cpu \
                   test_xception41_cpu \
-                  test_yolov3_cpu"
+                  test_yolov3_cpu \
+                  test_det_mv3_db_cpu \
+                  test_det_mv3_east_cpu \
+                  test_rec_chinese_common_train_cpu"
 
 ModelCase["gpu"]="test_blazeface_gpu \
                   test_deeplabv3_gpu \
@@ -40,7 +43,10 @@ ModelCase["gpu"]="test_blazeface_gpu \
                   test_resnet50_gpu \
                   test_seresnext50_gpu \
                   test_xception41_gpu \
-                  test_yolov3_gpu"
+                  test_yolov3_gpu \
+                  test_det_mv3_db_gpu \
+                  test_det_mv3_east_gpu \
+                  test_rec_chinese_common_train_gpu"
 
 ModelCase["mkldnn"]="test_blazeface_mkldnn \
                      test_deeplabv3_mkldnn \
@@ -63,7 +69,10 @@ ModelCase["trt_fp32"]="test_blazeface_trt_fp32 \
                        test_resnet50_trt_fp32 \
                        test_seresnext50_trt_fp32 \
                        test_xception41_trt_fp32 \
-                       test_yolov3_trt_fp32"
+                       test_yolov3_trt_fp32 \
+                       test_det_mv3_db_trt_fp32 \
+                       test_det_mv3_east_trt_fp32 \
+                       test_rec_chinese_common_train_trt_fp32"
 
 export project_path
 echo -e "\033[33m project_path is : ${project_path} \033[0m"

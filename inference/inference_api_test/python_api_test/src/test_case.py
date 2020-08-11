@@ -28,14 +28,29 @@ logger = logging.getLogger(__name__)
 
 
 class DeployConfig(object):
-    """
-    deploy config
+    """deploy config
     """
 
-    def __init__(self, model_path, batch_size=1, min_subgraph_size=3):
+    def __init__(self,
+                 model_path,
+                 batch_size=1,
+                 min_subgraph_size=3,
+                 trt_dynamic_shape_info=None):
         """
         Args:
-            model_path(string): the path of test model
+            model_path (string): [the path of test model]
+            batch_size (int, optional): [description]. Defaults to 1.
+            min_subgraph_size (int, optional): [description]. Defaults to 3.
+            trt_dynamic_shape_info (namedtuple, optional): [description]. Defaults to None.
+        Usages:
+            import collections
+            min_input_shape = (1, 3, 10, 10)
+            max_input_shape = (1, 3, 224, 224)
+            opt_input_shape = (1, 3, 100, 100)
+            trt_dynamic_shape_info = collections.namedtuple('new_tuple',
+                        ['min_input_shape', 'max_input_shape', 'opt_input_shape'])
+        Raises:
+            Exception: [description]
         """
         if not os.path.exists(model_path):
             raise Exception('Config file path [%s] invalid!' % model_path)
@@ -52,13 +67,14 @@ class DeployConfig(object):
         # 2. set trt default config
         self.batch_size = batch_size
         self.min_subgraph_size = min_subgraph_size
+        self.trt_dynamic_shape_info = trt_dynamic_shape_info
 
     def analysis_config(self, config_type):
         """
         init analysis predictor configuration
         Args:
             config_type(str): describe prediction configuration
-        Return:
+        Returns:
             predictor_config(AnalysisConfig) : configuration pointer 
         """
         # following configs are only allowed to be used in analysis mode
@@ -98,6 +114,11 @@ class DeployConfig(object):
                 precision_mode=trt_precision_map[config_type],
                 use_static=False,
                 use_calib_mode=True if config_type == 'trt_int8' else False)
+            if self.trt_dynamic_shape_info is not None:
+                # set dynamic shape info
+                min_input_shape, max_input_shape, opt_input_shape = self.trt_dynamic_shape_info
+                predictor_config.set_trt_dynamic_shape_info(
+                    min_input_shape, max_input_shape, opt_input_shape)
         else:
             raise Exception('Config type [%s] invalid!' % config_type)
         # predictor_config.switch_ir_optim(True)
@@ -111,7 +132,7 @@ class DeployConfig(object):
         init native predictor configuration
         Args:
             config_type(string) : cpu, gpu, mkldnn, etc.
-        Return:
+        Returns:
             predictor_config(NativeConfig) : configuration
         """
         predictor_config = fluid.core.NativeConfig()
@@ -130,8 +151,7 @@ class DeployConfig(object):
 
 
 class Predictor(object):
-    """
-    init predictor
+    """init predictor
     """
 
     def __init__(self,
@@ -139,7 +159,8 @@ class Predictor(object):
                  predictor_mode="Analysis",
                  config_type="cpu",
                  batch_size=1,
-                 min_subgraph_size=1):
+                 min_subgraph_size=1,
+                 trt_dynamic_shape_info=None):
         """
         init configuration of predictor
         Args:
@@ -147,7 +168,11 @@ class Predictor(object):
             predictor_mode(strings): create native or analysis predictor
             config_type(strings): describe analysis prediction configuration
         """
-        configs = DeployConfig(model_path, min_subgraph_size=min_subgraph_size)
+        configs = DeployConfig(
+            model_path=model_path,
+            batch_size=batch_size,
+            min_subgraph_size=min_subgraph_size,
+            trt_dynamic_shape_info=trt_dynamic_shape_info)
         analysis_predictor_config = configs.analysis_config(config_type)
 
         logger.info(analysis_predictor_config)
@@ -179,7 +204,7 @@ class Predictor(object):
         Args:
             json_dir(string) : "*.json"
             repeats(int)
-        Return:
+        Returns:
             outputs(list|[numpy.array, numpy.array]): list of numpy array
             ave_time(float): infer speed
         """
@@ -226,7 +251,7 @@ class Predictor(object):
         Args:
             json_dir(string) : "*.json"
             repeats(int)
-        Return:
+        Returns:
             outputs(list|numpy.array): numpy array
             ave_time(float): infer speed
         """

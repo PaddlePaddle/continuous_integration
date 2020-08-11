@@ -11,9 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import argparse
+import collections
 import os
 import sys
-import argparse
 import logging
 import struct
 import six
@@ -36,6 +37,15 @@ class TestDetMv3EastInferenceTrtFp32(TestModelInferenceTrtFp32):
         """
         project_path = os.environ.get("project_path")
         self.model_root = os.path.join(project_path, "Data")
+        dy_input_tuple = collections.namedtuple(
+            'trt_dynamic_shape_info',
+            ['min_input_shape', 'max_input_shape', 'opt_input_shape'])
+        min_input_shape = [3, 448, 448]
+        max_input_shape = [3, 640, 640]
+        opt_input_shape = [3, 512, 512]
+        dy_input_infos = dy_input_tuple(min_input_shape, max_input_shape,
+                                        opt_input_shape)
+        self.trt_dynamic_shape_info = dy_input_infos
 
     def test_inference_det_mv3_east_trt_fp32(self):
         """

@@ -41,6 +41,7 @@ class TestModelInferenceTrtFp32(object):
         """
         project_path = os.environ.get("project_path")
         self.model_root = os.path.join(project_path, "Data/python-model-infer")
+        self.trt_dynamic_shape_info = None
 
     def check_data(self, result, expect, delta):
         """
@@ -74,7 +75,9 @@ class TestModelInferenceTrtFp32(object):
             model_path,
             predictor_mode="Analysis",
             config_type="trt_fp32",
-            min_subgraph_size=min_subgraph_size)
+            min_subgraph_size=min_subgraph_size,
+            trt_dynamic_shape_info=self.trt_dynamic_shape_info)
+
         res, ave_time = AnalysisPredictor.analysis_predict(
             data_path, repeats=10)
         logger.info(ave_time)

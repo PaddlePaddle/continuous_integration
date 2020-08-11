@@ -40,9 +40,9 @@ class TestRecChineseCommonTrainInferenceTrtFp32(TestModelInferenceTrtFp32):
         dy_input_tuple = collections.namedtuple(
             'trt_dynamic_shape_info',
             ['min_input_shape', 'max_input_shape', 'opt_input_shape'])
-        min_input_shape = [3, 32, 156]
-        max_input_shape = [3, 32, 448]
-        opt_input_shape = [3, 32, 320]
+        min_input_shape = {"image":[3, 32, 156]}
+        max_input_shape = {"image":[3, 32, 448]}
+        opt_input_shape = {"image":[3, 32, 320]}
         dy_input_infos = dy_input_tuple(min_input_shape, max_input_shape,
                                         opt_input_shape)
         self.trt_dynamic_shape_info = dy_input_infos

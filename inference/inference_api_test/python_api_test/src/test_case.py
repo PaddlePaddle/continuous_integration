@@ -44,9 +44,9 @@ class DeployConfig(object):
             trt_dynamic_shape_info (namedtuple, optional): [description]. Defaults to None.
         Usages:
             import collections
-            min_input_shape = (1, 3, 10, 10)
-            max_input_shape = (1, 3, 224, 224)
-            opt_input_shape = (1, 3, 100, 100)
+            min_input_shape = {"image":[3, 32, 156]}
+            max_input_shape = {"image":[3, 32, 448]}
+            opt_input_shape = {"image":[3, 32, 320]}
             trt_dynamic_shape_info = collections.namedtuple('new_tuple',
                         ['min_input_shape', 'max_input_shape', 'opt_input_shape'])
         Raises:

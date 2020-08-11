@@ -36,6 +36,7 @@ class TestDetMv3DbInferenceTrtFp32(TestModelInferenceTrtFp32):
         """
         project_path = os.environ.get("project_path")
         self.model_root = os.path.join(project_path, "Data")
+        self.trt_dynamic_shape_info = None
 
     def test_inference_det_mv3_db_trt_fp32(self):
         """

@@ -40,9 +40,9 @@ class TestDetMv3EastInferenceTrtFp32(TestModelInferenceTrtFp32):
         dy_input_tuple = collections.namedtuple(
             'trt_dynamic_shape_info',
             ['min_input_shape', 'max_input_shape', 'opt_input_shape'])
-        min_input_shape = {"image":[3, 448, 448]}
-        max_input_shape = {"image":[3, 640, 640]}
-        opt_input_shape = {"image":[3, 512, 512]}
+        min_input_shape = {"image":[1, 3, 448, 448]}
+        max_input_shape = {"image":[1, 3, 640, 640]}
+        opt_input_shape = {"image":[1, 3, 512, 512]}
         dy_input_infos = dy_input_tuple(min_input_shape, max_input_shape,
                                         opt_input_shape)
         self.trt_dynamic_shape_info = dy_input_infos

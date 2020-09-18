@@ -76,18 +76,10 @@ class TestModelInferenceGPU(object):
             data_path, repeats=10)
         logger.info(ave_time)
 
-        try:
-            NativePredictor = Predictor(
-                model_path, predictor_mode="Native", config_type="gpu")
-            exp, ave_time = NativePredictor.native_predict(data_path)
-            logger.info(ave_time)
-        except RuntimeError:
-            logger.info("native prediction is out of gpu memory \
-                         , use cpu native infer instead")
-            NativePredictor = Predictor(
-                model_path, predictor_mode="Native", config_type="cpu")
-            exp, ave_time = NativePredictor.native_predict(data_path)
-            logger.info(ave_time)
+        NoIrPredictor = Predictor(
+            model_path, predictor_mode="Analysis", config_type="gpu_no_ir")
+        exp, ave_time = NoIrPredictor.analysis_predict(data_path)
+        logger.info(ave_time)
 
         nose.tools.assert_equal(
             len(exp), len(res), msg="num of output tensor not equal")

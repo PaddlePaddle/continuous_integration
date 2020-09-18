@@ -13,6 +13,9 @@ tar -xvf python-model-infer.tgz
 # download ocr models
 wget -q https://sys-p0.bj.bcebos.com/inference/python-ocr-infer.tgz --no-check-certificate
 tar -xvf python-ocr-infer.tgz
+# download hub-ernie models
+wget -q https://sys-p0.bj.bcebos.com/inference/python-hub-ernie.tgz --no-check-certificate
+tar -xvf python-hub-ernie.tgz
 cd -
 
 echo ${PADDLE_ROOT}
@@ -33,7 +36,8 @@ ModelCase["cpu"]="test_blazeface_cpu \
                   test_yolov3_cpu \
                   test_det_mv3_db_cpu \
                   test_det_mv3_east_cpu \
-                  test_rec_chinese_common_train_cpu"
+                  test_rec_chinese_common_train_cpu \
+                  test_rec_r34_vd_tps_bilstm_attn_cpu"
 
 ModelCase["gpu"]="test_blazeface_gpu \
                   test_deeplabv3_gpu \
@@ -46,7 +50,9 @@ ModelCase["gpu"]="test_blazeface_gpu \
                   test_yolov3_gpu \
                   test_det_mv3_db_gpu \
                   test_det_mv3_east_gpu \
-                  test_rec_chinese_common_train_gpu"
+                  test_rec_chinese_common_train_gpu \
+                  test_hub_ernie_gpu \
+                  test_rec_r34_vd_tps_bilstm_attn_gpu"
 
 ModelCase["mkldnn"]="test_blazeface_mkldnn \
                      test_deeplabv3_mkldnn \
@@ -59,7 +65,8 @@ ModelCase["mkldnn"]="test_blazeface_mkldnn \
                      test_yolov3_mkldnn \
                      test_det_mv3_db_mkldnn \
                      test_det_mv3_east_mkldnn \
-                     test_rec_chinese_common_train_mkldnn"
+                     test_rec_chinese_common_train_mkldnn \
+                     test_rec_r34_vd_tps_bilstm_attn_mkldnn"
 
 ModelCase["trt_fp32"]="test_blazeface_trt_fp32 \
                        test_deeplabv3_trt_fp32 \

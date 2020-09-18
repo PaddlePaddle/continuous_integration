@@ -83,6 +83,7 @@ class DeployConfig(object):
             'trt_fp16': fluid.core.AnalysisConfig.Precision.Half,
             'trt_int8': fluid.core.AnalysisConfig.Precision.Int8
         }
+
         if self.combined_model:
             predictor_config = fluid.core.AnalysisConfig(self.model_file,
                                                          self.param_file)
@@ -94,6 +95,7 @@ class DeployConfig(object):
         elif config_type == 'cpu_no_ir':
             predictor_config.disable_gpu()
             predictor_config.switch_ir_optim(False)
+            predictor_config.disable_glog_info()
         elif config_type == 'mkldnn':
             predictor_config.disable_gpu()
             predictor_config.enable_mkldnn()
@@ -103,6 +105,7 @@ class DeployConfig(object):
         elif config_type == 'gpu_no_ir':
             predictor_config.enable_use_gpu(100, 0)
             predictor_config.switch_ir_optim(False)
+            predictor_config.disable_glog_info()
         elif config_type == 'lite':
             predictor_config.enable_lite_engine()
         elif config_type in trt_precision_map.keys():
@@ -121,9 +124,9 @@ class DeployConfig(object):
                     min_input_shape, max_input_shape, opt_input_shape)
         else:
             raise Exception('Config type [%s] invalid!' % config_type)
-        # predictor_config.switch_ir_optim(True)
+        # predictor_config.switch_ir_optim(True) # default is enabled, no need to enable
         predictor_config.switch_specify_input_names(True)
-        predictor_config.enable_memory_optim()
+        # predictor_config.enable_memory_optim() # disable temporarily
         predictor_config.switch_use_feed_fetch_ops(False)
         return predictor_config
 
@@ -175,28 +178,28 @@ class Predictor(object):
             trt_dynamic_shape_info=trt_dynamic_shape_info)
         analysis_predictor_config = configs.analysis_config(config_type)
 
-        logger.info(analysis_predictor_config)
-        try:
-            if predictor_mode == "Analysis":
-                logger.info("current config is Analysis config")
-                predictor0 = fluid.core.create_paddle_predictor(
-                    analysis_predictor_config)
-                # clone main predictor to test predictor.clone api
-                self.predictor = predictor0.clone()
-            elif predictor_mode == "Native":
-                native_predictor_config = DeployConfig(
-                    model_path).native_config(config_type)
-                logger.info(native_predictor_config)
-                logger.info("current config is Native config")
-                # use analysis predictor to retrive number of inputs
-                analysis_predictor_config.disable_glog_info()
-                self.analysis_predictor = fluid.core.create_paddle_predictor(
-                    analysis_predictor_config)
-                # use native predictor to predict
-                self.native_predictor = fluid.core.create_paddle_predictor(
-                    native_predictor_config)
-        except:
-            raise EOFError("fail to create predictor")
+        logger.debug("analysis_predictor_config : {}".format(analysis_predictor_config))
+
+        if predictor_mode == "Analysis":
+            logger.info("current config is Analysis config")
+            predictor0 = fluid.core.create_paddle_predictor(
+                analysis_predictor_config)
+            # clone main predictor to test predictor.clone api
+            self.predictor = predictor0.clone()
+            logger.info("analysis predictor create and clone successful")
+        elif predictor_mode == "Native":
+            native_predictor_config = DeployConfig(
+                model_path).native_config(config_type)
+            logger.info(native_predictor_config)
+            logger.info("current config is Native config")
+            # use analysis predictor to retrive number of inputs
+            analysis_predictor_config.disable_glog_info()
+            self.analysis_predictor = fluid.core.create_paddle_predictor(
+                analysis_predictor_config)
+            # use native predictor to predict
+            self.native_predictor = fluid.core.create_paddle_predictor(
+                native_predictor_config)
+            logger.info("native predictor create successful")
 
     def analysis_predict(self, json_dir, repeats=1):
         """
@@ -218,6 +221,7 @@ class Predictor(object):
             logger.info("====> input_names[{0}] = {1} <====".format(
                 i, input_names[i]))
             input_tensor = self.predictor.get_input_tensor(input_data_name)
+            logger.debug("record.data shape is {}".format(record.data.shape))
             input_tensor.copy_from_cpu(record.data)
             if hasattr(record, 'lod'):
                 input_tensor.set_lod([record.lod])
@@ -231,7 +235,7 @@ class Predictor(object):
             outputs = []
             output_names = self.predictor.get_output_names()
             for i, output_data in enumerate(output_names):
-                logger.info("====> output_names[{0}] = {1} <====".format(
+                logger.debug("====> output_names[{0}] = {1} <====".format(
                     i, output_data))
                 output_tensor = self.predictor.get_output_tensor(output_data)
                 _output = output_tensor.copy_to_cpu()

@@ -126,7 +126,7 @@ class DeployConfig(object):
             raise Exception('Config type [%s] invalid!' % config_type)
         # predictor_config.switch_ir_optim(True) # default is enabled, no need to enable
         predictor_config.switch_specify_input_names(True)
-        # predictor_config.enable_memory_optim() # disable temporarily
+        predictor_config.enable_memory_optim()  # enable temporarily
         predictor_config.switch_use_feed_fetch_ops(False)
         return predictor_config
 
@@ -151,6 +151,44 @@ class DeployConfig(object):
         predictor_config.device = 0
         predictor_config.fraction_of_gpu_memory = 0
         return predictor_config
+
+    def summary_config(self, predictor_config):
+        """
+        summary analysis config
+        TODO
+        Returns:
+            [type]: [description]
+        """
+        if type(predictor_config) is not fluid.core.AnalysisConfig:
+            raise Exception('Config [%s] is not fluid.core.AnalysisConfig' %
+                            predictor_config)
+        else:
+            summary_info = {}
+            summary_info[
+                'cpu_math_library_num_threads'] = predictor_config.cpu_math_library_num_threads(
+                )
+            summary_info[
+                'fraction_of_gpu_memory_for_pool'] = predictor_config.fraction_of_gpu_memory_for_pool(
+                )
+            summary_info['gpu_device_id'] = predictor_config.gpu_device_id()
+            summary_info[
+                'lite_engine_enabled'] = predictor_config.lite_engine_enabled()
+            summary_info['mkldnn_enabled'] = predictor_config.mkldnn_enabled()
+            summary_info[
+                'tensorrt_engine_enabled'] = predictor_config.tensorrt_engine_enabled(
+                )
+            summary_info[
+                'use_feed_fetch_ops_enabled'] = predictor_config.use_feed_fetch_ops_enabled(
+                )
+            summary_info[
+                'model_from_memory'] = predictor_config.model_from_memory()
+            summary_info['use_gpu'] = predictor_config.use_gpu()
+        logger.debug(
+            '=================== Analysis config Summary ===================')
+        for k, v in summary_info.items():
+            logger.debug("predictor_config['{0}'] = {1}".format(k, v))
+        logger.debug(
+            '===============================================================')
 
 
 class Predictor(object):
@@ -178,7 +216,9 @@ class Predictor(object):
             trt_dynamic_shape_info=trt_dynamic_shape_info)
         analysis_predictor_config = configs.analysis_config(config_type)
 
-        logger.debug("analysis_predictor_config : {}".format(analysis_predictor_config))
+        logger.debug("analysis_predictor_config : {}".format(
+            analysis_predictor_config))
+        configs.summary_config(analysis_predictor_config)  # summary configs
 
         if predictor_mode == "Analysis":
             logger.info("current config is Analysis config")
@@ -188,8 +228,8 @@ class Predictor(object):
             self.predictor = predictor0.clone()
             logger.info("analysis predictor create and clone successful")
         elif predictor_mode == "Native":
-            native_predictor_config = DeployConfig(
-                model_path).native_config(config_type)
+            native_predictor_config = DeployConfig(model_path).native_config(
+                config_type)
             logger.info(native_predictor_config)
             logger.info("current config is Native config")
             # use analysis predictor to retrive number of inputs

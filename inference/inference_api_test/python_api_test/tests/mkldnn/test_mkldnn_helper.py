@@ -72,13 +72,12 @@ class TestModelInferenceMKLDNN(object):
         """
         AnalysisPredictor = Predictor(
             model_path, predictor_mode="Analysis", config_type="mkldnn")
-        res, ave_time = AnalysisPredictor.analysis_predict(
-            data_path, repeats=5)
+        res, ave_time = AnalysisPredictor.analysis_predict(data_path, repeats=5)
         logger.info(ave_time)
 
-        NativePredictor = Predictor(
-            model_path, predictor_mode="Native", config_type="cpu")
-        exp, ave_time = NativePredictor.native_predict(data_path)
+        NoIrPredictor = Predictor(
+            model_path, predictor_mode="Analysis", config_type="cpu_no_ir")
+        exp, ave_time = NoIrPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
         nose.tools.assert_equal(

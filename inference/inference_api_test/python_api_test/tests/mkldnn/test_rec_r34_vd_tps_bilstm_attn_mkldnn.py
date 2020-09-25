@@ -25,11 +25,12 @@ from test_mkldnn_helper import TestModelInferenceMKLDNN
 
 #rec_r34_vd_tps_bilstm_attn
 
+
 class TestRecR34VdTpsBiLstmAttnInferenceMKLDNN(TestModelInferenceMKLDNN):
     """
     TestModelInferenceMKLDNN
     Args:
-    Return:
+    Returns:
     """
 
     def __init__(self):
@@ -44,7 +45,7 @@ class TestRecR34VdTpsBiLstmAttnInferenceMKLDNN(TestModelInferenceMKLDNN):
         rec_r34_vd_tps_bilstm_attn mkldnn model
         Args:
             None
-        Return:
+        Returns:
             None
         """
         model_name = "rec_r34_vd_tps_bilstm_attn"

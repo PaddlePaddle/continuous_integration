@@ -28,7 +28,7 @@ class TestBlazeFaceInferenceCPU(TestModelInferenceCPU):
     """
     TestModelInferenceCPU
     Args:
-    Return:
+    Returns:
     """
 
     def test_inference_blazeface_cpu(self):
@@ -37,7 +37,7 @@ class TestBlazeFaceInferenceCPU(TestModelInferenceCPU):
         blazeface cpu model
         Args:
             None
-        Return:
+        Returns:
             None
         """
         model_name = "blazeface_nas_128"

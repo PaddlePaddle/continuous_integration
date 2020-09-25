@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 def parse_args():
     """
     parse input arguments
-    Return:
+    Returns:
         test_args(argparse)
         remaining_args(argparse)
     """
@@ -57,7 +57,7 @@ class TestModelInferenceTrtInt8(unittest.TestCase):
     """
     TestModelInferenceTrtInt8
     Args:
-    Return:
+    Returns:
     """
 
     def test_inference(self):
@@ -66,7 +66,7 @@ class TestModelInferenceTrtInt8(unittest.TestCase):
         Args:
             model_path(string): parent path of __model__ file
             data_path(string): path of data.json
-        Return:
+        Returns:
             None
         """
         model_path = test_case_args.model_path

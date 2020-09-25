@@ -33,7 +33,7 @@ class TestModelInferenceMKLDNN(object):
     """
     TestModelInferenceMKLDNN
     Args:
-    Return:
+    Returns:
     """
 
     def __init__(self):
@@ -50,7 +50,7 @@ class TestModelInferenceMKLDNN(object):
             result(list): list of result data
             expect(list): list of expect data
             delta(float): e.g. 0.001
-        Return:
+        Returns:
             None
         """
         logger.info("current comparison delta is : {0}".format(delta))
@@ -66,7 +66,7 @@ class TestModelInferenceMKLDNN(object):
         Args:
             model_path(string): parent path of __model__ file
             data_path(string): path of data.json
-        Return:
+        Returns:
             res(numpy array): analysis cf outputs
             exp(numpy array): native cfg outputs
         """

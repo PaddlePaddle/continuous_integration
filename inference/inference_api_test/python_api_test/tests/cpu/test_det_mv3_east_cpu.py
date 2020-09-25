@@ -43,7 +43,7 @@ class TestDetMv3EastInferenceCPU(TestModelInferenceCPU):
         det_mv3_east cpu model
         Args:
             None
-        Return:
+        Returns:
             None
         """
         model_name = "det_mv3_east"

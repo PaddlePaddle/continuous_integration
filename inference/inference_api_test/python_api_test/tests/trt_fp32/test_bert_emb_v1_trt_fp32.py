@@ -76,7 +76,7 @@ class TestBertEmbV1InferenceTrtFp32(TestModelInferenceTrtFp32):
         tmp_path = os.path.join(self.model_root, "hub-ernie")
         model_path = os.path.join(tmp_path, model_name)
         data_path = os.path.join(tmp_path, "bert-data", "data.json")
-        delta = 0.0006
+        delta = 0.0001
 
         res, exp = self.get_infer_results(model_path, data_path)
 

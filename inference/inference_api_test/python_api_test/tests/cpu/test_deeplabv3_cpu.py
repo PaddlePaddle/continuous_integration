@@ -37,7 +37,7 @@ class TestDeepLabV3InferenceCPU(TestModelInferenceCPU):
         deeplabv3_mobilenetv2 cpu model
         Args:
             None
-        Return:
+        Returns:
             None
         """
         model_name = "deeplabv3_mobilenetv2"

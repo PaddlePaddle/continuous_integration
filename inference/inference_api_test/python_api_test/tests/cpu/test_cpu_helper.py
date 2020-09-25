@@ -50,7 +50,7 @@ class TestModelInferenceCPU(object):
             result(list): list of result data
             expect(list): list of expect data
             delta(float): e.g. 0.001
-        Return:
+        Returns:
             None
         """
         logger.info("current comparison delta is : {0}".format(delta))
@@ -66,14 +66,13 @@ class TestModelInferenceCPU(object):
         Args:
             model_path(string): parent path of __model__ file
             data_path(string): path of data.json
-        Return:
+        Returns:
             res(numpy array): analysis cf outputs
             exp(numpy array): native cfg outputs
         """
         AnalysisPredictor = Predictor(
             model_path, predictor_mode="Analysis", config_type="cpu")
-        res, ave_time = AnalysisPredictor.analysis_predict(
-            data_path, repeats=2)
+        res, ave_time = AnalysisPredictor.analysis_predict(data_path, repeats=2)
         logger.info(ave_time)
 
         NativePredictor = Predictor(

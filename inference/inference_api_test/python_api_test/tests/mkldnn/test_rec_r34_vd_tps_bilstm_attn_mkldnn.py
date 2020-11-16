@@ -51,7 +51,7 @@ class TestRecR34VdTpsBiLstmAttnInferenceMKLDNN(TestModelInferenceMKLDNN):
         model_name = "rec_r34_vd_tps_bilstm_attn"
         tmp_path = os.path.join(self.model_root, "python-ocr-infer")
         model_path = os.path.join(tmp_path, model_name)
-        data_path = os.path.join(tmp_path, "word_rec_data", "data.json")
+        data_path = os.path.join(tmp_path, "word_rec_data_3_32_100", "data.json")
         delta = 0.0001
 
         res, exp = self.get_infer_results(model_path, data_path)

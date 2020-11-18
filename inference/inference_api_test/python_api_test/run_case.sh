@@ -91,9 +91,14 @@ ModelCase["trt_fp32"]="test_blazeface_trt_fp32 \
                        test_xception41_trt_fp32 \
                        test_yolov3_trt_fp32 \
                        test_det_mv3_db_trt_fp32 \
-                       test_det_mv3_east_trt_fp32 \
-                       test_rec_chinese_common_train_trt_fp32 \
-                       test_bert_emb_v1_trt_fp32"
+                       "
+
+# disabled model
+"
+test_det_mv3_east_trt_fp32 \
+test_bert_emb_v1_trt_fp32 \
+test_rec_chinese_common_train_trt_fp32
+"
 
 export project_path
 echo -e "\033[33m project_path is : ${project_path} \033[0m"

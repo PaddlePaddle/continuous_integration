@@ -55,8 +55,8 @@ main(){
     models="mobilenet_ssd-paddle"
     predict_gpu clas_benchmark ${models} ${model_root}/${models}/model "${model_root}/${models}/params" "3,300,300"
 
-    # faser_rcnn_r50_1x-paddle
-    models="faser_rcnn_r50_1x-paddle"
+    # faster_rcnn_r50_1x-paddle
+    models="faster_rcnn_r50_1x-paddle"
     predict_gpu rcnn_benchmark ${models} ${model_root}/${models}/__model__ "${model_root}/${models}/__params__" "3,640,640"
 
     # deeplabv3p_xception_769_fp32-paddle

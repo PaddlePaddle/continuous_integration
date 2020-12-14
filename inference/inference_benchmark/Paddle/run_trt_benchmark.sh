@@ -43,6 +43,7 @@ predict_trt(){
                                 --model_path=${model_path} \
                                 --params_path=${params_path} \
                                 --use_gpu=True \
+                                --image_shape=${image_shape} \
                                 --repeats=1000 \
                                 --batch_size=${batch_size} \
                                 --use_trt=${use_trt} \

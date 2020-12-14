@@ -16,6 +16,11 @@ predict_trt(){
     fi
     printf "${RED} ${model_name} input image_shape = ${image_shape} ${NC} \n";
 
+    trt_min_subgraph_size="3"
+    if [ $# -ge 6 ]; then
+        trt_min_subgraph_size=$6
+    fi
+
     model_type="static"
     log_root="./logs/${model_name}_trt"
 
@@ -47,6 +52,7 @@ predict_trt(){
                                 --repeats=1000 \
                                 --batch_size=${batch_size} \
                                 --use_trt=${use_trt} \
+                                --trt_min_subgraph_size=${trt_min_subgraph_size} \
                                 --trt_precision=${trt_precision} 2>&1 | tee ${log_path}/${model_name}_infer.log
             printf "finish ${RED} ${model_name}, use_gpu: True, \
     use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC} \n"
@@ -70,11 +76,13 @@ main(){
 
     # mobilenet_ssd-paddle
     models="mobilenet_ssd-paddle"
-    predict_trt clas_benchmark ${models} ${model_root}/${models}/model "${model_root}/${models}/params" "3,300,300"
+    # predict_trt clas_benchmark ${models} ${model_root}/${models}/model "${model_root}/${models}/params" "3,300,300"
 
-    # faster_rcnn_r50_1x-paddle
+    # faster_rcnn_r50_1x-paddle, trt_min_subgraph_size=40
     models="faster_rcnn_r50_1x-paddle"
-    predict_trt rcnn_benchmark ${models} ${model_root}/${models}/__model__ "${model_root}/${models}/__params__" "3,640,640"
+    predict_trt rcnn_benchmark ${models} ${model_root}/${models}/__model__ \
+                               "${model_root}/${models}/__params__" \
+                               "3,640,640" "40"
 
     # deeplabv3p_xception_769_fp32-paddle
     models="deeplabv3p_xception_769_fp32-paddle"
@@ -82,7 +90,9 @@ main(){
 
     # unet-paddle
     models="unet-paddle"
-    predict_trt clas_benchmark ${models} ${model_root}/${models} "" "1,512,512"
+    predict_trt clas_benchmark ${models} ${model_root}/${models}/model \
+                                         ${model_root}/${models}/params \
+                                         "3,512,512"
 
     # bert_emb_v1-paddle
     models="bert_emb_v1-paddle"

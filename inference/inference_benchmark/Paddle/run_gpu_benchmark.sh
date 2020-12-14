@@ -65,7 +65,9 @@ main(){
 
     # unet-paddle
     models="unet-paddle"
-    predict_gpu clas_benchmark ${models} ${model_root}/${models} "" "1,512,512"
+    predict_gpu clas_benchmark ${models} ${models} ${model_root}/${models}/model \
+                                         ${model_root}/${models}/params \
+                                         "3,512,512"
 
     # bert_emb_v1-paddle
     models="bert_emb_v1-paddle"

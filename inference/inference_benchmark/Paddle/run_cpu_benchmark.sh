@@ -16,6 +16,11 @@ predict_cpu(){
     fi
     printf "${RED} ${model_name} input image_shape = ${image_shape} ${NC} \n";
 
+    repeats="500"
+    if [ $# -ge 6 ]; then
+        image_shape=$6
+    fi
+
     model_type="static"
     log_root="./logs/${model_name}_cpu"
 
@@ -36,7 +41,7 @@ predict_cpu(){
                                 --params_path=${params_path} \
                                 --image_shape=${image_shape} \
                                 --use_gpu=false \
-                                --repeats=500 \
+                                --repeats=${repeats} \
                                 --batch_size=${batch_size} \
                                 --cpu_math_library_num_threads=${cpu_math_library_num_threads} \
                                 --use_mkldnn=${use_mkldnn} 2>&1 | tee ${log_path}/${model_name}_infer.log
@@ -55,7 +60,8 @@ main(){
 
     # mobilenet_v2-paddle
     models="mobilenet_v2-paddle"
-    predict_cpu clas_benchmark ${models} ${model_root}/${models}/model ${model_root}/${models}/params
+    predict_cpu clas_benchmark ${models} ${model_root}/${models}/model \
+                                         ${model_root}/${models}/params
 
     # resnet101-paddle
     models="resnet101-paddle"
@@ -63,15 +69,21 @@ main(){
 
     # mobilenet_ssd-paddle
     models="mobilenet_ssd-paddle"
-    predict_cpu clas_benchmark ${models} ${model_root}/${models}/model "${model_root}/${models}/params" "3,300,300"
+    predict_cpu clas_benchmark ${models} ${model_root}/${models}/model \
+                                         "${model_root}/${models}/params" \
+                                         "3,300,300"
 
     # faster_rcnn_r50_1x-paddle
     models="faster_rcnn_r50_1x-paddle"
-    predict_cpu rcnn_benchmark ${models} ${model_root}/${models}/__model__ "${model_root}/${models}/__params__" "3,640,640"
+    predict_cpu rcnn_benchmark ${models} ${model_root}/${models}/__model__ \
+                                         "${model_root}/${models}/__params__" \
+                                         "3,640,640" "100"
 
     # deeplabv3p_xception_769_fp32-paddle
     models="deeplabv3p_xception_769_fp32-paddle"
-    predict_cpu clas_benchmark ${models} ${model_root}/${models}/model "${model_root}/${models}/params" "3,769,769"
+    predict_cpu clas_benchmark ${models} ${model_root}/${models}/model \
+                               "${model_root}/${models}/params" \
+                               "3,769,769" "100"
 
     # unet-paddle
     models="unet-paddle"

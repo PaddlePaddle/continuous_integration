@@ -76,7 +76,7 @@ main(){
 
     # mobilenet_ssd-paddle
     models="mobilenet_ssd-paddle"
-    # predict_trt clas_benchmark ${models} ${model_root}/${models}/model "${model_root}/${models}/params" "3,300,300"
+    predict_trt clas_benchmark ${models} ${model_root}/${models}/model "${model_root}/${models}/params" "3,300,300"
 
     # faster_rcnn_r50_1x-paddle, trt_min_subgraph_size=40
     models="faster_rcnn_r50_1x-paddle"

@@ -64,16 +64,17 @@ class Timer {
 template <typename... Args>
 void SummaryConfig(double infer_time, Args... kwargs){
   // TODO: apply Variadic template here
+  // libtorch cannot compile with glog, use std::cout instead
 
-  LOG(INFO) << "----------------------- Model info ----------------------";
-  LOG(INFO) << "Model name: " << FLAGS_model_name << ", " \
-            << "Model type: " << FLAGS_model_type;
-  LOG(INFO) << "----------------------- Data info -----------------------";
-  LOG(INFO) << "Batch size: " << FLAGS_batch_size << ", " \
-               "Num of samples: " << FLAGS_repeats;
-  LOG(INFO) << "----------------------- Conf info -----------------------";
-  LOG(INFO) << "device: " << (FLAGS_use_gpu ? "gpu" : "cpu");
-  LOG(INFO) << "----------------------- Perf info -----------------------";
-  LOG(INFO) << "Average latency(ms): " << infer_time / FLAGS_repeats << ", " \
-            << "QPS: " << (FLAGS_repeats * FLAGS_batch_size)/ (infer_time/1000);
+  std::cout << "----------------------- Model info ----------------------" << std::endl;
+  std::cout << "Model name: " << FLAGS_model_name << ", " \
+            << "Model type: " << FLAGS_model_type << std::endl;
+  std::cout << "----------------------- Data info -----------------------" << std::endl;
+  std::cout << "Batch size: " << FLAGS_batch_size << ", " \
+               "Num of samples: " << FLAGS_repeats << std::endl;
+  std::cout << "----------------------- Conf info -----------------------" << std::endl;
+  std::cout << "device: " << (FLAGS_use_gpu ? "gpu" : "cpu") << std::endl;
+  std::cout << "----------------------- Perf info -----------------------" << std::endl;
+  std::cout << "Average latency(ms): " << infer_time / FLAGS_repeats << ", " \
+            << "QPS: " << (FLAGS_repeats * FLAGS_batch_size)/ (infer_time/1000) << std::endl;
 }

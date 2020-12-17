@@ -45,13 +45,17 @@ double Inference(Predictor* pred, int tid) {
 
   int shape_num = batch_size * channels;
   std::vector<float> shape_data(shape_num);
-  for (int i=0; i < shape_num; ++i) {
-    shape_data[i] = i % 10 * 0.1;
+  for (int i=0; i < batch_size; ++i){
+    shape_data[i] = 640;
+    shape_data[i + 1] = 640;
+    shape_data[i + 2] = 1;
   }
 
   std::vector<float> info_data(shape_num);
-  for (int i=0; i < shape_num; ++i) {
-    info_data[i] = i % 10 * 0.1;
+  for (int i=0; i < batch_size; ++i) {
+    info_data[i] = 480;
+    info_data[i + 1] = 640;
+    info_data[i + 2] = 1;
   }
 
   auto in_names = pred->GetInputNames();

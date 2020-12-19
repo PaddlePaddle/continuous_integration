@@ -1,5 +1,4 @@
 #!/bin/bash
-set -eo pipefail
 export RED='\033[0;31m' # red color
 export NC='\033[0m' # no color
 export YELLOW='\033[33m' # yellow color

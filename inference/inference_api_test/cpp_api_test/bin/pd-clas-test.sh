@@ -29,7 +29,7 @@ test_gpu(){
                                --use_gpu=${use_gpu} \
                                --accuracy=${accuracy} \
                                --gtest_output=xml:test_${model_name}_gpu_${accuracy}_bz${batch_size}.xml
-        python ${CASE_ROOT}/py_sed.py --input_file=test_${model_name}_gpu_${accuracy}_bz${batch_size}.xml \
+        python3.7 ${CASE_ROOT}/py_sed.py --input_file=test_${model_name}_gpu_${accuracy}_bz${batch_size}.xml \
                                       --testsuite_old_name="test_pdclas_model"
         printf "finish ${RED} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
         echo " "

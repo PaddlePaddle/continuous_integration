@@ -2,4 +2,4 @@
 
 echo ${PADDLE_ROOT}
 
-sh bin/run-case.sh
+bash bin/run-case.sh

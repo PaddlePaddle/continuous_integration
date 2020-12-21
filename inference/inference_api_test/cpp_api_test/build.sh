@@ -45,6 +45,6 @@ cmake $CASE_ROOT/src \
       -DCUDA_LIB=${CUDA_LIB} \
       -DUSE_TENSORRT=${USE_TENSORRT} \
       -DTENSORRT_INCLUDE_DIR="${TENSORRT_ROOT}/include" \
-      -DTENSORRT_LIB_DIR="${TENSORRT_ROOT}/lib" \
+      -DTENSORRT_LIB_DIR="${TENSORRT_ROOT}/lib"
 
 make -j4

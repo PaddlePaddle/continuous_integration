@@ -61,6 +61,7 @@ test_trt(){
 
     use_gpu=true;
     use_trt=true;
+    trt_min_subgraph_size=40;  # rcnn model need set to 40
 
     for batch_size in "1" "2" "4"
     do
@@ -73,6 +74,7 @@ test_trt(){
                                --use_gpu=${use_gpu} \
                                --use_trt=${use_trt} \
                                --accuracy=${accuracy} \
+                               --trt_min_subgraph_size=${trt_min_subgraph_size} \
                                --image_shape=${image_shape} \
                                --gtest_output=xml:test_${model_name}_trt_${accuracy}_bz${batch_size}.xml
         python3.7 ${CASE_ROOT}/py_sed.py --input_file=test_${model_name}_trt_${accuracy}_bz${batch_size}.xml \

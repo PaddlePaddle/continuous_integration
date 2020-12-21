@@ -29,3 +29,4 @@ cd -
 bash $CASE_ROOT/pd-yolo-test.sh
 bash $CASE_ROOT/pd-clas-test.sh
 bash $CASE_ROOT/pd-rcnn-test.sh
+bash $CASE_ROOT/pd-solo-test.sh

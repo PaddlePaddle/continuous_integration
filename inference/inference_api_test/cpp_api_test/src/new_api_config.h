@@ -117,9 +117,9 @@ static void split(const std::string &str, const char *sep,
 template<typename T>
 void CompareVectors(const std::vector<T> &outputs,
                     const std::vector<T> &ref_outputs) {
-    ASSERT_EQ(outputs.size(), ref_outputs.size());
+    EXPECT_EQ(outputs.size(), ref_outputs.size());
     for (size_t j = 0; j < outputs.size(); ++j) {
-        CHECK_LE(std::abs(outputs[j] - ref_outputs[j]), FLAGS_accuracy);
+        EXPECT_LE(std::abs(outputs[j] - ref_outputs[j]), FLAGS_accuracy);
     }
 }
 

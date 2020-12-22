@@ -103,35 +103,35 @@ main(){
     
     for tests in ${class_model}
     do
-        test_gpu "test_clas_model" "${tests}" \
+        test_gpu "clas_benchmark" "${tests}" \
                  ${model_root}/${tests}/__model__ \
                  ${model_root}/${tests}/params
     
-        test_trt "test_clas_model" "${tests}" \
+        test_trt "clas_benchmark" "${tests}" \
                  ${model_root}/${tests}/__model__ \
                  ${model_root}/${tests}/params
     done
 
     # ssdlite_mobilenet_v3_large
     model_case="ssdlite_mobilenet_v3_large"
-    test_gpu "test_clas_model" "${model_case}" \
+    test_gpu "clas_benchmark" "${model_case}" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
              "3,320,320"
 
-    test_trt "test_clas_model" "${model_case}" \
+    test_trt "clas_benchmark" "${model_case}" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
              "3,320,320"
     
     # ssd_mobilenet_v1_voc
     model_case="ssd_mobilenet_v1_voc"
-    test_gpu "test_clas_model" "${model_case}" \
+    test_gpu "clas_benchmark" "${model_case}" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
              "3,300,300"
 
-    test_trt "test_clas_model" "${model_case}" \
+    test_trt "clas_benchmark" "${model_case}" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
              "3,300,300"

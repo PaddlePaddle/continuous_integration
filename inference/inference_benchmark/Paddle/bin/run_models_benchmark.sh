@@ -30,3 +30,4 @@ cd -
 mkdir -p $LOG_ROOT
 
 bash $CASE_ROOT/run_clas_gpu_trt_benchmark.sh
+bash $CASE_ROOT/run_det_gpu_trt_benchmark.sh

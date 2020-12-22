@@ -54,7 +54,9 @@ if(NOT ${DEMO_NAME} STREQUAL "all")
 else()
   set(TestFiles "bert_benchmark.cc";
                 "clas_benchmark.cc";
-                "rcnn_benchmark.cc")
+                "rcnn_benchmark.cc";
+                "ptblm_benchmark.cc";
+                "yolo_benchmark.cc")
   foreach(testsourcefile ${TestFiles})
     message("====> ${testsourcefile} will be compiled")
     # add executable for all test files

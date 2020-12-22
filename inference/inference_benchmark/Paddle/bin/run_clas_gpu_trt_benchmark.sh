@@ -25,7 +25,7 @@ test_gpu(){
                                --model_path=${model_path} \
                                --params_path=${params_path} \
                                --image_shape=${image_shape} \
-                               --baatch_size=${batch_size} \
+                               --batch_size=${batch_size} \
                                --use_gpu=${use_gpu} 2>&1 | tee ${LOG_ROOT}/${model_name}_gpu_bz${batch_size}_infer.log
         printf "finish ${RED} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
         echo " "
@@ -49,7 +49,7 @@ test_trt(){
     use_trt=true;
 
     # Tesla T4 can run fp16
-    if $gpu_type == "T4"; then
+    if [ "$gpu_type" == "T4" ] then
         declare -a trt_precisions=("fp32" "fp16")
     else
         declare -a trt_precisions=("fp32")
@@ -67,7 +67,7 @@ test_trt(){
                                 --image_shape=${image_shape} \
                                 --batch_size=${batch_size} \
                                 --use_gpu=${use_gpu} \
-                                --use_trt=${use_trt} 2>&1 | ${LOG_ROOT}/${model_name}_gpu_bz${batch_size}_infer.log
+                                --use_trt=${use_trt} 2>&1 | ${LOG_ROOT}/${model_name}_trt_bz${batch_size}_infer.log
             printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
             echo " "
         done

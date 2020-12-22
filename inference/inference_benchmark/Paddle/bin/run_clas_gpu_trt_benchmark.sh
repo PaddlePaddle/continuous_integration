@@ -67,7 +67,8 @@ test_trt(){
                                --image_shape=${image_shape} \
                                --batch_size=${batch_size} \
                                --use_gpu=${use_gpu} \
-                               -use_trt=${use_trt} 2>&1 | tee ${LOG_ROOT}/${model_name}_trt_bz${batch_size}_infer.log
+                               --trt_precision=${trt_precision} \
+                               -use_trt=${use_trt} 2>&1 | tee ${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log
             printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
             echo " "
         done

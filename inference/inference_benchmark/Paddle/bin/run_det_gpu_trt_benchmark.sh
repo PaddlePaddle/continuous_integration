@@ -45,7 +45,7 @@ test_trt(){
 
     trt_min_subgraph_size="6"
     if [ $# -ge 6 ]; then
-        trt_min_subgraph_size=$5
+        trt_min_subgraph_size=$6
     fi
 
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
@@ -91,14 +91,14 @@ main(){
     for tests in ${rcnn_model}
     do
         test_gpu "rcnn_benchmark" "${tests}" \
-                 ${model_root}/${tests}/__model__ \
-                 ${model_root}/${tests}/__params__ \
-                 "3,640,640"
+                ${model_root}/${tests}/__model__ \
+                ${model_root}/${tests}/__params__ \
+                "3,640,640"
 
     
         test_trt "rcnn_benchmark" "${tests}" \
                  ${model_root}/${tests}/__model__ \
-                 ${model_root}/${tests}/__params__
+                 ${model_root}/${tests}/__params__ \
                  "3,640,640" "40"
     done
 

@@ -63,24 +63,35 @@ test_trt(){
     use_trt=true;
     trt_min_subgraph_size=40;  # rcnn model need set to 40
 
+    # Tesla T4 can run fp16
+    if [ "$gpu_type" == "T4" ]; then
+        declare -a trt_precisions=("fp32" "fp16")
+    else
+        declare -a trt_precisions=("fp32")
+    fi
+
     for batch_size in "1" "2" "4"
-    do
-        echo " "
-        printf "start ${YELLOW} ${model_name}, use_trt: ${use_trt}, batch_size: ${batch_size}${NC}\n"
-        $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
-                               --model_path=${model_path} \
-                               --params_path=${params_path} \
-                               --batch_size=${batch_size} \
-                               --use_gpu=${use_gpu} \
-                               --use_trt=${use_trt} \
-                               --accuracy=${accuracy} \
-                               --trt_min_subgraph_size=${trt_min_subgraph_size} \
-                               --image_shape=${image_shape} \
-                               --gtest_output=xml:test_${model_name}_trt_${accuracy}_bz${batch_size}.xml
-        python3.7 ${CASE_ROOT}/py_sed.py --input_file=test_${model_name}_trt_${accuracy}_bz${batch_size}.xml \
-                                      --testsuite_old_name="test_rcnn_model"
-        printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, batch_size: ${batch_size}${NC}\n"
-        echo " "
+    do  
+        for trt_precision in "${trt_precisions[@]}"  # "fp32" "fp16" "int8"
+        do
+            echo " "
+            printf "start ${YELLOW} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
+            $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
+                                    --model_path=${model_path} \
+                                    --params_path=${params_path} \
+                                    --batch_size=${batch_size} \
+                                    --use_gpu=${use_gpu} \
+                                    --use_trt=${use_trt} \
+                                    --accuracy=${accuracy} \
+                                    --trt_min_subgraph_size=${trt_min_subgraph_size} \
+                                    --trt_precision=${trt_precision} \
+                                    --image_shape=${image_shape} \
+                                    --gtest_output=xml:test_${model_name}_trt_${trt_precision}_${accuracy}_bz${batch_size}.xml
+            python3.7 ${CASE_ROOT}/py_sed.py --input_file=test_${model_name}_trt_${trt_precision}_${accuracy}_bz${batch_size}.xml \
+                                            --testsuite_old_name="test_rcnn_model"
+            printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
+            echo " "
+        done
     done                               
 }
 

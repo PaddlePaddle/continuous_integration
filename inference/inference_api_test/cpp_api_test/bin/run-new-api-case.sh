@@ -9,6 +9,7 @@ export OUTPUT_BIN=$ROOT/build
 export DATA_ROOT=$ROOT/data
 export TOOLS_ROOT=$ROOT/tools
 export CASE_ROOT=$ROOT/bin
+export gpu_type=`nvidia-smi -q | grep "Product Name" | head -n 1 | awk '{print $NF}'`
 
 mkdir -p $DATA_ROOT
 cd $DATA_ROOT

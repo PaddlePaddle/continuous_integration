@@ -16,7 +16,8 @@
 
 namespace paddle_infer {
 
-std::vector<float> Inference(Predictor* pred, int tid) {
+template<typename T = float>
+std::vector<T> Inference(Predictor* pred, int tid) {
   // parse FLAGS_image_shape to vector
   std::vector<std::string> shape_strs;
   split(FLAGS_image_shape, ",", &shape_strs, true);
@@ -48,7 +49,7 @@ std::vector<float> Inference(Predictor* pred, int tid) {
   input_t->CopyFromCpu(in_data.data());
 
   int out_num = 0;
-  std::vector<float> out_data;
+  std::vector<T> out_data;
   // main prediction process
   for (size_t i = 0; i < FLAGS_repeats; ++i) {
     pred->Run();
@@ -74,16 +75,24 @@ TEST(test_pdclas_model, ir_compare) {
     Config config;
     PrepareConfig(&config);
     services::PredictorPool pred_pool(config, 1);
-    auto out_data1 = Inference(pred_pool.Retrive(0), 0);
 
     Config no_ir_config;
     PrepareConfig(&no_ir_config);
     no_ir_config.SwitchIrOptim(false); 
     services::PredictorPool pred_pool2(no_ir_config, 1);
-    auto out_data2 = Inference(pred_pool2.Retrive(0), 0);
 
-    SummaryConfig(&config);
-    CompareVectors(out_data1, out_data2);
+    if (FLAGS_model_name == "ch_ppocr_mobile_v1.1_rec_infer"){
+      LOG(INFO) << "run ch_ppocr_mobile_v1.1_rec_infer model";
+      auto out_data1 = Inference<int64_t>(pred_pool.Retrive(0), 0);
+      auto out_data2 = Inference<int64_t>(pred_pool2.Retrive(0), 0);
+      SummaryConfig(&config);
+      CompareVectors(out_data1, out_data2);
+    } else {
+      auto out_data1 = Inference(pred_pool.Retrive(0), 0);
+      auto out_data2 = Inference(pred_pool2.Retrive(0), 0);
+      SummaryConfig(&config);
+      CompareVectors(out_data1, out_data2);
+    }
 }
 
 }  // namespace paddle_infer

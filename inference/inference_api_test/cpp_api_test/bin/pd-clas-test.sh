@@ -15,6 +15,9 @@ test_gpu(){
     fi
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
     accuracy=1e-5;
+    if [ $# -ge 6 ]; then
+        accuracy=$6
+    fi
     use_gpu=true;
 
     for batch_size in "1" "2" "4"
@@ -49,6 +52,15 @@ test_trt(){
     fi
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
     accuracy=1e-5;
+    if [ $# -ge 6 ]; then
+        accuracy=$6
+    fi
+
+    trt_min_subgraph_size=10;  # ch_ppocr_mobile_v1.1_rec_infer model need set to 10
+    if [ $# -ge 7 ]; then
+        trt_min_subgraph_size=$7
+    fi
+
     use_gpu=true;
     use_trt=true;
 
@@ -74,6 +86,7 @@ test_trt(){
                                 --use_trt=${use_trt} \
                                 --accuracy=${accuracy} \
                                 --trt_precision=${trt_precision} \
+                                --trt_min_subgraph_size=${trt_min_subgraph_size} \
                                 --gtest_output=xml:test_${model_name}_trt_${trt_precision}_${accuracy}_bz${batch_size}.xml
             python3.7 ${CASE_ROOT}/py_sed.py --input_file=test_${model_name}_trt_${trt_precision}_${accuracy}_bz${batch_size}.xml \
                                         --testsuite_old_name="test_pdclas_model"
@@ -144,7 +157,62 @@ main(){
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
              "3,300,300"
+    
+    seg_model="deeplabv3p \
+               fastscnn \
+               hrnet \
+               icnet \
+               pspnet \
+               unet"
 
+    for tests in ${seg_model}
+    do
+        test_gpu "test_clas_model" "${tests}" \
+                 ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
+                 ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
+                 "3,512,512" "1e-4"
+    
+        test_trt "test_clas_model" "${tests}" \
+                 ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
+                 ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
+                 "3,512,512" "1e-4"
+    done
+
+    # ch_ppocr_mobile_v1.1_cls_infer
+    model_case="ch_ppocr_mobile_v1.1_cls_infer"
+    test_gpu "test_clas_model" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,48,192"
+
+    test_trt "test_clas_model" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,48,192"
+    
+    # ch_ppocr_mobile_v1.1_det_infer
+    model_case="ch_ppocr_mobile_v1.1_det_infer"
+    test_gpu "test_clas_model" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,640,640"
+
+    test_trt "test_clas_model" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,640,640"
+    
+    # ch_ppocr_mobile_v1.1_rec_infer
+    model_case="ch_ppocr_mobile_v1.1_rec_infer"
+    test_gpu "test_clas_model" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,32,320"
+
+    test_trt "test_clas_model" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,32,320" "1e-5" "10"
 
     printf "${YELLOW} ==== finish benchmark ==== ${NC} \n"
 }

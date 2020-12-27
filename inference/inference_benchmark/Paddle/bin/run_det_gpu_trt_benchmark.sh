@@ -20,12 +20,15 @@ test_gpu(){
     do
         echo " "
         printf "start ${YELLOW} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
+
+        log_file="${LOG_ROOT}/${model_name}_gpu_bz${batch_size}_infer.log"
         $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
-                               --model_path=${model_path} \
-                               --params_path=${params_path} \
-                               --image_shape=${image_shape} \
-                               --batch_size=${batch_size} \
-                               --use_gpu=${use_gpu} 2>&1 | tee ${LOG_ROOT}/${model_name}_gpu_bz${batch_size}_infer.log
+            --model_path=${model_path} \
+            --params_path=${params_path} \
+            --image_shape=${image_shape} \
+            --batch_size=${batch_size} \
+            --use_gpu=${use_gpu} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
+
         printf "finish ${RED} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
         echo " "
     done                               
@@ -65,15 +68,18 @@ test_trt(){
         do
             echo " "
             printf "start ${YELLOW} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
+
+            log_file="${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log"
             $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
-                               --model_path=${model_path} \
-                               --params_path=${params_path} \
-                               --image_shape=${image_shape} \
-                               --batch_size=${batch_size} \
-                               --use_gpu=${use_gpu} \
-                               --trt_min_subgraph_size=${trt_min_subgraph_size} \
-                               --trt_precision=${trt_precision} \
-                               -use_trt=${use_trt} 2>&1 | tee ${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log
+                --model_path=${model_path} \
+                --params_path=${params_path} \
+                --image_shape=${image_shape} \
+                --batch_size=${batch_size} \
+                --use_gpu=${use_gpu} \
+                --trt_min_subgraph_size=${trt_min_subgraph_size} \
+                --trt_precision=${trt_precision} \
+                -use_trt=${use_trt} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
+
             printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
             echo " "
         done
@@ -95,7 +101,6 @@ main(){
                 ${model_root}/${tests}/__params__ \
                 "3,640,640"
 
-    
         test_trt "rcnn_benchmark" "${tests}" \
                  ${model_root}/${tests}/__model__ \
                  ${model_root}/${tests}/__params__ \

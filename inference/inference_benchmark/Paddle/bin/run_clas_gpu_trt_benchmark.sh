@@ -14,19 +14,21 @@ test_gpu(){
         image_shape=$5
     fi
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
-    accuracy=1e-5;
     use_gpu=true;
 
     for batch_size in "1" "2" "4"
     do
         echo " "
         printf "start ${YELLOW} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
+
+        log_file="${LOG_ROOT}/${model_name}_gpu_bz${batch_size}_infer.log"
         $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
-                               --model_path=${model_path} \
-                               --params_path=${params_path} \
-                               --image_shape=${image_shape} \
-                               --batch_size=${batch_size} \
-                               --use_gpu=${use_gpu} 2>&1 | tee ${LOG_ROOT}/${model_name}_gpu_bz${batch_size}_infer.log
+            --model_path=${model_path} \
+            --params_path=${params_path} \
+            --image_shape=${image_shape} \
+            --batch_size=${batch_size} \
+            --use_gpu=${use_gpu} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
+
         printf "finish ${RED} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
         echo " "
     done                               
@@ -44,9 +46,13 @@ test_trt(){
         image_shape=$5
     fi
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
-    accuracy=1e-5;
     use_gpu=true;
     use_trt=true;
+
+    trt_min_subgraph_size=10;  # ch_ppocr_mobile_v1.1_rec_infer model need set to 10
+    if [ $# -ge 6 ]; then
+        trt_min_subgraph_size=$6
+    fi
 
     # Tesla T4 can run fp16
     if [ "$gpu_type" == "T4" ]; then
@@ -61,14 +67,18 @@ test_trt(){
         do
             echo " "
             printf "start ${YELLOW} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
+
+            log_file="${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log"
             $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
-                               --model_path=${model_path} \
-                               --params_path=${params_path} \
-                               --image_shape=${image_shape} \
-                               --batch_size=${batch_size} \
-                               --use_gpu=${use_gpu} \
-                               --trt_precision=${trt_precision} \
-                               -use_trt=${use_trt} 2>&1 | tee ${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log
+                --model_path=${model_path} \
+                --params_path=${params_path} \
+                --image_shape=${image_shape} \
+                --batch_size=${batch_size} \
+                --use_gpu=${use_gpu} \
+                --trt_precision=${trt_precision} \
+                --trt_min_subgraph_size=${trt_min_subgraph_size} \
+                -use_trt=${use_trt} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
+
             printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
             echo " "
         done
@@ -136,7 +146,62 @@ main(){
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
              "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
              "3,300,300"
+    
+    seg_model="deeplabv3p \
+               fastscnn \
+               hrnet \
+               icnet \
+               pspnet \
+               unet"
 
+    for tests in ${seg_model}
+    do
+        test_gpu "clas_benchmark" "${tests}" \
+                 ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
+                 ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
+                 "3,512,512"
+    
+        test_trt "clas_benchmark" "${tests}" \
+                 ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
+                 ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
+                 "3,512,512"
+    done
+
+    # ch_ppocr_mobile_v1.1_cls_infer
+    model_case="ch_ppocr_mobile_v1.1_cls_infer"
+    test_gpu "clas_benchmark" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,48,192"
+
+    test_trt "clas_benchmark" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,48,192"
+    
+    # ch_ppocr_mobile_v1.1_det_infer
+    model_case="ch_ppocr_mobile_v1.1_det_infer"
+    test_gpu "clas_benchmark" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,640,640"
+
+    test_trt "clas_benchmark" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,640,640"
+    
+    # ch_ppocr_mobile_v1.1_rec_infer
+    model_case="ch_ppocr_mobile_v1.1_rec_infer"
+    test_gpu "clas_benchmark" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,32,320"
+
+    test_trt "clas_benchmark" "${model_case}" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+             "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+             "3,32,320" "10"
 
     printf "${YELLOW} ==== finish benchmark ==== ${NC} \n"
 }

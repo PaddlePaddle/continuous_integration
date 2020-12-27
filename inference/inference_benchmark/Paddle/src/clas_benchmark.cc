@@ -21,6 +21,7 @@
 
 namespace paddle_infer {
 
+template<typename T = float>
 double Inference(Predictor* pred, int tid) {
   // parse FLAGS_image_shape to vector
   std::vector<std::string> shape_strs;
@@ -56,7 +57,8 @@ double Inference(Predictor* pred, int tid) {
   for (size_t i = 0; i < FLAGS_warmup_times; ++i) {
     pred->Run();
     int out_num = 0;
-    std::vector<float> out_data;
+    // std::vector<float> out_data;
+    std::vector<T> out_data;
     auto out_names = pred->GetOutputNames();
     auto output_t = pred->GetOutputHandle(out_names[0]);
 
@@ -71,7 +73,8 @@ double Inference(Predictor* pred, int tid) {
 
   Timer pred_timer;  // init prediction timer
   int out_num = 0;
-  std::vector<float> out_data;
+  // std::vector<float> out_data;
+  std::vector<T> out_data;
 
   // main prediction process
   pred_timer.start();  // start timer
@@ -99,9 +102,14 @@ void RunDemo() {
 
   services::PredictorPool pred_pool(config, FLAGS_thread_num);
 
-  auto total_time = Inference(pred_pool.Retrive(0), 0);
-
-  SummaryConfig(&config, total_time);
+  if (FLAGS_model_name == "ch_ppocr_mobile_v1.1_rec_infer"){
+    LOG(INFO) << "run ch_ppocr_mobile_v1.1_rec_infer model";
+    auto total_time = Inference<int64_t>(pred_pool.Retrive(0), 0);
+    SummaryConfig(&config, total_time);
+  } else {
+    auto total_time = Inference(pred_pool.Retrive(0), 0);
+    SummaryConfig(&config, total_time);
+  }
 }
 
 }  // namespace paddle_infer

@@ -25,6 +25,18 @@ if [ ! -f PaddleDetection/infer_static/yolov3_darknet/__model__ ]; then
     tar -zxf PaddleDetection.tgz
 fi
 
+if [ ! -f PaddleOCR/ch_ppocr_mobile_v1.1_cls_infer/model ]; then
+    echo "==== Download PaddleOCR data and models ===="
+    wget --no-proxy -q https://sys-p0.bj.bcebos.com/Paddle-UnitTest-Model/PaddleOCR.tgz --no-check-certificate
+    tar -zxf PaddleOCR.tgz
+fi
+
+if [ ! -f PaddleSeg/infer_static/deeplabv3p/__model__ ]; then
+    echo "==== Download PaddleSeg data and models ===="
+    wget --no-proxy -q https://sys-p0.bj.bcebos.com/Paddle-UnitTest-Model/PaddleSeg.tgz --no-check-certificate
+    tar -zxf PaddleSeg.tgz
+fi
+
 cd -
 
 mkdir -p $LOG_ROOT

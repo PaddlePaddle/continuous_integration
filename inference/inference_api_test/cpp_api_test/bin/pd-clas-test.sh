@@ -56,7 +56,7 @@ test_trt(){
         accuracy=$6
     fi
 
-    trt_min_subgraph_size=10;  # ch_ppocr_mobile_v1.1_rec_infer model need set to 10
+    trt_min_subgraph_size=3;  # ch_ppocr_mobile_v1.1_rec_infer model need set to 10
     if [ $# -ge 7 ]; then
         trt_min_subgraph_size=$7
     fi
@@ -77,6 +77,12 @@ test_trt(){
         do
             echo " "
             printf "start ${YELLOW} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
+            if [ $trt_precision == "fp16" ]; then
+                accuracy=1e-3
+            else
+                accuracy=1e-5
+            fi
+            printf "${YELLOW} ${trt_precision} accuracy set to ${accuracy} ${NC}\n"
             $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
                                 --model_path=${model_path} \
                                 --params_path=${params_path} \

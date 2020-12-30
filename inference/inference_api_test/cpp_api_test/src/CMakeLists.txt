@@ -34,6 +34,8 @@ include_directories("${PADDLE_LIB}/third_party/boost")
 include_directories("${PADDLE_LIB}/third_party/eigen3")
 include_directories("${PADDLE_LIB}/paddle/include")
 include_directories("${PADDLE_LIB}/paddle")
+# include_directories("${CMAKE_CURRENT_BINARY_DIR}/..") # include .h
+# TODO: split .h and .cc
 
 link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}zlib/lib")
 link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}protobuf/lib")
@@ -88,8 +90,10 @@ set(DEPS ${DEPS}
 
 if(WITH_GPU)
     if (USE_TENSORRT)
-      set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer${CMAKE_STATIC_LIBRARY_SUFFIX})
-      set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer_plugin${CMAKE_STATIC_LIBRARY_SUFFIX})
+      # set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer${CMAKE_STATIC_LIBRARY_SUFFIX})
+      # set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer_plugin${CMAKE_STATIC_LIBRARY_SUFFIX})
+      set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer${CMAKE_SHARED_LIBRARY_SUFFIX})
+      set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer_plugin${CMAKE_SHARED_LIBRARY_SUFFIX})
     endif()
     set(DEPS ${DEPS} $ENV{CUDA_LIB})
 endif()
@@ -112,6 +116,10 @@ set(TestFiles "test_resnet50.cc";
               "test_ocr.cc";
               "test_text_classification.cc";
               "test_multi_thread.cc")
+set(NewApiFiles "test_clas_model.cc";
+                "test_yolo_model.cc";
+                "test_rcnn_model.cc";
+                "test_solo_model.cc")
 
 foreach(testsourcefile ${TestFiles})
   message("====> ${testsourcefile} will be compiled")
@@ -127,5 +135,20 @@ foreach(testsourcefile ${TestFiles})
   target_include_directories(${testname} PRIVATE ${gtest_src_dir})
   target_include_directories(${testname} PRIVATE ${gtest_lib_dir})
   target_link_libraries( ${testname} ${gtest_lib_dir}/libgtest.a)
-  
+endforeach()
+
+foreach(testsourcefile ${NewApiFiles})
+  message("====> ${testsourcefile} will be compiled")
+  # add executable for all test files
+  string(REPLACE ".cc" "" testname ${testsourcefile})
+  add_executable(${testname} ${testsourcefile})
+
+  # link libs
+  target_link_libraries(${testname} ${DEPS})
+  add_dependencies(${testname} thirdparty_gtest)
+
+  # link gtest
+  target_include_directories(${testname} PRIVATE ${gtest_src_dir})
+  target_include_directories(${testname} PRIVATE ${gtest_lib_dir})
+  target_link_libraries( ${testname} ${gtest_lib_dir}/libgtest.a)
 endforeach()

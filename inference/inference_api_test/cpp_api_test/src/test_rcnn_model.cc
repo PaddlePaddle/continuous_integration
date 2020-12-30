@@ -12,27 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <numeric>
-#include <iostream>
-#include <memory>
-#include <sstream>
-
-#include "./demo_helper.h"
+#include "./new_api_config.h"
 
 namespace paddle_infer {
 
-template<typename T = float>
-double Inference(Predictor* pred, int tid) {
-  // parse FLAGS_image_shape to vector
+std::vector<float> Inference(Predictor* pred, int tid) {
+// parse FLAGS_image_shape to vector
   std::vector<std::string> shape_strs;
   split(FLAGS_image_shape, ",", &shape_strs);
 
-  // int channels = 3;
-  int channels = static_cast<int>(std::stoi(shape_strs[0]));
-  // int height = 224;
-  int height = static_cast<int>(std::stoi(shape_strs[1]));
-  // int width = 224;
-  int width = static_cast<int>(std::stoi(shape_strs[2]));
+  int channels = static_cast<int>(std::stoi(shape_strs[0]));  // int channels = 3;
+  int height = static_cast<int>(std::stoi(shape_strs[1]));  // int height = 224;
+  int width = static_cast<int>(std::stoi(shape_strs[2]));  // int width = 224;
 
   int batch_size = FLAGS_batch_size;  // int batch_size = 1;
   int input_num = channels * height * width * batch_size;
@@ -47,37 +38,40 @@ double Inference(Predictor* pred, int tid) {
     in_data[i] = i % 10 * 0.1;
   }
 
-  // set inputs
+  int shape_num = batch_size * channels;
+  std::vector<float> shape_data(shape_num);
+  for (int i=0; i < batch_size; ++i){
+    shape_data[i] = 640;
+    shape_data[i + 1] = 640;
+    shape_data[i + 2] = 1;
+  }
+
+  std::vector<float> info_data(shape_num);
+  for (int i=0; i < batch_size; ++i) {
+    info_data[i] = 480;
+    info_data[i + 1] = 640;
+    info_data[i + 2] = 1;
+  }
+
   auto in_names = pred->GetInputNames();
+  // set inputs image, float32[?,3,640,640]
   auto input_t = pred->GetInputHandle(in_names[0]);
   input_t->Reshape({batch_size, channels, height, width});
   input_t->CopyFromCpu(in_data.data());
 
-  // warm-up
-  for (size_t i = 0; i < FLAGS_warmup_times; ++i) {
-    pred->Run();
-    int out_num = 0;
-    // std::vector<float> out_data;
-    std::vector<T> out_data;
-    auto out_names = pred->GetOutputNames();
-    auto output_t = pred->GetOutputHandle(out_names[0]);
+  // set image shape, float32[?,3]
+  auto shape_t = pred->GetInputHandle(in_names[1]);
+  shape_t->Reshape({batch_size, channels});
+  shape_t->CopyFromCpu(shape_data.data());
 
-    std::vector<int> output_shape = output_t->shape();
-    // retrive date to output vector
-    out_num = std::accumulate(output_shape.begin(),
-                              output_shape.end(), 1,
-                              std::multiplies<int>());
-    out_data.resize(out_num);
-    output_t->CopyToCpu(out_data.data());
-  }
+  // set image info, float32[?,3]
+  auto info_t = pred->GetInputHandle(in_names[2]);
+  info_t->Reshape({batch_size, channels});
+  info_t->CopyFromCpu(info_data.data());
 
-  Timer pred_timer;  // init prediction timer
   int out_num = 0;
-  // std::vector<float> out_data;
-  std::vector<T> out_data;
-
+  std::vector<float> out_data;
   // main prediction process
-  pred_timer.start();  // start timer
   for (size_t i = 0; i < FLAGS_repeats; ++i) {
     pred->Run();
     auto out_names = pred->GetOutputNames();
@@ -91,33 +85,34 @@ double Inference(Predictor* pred, int tid) {
     out_data.resize(out_num);
     output_t->CopyToCpu(out_data.data());
   }
-  pred_timer.stop();  // stop timer
 
-  return pred_timer.report();
+  return out_data;
 }
 
-void RunDemo() {
-  Config config;
-  PrepareConfig(&config);
+TEST(test_rcnn_model, ir_compare) {
+    // Test PaddleClas model
+    // ir optim compare
 
-  services::PredictorPool pred_pool(config, FLAGS_thread_num);
+    Config config;
+    PrepareConfig(&config);
+    services::PredictorPool pred_pool(config, 1);
+    auto out_data1 = Inference(pred_pool.Retrive(0), 0);
 
-  if (FLAGS_model_name == "ch_ppocr_mobile_v1.1_rec_infer"){
-    LOG(INFO) << "run ch_ppocr_mobile_v1.1_rec_infer model";
-    auto total_time = Inference<int64_t>(pred_pool.Retrive(0), 0);
-    SummaryConfig(&config, total_time);
-  } else {
-    auto total_time = Inference(pred_pool.Retrive(0), 0);
-    SummaryConfig(&config, total_time);
-  }
+    Config no_ir_config;
+    PrepareConfig(&no_ir_config);
+    no_ir_config.SwitchIrOptim(false); 
+    services::PredictorPool pred_pool2(no_ir_config, 1);
+    auto out_data2 = Inference(pred_pool2.Retrive(0), 0);
+
+    SummaryConfig(&config);
+    CompareVectors(out_data1, out_data2);
 }
 
 }  // namespace paddle_infer
 
 
-int main(int argc, char**argv) {
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
-  paddle_infer::RunDemo();
-  return 0;
+int main(int argc, char** argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    ::google::ParseCommandLineFlags(&argc, &argv, true);
+    return RUN_ALL_TESTS();
 }
-

@@ -17,29 +17,26 @@
 #include <memory>
 #include <sstream>
 
-#include "./demo_helper.h"
+#include "demo_helper.h"
 
 namespace paddle_infer {
 
-template<typename T = float>
 double Inference(Predictor* pred, int tid) {
-  // parse FLAGS_image_shape to vector
-  std::vector<std::string> shape_strs;
-  split(FLAGS_image_shape, ",", &shape_strs);
-
-  // int channels = 3;
-  int channels = static_cast<int>(std::stoi(shape_strs[0]));
-  // int height = 224;
-  int height = static_cast<int>(std::stoi(shape_strs[1]));
-  // int width = 224;
-  int width = static_cast<int>(std::stoi(shape_strs[2]));
-
-  int batch_size = FLAGS_batch_size;  // int batch_size = 1;
+  int channels = 3;
+  int height = 608;
+  int width = 608;
+  int batch_size = FLAGS_batch_size;
   int input_num = channels * height * width * batch_size;
-  LOG(INFO) << "batch_size: " << batch_size << "\t," \
-            << "channels: " << channels << "\t," \
-            << "height: " << height << "\t," \
-            << "width: " << width;
+
+  // init im_shape
+  int shape_num = 2 * batch_size;
+  // int *shape = new int[shape_num];
+  // memset(shape, height, shape_num * sizeof(int));
+  std::vector<int> shape(shape_num);
+  for (int i=0; i < batch_size; ++i) {
+    shape[i] = 608;
+    shape[i + 1] = 608;
+  }
 
   // prepare inputs
   std::vector<float> in_data(input_num);
@@ -48,36 +45,39 @@ double Inference(Predictor* pred, int tid) {
   }
 
   // set inputs
+  // image, float32[?,3,608,608]
   auto in_names = pred->GetInputNames();
   auto input_t = pred->GetInputHandle(in_names[0]);
   input_t->Reshape({batch_size, channels, height, width});
   input_t->CopyFromCpu(in_data.data());
 
+  // set input data shape
+  // im_size, int32[?,2]
+  auto shape_t = pred->GetInputHandle(in_names[1]);
+  shape_t->Reshape({batch_size, 2});
+  shape_t->CopyFromCpu(shape.data());
+
   // warm-up
   for (size_t i = 0; i < FLAGS_warmup_times; ++i) {
     pred->Run();
     int out_num = 0;
-    // std::vector<float> out_data;
-    std::vector<T> out_data;
+    std::vector<float> out_data;
     auto out_names = pred->GetOutputNames();
     auto output_t = pred->GetOutputHandle(out_names[0]);
 
     std::vector<int> output_shape = output_t->shape();
     // retrive date to output vector
-    out_num = std::accumulate(output_shape.begin(),
-                              output_shape.end(), 1,
-                              std::multiplies<int>());
+    out_num = std::accumulate(output_shape.begin(), output_shape.end(), 1, std::multiplies<int>());
     out_data.resize(out_num);
     output_t->CopyToCpu(out_data.data());
   }
 
-  Timer pred_timer;  // init prediction timer
+  Timer pred_timer; // init prediction timer
   int out_num = 0;
-  // std::vector<float> out_data;
-  std::vector<T> out_data;
+  std::vector<float> out_data;
 
   // main prediction process
-  pred_timer.start();  // start timer
+  pred_timer.start(); // start timer
   for (size_t i = 0; i < FLAGS_repeats; ++i) {
     pred->Run();
     auto out_names = pred->GetOutputNames();
@@ -85,13 +85,11 @@ double Inference(Predictor* pred, int tid) {
 
     std::vector<int> output_shape = output_t->shape();
     // retrive date to output vector
-    out_num = std::accumulate(output_shape.begin(),
-                              output_shape.end(), 1,
-                              std::multiplies<int>());
+    out_num = std::accumulate(output_shape.begin(), output_shape.end(), 1, std::multiplies<int>());
     out_data.resize(out_num);
     output_t->CopyToCpu(out_data.data());
   }
-  pred_timer.stop();  // stop timer
+  pred_timer.stop(); // stop timer
 
   return pred_timer.report();
 }
@@ -102,17 +100,12 @@ void RunDemo() {
 
   services::PredictorPool pred_pool(config, FLAGS_thread_num);
 
-  if (FLAGS_model_name == "ch_ppocr_mobile_v1.1_rec_infer"){
-    LOG(INFO) << "run ch_ppocr_mobile_v1.1_rec_infer model";
-    auto total_time = Inference<int64_t>(pred_pool.Retrive(0), 0);
-    SummaryConfig(&config, total_time);
-  } else {
-    auto total_time = Inference(pred_pool.Retrive(0), 0);
-    SummaryConfig(&config, total_time);
-  }
+  auto total_time = Inference(pred_pool.Retrive(0), 0);
+
+  SummaryConfig(&config, total_time);
 }
 
-}  // namespace paddle_infer
+} // namespace paddle_infer
 
 
 int main(int argc, char**argv) {

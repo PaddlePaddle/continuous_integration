@@ -12,20 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <numeric>
-#include <iostream>
-#include <memory>
-#include <sstream>
-
-#include "./demo_helper.h"
+#include "./new_api_config.h"
 
 namespace paddle_infer {
 
 template<typename T = float>
-double Inference(Predictor* pred, int tid) {
+std::vector<T> Inference(Predictor* pred, int tid) {
   // parse FLAGS_image_shape to vector
   std::vector<std::string> shape_strs;
-  split(FLAGS_image_shape, ",", &shape_strs);
+  split(FLAGS_image_shape, ",", &shape_strs, true);
 
   // int channels = 3;
   int channels = static_cast<int>(std::stoi(shape_strs[0]));
@@ -36,9 +31,9 @@ double Inference(Predictor* pred, int tid) {
 
   int batch_size = FLAGS_batch_size;  // int batch_size = 1;
   int input_num = channels * height * width * batch_size;
-  LOG(INFO) << "batch_size: " << batch_size << "\t," \
-            << "channels: " << channels << "\t," \
-            << "height: " << height << "\t," \
+  LOG(INFO) << "batch_size: " << batch_size << ",\t" \
+            << "channels: " << channels << ",\t" \
+            << "height: " << height << ",\t" \
             << "width: " << width;
 
   // prepare inputs
@@ -53,31 +48,9 @@ double Inference(Predictor* pred, int tid) {
   input_t->Reshape({batch_size, channels, height, width});
   input_t->CopyFromCpu(in_data.data());
 
-  // warm-up
-  for (size_t i = 0; i < FLAGS_warmup_times; ++i) {
-    pred->Run();
-    int out_num = 0;
-    // std::vector<float> out_data;
-    std::vector<T> out_data;
-    auto out_names = pred->GetOutputNames();
-    auto output_t = pred->GetOutputHandle(out_names[0]);
-
-    std::vector<int> output_shape = output_t->shape();
-    // retrive date to output vector
-    out_num = std::accumulate(output_shape.begin(),
-                              output_shape.end(), 1,
-                              std::multiplies<int>());
-    out_data.resize(out_num);
-    output_t->CopyToCpu(out_data.data());
-  }
-
-  Timer pred_timer;  // init prediction timer
   int out_num = 0;
-  // std::vector<float> out_data;
   std::vector<T> out_data;
-
   // main prediction process
-  pred_timer.start();  // start timer
   for (size_t i = 0; i < FLAGS_repeats; ++i) {
     pred->Run();
     auto out_names = pred->GetOutputNames();
@@ -91,33 +64,42 @@ double Inference(Predictor* pred, int tid) {
     out_data.resize(out_num);
     output_t->CopyToCpu(out_data.data());
   }
-  pred_timer.stop();  // stop timer
 
-  return pred_timer.report();
+  return out_data;
 }
 
-void RunDemo() {
-  Config config;
-  PrepareConfig(&config);
+TEST(test_pdclas_model, ir_compare) {
+    // Test PaddleClas model
+    // ir optim compare
 
-  services::PredictorPool pred_pool(config, FLAGS_thread_num);
+    Config config;
+    PrepareConfig(&config);
+    services::PredictorPool pred_pool(config, 1);
 
-  if (FLAGS_model_name == "ch_ppocr_mobile_v1.1_rec_infer"){
-    LOG(INFO) << "run ch_ppocr_mobile_v1.1_rec_infer model";
-    auto total_time = Inference<int64_t>(pred_pool.Retrive(0), 0);
-    SummaryConfig(&config, total_time);
-  } else {
-    auto total_time = Inference(pred_pool.Retrive(0), 0);
-    SummaryConfig(&config, total_time);
-  }
+    Config no_ir_config;
+    PrepareConfig(&no_ir_config);
+    no_ir_config.SwitchIrOptim(false); 
+    services::PredictorPool pred_pool2(no_ir_config, 1);
+
+    if (FLAGS_model_name == "ch_ppocr_mobile_v1.1_rec_infer"){
+      LOG(INFO) << "run ch_ppocr_mobile_v1.1_rec_infer model";
+      auto out_data1 = Inference<int64_t>(pred_pool.Retrive(0), 0);
+      auto out_data2 = Inference<int64_t>(pred_pool2.Retrive(0), 0);
+      SummaryConfig(&config);
+      CompareVectors(out_data1, out_data2);
+    } else {
+      auto out_data1 = Inference(pred_pool.Retrive(0), 0);
+      auto out_data2 = Inference(pred_pool2.Retrive(0), 0);
+      SummaryConfig(&config);
+      CompareVectors(out_data1, out_data2);
+    }
 }
 
 }  // namespace paddle_infer
 
 
-int main(int argc, char**argv) {
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
-  paddle_infer::RunDemo();
-  return 0;
+int main(int argc, char** argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    ::google::ParseCommandLineFlags(&argc, &argv, true);
+    return RUN_ALL_TESTS();
 }
-

@@ -11,16 +11,23 @@ export CASE_ROOT=$ROOT/bin
 export LOG_ROOT=$ROOT/log
 export gpu_type=`nvidia-smi -q | grep "Product Name" | head -n 1 | awk '{print $NF}'`
 
+model_type="static"
+if [ $# -ge 1 ]; then
+    model_type=$1
+fi
+export MODEL_TYPE=${model_type}
+
+
 mkdir -p $DATA_ROOT
 cd $DATA_ROOT
 if [ ! -f PaddleClas/infer_static/AlexNet/__model__ ]; then
-    echo "==== Download data and models ===="
+    echo "==== Download PaddleClas data and models ===="
     wget --no-proxy -q https://sys-p0.bj.bcebos.com/Paddle-UnitTest-Model/PaddleClas.tgz --no-check-certificate
     tar -zxf PaddleClas.tgz
 fi
 
 if [ ! -f PaddleDetection/infer_static/yolov3_darknet/__model__ ]; then
-    echo "==== Download data and models ===="
+    echo "==== Download PaddleDetection data and models ===="
     wget --no-proxy -q https://sys-p0.bj.bcebos.com/Paddle-UnitTest-Model/PaddleDetection.tgz --no-check-certificate
     tar -zxf PaddleDetection.tgz
 fi
@@ -41,5 +48,14 @@ cd -
 
 mkdir -p $LOG_ROOT
 
-bash $CASE_ROOT/run_clas_gpu_trt_benchmark.sh
-bash $CASE_ROOT/run_det_gpu_trt_benchmark.sh
+echo "==== run ${MODEL_TYPE} model benchmark ===="
+
+if [ "${MODEL_TYPE}" == "static" ]; then
+    bash $CASE_ROOT/run_clas_gpu_trt_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_static"
+    bash $CASE_ROOT/run_det_gpu_trt_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_static"
+elif [ "${MODEL_TYPE}" == "dy2static" ]; then
+    bash $CASE_ROOT/run_clas_gpu_trt_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_dygraph"
+    # bash $CASE_ROOT/run_dy2staic_det_gpu_trt_benchmark.sh
+fi
+
+

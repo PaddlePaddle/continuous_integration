@@ -119,7 +119,8 @@ set(TestFiles "test_resnet50.cc";
 set(NewApiFiles "test_clas_model.cc";
                 "test_yolo_model.cc";
                 "test_rcnn_model.cc";
-                "test_solo_model.cc")
+                "test_solo_model.cc";
+                "test_disable_trt.cc")
 
 foreach(testsourcefile ${TestFiles})
   message("====> ${testsourcefile} will be compiled")

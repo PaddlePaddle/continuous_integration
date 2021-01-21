@@ -131,7 +131,7 @@ void RunDemo() {
 
 
 int main(int argc, char**argv) {
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  ::GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
   paddle_infer::RunDemo();
   return 0;
 }

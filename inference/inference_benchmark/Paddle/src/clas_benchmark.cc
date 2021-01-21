@@ -13,9 +13,7 @@
 // limitations under the License.
 
 #include <numeric>
-#include <iostream>
 #include <memory>
-#include <sstream>
 
 #include "./demo_helper.h"
 
@@ -46,6 +44,10 @@ double Inference(Predictor* pred, int tid) {
   for (int i=0; i < input_num; ++i) {
     in_data[i] = i % 10 * 0.1;
   }
+
+  // LoadBinaryData("/workspace/inference/inference_benchmark/Paddle/Data/TestData/1.data");
+  // LoadBinaryData("/workspace/inference/inference_benchmark/Paddle/Data/TestData/324.data");
+  // LoadBinaryData("/workspace/inference/inference_benchmark/Paddle/Data/TestData/400.data");
 
   // set inputs
   auto in_names = pred->GetInputNames();
@@ -116,7 +118,7 @@ void RunDemo() {
 
 
 int main(int argc, char**argv) {
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  ::GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
   paddle_infer::RunDemo();
   return 0;
 }

@@ -16,9 +16,14 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <numeric>  // std::iota
+#include <algorithm>  // std::sort
 
-#include <gflags/gflags.h>
-#include <glog/logging.h>
+#include "gflags/gflags.h"
+#include "glog/logging.h"
 
 #include "paddle/include/paddle_inference_api.h"
 
@@ -31,10 +36,15 @@ DEFINE_string(trt_precision, "fp32",
               "tensorrt precision type, choice = ['fp32', 'fp16', 'int8']");
 DEFINE_string(image_shape, "3,224,224",
               "can only use for one input model(e.g. image classification)");
+DEFINE_string(binary_data_path, "./imagenet-eval-binary",
+              "input binary data path");
 
 DEFINE_bool(use_gpu, false, "use_gpu or not");
 DEFINE_bool(use_trt, false, "use trt or not");
-DEFINE_bool(use_mkldnn, false, "use mkldnn or not");
+DEFINE_bool(use_mkldnn_, false, "use mkldnn or not, \
+            use_mkldnn is internal gflags will conflict, \
+            named use_mkldnn_ instead");
+// DECLARE_bool(use_mkldnn);
 
 DEFINE_int32(thread_num, 1, "num of threads");
 DEFINE_int32(batch_size, 1, "batch size");
@@ -60,7 +70,7 @@ void PrepareConfig(paddle_infer::Config *config) {
   }
 
   if (FLAGS_use_gpu) {
-    config->EnableUseGpu(100, 0);
+    config->EnableUseGpu(500, 0);
     if (FLAGS_use_trt) {
       bool use_calib = (trt_precision_map[FLAGS_trt_precision] == paddle_infer::PrecisionType::kInt8);
       config->EnableTensorRtEngine(1 << 30,  // workspace_size
@@ -73,7 +83,7 @@ void PrepareConfig(paddle_infer::Config *config) {
   }else {
     config->DisableGpu();
     config->SetCpuMathLibraryNumThreads(FLAGS_cpu_math_library_num_threads);
-    if (FLAGS_use_mkldnn) {
+    if (FLAGS_use_mkldnn_) {
       config->EnableMKLDNN();
       LOG(INFO) << "mkldnn enabled";
     }
@@ -137,7 +147,6 @@ void SummaryConfig(paddle_infer::Config *config,
             << "QPS: " << (FLAGS_repeats * FLAGS_batch_size)/ (infer_time/1000);
 }
 
-
 static void split(const std::string &str, const char *sep,
                   std::vector<std::string> *pieces, bool ignore_null = true) {
   pieces->clear();
@@ -158,3 +167,26 @@ static void split(const std::string &str, const char *sep,
     pieces->push_back(str.substr(pos));
   }
 }
+
+
+void LoadBinaryData(const char *binary_file_name, 
+                    std::vector<float> in_data, int &label){
+    // read binary input file to input images and its label
+    LOG(INFO) << "input binary image path : " << binary_file_name;
+    int input_num = 3 * 224 * 224 * 1;
+    std::ifstream fs(binary_file_name, std::ifstream::binary);
+    if (!fs.is_open()) {
+      LOG(FATAL) << "open input file fail.";
+    }
+    for (int i = 0; i < in_data.size(); ++i) {
+      fs.read(reinterpret_cast<char*>(&in_data[i]), sizeof(in_data[i]));
+    }
+    LOG(INFO) << "before read, label is : " << label;
+    fs.read(reinterpret_cast<char*>(&label), sizeof(label));
+    fs.close();
+    for (int i=0; i < 5; ++i){
+      LOG(INFO) << "input : " << in_data[i]; 
+    }
+    LOG(INFO) << "after read, label is : " << label;
+}
+

@@ -52,7 +52,7 @@ echo "==== run ${MODEL_TYPE} model benchmark ===="
 
 if [ "${MODEL_TYPE}" == "static" ]; then
     bash $CASE_ROOT/run_clas_gpu_trt_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_static"
-    bash $CASE_ROOT/run_det_gpu_trt_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_static"
+    bash $CASE_ROOT/run_det_gpu_trt_benchmark.sh "${DATA_ROOT}/PaddleDetection/infer_static"
 elif [ "${MODEL_TYPE}" == "dy2static" ]; then
     bash $CASE_ROOT/run_clas_gpu_trt_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_dygraph"
     # bash $CASE_ROOT/run_dy2staic_det_gpu_trt_benchmark.sh

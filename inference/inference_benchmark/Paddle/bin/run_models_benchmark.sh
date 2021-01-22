@@ -15,7 +15,7 @@ model_type="static"
 if [ $# -ge 1 ]; then
     model_type=$1
 fi
-export MODEL_TYPE=${g}
+export MODEL_TYPE=${model_type}
 
 
 mkdir -p $DATA_ROOT

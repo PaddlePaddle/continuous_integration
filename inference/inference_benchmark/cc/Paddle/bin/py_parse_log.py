@@ -13,6 +13,7 @@ def parse_args():
                         help="benchmark log path")
     parser.add_argument("--output_name", type=str, default="benchmark_excel.xlsx",
                         help="output excel file name")
+    parser.add_argument("--process_trt", dest="process_trt", action='store_true')
     return parser.parse_args()
 
 
@@ -69,10 +70,51 @@ def process_log(file_name : str) -> dict:
                 output_dict["cpu_usage(%)"] = line_lists[pos_buf + 7].split(',')[0]
             if "total(MB):" in line_lists and "free(MB):" in line_lists:
                 pos_buf = line_lists.index("gpu_utilization_rate(%):")
-                output_dict["gpu_used(MB):"] = line_lists[pos_buf - 1].split(',')[0]
+                output_dict["gpu_used(MB)"] = line_lists[pos_buf - 1].split(',')[0]
                 output_dict["gpu_utilization_rate(%)"] = line_lists[pos_buf + 1].split(',')[0]
                 output_dict["gpu_mem_utilization_rate(%)"] = line_lists[pos_buf + 3].split(',')[0]
     return output_dict
+
+def compare_trt_perf(raw_df):
+    """
+    sperate raw dataframe to a list of dataframe
+    compare tensorrt percision performance
+    """
+    df_lists = []
+    precisions = []
+    precision_has_nan = False
+    for k,v in raw_df.groupby('trt_precision', dropna=False):
+        # fp16, fp32, int8, Nan
+        print(k)  # not use list generator here
+        precisions.append(k)
+        df_lists.append(v)
+        if pd.isnull(k):
+            precision_has_nan = True
+            new_df = v
+
+    # merge fp16, fp32, int8, Nan "trt_precision"
+    # new_df = df_lists[-1]
+    for i in range(len(df_lists)):
+        left_suffix = new_df["trt_precision"].unique()[0]
+        right_suffix = df_lists[i]["trt_precision"].unique()[0]
+        if not pd.isnull(right_suffix):
+            new_df = pd.merge(new_df, df_lists[i],  how='left',
+                              left_on=['model_name','batch_size'],
+                              right_on = ['model_name','batch_size'],
+                              suffixes=('', '_trt{}'.format(right_suffix)))
+        else:
+            pass
+
+    # calculate qps diff percentail
+    if "fp16" in precisions and "fp32" in precisions:
+        new_df["fp32_fp16_diff"] = new_df[["QPS_trtfp32", "QPS_trtfp16"]].apply(
+            lambda x:(float(x["QPS_trtfp16"]) - float(x["QPS_trtfp32"]))/float(x["QPS_trtfp32"]), axis=1)
+    if "fp32" in precisions and precision_has_nan:
+        new_df["fp32_gpu_diff"] = new_df[["QPS", "QPS_trtfp32"]].apply(
+            lambda x:(float(x["QPS_trtfp32"]) - float(x["QPS"]))/float(x["QPS"]), axis=1)
+
+    return new_df
+
 
 def main():
     """
@@ -89,7 +131,7 @@ def main():
                                       "Average_latency", "QPS",
                                       "cpu_rss(MB)", "cpu_vms(MB)",
                                       "cpu_shared(MB)", "cpu_dirty(MB)",
-                                      "cpu_usage(%)", "gpu_used(MB):",
+                                      "cpu_usage(%)", "gpu_used(MB)",
                                       "gpu_utilization_rate(%)",
                                       "gpu_mem_utilization_rate(%)"])
 
@@ -98,10 +140,15 @@ def main():
         dict_log = process_log(full_path)
         origin_df = origin_df.append(dict_log, ignore_index=True)
 
-    saved_df = origin_df.sort_values(by='model_name')
-    saved_df.to_excel(args.output_name)
-    print(saved_df)
+    raw_df = origin_df.sort_values(by='model_name')
+    raw_df.to_excel(args.output_name)
+    print(raw_df)
+    
+    if args.process_trt:
+        trt_df = compare_trt_perf(raw_df)
+        trt_df.to_excel("trt_res_{}".format(args.output_name))
+        print(trt_df)
+
 
 if __name__ == "__main__":
     main()
-

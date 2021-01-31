@@ -112,6 +112,9 @@ def compare_trt_perf(raw_df):
     if "fp32" in precisions and precision_has_nan:
         new_df["fp32_gpu_diff"] = new_df[["QPS", "QPS_trtfp32"]].apply(
             lambda x:(float(x["QPS_trtfp32"]) - float(x["QPS"]))/float(x["QPS"]), axis=1)
+    if "fp16" in precisions and "int8" in precisions:
+        new_df["fp16_int8_diff"] = new_df[["QPS_trtfp16", "QPS_trtint8"]].apply(
+            lambda x:(float(x["QPS_trtint8"]) - float(x["QPS_trtfp16"]))/float(x["QPS_trtfp16"]), axis=1)
 
     return new_df
 

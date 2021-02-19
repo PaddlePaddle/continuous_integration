@@ -1,27 +1,29 @@
 #!/bin/bash
 
 project_path=$(cd "$(dirname "$0")";pwd)
+echo -e "\033[33m project_path is : ${project_path} \033[0m"
+cd ${project_path}
 
 if [ -d "Data" ];then rm -rf Data
 fi
 mkdir -p ./Data
 cd ./Data
 # download models
-wget -q https://sys-p0.bj.bcebos.com/inference/python-infer.tgz --no-check-certificate
+wget --no-proxy -q https://sys-p0.bj.bcebos.com/inference/python-infer.tgz --no-check-certificate
 tar -xvf python-infer.tgz
-wget -q https://sys-p0.bj.bcebos.com/inference/python-model-infer.tgz --no-check-certificate
+wget --no-proxy -q https://sys-p0.bj.bcebos.com/inference/python-model-infer.tgz --no-check-certificate
 tar -xvf python-model-infer.tgz
 
 # download ocr models
-wget -q https://sys-p0.bj.bcebos.com/inference/python-ocr-infer.tgz --no-check-certificate
+wget --no-proxy -q https://sys-p0.bj.bcebos.com/inference/python-ocr-infer.tgz --no-check-certificate
 tar -xvf python-ocr-infer.tgz
 
 # download hub-ernie models
-wget -q https://sys-p0.bj.bcebos.com/inference/python-hub-ernie.tgz --no-check-certificate
+wget --no-proxy -q https://sys-p0.bj.bcebos.com/inference/python-hub-ernie.tgz --no-check-certificate
 tar -xvf python-hub-ernie.tgz
 
 # download paddle-slim models
-wget -q https://sys-p0.bj.bcebos.com/inference/python-slim-infer.tgz --no-check-certificate
+wget --no-proxy -q https://sys-p0.bj.bcebos.com/inference/python-slim-infer.tgz --no-check-certificate
 tar -xvf python-slim-infer.tgz
 cd -
 

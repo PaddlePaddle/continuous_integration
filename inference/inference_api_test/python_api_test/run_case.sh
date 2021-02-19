@@ -112,8 +112,8 @@ mkdir result
 
 for config in "cpu" "gpu" "mkldnn" "trt_fp32"
 do
-    cd ${config}
-    echo -e "\033[33m start ${config} tests, cd test_path(${project_path}/${config}) \033[0m"
+    cd ${project_path}/tests/${config}
+    echo -e "\033[33m start ${config} tests, cd test_path(${project_path}/tests/${config}) \033[0m"
     for file in ${ModelCase[${config}]}
     do
         echo " "

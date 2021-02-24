@@ -18,6 +18,7 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
@@ -31,6 +32,7 @@ class TestSeResnext50InferenceCPU(TestModelInferenceCPU):
     Return:
     """
 
+    @pytest.mark.p0
     def test_inference_seresnext50_cpu(self):
         """
         Inference and check value

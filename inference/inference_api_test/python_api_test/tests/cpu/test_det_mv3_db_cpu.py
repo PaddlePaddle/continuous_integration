@@ -18,6 +18,7 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
@@ -37,6 +38,7 @@ class TestDetMv3DbInferenceCPU(TestModelInferenceCPU):
         project_path = os.environ.get("project_path")
         self.model_root = os.path.join(project_path, "Data")
 
+    @pytest.mark.p0
     def test_inference_det_mv3_db_cpu(self):
         """
         Inference and check value

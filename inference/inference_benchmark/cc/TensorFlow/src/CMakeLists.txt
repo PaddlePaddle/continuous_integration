@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 find_package(TensorflowCC REQUIRED)
 
+#include(FindProtobuf)
+#find_package(Protobuf REQUIRED)
+#include_directories(${PROTOBUF_INCLUDE_DIR})
+
 include(external-cmake/gflag.cmake)
 include(external-cmake/glog.cmake)
 
@@ -12,7 +16,9 @@ link_directories(${CMAKE_BINARY_DIR}/3rdparty/gflag-2.2.2/lib)
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
 
-set(EXTERNAL_LIB "-lrt -ldl -lprotobuf")
+#set(EXTERNAL_LIB "-lrt -ldl -lprotobuf")
+#set(EXTERNAL_LIB "-lrt -ldl -lpthread")
+#set(EXTERNAL_LIB protobuf ${EXTERNAL_LIB})
 
 add_executable(clas_benchmark clas_benchmark.cc)
 add_dependencies(clas_benchmark glog gflag-2.2.2)

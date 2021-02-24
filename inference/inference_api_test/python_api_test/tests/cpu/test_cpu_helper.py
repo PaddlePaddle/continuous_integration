@@ -18,6 +18,7 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
@@ -54,10 +55,9 @@ class TestModelInferenceCPU(object):
             None
         """
         logger.info("current comparison delta is : {0}".format(delta))
-        nose.tools.assert_equal(
-            len(expect), len(result), msg="output length not equal")
+        assert len(result) == pytest.approx(expect, delta), "output length not equal"
         for i in range(0, len(expect)):
-            nose.tools.assert_almost_equal(expect[i], result[i], delta=delta)
+            assert result[i] == pytest.approx(expect[i], delta), "output length not equal"
 
     def get_infer_results(self, model_path, data_path):
         """
@@ -80,6 +80,6 @@ class TestModelInferenceCPU(object):
         exp, ave_time = NativePredictor.native_predict(data_path)
         logger.info(ave_time)
 
-        nose.tools.assert_equal(
-            len(exp), len(res), msg="num of output tensor not equal")
+        assert len(res) == pytest.approx(exp), "num of output tensor not equal"
+
         return res, exp

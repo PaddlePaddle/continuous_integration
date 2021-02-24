@@ -37,12 +37,12 @@ class TestModelInferenceCPU(object):
     Return:
     """
 
-    def __init__(self):
+    def __init__(self, data_path="Data/python-model-infer"):
         """
         __init__
         """
         project_path = os.environ.get("project_path")
-        self.model_root = os.path.join(project_path, "Data/python-model-infer")
+        self.model_root = os.path.join(project_path, data_path)
 
     def check_data(self, result, expect, delta):
         """

@@ -24,31 +24,25 @@ import numpy as np
 
 from test_cpu_helper import TestModelInferenceCPU
 
+TestBase = TestModelInferenceCPU()
 
-class TestXception41InferenceCPU(TestModelInferenceCPU):
+@pytest.mark.p0
+def test_inference_xception41_cpu(TestBase):
     """
-    TestModelInferenceCPU
+    Inference and check value
+    xception41 cpu model
     Args:
+        None
     Return:
+        None
     """
+    model_name = "Xception_41_pretrained"
+    tmp_path = os.path.join(TestBase.model_root, "classification")
+    model_path = os.path.join(tmp_path, model_name, "model")
+    data_path = os.path.join(tmp_path, model_name, "data/data.json")
+    delta = 0.0001
 
-    @pytest.mark.p0
-    def test_inference_xception41_cpu(self):
-        """
-        Inference and check value
-        xception41 cpu model
-        Args:
-            None
-        Return:
-            None
-        """
-        model_name = "Xception_41_pretrained"
-        tmp_path = os.path.join(self.model_root, "classification")
-        model_path = os.path.join(tmp_path, model_name, "model")
-        data_path = os.path.join(tmp_path, model_name, "data/data.json")
-        delta = 0.0001
+    res, exp = TestBase.get_infer_results(model_path, data_path)
 
-        res, exp = self.get_infer_results(model_path, data_path)
-
-        for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+    for i in range(len(res)):
+        TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)

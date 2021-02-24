@@ -24,16 +24,7 @@ import numpy as np
 
 from test_cpu_helper import TestModelInferenceCPU
 
-
-# class TestBlazeFaceInferenceCPU(TestModelInferenceCPU):
-#     """
-#     TestModelInferenceCPU
-#     Args:
-#     Returns:
-#     """
-
 TestBase = TestModelInferenceCPU()
-
 
 @pytest.mark.p0
 def test_inference_blazeface_cpu():

@@ -80,6 +80,6 @@ class TestModelInferenceCPU(object):
         exp, ave_time = NativePredictor.native_predict(data_path)
         logger.info(ave_time)
 
-        assert len(res) == pytest.approx(exp), "num of output tensor not equal"
+        assert len(res) == pytest.approx(len(exp)), "num of output tensor not equal"
 
         return res, exp

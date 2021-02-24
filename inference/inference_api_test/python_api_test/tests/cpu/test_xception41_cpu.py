@@ -27,7 +27,7 @@ from test_cpu_helper import TestModelInferenceCPU
 TestBase = TestModelInferenceCPU()
 
 @pytest.mark.p0
-def test_inference_xception41_cpu(TestBase):
+def test_inference_xception41_cpu():
     """
     Inference and check value
     xception41 cpu model

@@ -55,7 +55,7 @@ class TestModelInferenceCPU(object):
             None
         """
         logger.info("current comparison delta is : {0}".format(delta))
-        assert len(result) == pytest.approx(expect, delta), "output length not equal"
+        assert len(result) == pytest.approx(len(expect)), "output length not equal"
         for i in range(0, len(expect)):
             assert result[i] == pytest.approx(expect[i], delta), "output length not equal"
 

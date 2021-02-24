@@ -25,30 +25,33 @@ import numpy as np
 from test_cpu_helper import TestModelInferenceCPU
 
 
-class TestBlazeFaceInferenceCPU(TestModelInferenceCPU):
+# class TestBlazeFaceInferenceCPU(TestModelInferenceCPU):
+#     """
+#     TestModelInferenceCPU
+#     Args:
+#     Returns:
+#     """
+
+TestBase = TestModelInferenceCPU()
+
+
+@pytest.mark.p0
+def test_inference_blazeface_cpu():
     """
-    TestModelInferenceCPU
+    Inference and check value
+    blazeface cpu model
     Args:
+        None
     Returns:
+        None
     """
+    model_name = "blazeface_nas_128"
+    tmp_path = os.path.join(TestBase.model_root, "Detection")
+    model_path = os.path.join(tmp_path, model_name, "model")
+    data_path = os.path.join(tmp_path, model_name, "data/data.json")
+    delta = 0.0001
 
-    @pytest.mark.p0
-    def test_inference_blazeface_cpu(self):
-        """
-        Inference and check value
-        blazeface cpu model
-        Args:
-            None
-        Returns:
-            None
-        """
-        model_name = "blazeface_nas_128"
-        tmp_path = os.path.join(self.model_root, "Detection")
-        model_path = os.path.join(tmp_path, model_name, "model")
-        data_path = os.path.join(tmp_path, model_name, "data/data.json")
-        delta = 0.0001
+    res, exp = TestBase.get_infer_results(model_path, data_path)
 
-        res, exp = self.get_infer_results(model_path, data_path)
-
-        for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+    for i in range(len(res)):
+        TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)

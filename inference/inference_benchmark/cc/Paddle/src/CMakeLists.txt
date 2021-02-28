@@ -80,12 +80,13 @@ else()
 endif()
 
 # Note: libpaddle_inference_api.so/a must put before libpaddle_fluid.so/a
+# Note: libpaddle_fluid.so/a has been changed to libpaddle_inference.so/a after Paddle 2.0.1
 if(WITH_STATIC_LIB)
   set(DEPS
-      ${PADDLE_LIB}/paddle/lib/libpaddle_fluid${CMAKE_STATIC_LIBRARY_SUFFIX})
+      ${PADDLE_LIB}/paddle/lib/libpaddle_inference${CMAKE_STATIC_LIBRARY_SUFFIX})
 else()
   set(DEPS
-      ${PADDLE_LIB}/paddle/lib/libpaddle_fluid${CMAKE_SHARED_LIBRARY_SUFFIX})
+      ${PADDLE_LIB}/paddle/lib/libpaddle_inference${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
 
 set(EXTERNAL_LIB "-lrt -ldl -lpthread")

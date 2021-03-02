@@ -110,7 +110,7 @@ fi
 result_path="${project_path}/tests/result"
 mkdir result
 
-for config in "cpu" "gpu" "mkldnn" "trt_fp32"
+for config in "gpu" "mkldnn" "trt_fp32"
 do
     cd ${project_path}/tests/${config}
     echo -e "\033[33m start ${config} tests, cd test_path(${project_path}/tests/${config}) \033[0m"
@@ -120,6 +120,23 @@ do
         echo " "
         echo -e "\033[33m ====> ${file} case start \033[0m"
         python -m nose -s -v --with-xunit --xunit-file=${result_path}/${file}.xml ${file}.py
+        echo -e "\033[33m ====> ${file} case finish \033[0m"
+        echo " "
+    done
+    echo -e "\033[33m finish ${config} tests, return parent dirs \033[0m"
+    cd - # back tests
+done
+
+for config in "cpu"
+do
+    cd ${project_path}/tests/${config}
+    echo -e "\033[33m start ${config} tests, cd test_path(${project_path}/tests/${config}) \033[0m"
+    python -c 'import platform; print("current python version : ", platform.python_version())'
+    for file in ${ModelCase[${config}]}
+    do
+        echo " "
+        echo -e "\033[33m ====> ${file} case start \033[0m"
+        python -m pytest ${file}.py --junit-xml=${result_path}/${file}.xml
         echo -e "\033[33m ====> ${file} case finish \033[0m"
         echo " "
     done

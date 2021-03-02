@@ -18,6 +18,7 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
@@ -36,12 +37,12 @@ class TestModelInferenceCPU(object):
     Return:
     """
 
-    def __init__(self):
+    def __init__(self, data_path="Data/python-model-infer"):
         """
         __init__
         """
         project_path = os.environ.get("project_path")
-        self.model_root = os.path.join(project_path, "Data/python-model-infer")
+        self.model_root = os.path.join(project_path, data_path)
 
     def check_data(self, result, expect, delta):
         """
@@ -54,10 +55,9 @@ class TestModelInferenceCPU(object):
             None
         """
         logger.info("current comparison delta is : {0}".format(delta))
-        nose.tools.assert_equal(
-            len(expect), len(result), msg="output length not equal")
+        assert len(result) == pytest.approx(len(expect)), "output length not equal"
         for i in range(0, len(expect)):
-            nose.tools.assert_almost_equal(expect[i], result[i], delta=delta)
+            assert result[i] == pytest.approx(expect[i], rel=None, abs=delta), "output data not equal"
 
     def get_infer_results(self, model_path, data_path):
         """
@@ -75,11 +75,11 @@ class TestModelInferenceCPU(object):
         res, ave_time = AnalysisPredictor.analysis_predict(data_path, repeats=2)
         logger.info(ave_time)
 
-        NativePredictor = Predictor(
-            model_path, predictor_mode="Native", config_type="cpu")
-        exp, ave_time = NativePredictor.native_predict(data_path)
+        NoIrPredictor = Predictor(
+            model_path, predictor_mode="Analysis", config_type="cpu_no_ir")
+        exp, ave_time = NoIrPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
-        nose.tools.assert_equal(
-            len(exp), len(res), msg="num of output tensor not equal")
+        assert len(res) == pytest.approx(len(exp)), "num of output tensor not equal"
+
         return res, exp

@@ -122,7 +122,7 @@ void DynamicShsapeConfig(Config *config) {
           {input_names[0], max_shape},
           {input_names[1], max_shape},
           {input_names[2], max_shape},
-          {input_names[3], {1, 128, 1}},
+          {input_names[3], {static_cast<int>(FLAGS_batch_size), 128, 1}},
   };
   const std::map<std::string, std::vector<int>> opt_input_shape = {
           {input_names[0], opt_shape},

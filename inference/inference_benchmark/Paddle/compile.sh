@@ -48,7 +48,6 @@ cmake ../src -DPADDLE_LIB=${LIB_DIR} \
              -DWITH_GPU=${WITH_GPU} \
              -DWITH_STATIC_LIB=OFF \
              -DUSE_TENSORRT=${USE_TENSORRT} \
-             -DCUDNN_LIB=${CUDNN_LIB} \
              -DCUDA_LIB=${CUDA_LIB} \
              -DTENSORRT_ROOT=${TENSORRT_ROOT}
 

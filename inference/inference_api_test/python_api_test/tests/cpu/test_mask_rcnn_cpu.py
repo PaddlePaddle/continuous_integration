@@ -27,7 +27,7 @@ from test_cpu_helper import TestModelInferenceCPU
 TestBase = TestModelInferenceCPU()
 
 @pytest.mark.p0
-def test_inference_mask_rcnn_cpu(self):
+def test_inference_mask_rcnn_cpu():
     """
     Inference and check value
     mask_rcnn cpu model

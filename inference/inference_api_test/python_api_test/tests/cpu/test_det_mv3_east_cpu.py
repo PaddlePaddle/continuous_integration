@@ -27,7 +27,7 @@ from test_cpu_helper import TestModelInferenceCPU
 TestBase = TestModelInferenceCPU(data_path="Data")
 
 @pytest.mark.p0
-def test_inference_det_mv3_east_cpu(self):
+def test_inference_det_mv3_east_cpu():
     """
     Inference and check value
     det_mv3_east cpu model
@@ -46,3 +46,36 @@ def test_inference_det_mv3_east_cpu(self):
 
     for i in range(len(res)):
         TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)
+
+# class TestDetMv3EastInferenceCPU(TestModelInferenceCPU):
+#     """
+#     TestModelInferenceCPU
+#     Args:
+#     Return:
+#     """
+
+#     def __init__(self):
+#         """__init__
+#         """
+#         project_path = os.environ.get("project_path")
+#         self.model_root = os.path.join(project_path, "Data")
+
+#     def test_inference_det_mv3_east_cpu(self):
+#         """
+#         Inference and check value
+#         det_mv3_east cpu model
+#         Args:
+#             None
+#         Returns:
+#             None
+#         """
+#         model_name = "det_mv3_east"
+#         tmp_path = os.path.join(self.model_root, "python-ocr-infer")
+#         model_path = os.path.join(tmp_path, model_name)
+#         data_path = os.path.join(tmp_path, "word_det_data", "data.json")
+#         delta = 0.001
+
+#         res, exp = self.get_infer_results(model_path, data_path)
+
+#         for i in range(len(res)):
+#             self.check_data(res[i].flatten(), exp[i].flatten(), delta)

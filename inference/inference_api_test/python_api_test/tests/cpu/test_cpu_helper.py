@@ -57,7 +57,7 @@ class TestModelInferenceCPU(object):
         logger.info("current comparison delta is : {0}".format(delta))
         assert len(result) == pytest.approx(len(expect)), "output length not equal"
         for i in range(0, len(expect)):
-            assert result[i] == pytest.approx(expect[i], delta), "output length not equal"
+            assert result[i] == pytest.approx(expect[i], rel=None, abs=delta), "output data not equal"
 
     def get_infer_results(self, model_path, data_path):
         """
@@ -75,9 +75,9 @@ class TestModelInferenceCPU(object):
         res, ave_time = AnalysisPredictor.analysis_predict(data_path, repeats=2)
         logger.info(ave_time)
 
-        NativePredictor = Predictor(
-            model_path, predictor_mode="Native", config_type="cpu")
-        exp, ave_time = NativePredictor.native_predict(data_path)
+        NoIrPredictor = Predictor(
+            model_path, predictor_mode="Analysis", config_type="cpu_no_ir")
+        exp, ave_time = NoIrPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
         assert len(res) == pytest.approx(len(exp)), "num of output tensor not equal"

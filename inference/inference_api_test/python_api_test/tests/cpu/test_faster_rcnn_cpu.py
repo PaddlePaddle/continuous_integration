@@ -27,7 +27,7 @@ from test_cpu_helper import TestModelInferenceCPU
 TestBase = TestModelInferenceCPU()
 
 @pytest.mark.p0
-def test_inference_faster_rcnn_cpu(self):
+def test_inference_faster_rcnn_cpu():
     """
     Inference and check value
     faster_rcnn cpu model

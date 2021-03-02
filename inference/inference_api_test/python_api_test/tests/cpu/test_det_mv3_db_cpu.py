@@ -27,7 +27,7 @@ from test_cpu_helper import TestModelInferenceCPU
 TestBase = TestModelInferenceCPU(data_path="Data")
 
 @pytest.mark.p0
-def test_inference_det_mv3_db_cpu(self):
+def test_inference_det_mv3_db_cpu():
     """
     Inference and check value
     det_mv3_db cpu model

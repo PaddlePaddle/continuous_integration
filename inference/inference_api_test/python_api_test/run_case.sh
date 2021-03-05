@@ -110,7 +110,7 @@ fi
 result_path="${project_path}/tests/result"
 mkdir result
 
-for config in "gpu" "mkldnn" "trt_fp32"
+for config in "gpu" "trt_fp32"
 do
     cd ${project_path}/tests/${config}
     echo -e "\033[33m start ${config} tests, cd test_path(${project_path}/tests/${config}) \033[0m"
@@ -127,7 +127,7 @@ do
     cd - # back tests
 done
 
-for config in "cpu"
+for config in "cpu" "mkldnn" 
 do
     cd ${project_path}/tests/${config}
     echo -e "\033[33m start ${config} tests, cd test_path(${project_path}/tests/${config}) \033[0m"

@@ -19,41 +19,32 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
 from test_mkldnn_helper import TestModelInferenceMKLDNN
 
+TestBase = TestModelInferenceMKLDNN(data_path="Data")
 
-class TestHubErnieInferenceMKLDNN(TestModelInferenceMKLDNN):
+@pytest.mark.p0
+def test_inference_hub_ernie_mkldnn():
     """
-    TestHubErnieInferenceMKLDNN
+    Inference and check value
+    hub_ernie mkldnn model
     Args:
+        None
     Return:
+        None
     """
+    model_name = "hub-ernie"
+    tmp_path = os.path.join(TestBase.model_root, model_name)
+    model_path = os.path.join(tmp_path, "hub-ernie-model")
+    data_path = os.path.join(tmp_path, "hub-ernie-data", "data.json")
+    delta = 0.0001
 
-    def __init__(self):
-        """__init__
-        """
-        project_path = os.environ.get("project_path")
-        self.model_root = os.path.join(project_path, "Data")
+    res, exp = TestBase.get_infer_results(model_path, data_path)
 
-    def test_inference_hub_ernie_mkldnn(self):
-        """
-        Inference and check value
-        hub_ernie mkldnn model
-        Args:
-            None
-        Return:
-            None
-        """
-        model_name = "hub-ernie"
-        tmp_path = os.path.join(self.model_root, model_name)
-        model_path = os.path.join(tmp_path, "hub-ernie-model")
-        data_path = os.path.join(tmp_path, "hub-ernie-data", "data.json")
-        delta = 0.0001
+    for i in range(len(res)):
+        TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)
 
-        res, exp = self.get_infer_results(model_path, data_path)
-
-        for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten(), delta)

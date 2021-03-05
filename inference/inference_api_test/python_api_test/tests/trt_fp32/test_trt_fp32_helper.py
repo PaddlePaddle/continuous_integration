@@ -18,6 +18,7 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
@@ -36,12 +37,14 @@ class TestModelInferenceTrtFp32(object):
     Returns:
     """
 
-    def __init__(self):
+    def __init__(self,
+                 data_path="Data/python-model-infer",
+                 trt_dynamic_shape_info=None):
         """__init__
         """
         project_path = os.environ.get("project_path")
-        self.model_root = os.path.join(project_path, "Data/python-model-infer")
-        self.trt_dynamic_shape_info = None
+        self.model_root = os.path.join(project_path, data_path)
+        self.trt_dynamic_shape_info = trt_dynamic_shape_info
 
     def check_data(self, result, expect, delta):
         """
@@ -54,10 +57,11 @@ class TestModelInferenceTrtFp32(object):
             None
         """
         logger.info("current comparison delta is : {0}".format(delta))
-        nose.tools.assert_equal(
-            len(expect), len(result), msg="output length not equal")
+        assert len(result) == pytest.approx(len(
+            expect)), "output length not equal"
         for i in range(0, len(expect)):
-            nose.tools.assert_almost_equal(expect[i], result[i], delta=delta)
+            assert result[i] == pytest.approx(
+                expect[i], rel=None, abs=delta), "output data not equal"
 
     def get_infer_results(self, model_path, data_path, min_subgraph_size=3):
         """
@@ -87,6 +91,7 @@ class TestModelInferenceTrtFp32(object):
         exp, ave_time = NoIrPredictor.analysis_predict(data_path)
         logger.info(ave_time)
 
-        nose.tools.assert_equal(
-            len(exp), len(res), msg="num of output tensor not equal")
+        assert len(res) == pytest.approx(len(
+            exp)), "num of output tensor not equal"
+
         return res, exp

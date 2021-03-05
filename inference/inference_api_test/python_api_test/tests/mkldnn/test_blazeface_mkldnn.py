@@ -18,35 +18,31 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
 from test_mkldnn_helper import TestModelInferenceMKLDNN
 
+TestBase = TestModelInferenceMKLDNN()
 
-class TestBlazeFaceInferenceMKLDNN(TestModelInferenceMKLDNN):
+@pytest.mark.p0
+def test_inference_blazeface_mkldnn():
     """
-    TestModelInferenceMKLDNN
+    Inference and check value
+    blazeface mkldnn model
     Args:
+        None
     Return:
+        None
     """
+    model_name = "blazeface_nas_128"
+    tmp_path = os.path.join(TestModelInferenceMKLDNN.model_root, "Detection")
+    model_path = os.path.join(tmp_path, model_name, "model")
+    data_path = os.path.join(tmp_path, model_name, "data/data.json")
+    delta = 0.0001
 
-    def test_inference_blazeface_mkldnn(self):
-        """
-        Inference and check value
-        blazeface mkldnn model
-        Args:
-            None
-        Return:
-            None
-        """
-        model_name = "blazeface_nas_128"
-        tmp_path = os.path.join(self.model_root, "Detection")
-        model_path = os.path.join(tmp_path, model_name, "model")
-        data_path = os.path.join(tmp_path, model_name, "data/data.json")
-        delta = 0.0001
+    res, exp = TestModelInferenceMKLDNN.get_infer_results(model_path, data_path)
 
-        res, exp = self.get_infer_results(model_path, data_path)
-
-        for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+    for i in range(len(res)):
+        TestModelInferenceMKLDNN.check_data(res[i].flatten(), exp[i].flatten(), delta)

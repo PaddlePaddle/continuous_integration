@@ -37,12 +37,12 @@ def test_inference_blazeface_mkldnn():
         None
     """
     model_name = "blazeface_nas_128"
-    tmp_path = os.path.join(TestModelInferenceMKLDNN.model_root, "Detection")
+    tmp_path = os.path.join(TestBase.model_root, "Detection")
     model_path = os.path.join(tmp_path, model_name, "model")
     data_path = os.path.join(tmp_path, model_name, "data/data.json")
     delta = 0.0001
 
-    res, exp = TestModelInferenceMKLDNN.get_infer_results(model_path, data_path)
+    res, exp = TestBase.get_infer_results(model_path, data_path)
 
     for i in range(len(res)):
-        TestModelInferenceMKLDNN.check_data(res[i].flatten(), exp[i].flatten(), delta)
+        TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)

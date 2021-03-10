@@ -19,6 +19,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iterator>
 #include <numeric>  // std::iota
 #include <algorithm>  // std::sort
 
@@ -37,7 +38,11 @@ DEFINE_string(trt_precision, "fp32",
 DEFINE_string(image_shape, "3,224,224",
               "can only use for one input model(e.g. image classification)");
 DEFINE_string(binary_data_path, "./imagenet-eval-binary",
-              "input binary data path");
+              "input binary data path, not compulsory");
+DEFINE_string(txt_image_path, "./Data/faster_rcnn_r50_fpn_1x_coco_image.txt",
+              "input txt data path, not compulsory");
+DEFINE_string(txt_image_shape_path, "./Data/faster_rcnn_r50_fpn_1x_coco_image_shape.txt",
+              "input txt image shape, not compulsory");
 
 DEFINE_bool(use_gpu, false, "use_gpu or not");
 DEFINE_bool(use_trt, false, "use trt or not");
@@ -189,4 +194,33 @@ void LoadBinaryData(const char *binary_file_name,
     }
     LOG(INFO) << "after read, label is : " << label;
 }
+
+
+void LoadTxtImageData(const char *txt_file_name, 
+                      std::vector<float> *in_data){
+    // read one line by one line txt file from txt file
+    LOG(INFO) << "input txt image path : " << txt_file_name;
+    std::ifstream file_in(txt_file_name);
+    if (!file_in.is_open()) {
+      LOG(FATAL) << "open input file fail.";
+    }
+
+    // save input data to string vector
+    std::string line;
+    std::vector<std::string> stringVector;
+    while (std::getline(file_in, line))
+    {
+      stringVector.push_back(line);
+    }
+    file_in.close();
+
+    // save data to std::vector<float> in_data
+    // std::vector<float> floatVector(stringVector.size());
+    std::transform(stringVector.begin(), stringVector.end(), in_data->begin(), [](const std::string& val)
+    {
+      return std::stof(val);
+    });
+}
+
+
 

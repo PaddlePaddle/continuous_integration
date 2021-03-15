@@ -45,7 +45,11 @@ def parse_args():
 
     return parser.parse_args()
 
+
 def benchmark_tftrt(args):
+    logger.warn(
+        "==== argument trt_precision cannot specify precison, to record log, please input correct precision for model ===="
+    )
     input_saved_model = args.model_path
     saved_model_loaded = tf.saved_model.load(
         input_saved_model, tags=[tag_constants.SERVING])
@@ -87,7 +91,7 @@ def summary_config(args, infer_time: float):
     """
     logger.info("----------------------- Model info ----------------------")
     logger.info("Model name: {0}, Model type: {1}".format(args.model_name,
-                                                          "keras_dy2static"))
+                                                          "saved_model"))
     logger.info("----------------------- Data info -----------------------")
     logger.info("Batch size: {0}, Num of samples: {1}".format(args.batch_size,
                                                               args.repeats))

@@ -19,50 +19,42 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
 from test_trt_fp32_helper import TestModelInferenceTrtFp32
 
+dy_input_tuple = collections.namedtuple(
+    'trt_dynamic_shape_info',
+    ['min_input_shape', 'max_input_shape', 'opt_input_shape'])
+min_input_shape = {"image": [1, 3, 32, 156]}
+max_input_shape = {"image": [1, 3, 32, 448]}
+opt_input_shape = {"image": [1, 3, 32, 320]}
+dy_input_infos = dy_input_tuple(min_input_shape, max_input_shape,
+                                opt_input_shape)
 
-class TestRecChineseCommonTrainInferenceTrtFp32(TestModelInferenceTrtFp32):
+TestBase = TestModelInferenceTrtFp32(
+    data_path="Data", trt_dynamic_shape_info=dy_input_infos)
+
+
+@pytest.mark.p2
+def test_inference_rec_chinese_common_train_trt_fp32():
     """
-    TestModelInferenceTrtFp32
+    Inference and check value
+    rec_chinese_common_train trt_fp32 model
     Args:
+        None
     Returns:
+        None
     """
+    model_name = "rec_chinese_common_train"
+    tmp_path = os.path.join(TestBase.model_root, "python-ocr-infer")
+    model_path = os.path.join(tmp_path, model_name)
+    data_path = os.path.join(tmp_path, "word_rec_data", "data.json")
+    delta = 0.0001
 
-    def __init__(self):
-        """__init__
-        """
-        project_path = os.environ.get("project_path")
-        self.model_root = os.path.join(project_path, "Data")
-        dy_input_tuple = collections.namedtuple(
-            'trt_dynamic_shape_info',
-            ['min_input_shape', 'max_input_shape', 'opt_input_shape'])
-        min_input_shape = {"image": [1, 3, 32, 156]}
-        max_input_shape = {"image": [1, 3, 32, 448]}
-        opt_input_shape = {"image": [1, 3, 32, 320]}
-        dy_input_infos = dy_input_tuple(min_input_shape, max_input_shape,
-                                        opt_input_shape)
-        self.trt_dynamic_shape_info = dy_input_infos
+    res, exp = TestBase.get_infer_results(model_path, data_path)
 
-    def test_inference_rec_chinese_common_train_trt_fp32(self):
-        """
-        Inference and check value
-        rec_chinese_common_train trt_fp32 model
-        Args:
-            None
-        Returns:
-            None
-        """
-        model_name = "rec_chinese_common_train"
-        tmp_path = os.path.join(self.model_root, "python-ocr-infer")
-        model_path = os.path.join(tmp_path, model_name)
-        data_path = os.path.join(tmp_path, "word_rec_data", "data.json")
-        delta = 0.0001
-
-        res, exp = self.get_infer_results(model_path, data_path)
-
-        for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+    for i in range(len(res)):
+        TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)

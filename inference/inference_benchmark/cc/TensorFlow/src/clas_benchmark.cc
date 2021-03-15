@@ -16,7 +16,7 @@ tensorflow::Status LoadModel(tensorflow::Session *sess, std::string graph_fn,
 
   // create the graph
   // tensorflow::graph::SetDefaultDevice("/gpu:3", const_cast<tensorflow::GraphDef*>(&graph_def.graph_def()));
-  tensorflow::graph::SetDefaultDevice("/gpu:3", const_cast<tensorflow::GraphDef*>(&graph_def));
+  //tensorflow::graph::SetDefaultDevice("/gpu:3", const_cast<tensorflow::GraphDef*>(&graph_def));
   // tensorflow::graph::SetDefaultDevice("/gpu:3", &graph_def);
   status = sess->Create(graph_def);
   if (status != tensorflow::Status::OK()) return status;

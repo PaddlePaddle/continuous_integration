@@ -18,35 +18,31 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
 from test_cpu_helper import TestModelInferenceCPU
 
+TestBase = TestModelInferenceCPU()
 
-class TestYoloV3InferenceCPU(TestModelInferenceCPU):
+@pytest.mark.p0
+def test_inference_yolov3_cpu():
     """
-    TestModelInferenceCPU
+    Inference and check value
+    yolov3 cpu model
     Args:
+        None
     Return:
+        None
     """
+    model_name = "yolov3_darknet"
+    tmp_path = os.path.join(TestBase.model_root, "Detection")
+    model_path = os.path.join(tmp_path, model_name, "model")
+    data_path = os.path.join(tmp_path, model_name, "data/data.json")
+    delta = 0.001
 
-    def test_inference_yolov3_cpu(self):
-        """
-        Inference and check value
-        yolov3 cpu model
-        Args:
-            None
-        Return:
-            None
-        """
-        model_name = "yolov3_darknet"
-        tmp_path = os.path.join(self.model_root, "Detection")
-        model_path = os.path.join(tmp_path, model_name, "model")
-        data_path = os.path.join(tmp_path, model_name, "data/data.json")
-        delta = 0.001
+    res, exp = TestBase.get_infer_results(model_path, data_path)
 
-        res, exp = self.get_infer_results(model_path, data_path)
-
-        for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+    for i in range(len(res)):
+        TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)

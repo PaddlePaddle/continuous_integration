@@ -18,35 +18,32 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
 from test_trt_fp32_helper import TestModelInferenceTrtFp32
 
+TestBase = TestModelInferenceTrtFp32()
 
-class TestYolov3InferenceTrtFp32(TestModelInferenceTrtFp32):
+
+@pytest.mark.p0
+def test_inference_yolov3_trt_fp32():
     """
-    TestModelInferenceTrtFp32
+    Inference and check value
+    yolov3 trt_fp32 model
     Args:
+        None
     Return:
+        None
     """
+    model_name = "yolov3_darknet"
+    tmp_path = os.path.join(TestBase.model_root, "Detection")
+    model_path = os.path.join(tmp_path, model_name, "model")
+    data_path = os.path.join(tmp_path, model_name, "data/data.json")
+    delta = 0.001
 
-    def test_inference_yolov3_trt_fp32(self):
-        """
-        Inference and check value
-        yolov3 trt_fp32 model
-        Args:
-            None
-        Return:
-            None
-        """
-        model_name = "yolov3_darknet"
-        tmp_path = os.path.join(self.model_root, "Detection")
-        model_path = os.path.join(tmp_path, model_name, "model")
-        data_path = os.path.join(tmp_path, model_name, "data/data.json")
-        delta = 0.001
+    res, exp = TestBase.get_infer_results(model_path, data_path)
 
-        res, exp = self.get_infer_results(model_path, data_path)
-
-        for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+    for i in range(len(res)):
+        TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)

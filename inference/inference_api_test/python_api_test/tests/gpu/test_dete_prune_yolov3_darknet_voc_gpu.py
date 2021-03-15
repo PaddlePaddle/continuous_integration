@@ -18,43 +18,34 @@ import logging
 import struct
 import six
 
+import pytest
 import nose
 import numpy as np
 
 from test_gpu_helper import TestModelInferenceGPU
 
+TestBase = TestModelInferenceGPU(data_path="Data")
 
-class TestDetePruneYoloDarknetVocInferenceGPU(TestModelInferenceGPU):
+
+@pytest.mark.p0
+def test_inference_dete_prune_yolov3_darknet_voc_gpu():
     """
-    TestModelInferenceGPU
+    Inference and check value
+    dete_prune_yolov3_darknet_voc gpu model
     Args:
+        None
     Return:
+        None
     """
+    model_name = "dete_prune_yolov3_darknet_voc_combined"
+    model_path = os.path.join(TestBase.model_root, "python-slim-infer",
+                              model_name)
+    data_path = os.path.join(
+        TestBase.model_root,
+        "python-model-infer/Detection/yolov3_darknet/data/data.json")
+    delta = 0.001
 
-    def __init__(self):
-        """__init__
-        """
-        project_path = os.environ.get("project_path")
-        self.model_root = os.path.join(project_path, "Data")
+    res, exp = TestBase.get_infer_results(model_path, data_path)
 
-    def test_inference_dete_prune_yolov3_darknet_voc_gpu(self):
-        """
-        Inference and check value
-        dete_prune_yolov3_darknet_voc gpu model
-        Args:
-            None
-        Return:
-            None
-        """
-        model_name = "dete_prune_yolov3_darknet_voc_combined"
-        model_path = os.path.join(self.model_root, "python-slim-infer",
-                                  model_name)
-        data_path = os.path.join(
-            self.model_root,
-            "python-model-infer/Detection/yolov3_darknet/data/data.json")
-        delta = 0.001
-
-        res, exp = self.get_infer_results(model_path, data_path)
-
-        for i in range(len(res)):
-            self.check_data(res[i].flatten(), exp[i].flatten(), delta)
+    for i in range(len(res)):
+        TestBase.check_data(res[i].flatten(), exp[i].flatten(), delta)

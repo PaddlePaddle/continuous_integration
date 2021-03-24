@@ -175,23 +175,35 @@ static void split(const std::string &str, const char *sep,
 
 
 void LoadBinaryData(const char *binary_file_name, 
-                    std::vector<float> in_data, int &label){
+                    std::vector<float> *in_data,
+                    int &label,
+                    int &input_num){
     // read binary input file to input images and its label
     LOG(INFO) << "input binary image path : " << binary_file_name;
-    int input_num = 3 * 224 * 224 * 1;
+    // int input_num = 3 * 224 * 224 * 1;
     std::ifstream fs(binary_file_name, std::ifstream::binary);
     if (!fs.is_open()) {
       LOG(FATAL) << "open input file fail.";
     }
-    for (int i = 0; i < in_data.size(); ++i) {
-      fs.read(reinterpret_cast<char*>(&in_data[i]), sizeof(in_data[i]));
+
+    // read binary input to array
+    float *input_array = new float[input_num];
+    memset(input_array, 0, input_num * sizeof(float));
+    for (int i = 0; i < input_num; ++i) {
+      fs.read(reinterpret_cast<char*>(input_array), sizeof(*input_array));
+      input_array++;
     }
+
+    // copy array to vector
+    in_data->assign(input_array, input_array + input_num);
+
     LOG(INFO) << "before read, label is : " << label;
     fs.read(reinterpret_cast<char*>(&label), sizeof(label));
     fs.close();
-    for (int i=0; i < 5; ++i){
-      LOG(INFO) << "input : " << in_data[i]; 
-    }
+    // // verfiy load data correct
+    // for (int i=0; i < 5; ++i){
+    //   LOG(INFO) << "input : " << (*in_data)[i]; 
+    // }
     LOG(INFO) << "after read, label is : " << label;
 }
 
@@ -221,6 +233,3 @@ void LoadTxtImageData(const char *txt_file_name,
       return std::stof(val);
     });
 }
-
-
-

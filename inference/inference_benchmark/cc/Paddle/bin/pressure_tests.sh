@@ -72,6 +72,7 @@ if [ "${MODEL_TYPE}" == "static" ]; then
         image_shape="3,224,224"
         batch_size=4
         use_gpu=False
+        repeats=10000
 
         $OUTPUT_BIN/clas_benchmark --model_name=${model_name} \
                                    --model_path=${model_path} \

@@ -50,10 +50,14 @@ double Inference(Predictor* pred, int tid) {
   // read imagenet-eval-binary data
   for (size_t ind = 0; ind < 50000; ind++) {
     // load data to vector
-    std::vector<float> in_data(input_num);
+    std::vector<float> in_data(input_num); // total batch image vector
     int label = 0;
     std::string data_path = FLAGS_binary_data_path + "/" + std::to_string(ind) + ".data";
-    LoadBinaryData(data_path.c_str(), in_data, label);
+    LoadBinaryData(data_path.c_str(), &in_data, label, input_num);
+    // verfiy load data correct
+    // for (int i=0; i < 5; ++i){
+    //   LOG(INFO) << "input : " << in_data[i]; 
+    // }
 
     // set inputs
     auto in_names = pred->GetInputNames();

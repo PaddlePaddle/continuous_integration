@@ -57,7 +57,8 @@ else()
                 "rcnn_benchmark.cc";
                 "ptblm_benchmark.cc";
                 "yolo_benchmark.cc";
-                "eval_clas.cc")
+                "eval_clas.cc";
+                "detection_benchmark.cc")
   foreach(testsourcefile ${TestFiles})
     message("====> ${testsourcefile} will be compiled")
     # add executable for all test files

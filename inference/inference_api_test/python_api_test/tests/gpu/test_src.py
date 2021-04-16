@@ -24,7 +24,6 @@ class test_gpu_model_jetson:
     Args:
     Returns:
     """
-
     def __init__(self, model_name):
         """
         __init__
@@ -38,7 +37,7 @@ class test_gpu_model_jetson:
 
     def test_comb_model_path(self, path):
         """
-        __init__
+        find combine model path
         Args:
             path: model save class path
         Returns:
@@ -53,7 +52,7 @@ class test_gpu_model_jetson:
 
     def test_uncomb_model_path(self, path):
         """
-        __init__
+        find uncombine model path
         Args:
             path: model save class path
         Returns:
@@ -65,7 +64,7 @@ class test_gpu_model_jetson:
 
     def npy_result_path(self, path):
         """
-        __init__
+        load numpy result path
         Args:
             path: npy result save name
         Returns:
@@ -79,7 +78,7 @@ class test_gpu_model_jetson:
 
     def test_readdata(self, path, data_name):
         """
-        __init__
+        check model path
         Args:
             path: data save name
             data_name: data name
@@ -93,7 +92,6 @@ class test_gpu_model_jetson:
     def test_diff(self, without_lr_data, with_lr_data, diff_standard):
         """
         get native and analysis infer results
-        trt_fp32
         Args:
             without_lr_data(numpy array): switch_ir_optim is False
             with_lr_data(numpy array): switch_ir_optim is True

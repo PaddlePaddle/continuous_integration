@@ -69,7 +69,7 @@ def test_deeplabv3_resnet50():
     Returns:
         None
     """
-    diff_standard = 1e-6
+    diff_standard = 1e-4
     model_name = "deeplabv3_resnet50"
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path("cv_seg_model")

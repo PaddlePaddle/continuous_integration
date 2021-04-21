@@ -12,23 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import argparse
-import time
-import logging
-import numpy as np
 import cv2
-import image_preprocess
+import time
+import numpy as np
 import paddle.inference as paddle_infer
 import demo_helper as helper
+import image_preprocess
 
-def Inference(args, predictor) -> int:
+
+def Inference(args, predictor) -> float:
     """
     paddle-inference
     Args:
         args : python input arguments
         predictor : paddle-inference predictor
     Returns:
-        total_inference_cost (int): inference time
+        total_inference_cost (float): inference time
     """
     channels = int(args.image_shape.split(',')[0])
     height = int(args.image_shape.split(',')[1])
@@ -36,14 +35,21 @@ def Inference(args, predictor) -> int:
 
     im_size = height
     img_name = 'kite.jpg'
-    img_path = os.path.join(args.model_name,img_name)
+    img_path = os.path.join(args.model_name, img_name)
     img = np.array(cv2.imread(img_path))
     data = image_preprocess.preprocess(img, im_size)
+    base_data = image_preprocess.preprocess(img, im_size)
     scale_factor = np.array([im_size * 1. / img.shape[0], im_size *
-                             1. / img.shape[1]]).reshape((1, 2)).astype(np.float32)
+                            1. / img.shape[1]]).reshape((1, 2)).astype(np.float32)
+    base_scale_factor = np.array([im_size * 1. / img.shape[0], im_size *
+                                  1. / img.shape[1]]).reshape((1, 2)).astype(np.float32)
     im_shape = np.array([im_size, im_size]).reshape((1, 2)).astype(np.float32)
+    base_im_shape = np.array([im_size, im_size]).reshape((1, 2)).astype(np.float32)
+    for batch in range(args.batch_size - 1):
+        data = np.concatenate((data, base_data), axis=0)
+        scale_factor = np.concatenate((scale_factor, base_scale_factor), axis=0)
+        im_shape = np.concatenate((im_shape, base_im_shape), axis=0)
     data_input = [im_shape, data, scale_factor]
-
     input_names = predictor.get_input_names()
     for i, name in enumerate(input_names):
         input_tensor = predictor.get_input_handle(name)
@@ -80,6 +86,6 @@ def run_demo():
 
     helper.summary_config(config, args, total_time)
 
+
 if __name__ == "__main__":
     run_demo()
-

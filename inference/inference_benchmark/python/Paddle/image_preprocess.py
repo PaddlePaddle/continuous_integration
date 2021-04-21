@@ -64,7 +64,6 @@ def preprocess(img, img_size):
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
     if img_size != '0':
-        print(111)
         img = resize(img, img_size)
     img = img[:, :, ::-1].astype('float32')  # bgr -> rgb
     img = normalize(img, mean, std)

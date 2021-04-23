@@ -14,4 +14,5 @@ if __name__ == "__main__":
             # Status fans
             if hasattr(jetson, 'fan'):
                 print(jetson.fan)
+            print(jetson.free)
             # uptim

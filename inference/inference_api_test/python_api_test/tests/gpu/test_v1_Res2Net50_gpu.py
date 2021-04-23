@@ -17,13 +17,15 @@ import cv2
 import pytest
 import numpy as np
 import image_preprocess
+from PIL import Image
 from paddle.inference import Config
 from paddle.inference import create_predictor
 from test_src import test_gpu_model_jetson
 
-def inference_unet(img, model_path, params_path):
+
+def inference_Res2Net50(img, model_path, params_path):
     """
-    inference_unet
+    inference_ttfnet
     Args:
         img: numpy img
         model_path: model path
@@ -31,7 +33,6 @@ def inference_unet(img, model_path, params_path):
     Returns:
         results : paddle inference output data
     """
-    batch_size = 1
     config = Config(model_path, params_path)
     config.enable_use_gpu(0)
     config.switch_ir_optim(True)
@@ -39,50 +40,51 @@ def inference_unet(img, model_path, params_path):
     config.switch_specify_input_names(True)
     config.enable_memory_optim()
 
-    mean = [0.5, 0.5, 0.5]
-    std = [0.5, 0.5, 0.5]
-    data = image_preprocess.normalize(img,mean,std)
-    data_input = np.array([data]).transpose([0, 3, 1, 2])
-
     predictor = create_predictor(config)
     input_names = predictor.get_input_names()
-    input_handle0 = predictor.get_input_handle(input_names[0])
-    input_handle0.reshape([batch_size, 3, 1024, 2048])
-    input_handle0.copy_from_cpu(data_input)
+
+    im_size = 224
+    data = image_preprocess.preprocess(img, im_size)
+    data_input = [data]
+    for i, name in enumerate(input_names):
+        input_tensor = predictor.get_input_handle(name)
+        input_tensor.reshape(data_input[i].shape)
+        input_tensor.copy_from_cpu(data_input[i].copy())
 
     # do the inference
     predictor.run()
 
+    results = []
+    # get out data from output tensor
     output_names = predictor.get_output_names()
-    output_handle = predictor.get_output_handle(output_names[0])
-    output_data = output_handle.copy_to_cpu()
+    for i, name in enumerate(output_names):
+        output_tensor = predictor.get_output_handle(name)
+        output_data = output_tensor.copy_to_cpu()
+        results.append(output_data)
+    return results
 
-    return output_data
 
 @pytest.mark.p0
-@pytest.mark.p1
-def test_unet():
+def test_Res2Net50():
     """
-    test_unet
+    test_Res2Net50
     Args:
         None
     Returns:
         None
     """
-    diff_standard = 1e-4
-    model_name = "unet"
+    diff_standard = 1e-6
+    model_name = "Res2Net50"
     test_model = test_gpu_model_jetson(model_name=model_name)
-    model_path, params_path = test_model.test_comb_model_path("cv_seg_model")
-    img_name = 'seg_data.png'
+    model_path, params_path = test_model.test_comb_model_path("cv_class_model")
+    img_name = 'bird.jpeg'
     image_path = test_model.test_readdata(
-        path="cv_seg_model", data_name=img_name)
-    img = np.array(cv2.imread(image_path)).astype("float32")
-    with_lr_data = inference_unet(img, model_path, params_path)
-    npy_result = test_model.npy_result_path("cv_seg_model")
+        path="cv_class_model", data_name=img_name)
+    img = cv2.imread(image_path)
+    with_lr_data = inference_Res2Net50(img, model_path, params_path)
+    npy_result = test_model.npy_result_path("cv_class_model")
     test_model.test_diff(npy_result, with_lr_data[0], diff_standard)
-    
-    # save color img
-    # np.save("unet.npy",with_lr_data[0]) 
-    # imgs = np.argmax(with_lr_data[0], axis=0)
-    # color_img = image_preprocess.seg_color(np.array([imgs]).transpose([1,2,0]))
-    # cv2.imwrite("unet.png", color_img)
+
+    # for test
+    # np.save("Res2Net50.npy",with_lr_data[0])
+    # print(np.argmax(with_lr_data[0][0]))

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -eo pipefail
 
 ROOT=`dirname "$0"`
@@ -10,7 +9,7 @@ export DATA_ROOT=$ROOT/Data
 export CASE_ROOT=$ROOT/bin
 export LOG_ROOT=$ROOT/log
 export gpu_type=`nvidia-smi -q | grep "Product Name" | head -n 1 | awk '{print $NF}'`
-
+source $ROOT/bin/run_clas_mkl_benchmark.sh
 # test model type
 model_type="static"
 if [ $# -ge 1 ]; then
@@ -63,7 +62,19 @@ if [ "${MODEL_TYPE}" == "static" ]; then
         bash $CASE_ROOT/run_clas_int8_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_static"
         bash $CASE_ROOT/run_det_int8_benchmark.sh "${DATA_ROOT}/PaddleDetection/infer_static"
     elif [ "${device_type}" == "cpu" ]; then 
-        bash $CASE_ROOT/run_clas_mkl_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_static"
+        export KMP_AFFINITY=granularity=fine,compact,1,0
+        export KMP_BLOCKTIME=1
+        # no_turbo 1 means turning off turbo, it was set to save power. no_turbo 0 means turning on turbo which will improve some performance
+        # echo 1 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
+
+        default_cpu_batch_size=(1 2 4)
+        cpu_batch_size=${3:-${default_cpu_batch_size[@]}}
+        default_cpu_num_threads=(1 2 4)
+        cpu_num_threads=${4:-${default_cpu_num_threads[@]}}
+        # echo "first cpu_batch_size is "
+        # echo ${cpu_batch_size[@]}
+        run_clas_mkl_func "${DATA_ROOT}/PaddleClas/infer_static" cpu_batch_size cpu_num_threads
+        #bash $CASE_ROOT/run_clas_mkl_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_static"
         # bash $CASE_ROOT/run_det_mkl_benchmark.sh "${DATA_ROOT}/PaddleDetection/infer_static"  # very slow
     fi
 elif [ "${MODEL_TYPE}" == "dy2static" ]; then

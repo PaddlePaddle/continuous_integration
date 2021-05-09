@@ -71,10 +71,7 @@ if [ "${MODEL_TYPE}" == "static" ]; then
         cpu_batch_size=${3:-${default_cpu_batch_size[@]}}
         default_cpu_num_threads=(1 2 4)
         cpu_num_threads=${4:-${default_cpu_num_threads[@]}}
-        # echo "first cpu_batch_size is "
-        # echo ${cpu_batch_size[@]}
         run_clas_mkl_func "${DATA_ROOT}/PaddleClas/infer_static" cpu_batch_size cpu_num_threads
-        #bash $CASE_ROOT/run_clas_mkl_benchmark.sh "${DATA_ROOT}/PaddleClas/infer_static"
         # bash $CASE_ROOT/run_det_mkl_benchmark.sh "${DATA_ROOT}/PaddleDetection/infer_static"  # very slow
     fi
 elif [ "${MODEL_TYPE}" == "dy2static" ]; then

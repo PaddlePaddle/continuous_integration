@@ -125,87 +125,87 @@ function run_clas_mkl_func(){
                  ${model_root}/${tests}/params cpu_batch_size cpu_num_threads
     done
 
-#     if [ "${MODEL_TYPE}" == "static" ]; then
-#         # ssdlite_mobilenet_v3_large
-#         model_case="ssdlite_mobilenet_v3_large"
-#         test_cpu "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
-#                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
-#                 "3,320,320"
+    if [ "${MODEL_TYPE}" == "static" ]; then
+        # ssdlite_mobilenet_v3_large
+        model_case="ssdlite_mobilenet_v3_large"
+        test_cpu "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
+                "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
+                "3,320,320"
 
-#         test_mkldnn "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
-#                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
-#                 "3,320,320"
+        test_mkldnn "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
+                "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
+                "3,320,320"
         
-#         # ssd_mobilenet_v1_voc
-#         model_case="ssd_mobilenet_v1_voc"
-#         test_cpu "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
-#                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
-#                 "3,300,300"
+        # ssd_mobilenet_v1_voc
+        model_case="ssd_mobilenet_v1_voc"
+        test_cpu "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
+                "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
+                "3,300,300"
 
-#         test_mkldnn "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
-#                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
-#                 "3,300,300"
+        test_mkldnn "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
+                "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
+                "3,300,300"
         
-#         seg_model="deeplabv3p \
-#                 fastscnn \
-#                 hrnet \
-#                 icnet \
-#                 pspnet \
-#                 unet"
+        seg_model="deeplabv3p \
+                fastscnn \
+                hrnet \
+                icnet \
+                pspnet \
+                unet"
 
-#         for tests in ${seg_model}
-#         do
-#             test_cpu "clas_benchmark" "${tests}" \
-#                     ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
-#                     ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
-#                     "3,512,512"
+        for tests in ${seg_model}
+        do
+            test_cpu "clas_benchmark" "${tests}" \
+                    ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
+                    ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
+                    "3,512,512"
         
-#             test_mkldnn "clas_benchmark" "${tests}" \
-#                     ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
-#                     ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
-#                     "3,512,512"
-#         done
+            test_mkldnn "clas_benchmark" "${tests}" \
+                    ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
+                    ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
+                    "3,512,512"
+        done
 
-#         # ch_ppocr_mobile_v1.1_cls_infer
-#         model_case="ch_ppocr_mobile_v1.1_cls_infer"
-#         test_cpu "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-#                 "3,48,192"
+        # ch_ppocr_mobile_v1.1_cls_infer
+        model_case="ch_ppocr_mobile_v1.1_cls_infer"
+        test_cpu "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+                "3,48,192"
 
-#         test_mkldnn "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-#                 "3,48,192"
+        test_mkldnn "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+                "3,48,192"
         
-#         # ch_ppocr_mobile_v1.1_det_infer
-#         model_case="ch_ppocr_mobile_v1.1_det_infer"
-#         test_cpu "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-#                 "3,640,640"
+        # ch_ppocr_mobile_v1.1_det_infer
+        model_case="ch_ppocr_mobile_v1.1_det_infer"
+        test_cpu "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+                "3,640,640"
 
-#         test_mkldnn "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-#                 "3,640,640"
+        test_mkldnn "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+                "3,640,640"
         
-#         # ch_ppocr_mobile_v1.1_rec_infer
-#         model_case="ch_ppocr_mobile_v1.1_rec_infer"
-#         test_cpu "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-#                 "3,32,320"
+        # ch_ppocr_mobile_v1.1_rec_infer
+        model_case="ch_ppocr_mobile_v1.1_rec_infer"
+        test_cpu "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+                "3,32,320"
 
-#         test_mkldnn "clas_benchmark" "${model_case}" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-#                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-#                 "3,32,320" "10"
-#     fi
+        test_mkldnn "clas_benchmark" "${model_case}" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+                "3,32,320" "10"
+    fi
 
-#     printf "${YELLOW} ==== finish benchmark ==== ${NC} \n"
+    printf "${YELLOW} ==== finish benchmark ==== ${NC} \n"
 }

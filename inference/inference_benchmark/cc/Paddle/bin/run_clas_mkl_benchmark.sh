@@ -86,10 +86,9 @@ function run_clas_mkl_func(){
         model_root=$1
     fi
     printf "${YELLOW} ==== start benchmark ==== ${NC} \n"
-    #model_root=$1
-    name=$2[@]
+    declare name=$2[@]
     cpu_batch_size=(${!name})
-    name_threads=$3[@]
+    declare name_threads=$3[@]
     cpu_num_threads=(${!name_threads})
     class_model="AlexNet \
                  DarkNet53 \

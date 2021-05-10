@@ -18,7 +18,12 @@ import argparse
 import hashlib
 
 import wget
+from pathlib import Path
 from git import Repo
+
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+LOG_PATH = f"{ROOT_PATH}/fullchain_benchmark_log"
+
 
 def parse_args():
     """
@@ -26,6 +31,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser()
     return parser.parse_args()
+
 
 def prepare_repo():
     """
@@ -54,6 +60,7 @@ def prepare_repo():
 
     os.chdir("..")
 
+
 def check_md5(file_name: str, original_md5: str) -> bool:
     """
     check file md5
@@ -77,6 +84,7 @@ def check_md5(file_name: str, original_md5: str) -> bool:
         print("MD5 verification failed!.")
         return False
 
+
 def prepare_test_codes():
     """
     prepare test codes
@@ -93,17 +101,19 @@ def prepare_test_codes():
         print("fullchain_log.py file not exist or md5sum not correct")
         print("re-download fullchain_log.py file")
 
+
 def paddle_train_model():
     """
     train paddle model for inference
     """
     pass
 
+
 def paddle_infer_benchmark():
     """
     start run paddle inference benchmark
     """
-    linux_output = "2>&1 | tee ch_ppocr_mobile_v2.0_det_infer_gpu.log"
+    linux_output = f"2>&1 | tee {LOG_PATH}/ch_ppocr_mobile_v2.0_det_infer_gpu.log"
     # cmd = "bash ./PaddleOCR/benchmark.sh"
     use_trt = False
     use_gpu = True
@@ -114,8 +124,10 @@ def paddle_infer_benchmark():
                                                  --use_tensorrt={use_trt} \
                                                  --det_model_dir={det_model_dir} \
                                                  --image_dir={img_dir} {linux_output}"
+
     os.system(cmd)
     os.chdir("/workspace/inference/inference_test_utils")
+
 
 def paddle_serving_benchmark():
     """
@@ -135,9 +147,11 @@ def summary_benchmark_data():
     """
     batch summary benchmark data
     """
-    cmd = "python py_fullchain_analysis.py --log_path=./log_path \
-                                           --output_name=test_benhmark_excel.xlsx"
+    cmd = f"python3.7 fullchain_analysis.py --log_path={LOG_PATH} \
+                                            --output_name=test_fullchain_benchmark.xlsx"
+
     os.system(cmd)
+
 
 def analysis_benchmark_data():
     """
@@ -150,10 +164,12 @@ def main():
     """
     main
     """
+    Path(f"{LOG_PATH}").mkdir(parents=True, exist_ok=True)
+
     prepare_repo()
-    # prepare_test_codes()
+    prepare_test_codes()
     paddle_infer_benchmark()
-    # summary_benchmark_data()
+    summary_benchmark_data()
 
 
 if __name__ == "__main__":

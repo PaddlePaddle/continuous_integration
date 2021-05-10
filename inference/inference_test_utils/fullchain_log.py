@@ -84,6 +84,8 @@ class FullChainLog(object):
         print log report
         """
         logger.info("\n")
+        logger.info("---------------------- Paddle info ----------------------")
+        logger.info(f"{paddle_infer.get_version()}")
         logger.info(f"log_style_version: {self.log_version}")
         logger.info("----------------------- Conf info -----------------------")
         logger.info(f"runtime_device: {self.config_status['runtime_device']}")

@@ -8,8 +8,8 @@ function test_cpu(){
     model_name=$2
     model_path=$3
     params_path=$4
-    declare -a name=$5[@]
-    cpu_batch_size=(${!name})
+    declare -a name_batch_size=$5[@]
+    cpu_batch_size=(${!name_batch_size})
     image_shape="3,224,224"
     if [ $# -ge 6 ]; then
         image_shape=$6
@@ -42,8 +42,8 @@ function test_mkldnn(){
     model_name=$2
     model_path=$3
     params_path=$4
-    declare -a name=$5[@]
-    cpu_batch_size=(${!name})
+    declare -a name_batch_size=$5[@]
+    cpu_batch_size=(${!name_batch_size})
     declare -a name_threads=$6[@]
     cpu_num_threads=(${!name_threads})
     image_shape="3,224,224"
@@ -86,8 +86,8 @@ function run_clas_mkl_func(){
         model_root=$1
     fi
     printf "${YELLOW} ==== start benchmark ==== ${NC} \n"
-    declare name=$2[@]
-    cpu_batch_size=(${!name})
+    declare name_batch_size=$2[@]
+    cpu_batch_size=(${!name_batch_size})
     declare name_threads=$3[@]
     cpu_num_threads=(${!name_threads})
     class_model="AlexNet \

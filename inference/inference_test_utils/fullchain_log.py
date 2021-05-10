@@ -138,8 +138,7 @@ def main():
     }
     mem_info = {'cpu_rss': 1.02, 'gpu_rss': 13, 'gpu_util': 80}
 
-    ReportLog = FullChainLog(config, model_info, data_info, perf_info,
-                             mem_info).report()
+    FullChainLog(config, model_info, data_info, perf_info, mem_info).report()
 
 
 if __name__ == "__main__":

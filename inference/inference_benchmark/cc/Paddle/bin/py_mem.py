@@ -117,23 +117,26 @@ def main():
     """
     process = sys.argv[1]
     time.sleep(0.5)
-
+    use_gpu = True
     gpu_ids = os.environ.get("CUDA_VISIBLE_DEVICES") # 0,1,2,3
-    gpu_id_lists = gpu_ids.split(',')
-    if len(gpu_id_lists) > 1:
-        logger.warning("more than one CUDA_VISIBLE_DEVICES was set")
+    if gpu_ids is not None:
+        gpu_id_lists = gpu_ids.split(',')
+        if len(gpu_id_lists) > 1:
+            logger.warning("more than one CUDA_VISIBLE_DEVICES was set")
+        else:
+            gpu_id = int(gpu_ids)
     else:
-        gpu_id = int(gpu_ids)
-
+        use_gpu = False
     cpu_mem_lists = []
     gpu_mem_lists = []
     while get_pid(process):
         pid = get_pid(process)
         if pid:
             cpu_mem = get_cpu_mem(pid)
-            gpu_mem = get_gpu_mem(gpu_id)
             cpu_mem_lists.append(cpu_mem)
-            gpu_mem_lists.append(gpu_mem)
+            if use_gpu: 
+                gpu_mem = get_gpu_mem(gpu_id)
+                gpu_mem_lists.append(gpu_mem)
         else:
             logger.warning("==== process pid is None, end recording ===")
             break

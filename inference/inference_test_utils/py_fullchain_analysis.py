@@ -154,9 +154,9 @@ def process_log(file_name: str) -> dict:
                 pos_buf = line_lists.index("gpu_util:")
                 output_dict["gpu_util"] = line_lists[pos_buf + 1].strip().split(
                     ',')[0]
-            if "preproce_time(ms):" in line_lists:
-                pos_buf = line_lists.index("preproce_time(ms):")
-                output_dict["preproce_time(ms)"] = line_lists[
+            if "preprocess_time(ms):" in line_lists:
+                pos_buf = line_lists.index("preprocess_time(ms):")
+                output_dict["preprocess_time(ms)"] = line_lists[
                     pos_buf + 1].strip().split(',')[0]
             if "inference_time(ms):" in line_lists:
                 pos_buf = line_lists.index("inference_time(ms):")
@@ -345,7 +345,7 @@ def post_benchmark(args):
         dict_log["cpu_rss"] = dict_log.pop("cpu_rss(MB)")
         dict_log["gpu_used"] = dict_log.pop("gpu_rss(MB)")
         dict_log["gpu_utilization_rate"] = dict_log.pop("gpu_util")
-        dict_log.pop("preproce_time(ms)")
+        dict_log.pop("preprocess_time(ms)")
         dict_log["average_latency"] = dict_log.pop("inference_time(ms)")
         dict_log.pop("postprocess_time(ms)")
         dict_log["num_samples"] = dict_log.pop("data_num")

@@ -102,9 +102,9 @@ def prepare_test_codes():
         print("re-download fullchain_log.py file")
 
 
-def paddle_train_model():
+def get_latest_train_model():
     """
-    train paddle model for inference
+    download latest paddle model for inference
     """
     pass
 
@@ -124,7 +124,6 @@ def paddle_infer_benchmark():
                                                  --use_tensorrt={use_trt} \
                                                  --det_model_dir={det_model_dir} \
                                                  --image_dir={img_dir} {linux_output}"
-
     os.system(cmd)
     os.chdir("/workspace/inference/inference_test_utils")
 

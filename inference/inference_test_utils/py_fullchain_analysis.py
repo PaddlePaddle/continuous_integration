@@ -45,6 +45,12 @@ def parse_args():
     parser.add_argument(
         "--analysis_mkl", dest="analysis_mkl", action='store_true')
 
+    parser.add_argument(
+        "--device_name",
+        type=str,
+        default=None,
+        help="device name, e.g. gpu_t4, gpu_p4")
+
     # for benchmark platform
     parser.add_argument(
         "--post_url",
@@ -335,29 +341,37 @@ def post_benchmark(args):
         dict_log["cudnn_version"] = args.cudnn_version
         dict_log["trt_version"] = args.trt_version
 
-        # modify key for upload to benchmark backend
-        dict_log["device"] = dict_log.pop("runtime_device")
-        dict_log["ir_optim"] = dict_log["ir_optim"].lower()
-        dict_log.pop("enable_memory_optim")
-        dict_log["enable_tensorrt"] = dict_log["enable_tensorrt"].lower()
-        dict_log["enable_mkldnn"] = dict_log["enable_mkldnn"].lower()
+        try:
+            # modify key for upload to benchmark backend
+            if args.device_name and dict_log['runtime_device'] == 'gpu':
+                dict_log["device"] = args.device_name
+            else:
+                dict_log["device"] = dict_log.pop("runtime_device", None)
+            dict_log["ir_optim"] = dict_log["ir_optim"].lower()
+            dict_log.pop("enable_memory_optim")
+            dict_log["enable_tensorrt"] = dict_log["enable_tensorrt"].lower()
+            dict_log["enable_mkldnn"] = dict_log["enable_mkldnn"].lower()
 
-        dict_log["cpu_rss"] = dict_log.pop("cpu_rss(MB)")
-        dict_log["gpu_used"] = dict_log.pop("gpu_rss(MB)")
-        dict_log["gpu_utilization_rate"] = dict_log.pop("gpu_util")
-        dict_log.pop("preprocess_time(ms)")
-        dict_log["average_latency"] = dict_log.pop("inference_time(ms)")
-        dict_log.pop("postprocess_time(ms)")
-        dict_log["num_samples"] = dict_log.pop("data_num")
-        dict_log["qps"] = str((int(dict_log["num_samples"]) * int(dict_log['batch_size'])) / (float(dict_log["average_latency"]) * float(dict_log["num_samples"]) /1000))
-        dict_log["trt_precision"] = dict_log.pop("precision")
+            dict_log["cpu_rss"] = dict_log.pop("cpu_rss(MB)")
+            dict_log["gpu_used"] = dict_log.pop("gpu_rss(MB)")
+            dict_log["gpu_utilization_rate"] = dict_log.pop("gpu_util")
+            dict_log.pop("preprocess_time(ms)")
+            dict_log["average_latency"] = dict_log.pop("inference_time(ms)")
+            dict_log.pop("postprocess_time(ms)")
+            dict_log["num_samples"] = dict_log.pop("data_num")
+            dict_log["qps"] = str(
+                (int(dict_log["num_samples"]) * int(dict_log['batch_size'])) /
+                (float(dict_log["average_latency"]) *
+                 float(dict_log["num_samples"]) / 1000))
+            dict_log["trt_precision"] = dict_log.pop("precision")
 
-        dict_log["cpu_vms"] = '0'
-        dict_log["cpu_shared"] = '0'
-        dict_log["cpu_usage"] = '0'
-        dict_log["gpu_mem_utilization_rate"] = '0'
-        dict_log.pop("input_shape")
-
+            dict_log["cpu_vms"] = '0'
+            dict_log["cpu_shared"] = '0'
+            dict_log["cpu_usage"] = '0'
+            dict_log["gpu_mem_utilization_rate"] = '0'
+            dict_log.pop("input_shape")
+        except:
+            print(f"==== {file_name} parse failed ====")
 
         # append dict log
         json_list.append(dict_log)

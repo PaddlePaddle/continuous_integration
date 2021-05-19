@@ -147,7 +147,7 @@ function run_clas_mkl_func(){
         test_mkldnn "clas_benchmark" "${model_case}" \
                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__model__" \
                 "${DATA_ROOT}/PaddleDetection/infer_static/${model_case}/__params__" \
-                cpu_batch_size cpu_num_thread "3,300,300"
+                cpu_batch_size cpu_num_threads "3,300,300"
         
         seg_model="deeplabv3p \
                 fastscnn \
@@ -166,7 +166,7 @@ function run_clas_mkl_func(){
             test_mkldnn "clas_benchmark" "${tests}" \
                     ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
                     ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
-                    cpu_batch_size cpu_num_thread "3,512,512"
+                    cpu_batch_size cpu_num_threads "3,512,512"
         done
 
         # ch_ppocr_mobile_v1.1_cls_infer
@@ -179,7 +179,7 @@ function run_clas_mkl_func(){
         test_mkldnn "clas_benchmark" "${model_case}" \
                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-                cpu_batch_size cpu_num_thread "3,48,192"
+                cpu_batch_size cpu_num_threads "3,48,192"
         
         # ch_ppocr_mobile_v1.1_det_infer
         model_case="ch_ppocr_mobile_v1.1_det_infer"
@@ -191,7 +191,7 @@ function run_clas_mkl_func(){
         test_mkldnn "clas_benchmark" "${model_case}" \
                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-                cpu_batch_size cpu_num_thread "3,640,640"
+                cpu_batch_size cpu_num_threads "3,640,640"
         
         # ch_ppocr_mobile_v1.1_rec_infer
         model_case="ch_ppocr_mobile_v1.1_rec_infer"
@@ -203,7 +203,7 @@ function run_clas_mkl_func(){
         test_mkldnn "clas_benchmark" "${model_case}" \
                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-                cpu_batch_size cpu_num_thread "3,32,320" "10"
+                cpu_batch_size cpu_num_threads "3,32,320" "10"
     fi
 
     printf "${YELLOW} ==== finish benchmark ==== ${NC} \n"

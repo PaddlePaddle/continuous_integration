@@ -241,18 +241,18 @@ class BenchmarkLogBackend(object):
             with open(self.args.output_json_file, 'w') as f:
                 json.dump(json_list, f)
 
-            if not os.path.exists(self.args.output_json_file):
-                raise ValueError("{} has not been created".format(
-                    self.args.output_json_file))
+        if not os.path.exists(self.args.output_json_file):
+            raise ValueError("{} has not been created".format(
+                self.args.output_json_file))
 
-            # post request
-            files = {'file': open(self.args.output_json_file, 'rb')}
-            response = requests.post(self.args.post_url, files=files)
-            logger.info(response)
-            assert response.status_code == 200, "send post request failed, please check input data structure and post urls"
-            logger.info(
-                "==== post request succeed, response status_code is {} ====".
-                format(response.status_code))
+        # post request
+        files = {'file': open(self.args.output_json_file, 'rb')}
+        response = requests.post(self.args.post_url, files=files)
+        logger.info(response)
+        assert response.status_code == 200, f"send post request failed, please check input data structure and post urls, \njson is {json_list}"
+        logger.info(
+            "==== post request succeed, response status_code is {} ====".format(
+                response.status_code))
 
 
 def main():

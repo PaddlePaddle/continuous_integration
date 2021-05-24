@@ -56,11 +56,13 @@ class BenchmarkLogAnalyzer(object):
 
         # init dataframe and dict style
         self.origin_df = pd.DataFrame(columns=[
-            "model_name", "batch_size", "input_shape", "runtime_device",
-            "ir_optim", "enable_memory_optim", "enable_tensorrt", "precision",
-            "enable_mkldnn", "cpu_math_library_num_threads",
-            "preprocess_time(ms)", "inference_time(ms)", "postprocess_time(ms)",
-            "cpu_rss(MB)", "gpu_rss(MB)", "gpu_util"
+            "paddle_version", "paddle_commit", "paddle_branch",
+            "runtime_device", "ir_optim", "enable_memory_optim",
+            "enable_tensorrt", "enable_mkldnn", "cpu_math_library_num_threads",
+            "model_name", "precision", "batch_size", "input_shape", "data_num",
+            "cpu_rss(MB)", "cpu_vms", "cpu_shared_mb", "cpu_dirty_mb",
+            "cpu_util", "gpu_rss(MB)", "gpu_util", "gpu_mem_util",
+            "preprocess_time(ms)", "inference_time(ms)", "postprocess_time(ms)"
         ])
         self.benchmark_key = self.origin_df.to_dict()
 

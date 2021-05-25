@@ -194,7 +194,7 @@ class BenchmarkLogBackend(object):
             "enable_tensorrt", "")
         new_database_dict["enable_mkldnn"] = old_log_dict.get("enable_mkldnn",
                                                               "")
-        new_database_dict["trt_precision"] = old_log_dict.get("trt_precision",
+        new_database_dict["trt_precision"] = old_log_dict.get("precision",
                                                               "")
         new_database_dict["cpu_math_library_num_threads"] = old_log_dict.get(
             "cpu_math_library_num_threads", "")

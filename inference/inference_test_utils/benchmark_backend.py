@@ -217,9 +217,9 @@ class BenchmarkLogBackend(object):
 
         # perfomance
         new_database_dict["preprocess_time_ms"] = old_log_dict.get(
-            "preprocess_time_ms", "")
+            "preprocess_time(ms)", "")
         new_database_dict["postprocess_time_ms"] = old_log_dict.get(
-            "postprocess_time_ms", "")
+            "postprocess_time(ms)", "")
         new_database_dict["inference_time_ms_90"] = old_log_dict.get(
             "inference_time_ms_90", "")
         new_database_dict["inference_time_ms_99"] = old_log_dict.get(

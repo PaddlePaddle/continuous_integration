@@ -50,6 +50,10 @@ function test_mkldnn(){
     if [ $# -ge 7 ]; then
         image_shape=$7
     fi
+    use_interpolate_mkldnn_pass=false;
+    if [ $# -ge 8 ]; then
+        use_interpolate_mkldnn_pass=$8
+    fi
 
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
     use_gpu=false;
@@ -71,6 +75,7 @@ function test_mkldnn(){
                 --use_gpu=${use_gpu} \
                 --repeats=500 \
                 --model_type=${MODEL_TYPE} \
+                --use_interpolate_mkldnn_pass=${use_interpolate_mkldnn_pass} \
                 --cpu_math_library_num_threads=${cpu_math_library_num_threads} \
                 --use_mkldnn_=${use_mkldnn} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
 
@@ -166,7 +171,7 @@ function run_clas_mkl_func(){
             test_mkldnn "clas_benchmark" "${tests}" \
                     ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__model__ \
                     ${DATA_ROOT}/PaddleSeg/infer_static/${tests}/__params__ \
-                    cpu_batch_size cpu_num_threads "3,512,512"
+                    cpu_batch_size cpu_num_threads "3,512,512" "true"
         done
 
         # ch_ppocr_mobile_v1.1_cls_infer
@@ -191,7 +196,7 @@ function run_clas_mkl_func(){
         test_mkldnn "clas_benchmark" "${model_case}" \
                 "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-                cpu_batch_size cpu_num_threads "3,640,640"
+                cpu_batch_size cpu_num_threads "3,640,640" "true"
         
         # ch_ppocr_mobile_v1.1_rec_infer
         model_case="ch_ppocr_mobile_v1.1_rec_infer"

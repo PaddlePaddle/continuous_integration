@@ -52,7 +52,7 @@ function test_mkldnn(){
     fi
     use_interpolate_mkldnn_pass=false;
     if [ $# -ge 8 ]; then
-        image_shape=$8
+        use_interpolate_mkldnn_pass=$8
     fi
 
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";

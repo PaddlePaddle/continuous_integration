@@ -50,6 +50,7 @@ DEFINE_bool(use_mkldnn_, false, "use mkldnn or not, \
             use_mkldnn is internal gflags will conflict, \
             named use_mkldnn_ instead");
 // DECLARE_bool(use_mkldnn);
+DEFINE_bool(use_interpolate_mkldnn_pass, false, "enable interpolate_mkldnn_pass or not");
 
 DEFINE_int32(thread_num, 1, "num of threads");
 DEFINE_int32(batch_size, 1, "batch size");
@@ -91,6 +92,10 @@ void PrepareConfig(paddle_infer::Config *config) {
     if (FLAGS_use_mkldnn_) {
       config->EnableMKLDNN();
       LOG(INFO) << "mkldnn enabled";
+      if (FLAGS_use_interpolate_mkldnn_pass){
+        config->pass_builder()->AppendPass("interpolate_mkldnn_pass");
+        LOG(INFO) << "enable interpolate_mkldnn_pass for seg and ocr model";
+      }
     }
   }
   config->EnableMemoryOptim();

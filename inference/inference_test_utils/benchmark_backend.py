@@ -146,7 +146,7 @@ class BenchmarkLogBackend(object):
         empty_values = []
         for k, _ in output_dict.items():
             if not output_dict[k]:
-                output_dict[k] = None
+                output_dict[k] = ""  # use "" not None here
                 empty_values.append(k)
 
         if not empty_values:

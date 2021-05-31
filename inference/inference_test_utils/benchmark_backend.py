@@ -194,8 +194,7 @@ class BenchmarkLogBackend(object):
             "enable_tensorrt", "")
         new_database_dict["enable_mkldnn"] = old_log_dict.get("enable_mkldnn",
                                                               "")
-        new_database_dict["trt_precision"] = old_log_dict.get("precision",
-                                                              "")
+        new_database_dict["trt_precision"] = old_log_dict.get("precision", "")
         new_database_dict["cpu_math_library_num_threads"] = old_log_dict.get(
             "cpu_math_library_num_threads", "")
 
@@ -238,10 +237,14 @@ class BenchmarkLogBackend(object):
         for file_name, full_path in self.find_all_logs(log_path):
             dict_log = self.process_log(full_path)
 
-            new_dict_log = self.post_key_modify(dict_log)
-            json_list.append(new_dict_log)
-            with open(self.args.output_json_file, 'w') as f:
-                json.dump(json_list, f)
+            try:
+                new_dict_log = self.post_key_modify(dict_log)
+                json_list.append(new_dict_log)
+            except:
+                logger.warning(f"{file_name} cannot be parsed")
+
+        with open(self.args.output_json_file, 'w') as f:
+            json.dump(json_list, f)
 
         if not os.path.exists(self.args.output_json_file):
             raise ValueError("{} has not been created".format(

@@ -42,6 +42,11 @@ def parse_args():
         type=str,
         default="benchmark_excel.xlsx",
         help="output excel file name")
+    parser.add_argument(
+        "--output_html_name",
+        type=str,
+        default="benchmark_data.html",
+        help="output html file name")
     return parser.parse_args()
 
 
@@ -115,7 +120,8 @@ class BenchmarkLogAnalyzer(object):
 
         raw_df = self.origin_df.sort_values(by='model_name')
         raw_df.sort_values(by=["model_name", "batch_size"], inplace=True)
-        raw_df.to_excel(self.args.output_name)
+        raw_df.to_excel(self.args.output_name)     # render excel
+        raw_df.to_html(self.args.output_html_name) # render html
         print(raw_df)
 
 

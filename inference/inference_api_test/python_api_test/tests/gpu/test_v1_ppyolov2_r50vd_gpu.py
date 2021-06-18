@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import cv2
 import pytest
 import numpy as np
-import image_preprocess
-from PIL import Image
 from paddle.inference import Config
 from paddle.inference import create_predictor
+
+import image_preprocess
 from test_src import test_gpu_model_jetson
 
 
@@ -68,10 +67,12 @@ def inference_ppyolov2_r50vd(img, model_path, params_path):
         results.append(output_data)
     return results
 
+
 @pytest.mark.p0
-def test_ppyolov2_r50vd():
+def test_ppyolov2_r50vd(debug=False):
     """
     test_ppyolov2_r50vd
+    测试ppyolov2模型，阀值控制在diff_standard
     Args:
         None
     Returns:
@@ -82,16 +83,15 @@ def test_ppyolov2_r50vd():
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path(
         "cv_detect_model")
-    #with_lr_data = inference_yolov3_r50vd(model_path,params_path,ir_optim=True)
     img_name = 'kite.jpg'
     image_path = test_model.test_readdata(
         path="cv_detect_model", data_name=img_name)
     img = cv2.imread(image_path)
     with_lr_data = inference_ppyolov2_r50vd(img, model_path, params_path)
-    
-    npy_result = test_model.npy_result_path("cv_detect_model")
-    test_model.test_diff(npy_result, with_lr_data[0], diff_standard)
-    
-    # det image with box
-    # np.save("ppyolov2_r50vd.npy",with_lr_data[0])
-    # image_preprocess.draw_bbox(image_path, with_lr_data[0], save_name="ppyolov2_r50vd.jpg")
+    if debug == False:
+        npy_result = test_model.npy_result_path("cv_detect_model")
+        test_model.test_diff(npy_result, with_lr_data[0], diff_standard)
+    else:
+        # det image with box
+        np.save("ppyolov2_r50vd.npy", with_lr_data[0])
+        image_preprocess.draw_bbox(image_path, with_lr_data[0], save_name="ppyolov2_r50vd.jpg")

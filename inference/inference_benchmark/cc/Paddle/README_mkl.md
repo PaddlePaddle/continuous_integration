@@ -47,7 +47,7 @@ python3.7 -m pip install openpyxl; # process data to excel
 
 
 # 5. start benchmark tests
-bash bin/run_models_benchmark.sh "static" "cpu"
+bash bin/run_models_benchmark.sh "static" "cpu" "1" "1"
 
 # 6. convert data to excel
 python3.7 bin/py_parse_log.py --log_path=./log --output_name=benchmark_mkl_excel.xlsx

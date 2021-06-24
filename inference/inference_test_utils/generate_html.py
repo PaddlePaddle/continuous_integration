@@ -119,8 +119,8 @@ class HtmlContentRender(object):
                 task_info['status'] = 'Failed'
                 content = content.replace("<td>failed</td>",
                                           red_bg_html + "failed</td>")
-            content = content.replace("text-align: right;",
-                                      "text-align: center;")
+            content = content.replace('<tr style="text-align: right;">',
+                                      '<tr bgcolor="#BEBEBE" style="font-weight:bold;">')
 
         task_info['table_data'] = content  # insert final table to html
 

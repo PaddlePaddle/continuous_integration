@@ -121,9 +121,9 @@ def main():
     print(b_1)
     print(c_1)
 
-    a_1.to_html("train_ci_log.html")  # render html
-    b_1.to_html("export_ci_log.html")  # render html
-    c_1.to_html("predict_det_ci_log.html")  # render html
+    a_1.to_html("train_ci_log.html", index=False)  # render html
+    b_1.to_html("export_ci_log.html", index=False)  # render html
+    c_1.to_html("predict_det_ci_log.html", index=False)  # render html
 
 
 if __name__ == "__main__":

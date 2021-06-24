@@ -60,7 +60,7 @@ class BenchmarkLogAnalyzer(object):
         self.analyzer_version = "1.0.3"
 
         # init dataframe and dict style
-        self.origin_df = pd.DataFrame(columns=[
+        df_columns = [
             "model_name", "paddle_version", "paddle_commit", "paddle_branch",
             "runtime_device", "ir_optim", "enable_memory_optim",
             "enable_tensorrt", "enable_mkldnn", "cpu_math_library_num_threads",
@@ -68,8 +68,19 @@ class BenchmarkLogAnalyzer(object):
             "cpu_vms", "cpu_shared_mb", "cpu_dirty_mb", "cpu_util",
             "gpu_rss(MB)", "gpu_util", "gpu_mem_util", "preprocess_time(ms)",
             "inference_time(ms)", "postprocess_time(ms)"
-        ])
-        self.benchmark_key = self.origin_df.to_dict()
+        ]
+        self.benchmark_key = dict.fromkeys(df_columns, None)
+
+        df_columns.remove("paddle_version")
+        df_columns.remove("paddle_commit")
+        df_columns.remove("paddle_branch")
+
+        df_columns.insert(1, "paddle_info")  # insert to 1 posistion
+
+        self.origin_df = pd.DataFrame(columns=df_columns)
+
+        # merged columns
+        self.paddle_info = ["paddle_version", "paddle_commit", "paddle_branch"]
 
     def find_all_logs(self, path_walk: str):
         """
@@ -83,6 +94,7 @@ class BenchmarkLogAnalyzer(object):
 
     def process_log(self, file_name: str) -> dict:
         """
+        process single inference log
         """
         output_dict = deepcopy(self.benchmark_key)
         with open(file_name, 'r') as f:
@@ -99,10 +111,17 @@ class BenchmarkLogAnalyzer(object):
                         ).split(',')[0]
 
         empty_values = []
+        paddle_info_str = r""
         for k, _ in output_dict.items():
             if not output_dict[k]:
                 output_dict[k] = None
                 empty_values.append(k)
+            if k in self.paddle_info:
+                out_str = "".join([str(k), ": ", str(output_dict[k])])
+                paddle_info_str = paddle_info_str + out_str + "\n"
+        output_dict["paddle_info"] = paddle_info_str
+        for paddle_info_key in self.paddle_info:
+            output_dict.pop(paddle_info_key)
 
         if not empty_values:
             logger.info("no empty value found")
@@ -120,8 +139,11 @@ class BenchmarkLogAnalyzer(object):
 
         raw_df = self.origin_df.sort_values(by='model_name')
         raw_df.sort_values(by=["model_name", "batch_size"], inplace=True)
-        raw_df.to_excel(self.args.output_name)     # render excel
-        raw_df.to_html(self.args.output_html_name) # render html
+        raw_df.to_excel(self.args.output_name, index=False)  # render excel
+        # convert '\n' to '<br/>' for further usage
+        raw_df["paddle_info"] = raw_df["paddle_info"].apply(
+            lambda x: x.replace("\n", "<br/>"))
+        raw_df.to_html(self.args.output_html_name, index=False)  # render html
         print(raw_df)
 
 

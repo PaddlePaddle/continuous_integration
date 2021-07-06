@@ -103,10 +103,10 @@ include(external-cmake/gtest-cpp.cmake)
 
 # if CentOS, gtest libs are under lib64
 # if Ubuntu, gtest libs are under lib
-if(DIST MATCHES "CentOS")
-  set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib64")
-else()
+if(DIST MATCHES "Ubuntu")
   set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib")
+else()
+  set(gtest_lib_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/lib64")
 endif()
 
 set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")

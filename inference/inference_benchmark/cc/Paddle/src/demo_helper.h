@@ -92,6 +92,8 @@ void PrepareConfig(paddle_infer::Config *config) {
     if (FLAGS_use_mkldnn_) {
       config->EnableMKLDNN();
       LOG(INFO) << "mkldnn enabled";
+      config->pass_builder()->AppendPass("fc_mkldnn_pass");
+      LOG(INFO) << "enable fc_mkldnn_pass for all model when enable mkldnn";
       if (FLAGS_use_interpolate_mkldnn_pass){
         config->pass_builder()->AppendPass("interpolate_mkldnn_pass");
         LOG(INFO) << "enable interpolate_mkldnn_pass for seg and ocr model";

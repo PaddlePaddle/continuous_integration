@@ -1,0 +1,79 @@
+
+<meta http-equiv="Content-Type"content="text/html;charset=utf-8">
+<html align='left'>
+    <body>
+        <div style="text-align: right">
+            <p style="font-size: 0.8em;">
+                <a href="{{ href_url }}"> 报告详情 </a>
+            </p>
+        </div>
+        <div style="text-align: left">
+            <h3>任务信息</h3>
+            <Card :bordered="false">
+                <p slot="title" style="text-align: left;font-size: 0.8em;">
+                    任务名: {{ task_info.tname }}
+                </p>
+                <p slot="title" style="text-align: left;font-size: 0.8em;">
+                    repo名: {{ task_info.repo }}
+                </p>
+                <p slot="title" style="text-align: left;font-size: 0.8em;">
+                    commit信息: {{ task_info.commit_id }}
+                </p>
+                <p slot="title" style="text-align: left;font-size: 0.8em;">
+                    branch信息: {{ task_info.branch }}
+                </p>
+                <p slot="title" style="text-align: left;font-size: 0.8em;" id="time">
+                    <script type=text/javascript>
+                        let timestamp = " {{ task_info.build_time }} "
+                        console.log(timestamp)
+                        let date = new Date(timestamp*1000);
+                        console.log(date);
+                        let utcOffset = 8;
+                        let tmp = utcOffset * 60;
+                        let hourOffset = Math.floor(tmp / 60);
+                        let minuteOffset = tmp % 60;
+                        let localHour = date.getHours();
+                        let localMinute = date.getMinutes();
+                        let localSeconds = date.getSeconds();
+                        let localOffset = date.getTimezoneOffset() / 60;
+                        let tmp1 = Math.abs(localOffset * 60);
+                        let localHourOffset = Math.floor(tmp1 / 60);
+                        let localMinuteOffset = tmp1 % 60;
+                        if (localOffset < 0) {
+                            localHourOffset = -localHourOffset;
+                            localMinuteOffset = -localMinuteOffset;
+                        }
+                        console.log(date);
+                        date.setHours(
+                            localHour + localHourOffset + hourOffset, localMinute + localMinuteOffset + minuteOffset, localSeconds, 0
+                        );
+                        console.log(date);
+                        let fmt = 'yyyy-MM-dd hh:mm:ss'
+                        let o = {
+                            'M+': date.getMonth() + 1,
+                            'd+': date.getDate(),
+                            'h+': date.getHours(),
+                            'm+': date.getMinutes(),
+                            's+': date.getSeconds(),
+                            'q+': Math.floor((date.getMonth() + 3) / 3),
+                            'S': date.getMilliseconds()
+                        };
+                        if (/(y+)/.test(fmt)) {
+                            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+                        }
+                        for (var k in o) {
+                            if (new RegExp('(' + k + ')').test(fmt)) {
+                            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
+                            }
+                        }
+                        console.log(fmt)
+                        document.getElementById("time").innerText = "任务完成时间: " + fmt;
+                    </script> 
+                </p>
+            </Card>
+        </div>
+        <div> 
+            {{ task_info.table_data }}
+        </div>
+    </body>
+</html>

@@ -3,20 +3,21 @@ export RED='\033[0;31m' # red color
 export NC='\033[0m' # no color
 export YELLOW='\033[33m' # yellow color
 
-test_cpu(){
+function test_det_cpu(){
     exe_bin=$1 # ./build/clas_benchmark
     model_name=$2
     model_path=$3
     params_path=$4
-
+    declare -a name_batch_size=$5[@]
+    cpu_batch_size=(${!name_batch_size})
     image_shape="3,224,224"
-    if [ $# -ge 5 ]; then
-        image_shape=$5
+    if [ $# -ge 6 ]; then
+        image_shape=$6
     fi
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
     use_gpu=false;
 
-    for batch_size in "1" "2" "4"
+    for batch_size in ${cpu_batch_size[@]}
     do
         echo " "
         printf "start ${YELLOW} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
@@ -28,7 +29,7 @@ test_cpu(){
             --image_shape=${image_shape} \
             --batch_size=${batch_size} \
             --model_type=${MODEL_TYPE} \
-            --repeats=500 \
+            --repeats=10 \
             --use_gpu=${use_gpu} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
 
         printf "finish ${RED} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
@@ -37,23 +38,26 @@ test_cpu(){
 }
 
 
-test_mkldnn(){
+function test_det_mkldnn(){
     exe_bin=$1 # ./build/clas_benchmark
     model_name=$2
     model_path=$3
     params_path=$4
-
+    declare -a name_batch_size=$5[@]
+    cpu_batch_size=(${!name_batch_size})
+    declare -a name_threads=$6[@]
+    cpu_num_threads=(${!name_threads})
     image_shape="3,224,224"
-    if [ $# -ge 5 ]; then
-        image_shape=$5
+    if [ $# -ge 7 ]; then
+        image_shape=$7
     fi
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
     use_gpu=false;
     use_mkldnn=true;
 
-    for batch_size in "1" "2" "4"
+    for batch_size in ${cpu_batch_size[@]}
     do
-        for cpu_math_library_num_threads in "1" "2" "4"
+        for cpu_math_library_num_threads in ${cpu_num_threads[@]}
         do
             echo " "
             printf "start ${YELLOW} ${model_name}, use_mkldnn: ${use_mkldnn}, cpu_math_library_num_threads: ${cpu_math_library_num_threads}, batch_size: ${batch_size}${NC}\n"
@@ -65,7 +69,7 @@ test_mkldnn(){
                 --image_shape=${image_shape} \
                 --batch_size=${batch_size} \
                 --use_gpu=${use_gpu} \
-                --repeats=500 \
+                --repeats=10 \
                 --model_type=${MODEL_TYPE} \
                 --cpu_math_library_num_threads=${cpu_math_library_num_threads} \
                 --use_mkldnn_=${use_mkldnn} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
@@ -76,9 +80,16 @@ test_mkldnn(){
     done                               
 }
 
-main(){
+function run_det_mkl_func(){
+    model_root=${DATA_ROOT}/PaddleDetection/infer_static
+    if [ $# -ge 1 ]; then
+        model_root=$1
+    fi
     printf "${YELLOW} ==== start benchmark ==== ${NC} \n"
-    model_root=$1
+    declare name_batch_size=$2[@]
+    cpu_batch_size=(${!name_batch_size})
+    declare name_threads=$3[@]
+    cpu_num_threads=(${!name_threads})
 
     rcnn_model="mask_rcnn_r50_1x \
                 faster_rcnn_r50_1x \
@@ -86,15 +97,15 @@ main(){
                 
     for tests in ${rcnn_model}
     do
-        test_cpu "rcnn_benchmark" "${tests}" \
+        test_det_cpu "rcnn_benchmark" "${tests}" \
                 ${model_root}/${tests}/__model__ \
                 ${model_root}/${tests}/__params__ \
-                "3,640,640"
+                cpu_batch_size "3,640,640"
 
-        test_mkldnn "rcnn_benchmark" "${tests}" \
+        test_det_mkldnn "rcnn_benchmark" "${tests}" \
                  ${model_root}/${tests}/__model__ \
                  ${model_root}/${tests}/__params__ \
-                 "3,640,640" "40"
+                 cpu_batch_size cpu_num_threads "3,640,640" "40"
     done
 
     yolo_model="ppyolo_mobilenet_v3_large \
@@ -105,23 +116,16 @@ main(){
                 
     for tests in ${yolo_model}
     do
-        test_cpu "yolo_benchmark" "${tests}" \
+        test_det_cpu "yolo_benchmark" "${tests}" \
                  ${model_root}/${tests}/__model__ \
                  ${model_root}/${tests}/__params__ \
-                 "3,608,608"
+                 cpu_batch_size "3,608,608"
     
-        test_mkldnn "yolo_benchmark" "${tests}" \
+        test_det_mkldnn "yolo_benchmark" "${tests}" \
                  ${model_root}/${tests}/__model__ \
                  ${model_root}/${tests}/__params__ \
-                 "3,608,608"
+                 cpu_batch_size cpu_num_threads "3,608,608"
     done
 
     printf "${YELLOW} ==== finish benchmark ==== ${NC} \n"
 }
-
-model_root=${DATA_ROOT}/PaddleDetection/infer_static
-if [ $# -ge 1 ]; then
-    model_root=$1
-fi
-
-main ${model_root}

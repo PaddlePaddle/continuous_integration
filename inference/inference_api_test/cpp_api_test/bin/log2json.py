@@ -93,7 +93,7 @@ def josn_file(key_log):
     return josn_list, failed_num
 
 def read_commit_id(inference_path):
-    version_path = os.path.join(inference_path,"version")
+    version_path = os.path.join(inference_path,"version.txt")
     with open(version_path) as f:
         first_line = f.readlines()[0]
         f.close()

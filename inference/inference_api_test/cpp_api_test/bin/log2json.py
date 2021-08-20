@@ -25,8 +25,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_file", type=str, help="log file")
     parser.add_argument("--url", type=str, help="url")
-    parser.add_argument(
-        "--build_type", type=str, help="build_type")
+    parser.add_argument("--build_type", type=str, help="build_type")
     parser.add_argument("--repo", type=str, help="repo name")
     parser.add_argument("--inference_path", type=str, help="inference path")
     parser.add_argument("--branch", type=str, help="branch")
@@ -34,8 +33,7 @@ def parse_args():
     parser.add_argument("--task_name", type=str, help="task name")
     parser.add_argument("--owner", type=str, help="owner")
     parser.add_argument("--build_id", type=str, help="build_id")
-    parser.add_argument(
-        "--build_number", type=str, help="build_number")
+    parser.add_argument("--build_number", type=str, help="build_number")
 
     return parser.parse_args()
 
@@ -89,14 +87,16 @@ def josn_file(key_log):
         id = id + 1
     return josn_list, failed_num
 
+
 def read_commit_id(inference_path):
-    version_path = os.path.join(inference_path,"version.txt")
+    version_path = os.path.join(inference_path, "version.txt")
     with open(version_path) as f:
         first_line = f.readlines()[0]
         f.close()
     return first_line.split()[-1]
 
-def send(args, josn_file, failed_num,commit_id):
+
+def send(args, josn_file, failed_num, commit_id):
     if failed_num > 0:
         status = "Failed"
     else:
@@ -127,5 +127,4 @@ if __name__ == '__main__':
     commit_id = read_commit_id(inference_path=inference_path)
     key_log = read_log(path=path)
     json_file, failed_num = josn_file(key_log=key_log)
-    send(args, json_file, failed_num,commit_id)
-
+    send(args, json_file, failed_num, commit_id)

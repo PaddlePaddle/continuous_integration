@@ -67,7 +67,11 @@ test_trt(){
             if [ $trt_precision == "fp16" ]; then
                 accuracy=9e-1
             else
-                accuracy=2e-4
+                if [ "$gpu_type" == "nano" ]; then
+                    accuracy=3e-4
+                else
+                    accuracy=2e-4
+                fi
             fi
             printf "${YELLOW} ${trt_precision} accuracy set to ${accuracy} ${NC}\n"
             $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \

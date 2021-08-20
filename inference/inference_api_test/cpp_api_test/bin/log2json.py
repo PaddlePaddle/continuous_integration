@@ -76,12 +76,12 @@ def josn_file(key_log):
             else:
                 status = "passed"
             full_name = "cpp_test_" + name
-            descriton = line
+            description = line
             josn_file = {
                 "name": name,
                 "status": status,
-                "full_name": full_name,
-                "descriton": descriton
+                "fullName": full_name,
+                "description": description
             }
             josn_list.append(josn_file)
         id = id + 1

@@ -78,10 +78,7 @@ def josn_file(key_log):
             else:
                 status = "passed"
             full_name = "cpp_test_" + name
-            descriton = full_name + information[3] + " " + information[
-                4] + " " + information[5] + " " + information[
-                    6] + " " + information[7] + " " + information[8].split("^")[
-                        0]
+            descriton = line
             josn_file = {
                 "name": name,
                 "status": status,

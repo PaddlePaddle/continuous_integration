@@ -198,17 +198,17 @@ function run_clas_mkl_func(){
                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
                 cpu_batch_size cpu_num_threads "3,640,640" "true"
         
-        # ch_ppocr_mobile_v1.1_rec_infer
-        model_case="ch_ppocr_mobile_v1.1_rec_infer"
-        test_cpu "clas_benchmark" "${model_case}" \
-                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-                cpu_batch_size "3,32,320"
+        # # ch_ppocr_mobile_v1.1_rec_infer
+        # model_case="ch_ppocr_mobile_v1.1_rec_infer"
+        # test_cpu "clas_benchmark" "${model_case}" \
+        #         "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+        #         "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+        #         cpu_batch_size "3,32,320"
 
-        test_mkldnn "clas_benchmark" "${model_case}" \
-                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-                cpu_batch_size cpu_num_threads "3,32,320" "10"
+        # test_mkldnn "clas_benchmark" "${model_case}" \
+        #         "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+        #         "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+        #         cpu_batch_size cpu_num_threads "3,32,320" "10"
     fi
 
     printf "${YELLOW} ==== finish benchmark ==== ${NC} \n"

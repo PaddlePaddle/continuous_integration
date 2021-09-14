@@ -42,9 +42,9 @@ def inference_EfficientNetB0(img, model_path, params_path):
     config.enable_memory_optim()
     config.enable_tensorrt_engine(1 << 30,    # workspace_size
             10,    # max_batch_size
-            30,    # min_subgraph_size
+            50,    # min_subgraph_size
             PrecisionType.Float32,    # precision
-            True,    # use_static
+            False,    # use_static
             False,    # use_calib_mode
             )
     predictor = create_predictor(config)

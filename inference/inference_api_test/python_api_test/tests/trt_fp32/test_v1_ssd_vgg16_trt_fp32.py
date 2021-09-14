@@ -40,10 +40,10 @@ def inference_ssd_vgg16(img, model_path, params_path):
     config.switch_specify_input_names(True)
     config.enable_memory_optim()
     config.enable_tensorrt_engine(1 << 30,    # workspace_size
-            10,    # max_batch_size
-            30,    # min_subgraph_size
+            1,    # max_batch_size
+            100,    # min_subgraph_size
             PrecisionType.Float32,    # precision
-            True,    # use_static
+            False,    # use_static
             False,    # use_calib_mode
             )
     predictor = create_predictor(config)

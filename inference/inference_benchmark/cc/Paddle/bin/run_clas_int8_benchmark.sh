@@ -107,39 +107,39 @@ main(){
     printf "${YELLOW} ==== start benchmark ==== ${NC} \n"
     model_root=$1
 
-    #class_model="AlexNet \
-    #             DarkNet53 \
-    #             DenseNet121 \
-    #             DPN68 \
-    #             EfficientNetB0 \
-    #             GhostNet_x1_3 \
-    #             GoogLeNet \
-    #             HRNet_W18_C \
-    #             InceptionV4 \
-    #             MobileNetV1 \
-    #             MobileNetV2 \
-    #             MobileNetV3_large_x1_0 \
-    #             RegNetX_4GF \
-    #             Res2Net50_26w_4s \
-    #             ResNeSt50_fast_1s1x64d \
-    #             ResNet50 \
-    #             ResNet50_vd \
-    #             SE_ResNeXt50_vd_32x4d \
-    #             ShuffleNetV2 \
-    #             SqueezeNet1_0 \
-    #             VGG11 \
-    #             Xception41"
+    class_model="AlexNet \
+                 DarkNet53 \
+                 DenseNet121 \
+                 DPN68 \
+                 EfficientNetB0 \
+                 GhostNet_x1_3 \
+                 GoogLeNet \
+                 HRNet_W18_C \
+                 InceptionV4 \
+                 MobileNetV1 \
+                 MobileNetV2 \
+                 MobileNetV3_large_x1_0 \
+                 RegNetX_4GF \
+                 Res2Net50_26w_4s \
+                 ResNeSt50_fast_1s1x64d \
+                 ResNet50 \
+                 ResNet50_vd \
+                 SE_ResNeXt50_vd_32x4d \
+                 ShuffleNetV2 \
+                 SqueezeNet1_0 \
+                 VGG11 \
+                 Xception41"
 
-    #for tests in ${class_model}
-    #do
-    #    gen_int8_calib "clas_benchmark" "${tests}" \
-    #             ${model_root}/${tests}/__model__ \
-    #             ${model_root}/${tests}/params
-    #
-    #    test_int8 "clas_benchmark" "${tests}" \
-    #             ${model_root}/${tests}/__model__ \
-    #             ${model_root}/${tests}/params
-    #done
+    for tests in ${class_model}
+    do
+        gen_int8_calib "clas_benchmark" "${tests}" \
+                 ${model_root}/${tests}/__model__ \
+                 ${model_root}/${tests}/params
+    
+        test_int8 "clas_benchmark" "${tests}" \
+                 ${model_root}/${tests}/__model__ \
+                 ${model_root}/${tests}/params
+    done
 
     if [ "${MODEL_TYPE}" == "static" ] || [ "${MODEL_TYPE}" == "static_prune_op" ]; then
         # ssdlite_mobilenet_v3_large

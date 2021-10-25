@@ -28,6 +28,14 @@ gen_int8_calib(){
     printf "start ${YELLOW} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
 
     # log_file="${LOG_ROOT}/Gen_calib_${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log"
+    if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
+        echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
+        python3.8 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                                              --params_file="${params_path}" \
+                                              --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
+        model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
+        params_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdiparams"
+    fi;
     $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
         --model_path=${model_path} \
         --params_path=${params_path} \
@@ -71,6 +79,14 @@ test_int8(){
         printf "start ${YELLOW} ${model_name} generate calib, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
 
         log_file="${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log"
+        if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
+            echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
+            python3.8 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                                                  --params_file="${params_path}" \
+                                                  --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
+            model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
+            params_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdiparams"
+        fi;
         $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
             --model_path=${model_path} \
             --params_path=${params_path} \
@@ -91,41 +107,41 @@ main(){
     printf "${YELLOW} ==== start benchmark ==== ${NC} \n"
     model_root=$1
 
-    class_model="AlexNet \
-                 DarkNet53 \
-                 DenseNet121 \
-                 DPN68 \
-                 EfficientNetB0 \
-                 GhostNet_x1_3 \
-                 GoogLeNet \
-                 HRNet_W18_C \
-                 InceptionV4 \
-                 MobileNetV1 \
-                 MobileNetV2 \
-                 MobileNetV3_large_x1_0 \
-                 RegNetX_4GF \
-                 Res2Net50_26w_4s \
-                 ResNeSt50_fast_1s1x64d \
-                 ResNet50 \
-                 ResNet50_vd \
-                 SE_ResNeXt50_vd_32x4d \
-                 ShuffleNetV2 \
-                 SqueezeNet1_0 \
-                 VGG11 \
-                 Xception41"
+    #class_model="AlexNet \
+    #             DarkNet53 \
+    #             DenseNet121 \
+    #             DPN68 \
+    #             EfficientNetB0 \
+    #             GhostNet_x1_3 \
+    #             GoogLeNet \
+    #             HRNet_W18_C \
+    #             InceptionV4 \
+    #             MobileNetV1 \
+    #             MobileNetV2 \
+    #             MobileNetV3_large_x1_0 \
+    #             RegNetX_4GF \
+    #             Res2Net50_26w_4s \
+    #             ResNeSt50_fast_1s1x64d \
+    #             ResNet50 \
+    #             ResNet50_vd \
+    #             SE_ResNeXt50_vd_32x4d \
+    #             ShuffleNetV2 \
+    #             SqueezeNet1_0 \
+    #             VGG11 \
+    #             Xception41"
 
-    for tests in ${class_model}
-    do
-        gen_int8_calib "clas_benchmark" "${tests}" \
-                 ${model_root}/${tests}/__model__ \
-                 ${model_root}/${tests}/params
-    
-        test_int8 "clas_benchmark" "${tests}" \
-                 ${model_root}/${tests}/__model__ \
-                 ${model_root}/${tests}/params
-    done
+    #for tests in ${class_model}
+    #do
+    #    gen_int8_calib "clas_benchmark" "${tests}" \
+    #             ${model_root}/${tests}/__model__ \
+    #             ${model_root}/${tests}/params
+    #
+    #    test_int8 "clas_benchmark" "${tests}" \
+    #             ${model_root}/${tests}/__model__ \
+    #             ${model_root}/${tests}/params
+    #done
 
-    if [ "${MODEL_TYPE}" == "static" ]; then
+    if [ "${MODEL_TYPE}" == "static" ] || [ "${MODEL_TYPE}" == "static_prune_op" ]; then
         # ssdlite_mobilenet_v3_large
         model_case="ssdlite_mobilenet_v3_large"
         gen_int8_calib "clas_benchmark" "${model_case}" \

@@ -24,7 +24,7 @@ test_gpu(){
         log_file="${LOG_ROOT}/${model_name}_gpu_bz${batch_size}_infer.log"
         if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
             echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
-            python3.8 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+            python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
                                                   --params_file="${params_path}" \
                                                   --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
             model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
@@ -80,7 +80,7 @@ test_trt(){
             log_file="${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log"
             if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
                 echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
-                python3.8 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
                                                       --params_file="${params_path}" \
                                                       --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
                 model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"

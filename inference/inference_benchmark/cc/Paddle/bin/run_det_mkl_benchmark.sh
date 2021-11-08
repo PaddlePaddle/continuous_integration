@@ -25,7 +25,7 @@ function test_det_cpu(){
         log_file="${LOG_ROOT}/${model_name}_cpu_bz${batch_size}_infer.log"
         if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
             echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
-            python3.8 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+            python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
                                                   --params_file="${params_path}" \
                                                   --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
             model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
@@ -73,7 +73,7 @@ function test_det_mkldnn(){
             log_file="${LOG_ROOT}/${model_name}_mkldnn_${cpu_math_library_num_threads}_bz${batch_size}_infer.log"
             if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
                 echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
-                python3.8 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
                                                       --params_file="${params_path}" \
                                                       --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
                 model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"

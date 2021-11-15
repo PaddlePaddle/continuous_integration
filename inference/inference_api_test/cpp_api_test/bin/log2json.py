@@ -99,8 +99,10 @@ def read_commit_id(inference_path):
 def send(args, josn_file, failed_num, commit_id):
     if failed_num > 0:
         status = "Failed"
+        exit_code=8
     else:
         status = "Passed"
+        exit_code=0
     params = {
         "build_type": args.build_type,
         "repo": args.repo,
@@ -112,6 +114,7 @@ def send(args, josn_file, failed_num, commit_id):
         "build_id": args.build_id,
         "build_number": args.build_number,
         "status": status,
+        "exit_code":exit_code,
         "create_time": time.time(),
         "duration": None,
         "case_detail": json.dumps(josn_file)

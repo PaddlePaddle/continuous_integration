@@ -102,6 +102,7 @@ def send(args, josn_file, failed_num, commit_id):
         exit_code=8
     else:
         status = "Passed"
+        exit_code=0
     params = {
         "build_type": args.build_type,
         "repo": args.repo,

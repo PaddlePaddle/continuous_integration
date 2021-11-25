@@ -63,7 +63,7 @@ python -m pip install paddleslim
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
 cd test_tipc
-cp ../continuous_integration/tipc/tipc_run.sh .
+cp ../../continuous_integration/tipc/tipc_run.sh .
 sh tipc_run.sh
 "
 

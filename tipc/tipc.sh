@@ -70,7 +70,7 @@ sh tipc_run.sh
 
 set +x
 # check_status
-log_file="./${REPO}/test_tipc/output/results.log"
+log_file="test_tipc/output/results.log"
 EXIT_CODE=0
 
 if [[ ! -f ${log_file} ]];then

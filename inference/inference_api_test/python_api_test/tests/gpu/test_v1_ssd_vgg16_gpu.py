@@ -76,7 +76,7 @@ def test_ssd_vgg16():
     Returns:
         None
     """
-    diff_standard = 1e-3
+    diff_standard = 2e-3
     model_name = "ssd_vgg16"
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path(

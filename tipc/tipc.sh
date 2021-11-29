@@ -71,8 +71,10 @@ sh tipc_run.sh
 # check_status
 set +x
 cd $REPO
-LOG_FILE="results"
-find . -name *.log > $LOG_FILE
+log_file="results"
+for f in `find . -name *.log`; do
+   cat $f >> $LOG_FILE
+done
 EXIT_CODE=0
 
 if [[ ! -f ${log_file} ]];then

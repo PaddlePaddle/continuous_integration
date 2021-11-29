@@ -73,7 +73,7 @@ set +x
 cd $REPO
 log_file="results"
 for f in `find . -name *.log`; do
-   cat $f >> $LOG_FILE
+   cat $f >> $log_file
 done
 EXIT_CODE=0
 

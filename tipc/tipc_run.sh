@@ -1,6 +1,13 @@
 #! /bin/bash
 
+
+test_mode=${TIPC_MODE:-lite_train_lite_infer}
+test_mode=$(echo $test_mode | tr "," "\n")
+
 for config_file in `find . -name "*train_infer_python.txt"`; do
-    bash test_tipc/prepare.sh $config_file 'lite_train_lite_infer';
-    bash test_tipc/test_train_inference_python.sh $config_file 'lite_train_lite_infer';
+    for mode in $test_mode; do
+        mode=$(echo $mode | xargs)
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_train_inference_python.sh $config_file $mode
+    done
 done

@@ -29,6 +29,7 @@ nvidia-docker run -i --rm \
                   --name ${DOCKER_NAME} \
                   --privileged \
                   --net=host \
+                  --shm-size=128G \
                   -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi ${CUDA_SO} ${DEVICES} \
                   -v $(pwd):/workspace \
                   -w /workspace \

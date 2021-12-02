@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-test_mode=$TIPC_MODE
+test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
 
 for config_file in `find . -name "*train_infer_python.txt"`; do

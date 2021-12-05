@@ -24,7 +24,7 @@ test_gpu(){
         log_file="${LOG_ROOT}/${model_name}_gpu_bz${batch_size}_infer.log"
         if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
             echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
-            python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+            python ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
                                                   --params_file="${params_path}" \
                                                   --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
             model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
@@ -35,7 +35,7 @@ test_gpu(){
             --params_path=${params_path} \
             --image_shape=${image_shape} \
             --batch_size=${batch_size} \
-            --use_gpu=${use_gpu} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
+            --use_gpu=${use_gpu} >> ${log_file} 2>&1 | python ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
 
         printf "finish ${RED} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
         echo " "
@@ -63,12 +63,9 @@ test_trt(){
     use_gpu=true;
     use_trt=true;
 
-    # Tesla T4 can run fp16
-    if [ "$gpu_type" == "T4" ]; then
-        declare -a trt_precisions=("fp32" "fp16")
-    else
-        declare -a trt_precisions=("fp32")
-    fi
+    # Tesla T4,v100,A100,A30,A10 can run fp16
+    
+    declare -a trt_precisions=("fp32" "fp16")
 
     for batch_size in "1" "2" "4"
     do
@@ -80,7 +77,7 @@ test_trt(){
             log_file="${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log"
             if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
                 echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
-                python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                python ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
                                                       --params_file="${params_path}" \
                                                       --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
                 model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
@@ -94,7 +91,7 @@ test_trt(){
                 --use_gpu=${use_gpu} \
                 --trt_min_subgraph_size=${trt_min_subgraph_size} \
                 --trt_precision=${trt_precision} \
-                -use_trt=${use_trt} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
+                -use_trt=${use_trt} >> ${log_file} 2>&1 | python ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
 
             printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
             echo " "

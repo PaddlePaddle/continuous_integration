@@ -73,7 +73,7 @@ def test_Xception41():
     Returns:
         None
     """
-    diff_standard = 1e-6
+    diff_standard = 3e-6
     model_name = "Xception41"
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path("cv_class_model")

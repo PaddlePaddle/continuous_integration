@@ -77,7 +77,7 @@ def test_yolov3_r50vd():
     Returns:
         None
     """
-    diff_standard = 1e-3
+    diff_standard = 3e-2
     model_name = "yolov3_r50vd"
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path(

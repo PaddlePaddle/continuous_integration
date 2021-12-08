@@ -121,6 +121,8 @@ def send(args, josn_file, failed_num, commit_id):
     }
     res = requests.post(args.url, data=params)
     print(res.content)
+    print("exit_code:", exit_code)
+    sys.exit(exit_code)
 
 
 if __name__ == '__main__':

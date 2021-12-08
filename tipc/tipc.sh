@@ -24,6 +24,10 @@ if version_lt ${nv_docker_version} 2.0.0; then
    export DEVICES=$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
 fi
 
+
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}
+
+
 docker rm -f ${DOCKER_NAME} || echo "remove docker paddle_whole_chain_test failed"
 nvidia-docker run -i --rm \
                   --name ${DOCKER_NAME} \
@@ -35,6 +39,7 @@ nvidia-docker run -i --rm \
                   -w /workspace \
                   -u root \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
+                  -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
 unset http_proxy

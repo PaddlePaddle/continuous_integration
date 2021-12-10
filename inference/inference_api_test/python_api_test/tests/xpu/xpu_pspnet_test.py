@@ -18,7 +18,7 @@ import pytest
 import numpy as np
 import image_preprocess
 from paddle.inference import Config
-from paddle.inference import 
+from paddle.inference import PrecisionType
 from paddle.inference import create_predictor
 from test_src import test_gpu_model_jetson
 

@@ -19,6 +19,7 @@ import numpy as np
 import image_preprocess
 from PIL import Image
 from paddle.inference import Config
+from paddle.inference import PrecisionType
 from paddle.inference import create_predictor
 from test_src import test_gpu_model_jetson
 
@@ -35,6 +36,7 @@ def inference_DenseNet121(img, model_path, params_path):
     """
     config = Config(model_path, params_path)
     config.enable_xpu(10 * 1024 * 1024)
+    config.enable_lite_engine(PrecisionType.Float32, True) 
     config.switch_ir_optim(True)
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)

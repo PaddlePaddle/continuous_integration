@@ -21,7 +21,7 @@ if __name__ == "__main__":
     with jtop() as jetson:
         if hasattr(jetson, 'fan'):
             print(jetson.fan)
-        jetson.fan.speed = 100
+        jetson.fan.speed = 30
         print(jetson.cpu)
         print(jetson.gpu)
         print('*** temperature ***')

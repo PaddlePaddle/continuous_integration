@@ -28,6 +28,14 @@ gen_int8_calib(){
     printf "start ${YELLOW} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
 
     # log_file="${LOG_ROOT}/Gen_calib_${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log"
+    if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
+        echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
+        python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                                              --params_file="${params_path}" \
+                                              --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
+        model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
+        params_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdiparams"
+    fi;
     $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
         --model_path=${model_path} \
         --params_path=${params_path} \
@@ -71,6 +79,14 @@ test_int8(){
         printf "start ${YELLOW} ${model_name} generate calib, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
 
         log_file="${LOG_ROOT}/${model_name}_trt_${trt_precision}_bz${batch_size}_infer.log"
+        if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
+            echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
+            python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                                                  --params_file="${params_path}" \
+                                                  --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
+            model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
+            params_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdiparams"
+        fi;
         $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
             --model_path=${model_path} \
             --params_path=${params_path} \

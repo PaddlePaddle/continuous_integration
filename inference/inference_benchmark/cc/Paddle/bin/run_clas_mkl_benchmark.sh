@@ -23,6 +23,14 @@ function test_cpu(){
         printf "start ${YELLOW} ${model_name}, use_gpu: ${use_gpu}, batch_size: ${batch_size}${NC}\n"
 
         log_file="${LOG_ROOT}/${model_name}_cpu_bz${batch_size}_infer.log"
+        if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
+            echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
+            python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                                                  --params_file="${params_path}" \
+                                                  --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
+            model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
+            params_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdiparams"
+        fi;
         $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
             --model_path=${model_path} \
             --params_path=${params_path} \
@@ -67,6 +75,14 @@ function test_mkldnn(){
             printf "start ${YELLOW} ${model_name}, use_mkldnn: ${use_mkldnn}, cpu_math_library_num_threads: ${cpu_math_library_num_threads}, batch_size: ${batch_size}${NC}\n"
 
             log_file="${LOG_ROOT}/${model_name}_mkldnn_${cpu_math_library_num_threads}_bz${batch_size}_infer.log"
+            if [ "${MODEL_TYPE}" == "static_prune_op" ]; then
+                echo "========================== start prune model op attribute +++++++++++++++++++++++++++"
+                python3.7 ${UTILS_ROOT}/model_clip.py --model_file="${model_path}" \
+                                                      --params_file="${params_path}" \
+                                                      --output_model_path="${DATA_ROOT}/prune_model/${model_name}/inference"
+                model_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdmodel"
+                params_path="${DATA_ROOT}/prune_model/${model_name}/inference.pdiparams"
+            fi;
             $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \
                 --model_path=${model_path} \
                 --params_path=${params_path} \
@@ -129,7 +145,7 @@ function run_clas_mkl_func(){
                  ${model_root}/${tests}/params cpu_batch_size cpu_num_threads
     done
 
-    if [ "${MODEL_TYPE}" == "static" ]; then
+    if [ "${MODEL_TYPE}" == "static" ] || [ "${MODEL_TYPE}" == "static_prune_op" ]; then
         # ssdlite_mobilenet_v3_large
         model_case="ssdlite_mobilenet_v3_large"
         test_cpu "clas_benchmark" "${model_case}" \
@@ -198,17 +214,17 @@ function run_clas_mkl_func(){
                 "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
                 cpu_batch_size cpu_num_threads "3,640,640" "true"
         
-        # ch_ppocr_mobile_v1.1_rec_infer
-        model_case="ch_ppocr_mobile_v1.1_rec_infer"
-        test_cpu "clas_benchmark" "${model_case}" \
-                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-                cpu_batch_size "3,32,320"
+        # # ch_ppocr_mobile_v1.1_rec_infer
+        # model_case="ch_ppocr_mobile_v1.1_rec_infer"
+        # test_cpu "clas_benchmark" "${model_case}" \
+        #         "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+        #         "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+        #         cpu_batch_size "3,32,320"
 
-        test_mkldnn "clas_benchmark" "${model_case}" \
-                "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
-                "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
-                cpu_batch_size cpu_num_threads "3,32,320" "10"
+        # test_mkldnn "clas_benchmark" "${model_case}" \
+        #         "${DATA_ROOT}/PaddleOCR/${model_case}/model" \
+        #         "${DATA_ROOT}/PaddleOCR/${model_case}/params" \
+        #         cpu_batch_size cpu_num_threads "3,32,320" "10"
     fi
 
     printf "${YELLOW} ==== finish benchmark ==== ${NC} \n"

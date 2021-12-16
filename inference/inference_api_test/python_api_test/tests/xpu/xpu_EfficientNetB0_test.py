@@ -75,7 +75,7 @@ def test_EfficientNetB0():
     Returns:
         None
     """
-    diff_standard = 1e-6
+    diff_standard = 5e-2
     model_name = "EfficientNetB0"
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path("cv_class_model")

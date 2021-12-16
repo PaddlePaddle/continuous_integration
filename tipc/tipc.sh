@@ -52,6 +52,7 @@ export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr
 python -m pip install --retries 50 --upgrade pip
 if [[ $REPO == "PaddleSeg" ]]; then
     python -m pip install --retries 50 paddleseg
+    python -m pip install --retries 50 scikit-image
 fi
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 cd ./AutoLog

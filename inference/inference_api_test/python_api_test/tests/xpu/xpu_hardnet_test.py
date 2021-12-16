@@ -71,7 +71,7 @@ def test_hardnet():
     Returns:
         None
     """
-    diff_standard = 1e-4
+    diff_standard = 4e-2
     model_name = "hardnet"
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path("cv_seg_model")

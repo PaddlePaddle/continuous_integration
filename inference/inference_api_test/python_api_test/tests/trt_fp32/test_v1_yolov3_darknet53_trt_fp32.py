@@ -85,7 +85,7 @@ def test_yolov3_darknet53():
     Returns:
         None
     """
-    diff_standard = 1e-4
+    diff_standard = 2e-4
     model_name = "yolov3_darknet53"
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path(

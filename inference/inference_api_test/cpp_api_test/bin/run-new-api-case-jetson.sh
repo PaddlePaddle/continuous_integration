@@ -39,6 +39,6 @@ fi
 
 cd -
 
-bash $CASE_ROOT/pd-yolo-test-jetson.sh
+# bash $CASE_ROOT/pd-yolo-test-jetson.sh #迁移至paddletest仓库
 bash $CASE_ROOT/pd-clas-test-jetson.sh
 bash $CASE_ROOT/pd-rcnn-test-jetson.sh

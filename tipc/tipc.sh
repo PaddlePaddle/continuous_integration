@@ -61,6 +61,9 @@ python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
 cd ./${REPO}
+if [[ $REPO == "PaddleNLP" ]]; then
+    cd tests
+fi
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro
 python -m pip install --retries 10 opencv-python
@@ -75,7 +78,11 @@ python -m pip install --retries 10 paddleslim
 python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
-cp ../continuous_integration/tipc/tipc_run.sh .
+if [[ $REPO == "PaddleNLP" ]]; then
+    cp ../../continuous_integration/tipc/tipc_run.sh .
+else
+    cp ../continuous_integration/tipc/tipc_run.sh .
+fi
 sh tipc_run.sh
 "
 

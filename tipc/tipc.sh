@@ -75,6 +75,9 @@ python -m pip install --retries 10 openpyxl
 python -m pip install --retries 10 psutil
 python -m pip install --retries 10 GPUtil
 python -m pip install --retries 10 paddleslim
+python -m pip install --retries 10 paddlenlp
+python -m pip install --retries 10 attrdict
+python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 

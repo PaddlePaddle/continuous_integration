@@ -33,7 +33,7 @@ def set_style(diff_excel):
         for j in i:
             j.alignment = aligncenter
     # color mark
-    diff_cells = sheet1["J"][1:]
+    diff_cells = sheet1["K"][1:]
     for cell in diff_cells:
         if cell.value < -5:
             cell.font = Font(color=Color(index=2))
@@ -64,9 +64,12 @@ if __name__ == '__main__':
                                                     "cpu_shared(MB)", "cpu_dirty(MB)", "cpu_usage(%)", "gpu_used(MB)",
                                                     "gpu_utilization_rate(%)", "gpu_mem_utilization_rate(%)"], axis=1)
     last_qps_df = last_df["QPS"]
-    new_df["QPS_last"] = last_qps_df
-    new_df["QPS_diff(%)"] = new_df[["QPS", "QPS_last"]].apply(lambda x: (x["QPS"] - x["QPS_last"]) / x["QPS_last"] * 100, axis=1)
-    print(new_df)
-    new_df.to_excel(args.output_name)
+    merge_df = pd.merge(new_df, last_df, how="inner",
+                        on=["model_name", "batch_size", "enable_tensorrt", "trt_precision"],
+                        suffixes=("", "_last")).drop(["device_last"], axis=1)
+    merge_df["QPS_diff(%)"] = merge_df[["QPS", "QPS_last"]].apply(lambda x: (x["QPS"] - x["QPS_last"]) / x["QPS_last"] * 100, axis=1)
+    print(merge_df)
+    merge_df.sort_values(by=["model_name", "batch_size", "trt_precision"], inplace=True)
+    merge_df.to_excel(args.output_name)
     # postprocess
     set_style(args.output_name)

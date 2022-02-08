@@ -69,6 +69,7 @@ if __name__ == '__main__':
                         suffixes=("", "_last")).drop(["device_last"], axis=1)
     merge_df["QPS_diff(%)"] = merge_df[["QPS", "QPS_last"]].apply(lambda x: (x["QPS"] - x["QPS_last"]) / x["QPS_last"] * 100, axis=1)
     print(merge_df)
+    merge_df.sort_values(by=["model_name", "batch_size", "trt_precision"], inplace=True)
     merge_df.to_excel(args.output_name)
     # postprocess
     set_style(args.output_name)

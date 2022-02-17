@@ -5,6 +5,7 @@ set -ex
 #repo_list="PaddleOCR PaddleClas PaddleSeg PaddleNLP PaddleDetection PaddleRec DeepSpeech"
 
 REPO=$1
+model_path_in_docker=$2
 DOCKER_IMAGE=registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82
 DOCKER_NAME=paddle_whole_chain_test
 #COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
@@ -50,7 +51,7 @@ mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-python -m pip install --retries 50 --upgrade pip
+python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 if [[ $REPO == "PaddleSeg" ]]; then
     python -m pip install --retries 50 paddleseg
     python -m pip install --retries 50 scikit-image
@@ -88,6 +89,10 @@ else
     cp ../continuous_integration/tipc/tipc_run.sh .
 fi
 sh tipc_run.sh
+if [[ ${model_path_in_docker} != "" ]]; then
+    cd /workspace
+    bash -x upload_model.sh ${REPO} "${model_path_in_docker}"
+fi
 "
 
 

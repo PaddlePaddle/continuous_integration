@@ -8,7 +8,7 @@ REPO=$1
 model_path_in_docker=$2
 DOCKER_IMAGE=registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82
 DOCKER_NAME=paddle_whole_chain_test
-#COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
+#COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
 COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
 
 # define version compare function
@@ -82,17 +82,16 @@ python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${COMPILE_PATH}
-python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
+python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
 if [[ $REPO == "PaddleNLP" ]]; then
     cp ../../continuous_integration/tipc/tipc_run.sh .
 else
     cp ../continuous_integration/tipc/tipc_run.sh .
 fi
 sh tipc_run.sh
-if [[ ${model_path_in_docker} != "" ]]; then
-    cd /workspace
-    bash -x upload_model.sh ${REPO} "${model_path_in_docker}"
-fi
+
+cp /workspace/continuous_integration/tipc/upload_model.sh .
+bash -x upload_model.sh ${REPO} "${model_path_in_docker}"
 "
 
 

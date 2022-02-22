@@ -34,11 +34,14 @@ def set_style(diff_excel):
             j.alignment = aligncenter
     # color mark
     diff_cells = sheet1["K"][1:]
-    for cell in diff_cells:
-        if cell.value < -5:
-            cell.font = Font(color=Color(index=2))
-        elif cell.value > 5:
-            cell.font = Font(color=Color(rgb="1aad19"))
+    try:
+        for cell in diff_cells:
+            if cell.value < -5:
+                cell.font = Font(color=Color(index=2))
+            elif cell.value > 5:
+                cell.font = Font(color=Color(rgb="1aad19"))
+    except Exception as e:
+        pass
     # edit width
     for index, i in enumerate(cells):
         column_width = 0

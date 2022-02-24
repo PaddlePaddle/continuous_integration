@@ -50,7 +50,8 @@ mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-python -m pip install --retries 50 --upgrade pip
+export REPO=$REPO
+python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 if [[ $REPO == "PaddleSeg" ]]; then
     python -m pip install --retries 50 paddleseg
     python -m pip install --retries 50 scikit-image
@@ -80,12 +81,15 @@ python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
+python2 -m pip install --retries 10 pycrypto -i https://mirror.baidu.com/pypi/simple
 wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
 if [[ $REPO == "PaddleNLP" ]]; then
     cp ../../continuous_integration/tipc/tipc_run.sh .
+    cp ../../continuous_integration/tipc/upload.sh .
 else
     cp ../continuous_integration/tipc/tipc_run.sh .
+    cp ../continuous_integration/tipc/upload.sh .
 fi
 sh tipc_run.sh
 "

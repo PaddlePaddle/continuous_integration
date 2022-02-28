@@ -87,7 +87,12 @@ if [[ $REPO == "PaddleNLP" ]]; then
 else
     cp ../continuous_integration/tipc/tipc_run.sh .
 fi
-sh tipc_run.sh
+if [[ $TIPC_MODE == "cpp_infer" ]]; then
+    cp ../continuous_integration/tipc/tipc_run_cpp.sh .
+    sh tipc_run_cpp.sh
+else
+    sh tipc_run.sh
+fi
 "
 
 

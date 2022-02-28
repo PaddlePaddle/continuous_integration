@@ -53,7 +53,9 @@ export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr
 
 if [[ $TIPC_MODE == "cpp_infer" ]]; then
     cd ./${REPO}
-    apt-get update && apt-get install cmake -y
+    wget https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-linux-x86_64.tar.gz
+    tar -zxf cmake-3.22.2-linux-x86_64.tar.gz
+    export PATH=`pwd`/cmake-3.22.2-linux-x86_64/bin:$PATH
     cp ../continuous_integration/tipc/tipc_run_cpp.sh .
     sh tipc_run_cpp.sh
     exit $?

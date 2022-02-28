@@ -50,6 +50,15 @@ mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+if [[ $TIPC_MODE == "cpp_infer" ]]; then
+    yum install cmake -y
+    cp ../continuous_integration/tipc/tipc_run_cpp.sh .
+    sh tipc_run_cpp.sh
+    exit $?
+fi
+
+
 python -m pip install --retries 50 --upgrade pip
 if [[ $REPO == "PaddleSeg" ]]; then
     python -m pip install --retries 50 paddleseg
@@ -86,12 +95,6 @@ if [[ $REPO == "PaddleNLP" ]]; then
     cp ../../continuous_integration/tipc/tipc_run.sh .
 else
     cp ../continuous_integration/tipc/tipc_run.sh .
-fi
-if [[ $TIPC_MODE == "cpp_infer" ]]; then
-    cp ../continuous_integration/tipc/tipc_run_cpp.sh .
-    sh tipc_run_cpp.sh
-else
-    sh tipc_run.sh
 fi
 "
 

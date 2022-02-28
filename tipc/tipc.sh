@@ -52,7 +52,8 @@ ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 if [[ $TIPC_MODE == "cpp_infer" ]]; then
-    yum install cmake -y
+    cd ./${REPO}
+    apt-get update && apt-get install cmake -y
     cp ../continuous_integration/tipc/tipc_run_cpp.sh .
     sh tipc_run_cpp.sh
     exit $?

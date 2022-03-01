@@ -49,13 +49,13 @@ unset https_proxy
 mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
-export PATH=/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 if [[ $TIPC_MODE == "cpp_infer" ]]; then
     cd ./${REPO}
-    wget https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-linux-x86_64.tar.gz --no-check-certificate
-    tar -zxf cmake-3.22.2-linux-x86_64.tar.gz
-    export PATH=$PATH:`pwd`/cmake-3.22.2-linux-x86_64/bin
+    # wget https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-linux-x86_64.tar.gz --no-check-certificate
+    # tar -zxf cmake-3.22.2-linux-x86_64.tar.gz
+    # export PATH=$PATH:`pwd`/cmake-3.22.2-linux-x86_64/bin
     cp ../continuous_integration/tipc/tipc_run_cpp.sh .
     sh tipc_run_cpp.sh
     exit $?

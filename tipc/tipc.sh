@@ -55,7 +55,7 @@ if [[ $TIPC_MODE == "cpp_infer" ]]; then
     cd ./${REPO}
     wget https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-linux-x86_64.tar.gz --no-check-certificate
     tar -zxf cmake-3.22.2-linux-x86_64.tar.gz
-    export PATH=`pwd`/cmake-3.22.2-linux-x86_64/bin:$PATH
+    export PATH=$PATH:`pwd`/cmake-3.22.2-linux-x86_64/bin
     cp ../continuous_integration/tipc/tipc_run_cpp.sh .
     sh tipc_run_cpp.sh
     exit $?

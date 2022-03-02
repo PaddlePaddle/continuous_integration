@@ -18,8 +18,8 @@ for config_file in `find . -name "*_infer_cpp_*.txt"`; do
         mode=$(echo $mode | xargs)
         echo "==START=="$config_file"_"$mode
         echo "CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES
-        bash test_tipc/prepare.sh $config_file "cpp_infer"
-        bash test_tipc/test_inference_cpp.sh $config_file
+        bash -ex test_tipc/prepare.sh $config_file "cpp_infer"
+        bash -ex test_tipc/test_inference_cpp.sh $config_file
         echo "==END=="$config_file"_"$mode
     done
 done

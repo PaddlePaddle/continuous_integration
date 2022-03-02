@@ -13,7 +13,7 @@ mv paddle_inference Paddle/build/paddle_inference_install_dir
 cd -
 
 
-for config_file in `find . -name "*train_infer_python.txt"`; do
+for config_file in `find . -name "*_infer_cpp_*.txt"`; do
     for mode in $test_mode; do
         mode=$(echo $mode | xargs)
         echo "==START=="$config_file"_"$mode

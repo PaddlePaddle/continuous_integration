@@ -80,53 +80,57 @@ def process_log(file_name: str) -> dict:
     """
     output_dict = {}
     with open(file_name, 'r') as f:
-        for i, data in enumerate(f.readlines()):
-            if i == 0:
-                continue
-            line_lists = data.split(" ")
-            if "name:" in line_lists and "type:" in line_lists:
-                pos_buf = line_lists.index("name:")
-                output_dict["model_name"] = line_lists[pos_buf + 1].split(',')[
-                    0]
-                output_dict["model_type"] = line_lists[-1].strip()
-            if "Num" in line_lists and "size:" in line_lists:
-                pos_buf = line_lists.index("size:")
-                output_dict["batch_size"] = line_lists[pos_buf + 1].split(',')[
-                    0]
-                output_dict["num_samples"] = line_lists[-1].strip()
-            if "ir_optim:" in line_lists and "device:" in line_lists:
-                pos_buf = line_lists.index("ir_optim:")
-                output_dict["device"] = line_lists[pos_buf - 1].split(',')[0]
-                output_dict["ir_optim"] = line_lists[-1].strip()
-            if "enable_tensorrt:" in line_lists:
-                output_dict["enable_tensorrt"] = line_lists[-1].strip()
-            if "QPS:" in line_lists and "latency(ms):" in line_lists:
-                pos_buf = line_lists.index("QPS:")
-                output_dict["average_latency"] = line_lists[pos_buf - 1].split(
-                    ',')[0]
-                output_dict["qps"] = line_lists[-1].strip()
-            if "enable_mkldnn:" in line_lists:
-                output_dict["enable_mkldnn"] = line_lists[-1].strip()
-            if "cpu_math_library_num_threads:" in line_lists:
-                output_dict["cpu_math_library_num_threads"] = line_lists[
-                    -1].strip()
-            if "trt_precision:" in line_lists:
-                output_dict["trt_precision"] = line_lists[-1].strip()
-            if "rss(MB):" in line_lists and "cpu_usage(%):" in line_lists:
-                pos_buf = line_lists.index("vms(MB):")
-                output_dict["cpu_rss"] = line_lists[pos_buf - 1].split(',')[0]
-                output_dict["cpu_vms"] = line_lists[pos_buf + 1].split(',')[0]
-                output_dict["cpu_shared"] = line_lists[pos_buf + 3].split(',')[
-                    0]
-                output_dict["cpu_dirty"] = line_lists[pos_buf + 5].split(',')[0]
-                output_dict["cpu_usage"] = line_lists[pos_buf + 7].split(',')[0]
-            if "total(MB):" in line_lists and "free(MB):" in line_lists:
-                pos_buf = line_lists.index("gpu_utilization_rate(%):")
-                output_dict["gpu_used"] = line_lists[pos_buf - 1].split(',')[0]
-                output_dict["gpu_utilization_rate"] = line_lists[
-                    pos_buf + 1].split(',')[0]
-                output_dict["gpu_mem_utilization_rate"] = line_lists[
-                    pos_buf + 3].split(',')[0]
+        try:
+            for i, data in enumerate(f.readlines()):
+                if i == 0:
+                    continue
+                line_lists = data.split(" ")
+                if "name:" in line_lists and "type:" in line_lists:
+                    pos_buf = line_lists.index("name:")
+                    output_dict["model_name"] = line_lists[pos_buf + 1].split(',')[
+                        0]
+                    output_dict["model_type"] = line_lists[-1].strip()
+                if "Num" in line_lists and "size:" in line_lists:
+                    pos_buf = line_lists.index("size:")
+                    output_dict["batch_size"] = line_lists[pos_buf + 1].split(',')[
+                        0]
+                    output_dict["num_samples"] = line_lists[-1].strip()
+                if "ir_optim:" in line_lists and "device:" in line_lists:
+                    pos_buf = line_lists.index("ir_optim:")
+                    output_dict["device"] = line_lists[pos_buf - 1].split(',')[0]
+                    output_dict["ir_optim"] = line_lists[-1].strip()
+                if "enable_tensorrt:" in line_lists:
+                    output_dict["enable_tensorrt"] = line_lists[-1].strip()
+                if "QPS:" in line_lists and "latency(ms):" in line_lists:
+                    pos_buf = line_lists.index("QPS:")
+                    output_dict["average_latency"] = line_lists[pos_buf - 1].split(
+                        ',')[0]
+                    output_dict["qps"] = line_lists[-1].strip()
+                if "enable_mkldnn:" in line_lists:
+                    output_dict["enable_mkldnn"] = line_lists[-1].strip()
+                if "cpu_math_library_num_threads:" in line_lists:
+                    output_dict["cpu_math_library_num_threads"] = line_lists[
+                        -1].strip()
+                if "trt_precision:" in line_lists:
+                    output_dict["trt_precision"] = line_lists[-1].strip()
+                if "rss(MB):" in line_lists and "cpu_usage(%):" in line_lists:
+                    pos_buf = line_lists.index("vms(MB):")
+                    output_dict["cpu_rss"] = line_lists[pos_buf - 1].split(',')[0]
+                    output_dict["cpu_vms"] = line_lists[pos_buf + 1].split(',')[0]
+                    output_dict["cpu_shared"] = line_lists[pos_buf + 3].split(',')[
+                        0]
+                    output_dict["cpu_dirty"] = line_lists[pos_buf + 5].split(',')[0]
+                    output_dict["cpu_usage"] = line_lists[pos_buf + 7].split(',')[0]
+                if "total(MB):" in line_lists and "free(MB):" in line_lists:
+                    pos_buf = line_lists.index("gpu_utilization_rate(%):")
+                    output_dict["gpu_used"] = line_lists[pos_buf - 1].split(',')[0]
+                    output_dict["gpu_utilization_rate"] = line_lists[
+                        pos_buf + 1].split(',')[0]
+                    output_dict["gpu_mem_utilization_rate"] = line_lists[
+                        pos_buf + 3].split(',')[0]
+        except Exception as e:
+            output_dict["model_name"] = file_name
+
     return output_dict
 
 
@@ -147,6 +151,9 @@ def main():
     for file_name, full_path in find_all_logs(args.log_path):
         # logger.info(file_name, full_path)
         dict_log = process_log(full_path)
+        # skip error case
+        if dict_log["model_name"].endswith(".log"):
+            continue
         # basic info
         dict_log["frame_name"] = args.frame_name
         dict_log["api"] = args.api

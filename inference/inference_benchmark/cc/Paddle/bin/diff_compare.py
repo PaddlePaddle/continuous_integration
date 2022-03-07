@@ -36,6 +36,8 @@ def set_style(diff_excel):
     diff_cells = sheet1["K"][1:]
     try:
         for cell in diff_cells:
+            if cell.value is None:
+                continue
             if cell.value < -5:
                 cell.font = Font(color=Color(index=2))
             elif cell.value > 5:

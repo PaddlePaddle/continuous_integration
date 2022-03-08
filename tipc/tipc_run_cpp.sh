@@ -21,6 +21,7 @@ for config_file in `find . -name "*_infer_cpp_*.txt"`; do
 
         export http_proxy=http://172.19.57.45:3128
         export https_proxy=http://172.19.57.45:3128
+        export no_proxy=baidubce.com,bcebos.com
         bash -ex test_tipc/prepare.sh $config_file "cpp_infer"
         bash -ex test_tipc/test_inference_cpp.sh $config_file
         echo "==END=="$config_file"_"$mode

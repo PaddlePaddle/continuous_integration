@@ -19,6 +19,8 @@ for config_file in `find . -name "*_infer_cpp_*.txt"`; do
         echo "==START=="$config_file"_"$mode
         echo "CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES
 
+        export http_proxy=http://172.19.57.45:3128
+        export https_proxy=http://172.19.57.45:3128
         bash -ex test_tipc/prepare.sh $config_file "cpp_infer"
         bash -ex test_tipc/test_inference_cpp.sh $config_file
         echo "==END=="$config_file"_"$mode

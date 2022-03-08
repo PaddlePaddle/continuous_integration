@@ -18,6 +18,7 @@ for config_file in `find . -name "*_infer_cpp_*.txt"`; do
         mode=$(echo $mode | xargs)
         echo "==START=="$config_file"_"$mode
         echo "CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES
+
         export http_proxy=http://172.19.56.199:3128
         export https_proxy=http://172.19.56.199:3128
         export no_proxy=bcebos.com

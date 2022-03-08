@@ -42,6 +42,8 @@ nvidia-docker run -i --rm \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
                   -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
                   -e "TIPC_MODE=${TIPC_MODE}" \
+                  -e "http_proxy=${http_proxy}" \
+                  -e "https_proxy=${https_proxy}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
 unset http_proxy
@@ -57,6 +59,8 @@ if [[ $TIPC_MODE == "cpp_infer" ]]; then
     # tar -zxf cmake-3.22.2-linux-x86_64.tar.gz
     # export PATH=$PATH:`pwd`/cmake-3.22.2-linux-x86_64/bin
     cp ../continuous_integration/tipc/tipc_run_cpp.sh .
+    export http_proxy
+    export https_proxy
     sh tipc_run_cpp.sh
     exit $?
 fi

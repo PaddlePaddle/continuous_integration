@@ -94,7 +94,7 @@ if [[ $REPO == "PaddleNLP" ]]; then
 else
     cp ../continuous_integration/tipc/tipc_run.sh .
 fi
-sh tipc_run.sh
+bash -x tipc_run.sh
 "
 
 

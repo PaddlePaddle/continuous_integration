@@ -1,6 +1,6 @@
 #! /bin/bash
 
-
+echo $CHECK_LOSS
 test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
 

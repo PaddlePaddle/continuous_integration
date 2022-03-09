@@ -37,6 +37,7 @@ nvidia-docker run -i --rm \
                   --shm-size=128G \
                   -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi ${CUDA_SO} ${DEVICES} \
                   -v $(pwd):/workspace \
+                  -v /home/work/bce-client:/home/work/bce-client \
                   -w /workspace \
                   -u root \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
@@ -44,6 +45,7 @@ nvidia-docker run -i --rm \
                   -e "TIPC_MODE=${TIPC_MODE}" \
                   -e "http_proxy=${http_proxy}" \
                   -e "https_proxy=${https_proxy}" \
+                  -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
 unset http_proxy
@@ -52,19 +54,7 @@ mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
-if [[ $TIPC_MODE == "cpp_infer" ]]; then
-    cd ./${REPO}
-    # wget https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-linux-x86_64.tar.gz --no-check-certificate
-    # tar -zxf cmake-3.22.2-linux-x86_64.tar.gz
-    # export PATH=$PATH:`pwd`/cmake-3.22.2-linux-x86_64/bin
-    cp ../continuous_integration/tipc/tipc_run_cpp.sh .
-    export http_proxy
-    export https_proxy
-    sh tipc_run_cpp.sh
-    exit $?
-fi
-
+export CHECK_LOSS=${CHECK_LOSS:-False}
 
 python -m pip install --retries 50 --upgrade pip
 if [[ $REPO == "PaddleSeg" ]]; then
@@ -81,6 +71,7 @@ cd ./${REPO}
 if [[ $REPO == "PaddleNLP" ]]; then
     cd tests
 fi
+python2 -m pip install --retries 10 pycrypto 
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro
 python -m pip install --retries 10 opencv-python

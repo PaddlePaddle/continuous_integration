@@ -56,7 +56,7 @@ ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export CHECK_LOSS=${CHECK_LOSS:-False}
 
-python -m pip install --retries 50 --upgrade pip
+python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 if [[ $REPO == "PaddleSeg" ]]; then
     python -m pip install --retries 50 paddleseg
     python -m pip install --retries 50 scikit-image
@@ -94,6 +94,7 @@ if [[ $REPO == "PaddleNLP" ]]; then
 else
     cp ../continuous_integration/tipc/tipc_run.sh .
 fi
+sh tipc_run.sh
 "
 
 

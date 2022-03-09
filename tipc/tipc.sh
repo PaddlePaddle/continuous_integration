@@ -91,8 +91,12 @@ wget --no-proxy ${COMPILE_PATH}
 python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
 if [[ $REPO == "PaddleNLP" ]]; then
     cp ../../continuous_integration/tipc/tipc_run.sh .
+    cp ../../continuous_integration/tipc/check_loss.sh .
+    cp ../../continuous_integration/tipc/check_loss.py .
 else
     cp ../continuous_integration/tipc/tipc_run.sh .
+    cp ../continuous_integration/tipc/check_loss.sh .
+    cp ../continuous_integration/tipc/check_loss.py .
 fi
 bash -x tipc_run.sh
 "

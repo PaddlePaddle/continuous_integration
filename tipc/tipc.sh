@@ -64,7 +64,7 @@ cd -
 python -m pip install ./AutoLog/dist/*.whl
 
 cd ./${REPO}
-REPO_PATH=`pwd`
+REPO_PATH=\`pwd\`
 if [[ $REPO == "PaddleNLP" ]]; then
     cd tests
 fi
@@ -86,7 +86,7 @@ python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${PADDLE_WHL}
-python -m pip install ./`basename ${PADDLE_WHL}`
+python -m pip install ./\`basename ${PADDLE_WHL}\`
 
 cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
 cp \$REPO_PATH/../continuous_integration/tipc/check_loss.sh .

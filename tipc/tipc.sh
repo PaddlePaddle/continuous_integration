@@ -2,13 +2,11 @@
 
 set -ex
 
-#repo_list="PaddleOCR PaddleClas PaddleSeg PaddleNLP PaddleDetection PaddleRec DeepSpeech"
-
 REPO=$1
-DOCKER_IMAGE=registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82
-DOCKER_NAME=paddle_whole_chain_test
-#COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
-COMPILE_PATH=https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl
+DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82}
+DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test}
+COMPILE_PATH==${COMPILE_PATH:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
+BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
 
 # define version compare function
 function version_lt() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" != "$1"; }
@@ -16,6 +14,7 @@ function version_lt() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)"
 
 # start docker and run test cases
 docker pull ${DOCKER_IMAGE}
+
 
 # check nvidia-docker version
 nv_docker_version=`nvidia-docker version | grep NVIDIA | cut -d" " -f3`
@@ -25,11 +24,7 @@ if version_lt ${nv_docker_version} 2.0.0; then
    export DEVICES=$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
 fi
 
-
-export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}
-
-
-docker rm -f ${DOCKER_NAME} || echo "remove docker paddle_whole_chain_test failed"
+docker rm -f ${DOCKER_NAME} || echo "remove docker ""${DOCKER_NAME}"" failed"
 nvidia-docker run -i --rm \
                   --name ${DOCKER_NAME} \
                   --privileged \
@@ -37,7 +32,7 @@ nvidia-docker run -i --rm \
                   --shm-size=128G \
                   -v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi ${CUDA_SO} ${DEVICES} \
                   -v $(pwd):/workspace \
-                  -v /home/work/bce-client:/home/work/bce-client \
+                  -v /home/work/bce-client:${BCE_CLIENT_PATH} \
                   -w /workspace \
                   -u root \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
@@ -67,10 +62,13 @@ python -m pip install --retries 10 -r requirements.txt
 python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
+
 cd ./${REPO}
+REPO_PATH=`pwd`
 if [[ $REPO == "PaddleNLP" ]]; then
     cd tests
 fi
+
 python2 -m pip install --retries 10 pycrypto 
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro
@@ -87,17 +85,13 @@ python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
-wget --no-proxy ${COMPILE_PATH}
-python -m pip install ./paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
-if [[ $REPO == "PaddleNLP" ]]; then
-    cp ../../continuous_integration/tipc/tipc_run.sh .
-    cp ../../continuous_integration/tipc/check_loss.sh .
-    cp ../../continuous_integration/tipc/check_loss.py .
-else
-    cp ../continuous_integration/tipc/tipc_run.sh .
-    cp ../continuous_integration/tipc/check_loss.sh .
-    cp ../continuous_integration/tipc/check_loss.py .
-fi
+wget -O paddlepaddle.whl --no-proxy ${COMPILE_PATH}
+python -m pip install ./paddlepaddle.whl 
+
+cp $REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
+cp $REPO_PATH/../continuous_integration/tipc/check_loss.sh .
+cp $REPO_PATH/../continuous_integration/tipc/check_loss.py .
+
 bash -x tipc_run.sh
 "
 
@@ -121,7 +115,7 @@ if [[ ! -f ${log_file} ]];then
   EXIT_CODE=8
 else
   number_lines=$(cat ${log_file} | wc -l)
-  failed_line=$(grep -o "failed" ${log_file}|wc -l)
+  failed_line=$(grep -o "Run failed with command" ${log_file}|wc -l)
   zero=0
   if [ $failed_line -ne $zero ]
   then
@@ -130,15 +124,46 @@ else
       echo "[ERROR] There are $number_lines results in ${log_file}, but failed number of tests is $failed_line."
       echo -e "=====================test summary======================"
       echo "The Following Tests Failed: "
-      cat ${log_file} | grep "failed"
+      cat ${log_file} | grep "Run failed with command"
       echo -e "========================================================"
       echo " "
       EXIT_CODE=8
   else
-      echo "All Succeed!"
+      echo "ALL TIPC COMMAND SUCCEED!"
   fi
 fi
 
 
-echo "Paddle Model Whole Chain Tests Finished."
+log_file="loss.result"
+if [[ ! -f ${log_file} ]];then
+  echo " "
+  echo -e "=====================result summary======================"
+  echo "${log_file}: No such file or directory"
+  echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
+  echo "========================================================"
+  echo " "
+  EXIT_CODE=9
+else
+  number_lines=$(cat ${log_file} | wc -l)
+  failed_line=$(grep "[CHECK]" ${log_file} | grep "False" | wc -l)
+  zero=0
+  if [ $failed_line -ne $zero ]
+  then
+      echo " "
+      echo "Summary Failed Tests ..."
+      echo "[ERROR] There are $number_lines results in ${log_file}, but failed number of tests is $failed_line."
+      echo -e "=====================test summary======================"
+      echo "The Following Tests Failed: "
+      grep "[CHECK]" ${log_file} | grep "False"
+      echo -e "========================================================"
+      echo " "
+      EXIT_CODE=9
+  else
+      echo "CHECK LOSS SUCCEED!"
+  fi
+fi
+
+
+
+echo "Paddle TIPC Tests Finished."
 exit ${EXIT_CODE}

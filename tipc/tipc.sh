@@ -5,7 +5,7 @@ set -ex
 REPO=$1
 DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82}
 DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test}
-COMPILE_PATH==${COMPILE_PATH:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
+PADDLE_WHL==${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
 
 # define version compare function
@@ -85,12 +85,12 @@ python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
-wget -O paddlepaddle.whl --no-proxy ${COMPILE_PATH}
-python -m pip install ./paddlepaddle.whl 
+wget --no-proxy ${PADDLE_WHL}
+python -m pip install ./`basename ${PADDLE_WHL}`
 
-cp $REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
-cp $REPO_PATH/../continuous_integration/tipc/check_loss.sh .
-cp $REPO_PATH/../continuous_integration/tipc/check_loss.py .
+cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
+cp \$REPO_PATH/../continuous_integration/tipc/check_loss.sh .
+cp \$REPO_PATH/../continuous_integration/tipc/check_loss.py .
 
 bash -x tipc_run.sh
 "

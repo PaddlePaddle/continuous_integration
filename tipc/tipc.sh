@@ -49,6 +49,7 @@ mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export REPO=$REPO
 export CHECK_LOSS=${CHECK_LOSS:-True}
 
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
@@ -85,10 +86,12 @@ python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
+python2 -m pip install --retries 10 pycrypto -i https://mirror.baidu.com/pypi/simple
 wget --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`
 
 cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
+cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
 cp \$REPO_PATH/../continuous_integration/tipc/check_loss.sh .
 cp \$REPO_PATH/../continuous_integration/tipc/check_loss.py .
 

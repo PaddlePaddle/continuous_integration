@@ -70,7 +70,7 @@ if [[ $REPO == "PaddleNLP" ]]; then
     cd tests
 fi
 
-python2 -m pip install --retries 10 pycrypto -i https://mirror.baidu.com/pypi/simple
+python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro
 python -m pip install --retries 10 opencv-python

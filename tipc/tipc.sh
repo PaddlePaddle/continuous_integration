@@ -70,7 +70,7 @@ if [[ $REPO == "PaddleNLP" ]]; then
     cd tests
 fi
 
-python2 -m pip install --retries 10 pycrypto 
+python2 -m pip install --retries 10 pycrypto -i https://mirror.baidu.com/pypi/simple
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro
 python -m pip install --retries 10 opencv-python
@@ -86,7 +86,6 @@ python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
-python2 -m pip install --retries 10 pycrypto -i https://mirror.baidu.com/pypi/simple
 wget --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`
 

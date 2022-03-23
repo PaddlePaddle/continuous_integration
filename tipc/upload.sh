@@ -33,7 +33,7 @@ model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | he
 echo ${model_name}
 output_dir="test_tipc/output/${model_name}"
 if [[ ${REPO} == "PaddleDetection" ]]; then
-    output_dir="output_inference/${model_name}"
+    output_dir="test_tipc/output"
 fi
 echo ${output_dir}
 if [ ! -d ${output_dir} ]; then
@@ -41,12 +41,8 @@ if [ ! -d ${output_dir} ]; then
     exit 1
 fi
 # copy model files
-model_file=`find ${output_dir} -name "inference.pdmodel" | head -n 1`
-params_file=`find ${output_dir} -name "inference.pdiparams" | head -n 1`
-if [[ ${REPO} == "PaddleDetection" ]]; then
-    model_file=`find ${output_dir} -name "model.pdmodel" | head -n 1`
-    params_file=`find ${output_dir} -name "model.pdiparams" | head -n 1`
-fi
+model_file=`find ${output_dir} -name "*.pdmodel" | head -n 1`
+params_file=`find ${output_dir} -name "*.pdiparams" | head -n 1`
 if [[ ${model_file} == "" ]]; then
     echo "model_file not found"
     exit 1

@@ -33,7 +33,7 @@ model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | he
 echo ${model_name}
 output_dir="test_tipc/output/${model_name}"
 if [[ ${REPO} == "PaddleDetection" ]]; then
-    output_dir="output_inference/${model_name}"
+    output_dir="test_tipc/output"
 fi
 echo ${output_dir}
 if [ ! -d ${output_dir} ]; then

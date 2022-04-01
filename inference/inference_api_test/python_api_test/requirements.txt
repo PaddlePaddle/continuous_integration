@@ -1,0 +1,4 @@
+opencv-python==4.2.0.32
+cup==3.2.24
+py3nvml==0.2.6
+pytest==5.4.3

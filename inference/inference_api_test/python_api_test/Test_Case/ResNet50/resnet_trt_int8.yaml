@@ -1,8 +1,0 @@
-# confguration for testing gpu inference with tensorrt int8
-model_name : resnet50
-model_filename : __model__
-params_filename : __params__
-use_gpu : true
-use_tensorrt : true
-use_iroptim : true
-model_precision : int8

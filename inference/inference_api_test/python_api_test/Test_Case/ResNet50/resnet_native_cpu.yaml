@@ -1,6 +1,0 @@
-# confguration for testing cpu inference
-# native cpu
-model_filename : "__model__"
-params_filename : "__params__"
-use_gpu : false
-use_iroptim : false

@@ -36,7 +36,7 @@ class TestDistCTR(TestFleetBase):
         校验结果数据.
         Args:
             loss (list): the loss will be checked.
-            delta (float): 
+            delta (float):
             expect (list):
         """
         if expect:
@@ -3745,65 +3745,65 @@ class TestDistCTR(TestFleetBase):
         assert len(train_data_list2) == 1
         assert len(train_data_list1[0]) > 0
 
-    def test_ctr_1ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_1ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=1, trainers=2)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'async',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': False,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_1ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 2
-        assert len(train_data_list2) == 2
-        assert len(train_data_list1[0]) > 0
-
-    def test_ctr_2ps_1tr_dataset_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_2ps_1tr_dataset_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=2, trainers=1)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'async',
-            'cpu_num': 1,
-            'num_threads': 1,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': False,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_2ps_1tr_dataset_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 1
-        assert len(train_data_list2) == 1
-        assert len(train_data_list1[0]) > 0
+    # def test_ctr_1ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_1ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=1, trainers=2)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'async',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': False,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_1ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 2
+    #     assert len(train_data_list2) == 2
+    #     assert len(train_data_list1[0]) > 0
+    #
+    # def test_ctr_2ps_1tr_dataset_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_2ps_1tr_dataset_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=2, trainers=1)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'async',
+    #         'cpu_num': 1,
+    #         'num_threads': 1,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': False,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_2ps_1tr_dataset_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 1
+    #     assert len(train_data_list2) == 1
+    #     assert len(train_data_list1[0]) > 0
 
     def test_ctr_1ps_1tr_dataset_geo_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
             self):
@@ -3835,95 +3835,95 @@ class TestDistCTR(TestFleetBase):
         assert len(train_data_list2) == 1
         assert len(train_data_list1[0]) > 0
 
-    def test_ctr_1ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_1ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=1, trainers=2)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'geo_async',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_1ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 2
-        assert len(train_data_list2) == 2
-        assert len(train_data_list1[0]) > 0
-
-    def test_ctr_2ps_1tr_dataset_geo_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_2ps_1tr_dataset_geo_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=1, trainers=1)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'geo_async',
-            'cpu_num': 1,
-            'num_threads': 1,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_2ps_1tr_dataset_geo_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 1
-        assert len(train_data_list2) == 1
-        assert len(train_data_list1[0]) > 0
-
-    def test_ctr_2ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_2ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=2, trainers=2)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'async',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': False,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_2ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 2
-        assert len(train_data_list2) == 2
-        assert len(train_data_list1[1]) > 0
+    # def test_ctr_1ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_1ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=1, trainers=2)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'geo_async',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_1ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 2
+    #     assert len(train_data_list2) == 2
+    #     assert len(train_data_list1[0]) > 0
+    #
+    # def test_ctr_2ps_1tr_dataset_geo_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_2ps_1tr_dataset_geo_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=1, trainers=1)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'geo_async',
+    #         'cpu_num': 1,
+    #         'num_threads': 1,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_2ps_1tr_dataset_geo_async_1thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 1
+    #     assert len(train_data_list2) == 1
+    #     assert len(train_data_list1[0]) > 0
+    #
+    # def test_ctr_2ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_2ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=2, trainers=2)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'async',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': False,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_2ps_2tr_dataset_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 2
+    #     assert len(train_data_list2) == 2
+    #     assert len(train_data_list1[1]) > 0
 
     def test_ctr_1ps_1tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
             self):
@@ -3955,95 +3955,95 @@ class TestDistCTR(TestFleetBase):
         assert len(train_data_list2) == 1
         assert len(train_data_list1[0]) > 0
 
-    def test_ctr_1ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_1ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=1, trainers=2)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'half_async',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_1ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 2
-        assert len(train_data_list2) == 2
-        assert len(train_data_list1[1]) > 0
-
-    def test_ctr_2ps_1tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_2ps_1tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=2, trainers=1)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'half_async',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_2ps_1tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 1
-        assert len(train_data_list2) == 1
-        assert len(train_data_list1[0]) > 0
-
-    def test_ctr_2ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_2ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=2, trainers=2)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'half_async',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_2ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 2
-        assert len(train_data_list2) == 2
-        assert len(train_data_list1[1]) > 0
+    # def test_ctr_1ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_1ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=1, trainers=2)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'half_async',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_1ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 2
+    #     assert len(train_data_list2) == 2
+    #     assert len(train_data_list1[1]) > 0
+    #
+    # def test_ctr_2ps_1tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_2ps_1tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=2, trainers=1)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'half_async',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_2ps_1tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 1
+    #     assert len(train_data_list2) == 1
+    #     assert len(train_data_list1[0]) > 0
+    #
+    # def test_ctr_2ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_2ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=2, trainers=2)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'half_async',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_2ps_2tr_dataset_half_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 2
+    #     assert len(train_data_list2) == 2
+    #     assert len(train_data_list1[1]) > 0
 
     def test_ctr_1ps_1tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
             self):
@@ -4075,122 +4075,122 @@ class TestDistCTR(TestFleetBase):
         assert len(train_data_list2) == 1
         assert len(train_data_list1[0]) > 0
 
-    def test_ctr_1ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_1ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=1, trainers=2)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'sync',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_1ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 2
-        assert len(train_data_list2) == 2
-        assert len(train_data_list1[1]) > 0
-
-    def test_ctr_2ps_1tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_2ps_1tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=2, trainers=1)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'sync',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_2ps_1tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 1
-        assert len(train_data_list2) == 1
-        assert len(train_data_list1[0]) > 0
-
-    def test_ctr_2ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_2ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=2, trainers=2)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'sync',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_2ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 2
-        assert len(train_data_list2) == 2
-        assert len(train_data_list1[0]) > 0
-
-    def test_ctr_2ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
-            self):
-        """test_ctr_2ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
-        TestFleetBase.__init__(self, pservers=2, trainers=2)
-        self.run_params = {
-            'run_from_dataset': True,
-            'sync_mode': 'geo_async',
-            'cpu_num': 2,
-            'num_threads': 2,
-            'slice_var_up': True,
-            'enable_dc_asgd': False,
-            'split_method': False,
-            'runtime_split_send_recv': True,
-            'geo_sgd': True,
-            'wait_port': True,
-            'use_hierarchical_allreduce': False,
-            'push_nums': 25
-        }
-        self.test_ctr_2ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
-            self.run_params)
-        train_data_list1 = self.get_result(
-            self._model_file, update_method='pserver')
-        train_data_list2 = self.get_result(
-            self._model_file, update_method='pserver')
-
-        # 判断两个list输出是否为2
-        assert len(train_data_list1) == 2
-        assert len(train_data_list2) == 2
-        assert len(train_data_list1[1]) > 0
+    # def test_ctr_1ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_1ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=1, trainers=2)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'sync',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_1ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 2
+    #     assert len(train_data_list2) == 2
+    #     assert len(train_data_list1[1]) > 0
+    #
+    # def test_ctr_2ps_1tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_2ps_1tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=2, trainers=1)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'sync',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_2ps_1tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 1
+    #     assert len(train_data_list2) == 1
+    #     assert len(train_data_list1[0]) > 0
+    #
+    # def test_ctr_2ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_2ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=2, trainers=2)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'sync',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_2ps_2tr_dataset_sync_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 2
+    #     assert len(train_data_list2) == 2
+    #     assert len(train_data_list1[0]) > 0
+    #
+    # def test_ctr_2ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25(
+    #         self):
+    #     """test_ctr_2ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25."""
+    #     TestFleetBase.__init__(self, pservers=2, trainers=2)
+    #     self.run_params = {
+    #         'run_from_dataset': True,
+    #         'sync_mode': 'geo_async',
+    #         'cpu_num': 2,
+    #         'num_threads': 2,
+    #         'slice_var_up': True,
+    #         'enable_dc_asgd': False,
+    #         'split_method': False,
+    #         'runtime_split_send_recv': True,
+    #         'geo_sgd': True,
+    #         'wait_port': True,
+    #         'use_hierarchical_allreduce': False,
+    #         'push_nums': 25
+    #     }
+    #     self.test_ctr_2ps_2tr_dataset_geo_async_2thread_Tslice_Fdc_Fsm_Tsr_Tgeo_Twp_Fha_pn25.__func__.__doc__ = json.dumps(
+    #         self.run_params)
+    #     train_data_list1 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #     train_data_list2 = self.get_result(
+    #         self._model_file, update_method='pserver')
+    #
+    #     # 判断两个list输出是否为2
+    #     assert len(train_data_list1) == 2
+    #     assert len(train_data_list2) == 2
+    #     assert len(train_data_list1[1]) > 0

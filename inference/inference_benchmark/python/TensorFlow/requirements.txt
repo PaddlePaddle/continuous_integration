@@ -1,0 +1,4 @@
+cup
+pytz
+py3nvml
+tensorflow_gpu

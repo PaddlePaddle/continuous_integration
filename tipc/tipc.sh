@@ -48,9 +48,11 @@ nvidia-docker run -i --rm \
 unset http_proxy
 unset https_proxy
 mkdir -p run_env
-ln -s /usr/local/bin/python3.7 run_env/python
-ln -s /usr/local/bin/pip3.7 run_env/pip
-export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#ln -s /usr/local/bin/python3.7 run_env/python
+#ln -s /usr/local/bin/pip3.7 run_env/pip
+ln -s /usr/local/python3.7.0/bin/python3.7 run_env/python
+ln -s /usr/local/python3.7.0/bin/pip3.7 run_env/pip
+export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/python3.7.0/bin/:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export REPO=$REPO
 export CHECK_LOSS=${CHECK_LOSS:-False}
 

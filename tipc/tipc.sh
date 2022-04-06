@@ -143,6 +143,7 @@ echo "Paddle TIPC Tests Finished."
 exit ${EXIT_CODE}
 
 
+# check loss 
 log_file="loss.result"
 if [[ ! -f ${log_file} ]];then
   echo " "

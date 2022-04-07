@@ -2,7 +2,7 @@
 
 set -ex
 
-REPOS=$1
+REPO=$1
 #DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82}
 DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle:2.2.2-gpu-cuda10.2-cudnn7}
 DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test}
@@ -53,16 +53,26 @@ mkdir -p run_env
 ln -s /usr/local/python3.7.0/bin/python3.7 run_env/python
 ln -s /usr/local/python3.7.0/bin/pip3.7 run_env/pip
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/python3.7.0/bin/:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-export REPOS=$REPOS
+export REPO=$REPO
 export CHECK_LOSS=${CHECK_LOSS:-False}
 
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
+if [[ $REPO == "PaddleSeg" ]]; then
+    python -m pip install --retries 50 paddleseg
+    python -m pip install --retries 50 scikit-image
+fi
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 cd ./AutoLog
 python -m pip install --retries 10 -r requirements.txt
 python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
+
+cd ./${REPO}
+REPO_PATH=\`pwd\`
+if [[ $REPO == "PaddleNLP" ]]; then
+    cd tests
+fi
 
 python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
@@ -79,116 +89,90 @@ python -m pip install --retries 10 paddleslim
 python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
-
+python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`
 
-#REPOS="PaddleNLP:n1,n2,n3;PaddleOCR:o1,o2"
-repos=`echo ${REPOS//;/ }`
-for i in ${repos[*]}; do
-    echo ${i}
-    REPO=`echo ${i}|awk -F ":" '{print $1}'`
-    tmp=`echo ${i}|awk -F ":" '{print $2}'`
-    MODELS=`echo ${tmp//,/ }`
-    if [[ $REPO == "PaddleSeg" ]]; then
-        python -m pip install --retries 50 paddleseg
-        python -m pip install --retries 50 scikit-image
-    fi
+cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
+cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
+cp \$REPO_PATH/../continuous_integration/tipc/check_loss.sh .
+cp \$REPO_PATH/../continuous_integration/tipc/check_loss.py .
 
-    cd ./${REPO}
-    REPO_PATH=\`pwd\`
-    if [[ $REPO == "PaddleNLP" ]]; then
-        cd tests
-    fi
-
-    python -m pip install --retries 10 -r requirements.txt
-
-    cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
-    cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
-    cp \$REPO_PATH/../continuous_integration/tipc/check_loss.sh .
-    cp \$REPO_PATH/../continuous_integration/tipc/check_loss.py .
-
-    bash -x tipc_run.sh $MODELS
-done
+bash -x tipc_run.sh
 "
 
 
 # check_status
 set +x
-EXIT_CODE=0
-echo -e "=====================result summary======================"
-for i in ${repos[*]}; do
-    REPO=`echo ${i}|awk -F ":" '{print $1}'`
-    cd $REPO
-    log_file="results"
-    for f in `find . -name '*.log'`; do
-        cat $f >> $log_file
-    done
-
-    if [[ ! -f ${log_file} ]];then
-        echo " "
-        echo ${REPO} ":"
-        echo "${log_file}: No such file or directory"
-        echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
-        echo "========================================================"
-        echo " "
-        EXIT_CODE=8
-    else
-        number_lines=$(cat ${log_file} | wc -l)
-        failed_line=$(grep -o "Run failed with command" ${log_file}|wc -l)
-        zero=0
-        if [ $failed_line -ne $zero ]
-        then
-            echo " "
-            echo ${REPO} ":"
-            echo "[ERROR] There are $number_lines results in ${log_file}, but failed number of tests is $failed_line."
-            echo "The Following Tests Failed: "
-            cat ${log_file} | grep "Run failed with command"
-            echo -e "========================================================"
-            echo " "
-            EXIT_CODE=8
-        else
-            echo ${REPO} ":"
-            echo "ALL TIPC COMMAND SUCCEED!"
-        fi
-    fi
+cd $REPO
+log_file="results"
+for f in `find . -name '*.log'`; do
+   cat $f >> $log_file
 done
+EXIT_CODE=0
+
+if [[ ! -f ${log_file} ]];then
+  echo " "
+  echo -e "=====================result summary======================"
+  echo "${log_file}: No such file or directory"
+  echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
+  echo "========================================================"
+  echo " "
+  EXIT_CODE=8
+else
+  number_lines=$(cat ${log_file} | wc -l)
+  failed_line=$(grep -o "Run failed with command" ${log_file}|wc -l)
+  zero=0
+  if [ $failed_line -ne $zero ]
+  then
+      echo " "
+      echo "Summary Failed Tests ..."
+      echo "[ERROR] There are $number_lines results in ${log_file}, but failed number of tests is $failed_line."
+      echo -e "=====================test summary======================"
+      echo "The Following Tests Failed: "
+      cat ${log_file} | grep "Run failed with command"
+      echo -e "========================================================"
+      echo " "
+      EXIT_CODE=8
+  else
+      echo "ALL TIPC COMMAND SUCCEED!"
+  fi
+fi
 
 echo "Paddle TIPC Tests Finished."
 exit ${EXIT_CODE}
 
 
 # check loss 
-echo -e "=====================check loss======================"
-for i in ${repos[*]}; do
-    REPO=`echo ${i}|awk -F ":" '{print $1}'`
-    cd $REPO
-    log_file="loss.result"
-    if [[ ! -f ${log_file} ]];then
-        echo " "
-        echo ${REPO}
-        echo "${log_file}: No such file or directory"
-        echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
-        echo "========================================================"
-        EXIT_CODE=9
-    else
-        number_lines=$(cat ${log_file} | wc -l)
-        failed_line=$(grep "[CHECK]" ${log_file} | grep "False" | wc -l)
-        zero=0
-        if [ $failed_line -ne $zero ]
-        then
-            echo " "
-            echo "[ERROR] There are $number_lines results in ${log_file}, but failed number of tests is $failed_line."
-            echo -e "=====================test summary======================"
-            echo "The Following Tests Failed: "
-            grep "[CHECK]" ${log_file} | grep "False"
-            echo -e "========================================================"
-            EXIT_CODE=9
-        else
-            echo "CHECK LOSS SUCCEED!"
-        fi
-    fi
-done
+log_file="loss.result"
+if [[ ! -f ${log_file} ]];then
+  echo " "
+  echo -e "=====================result summary======================"
+  echo "${log_file}: No such file or directory"
+  echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
+  echo "========================================================"
+  echo " "
+  EXIT_CODE=9
+else
+  number_lines=$(cat ${log_file} | wc -l)
+  failed_line=$(grep "[CHECK]" ${log_file} | grep "False" | wc -l)
+  zero=0
+  if [ $failed_line -ne $zero ]
+  then
+      echo " "
+      echo "Summary Failed Tests ..."
+      echo "[ERROR] There are $number_lines results in ${log_file}, but failed number of tests is $failed_line."
+      echo -e "=====================test summary======================"
+      echo "The Following Tests Failed: "
+      grep "[CHECK]" ${log_file} | grep "False"
+      echo -e "========================================================"
+      echo " "
+      EXIT_CODE=9
+  else
+      echo "CHECK LOSS SUCCEED!"
+  fi
+fi
+
 
 
 echo "Paddle TIPC Tests Finished."

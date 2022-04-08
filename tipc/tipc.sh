@@ -60,7 +60,9 @@ export CHECK_LOSS=${CHECK_LOSS:-False}
 
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 if [[ $REPO == "PaddleSeg" ]]; then
-    python -m pip install --retries 50 paddleseg
+    cd $REPO
+    pip install -e .
+    cd -
     python -m pip install --retries 50 scikit-image
 fi
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;

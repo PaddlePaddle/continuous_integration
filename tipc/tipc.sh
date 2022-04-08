@@ -61,7 +61,7 @@ export CHECK_LOSS=${CHECK_LOSS:-False}
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 if [[ $REPO == "PaddleSeg" ]]; then
     cd $REPO
-    pip install -e .
+    export PYTHONPATH=`pwd`
     cd -
     python -m pip install --retries 50 scikit-image
 fi

@@ -77,7 +77,9 @@ REPO_PATH=\`pwd\`
 if [[ $REPO == "PaddleNLP" ]]; then
     cd tests
 fi
-
+if [[ $REPO == "PaddleGAN" ]]; then
+    python -m pip install -v -e . #安装ppgan
+fi
 python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro

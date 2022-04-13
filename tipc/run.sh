@@ -1,4 +1,6 @@
 REPO=$1
+AGILE_PULL_ID=$2
+AGILE_REVISION=$3
 
 work_dir=/mnt/xly/work/${REPO}
 mkdir -p ${work_dir}

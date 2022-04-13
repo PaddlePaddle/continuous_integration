@@ -1,6 +1,9 @@
 #!/bin/bash
 REPO=$1
 BRANCH=${2:-develop}
+AGILE_PULL_ID=$3
+AGILE_REVISION=$4
+
 work_dir=/home/work/tipc/${REPO}
 mkdir -p ${work_dir}
 rm -rf ${work_dir}/*

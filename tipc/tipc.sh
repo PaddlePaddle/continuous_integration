@@ -86,6 +86,8 @@ python -m pip install --retries 10 paddleslim
 #python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
+python -m pip install --retries 10 visualdl 
+python -c 'from visualdl import LogWriter'
 python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`

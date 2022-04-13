@@ -3,8 +3,9 @@ REPO=$1
 BRANCH=${2:-develop}
 AGILE_PULL_ID=$3
 AGILE_REVISION=$4
+ROOT_PATH=${5:-/home/work/tipc/}
 
-work_dir=/home/work/tipc/${REPO}
+work_dir=${ROOT_PATH}/${REPO}
 mkdir -p ${work_dir}
 rm -rf ${work_dir}/*
 cd ${work_dir}

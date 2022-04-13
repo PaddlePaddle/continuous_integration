@@ -136,26 +136,6 @@ main(){
                  "3,640,640" "40"
     done
 
-    new_rcnn_model="faster_rcnn_r50_1x_coco \
-                    faster_rcnn_r50_fpn_1x_coco \
-                    mask_rcnn_r50_1x_coco \
-                    mask_rcnn_r50_fpn_1x_coco \
-                    cascade_rcnn_r50_fpn_1x_coco \
-                    cascade_mask_rcnn_r50_fpn_1x_coco"
-
-    for tests in ${new_rcnn_model}
-    do
-        gen_int8_calib "new_rcnn_benchmark" "${tests}" \
-                ${model_root}/${tests}/model.pdmodel \
-                ${model_root}/${tests}/model.pdiparams \
-                "3,640,640" "40" true
-
-        test_int8 "new_rcnn_benchmark" "${tests}" \
-                 ${model_root}/${tests}/model.pdmodel \
-                 ${model_root}/${tests}/model.pdiparams \
-                 "3,640,640" "40" true
-    done
-
     yolo_model="ppyolo_mobilenet_v3_large \
                 yolov3_darknet \
                 yolov3_mobilenet_v3 \

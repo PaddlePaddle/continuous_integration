@@ -55,6 +55,7 @@ else()
   set(TestFiles "bert_benchmark.cc";
                 "clas_benchmark.cc";
                 "rcnn_benchmark.cc";
+                "new_rcnn_benchmark.cc";
                 "ptblm_benchmark.cc";
                 "yolo_benchmark.cc";
                 "eval_clas.cc";

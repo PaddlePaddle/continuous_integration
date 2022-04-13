@@ -1,6 +1,5 @@
 #! /bin/bash
 
-
 set -ex
 
 REPO=$1
@@ -59,12 +58,6 @@ export REPO=$REPO
 export CHECK_LOSS=${CHECK_LOSS:-False}
 
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
-if [[ $REPO == "PaddleSeg" ]]; then
-    cd $REPO
-    export PYTHONPATH=`pwd`
-    cd -
-    python -m pip install --retries 50 scikit-image
-fi
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 cd ./AutoLog
 python -m pip install --retries 10 -r requirements.txt
@@ -90,13 +83,21 @@ python -m pip install --retries 10 openpyxl
 python -m pip install --retries 10 psutil
 python -m pip install --retries 10 GPUtil
 python -m pip install --retries 10 paddleslim
-python -m pip install --retries 10 paddlenlp
+#python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`
 
+if [[ $REPO == "PaddleSeg" ]]; then
+    pip install -e .
+    #export PYTHONPATH=`pwd`
+    python -m pip install --retries 50 scikit-image
+fi
+if [[ $REPO == "PaddleNLP" ]]; then
+    python -m pip install --retries 10 paddlenlp
+fi
 cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
 cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
 cp \$REPO_PATH/../continuous_integration/tipc/check_loss.sh .

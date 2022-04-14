@@ -86,6 +86,8 @@ python -m pip install --retries 10 paddleslim
 #python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
+python -m pip install --retries 10 visualdl 
+python -c 'from visualdl import LogWriter'
 python -m pip install --retries 10 -r requirements.txt
 wget --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`
@@ -94,6 +96,8 @@ if [[ $REPO == "PaddleSeg" ]]; then
     pip install -e .
     #export PYTHONPATH=`pwd`
     python -m pip install --retries 50 scikit-image
+    python -m pip install numba
+    python -m pip install sklearn
 fi
 if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp

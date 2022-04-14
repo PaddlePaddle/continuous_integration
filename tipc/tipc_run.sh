@@ -24,9 +24,9 @@ fi
 
 find . -name "*train_infer_python.txt" > full_chain_list_all_tmp
 if [[ ${grep_models} =~ "undefined" ]]; then
-    cat full_chain_list_all_tmp | sort | uniq |grep -v ${grep_v_models} > full_chain_list_all  #除了剔除的都跑
+    cat full_chain_list_all_tmp | sort | uniq |grep -v -E ${grep_v_models} > full_chain_list_all  #除了剔除的都跑
 else
-    cat full_chain_list_all_tmp | sort | uniq |grep -v ${grep_v_models} |grep ${grep_models} > full_chain_list_all  #防止选择中含被剔除的模型
+    cat full_chain_list_all_tmp | sort | uniq |grep -v -E ${grep_v_models} |grep -E ${grep_models} > full_chain_list_all  #防止选择中含被剔除的模型
 fi
 
 echo "==length models_list=="

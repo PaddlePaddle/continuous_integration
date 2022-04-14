@@ -43,6 +43,8 @@ nvidia-docker run -i --rm \
                   -e "TIPC_MODE=${TIPC_MODE}" \
                   -e "http_proxy=${http_proxy}" \
                   -e "https_proxy=${https_proxy}" \
+                  -e "grep_v_models=${grep_v_models}" \
+                  -e "grep_models=${grep_models}" \
                   -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "

@@ -46,6 +46,7 @@ DEFINE_string(txt_image_shape_path, "./Data/faster_rcnn_r50_fpn_1x_coco_image_sh
 
 DEFINE_bool(use_gpu, false, "use_gpu or not");
 DEFINE_bool(use_trt, false, "use trt or not");
+DEFINE_bool(use_dynamic_shape, false, "use dynamic_shape or not");
 DEFINE_bool(use_mkldnn_, false, "use mkldnn or not, \
             use_mkldnn is internal gflags will conflict, \
             named use_mkldnn_ instead");
@@ -85,6 +86,13 @@ void PrepareConfig(paddle_infer::Config *config) {
           trt_precision_map[FLAGS_trt_precision],  // Precision precision
           false,  // use_static
           use_calib);  //use_calib_mode
+      if (FLAGS_use_dynamic_shape) {
+        std::cout << "Enable dynamic shape" << std::endl;
+        std::map<std::string, std::vector<int>> min_input_shape = {{"image", {1, 3, 640, 640}}};
+        std::map<std::string, std::vector<int>> max_input_shape = {{"image", {4, 3, 640, 640}}};
+        std::map<std::string, std::vector<int>> opt_input_shape = {{"image", {2, 3, 640, 640}}};
+        config->SetTRTDynamicShapeInfo(min_input_shape, max_input_shape, opt_input_shape);
+      }
     }
   }else {
     config->DisableGpu();

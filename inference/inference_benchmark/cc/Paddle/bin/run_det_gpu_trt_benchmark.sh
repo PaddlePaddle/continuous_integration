@@ -59,6 +59,11 @@ test_trt(){
         trt_min_subgraph_size=$6
     fi
 
+    use_dynamic_shape=false
+    if [ $# -ge 7 ]; then
+        use_dynamic_shape=$7
+    fi
+
     printf "${YELLOW} ${model_name} input image_shape = ${image_shape} ${NC} \n";
     use_gpu=true;
     use_trt=true;
@@ -91,7 +96,8 @@ test_trt(){
                 --use_gpu=${use_gpu} \
                 --trt_min_subgraph_size=${trt_min_subgraph_size} \
                 --trt_precision=${trt_precision} \
-                -use_trt=${use_trt} >> ${log_file} 2>&1 | python ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
+                -use_trt=${use_trt} \
+                -use_dynamic_shape=${use_dynamic_shape} >> ${log_file} 2>&1 | python ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
 
             printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
             echo " "
@@ -118,6 +124,26 @@ main(){
                  ${model_root}/${tests}/__model__ \
                  ${model_root}/${tests}/__params__ \
                  "3,640,640" "40"
+    done
+
+    new_rcnn_model="faster_rcnn_r50_1x_coco \
+                    faster_rcnn_r50_fpn_1x_coco \
+                    mask_rcnn_r50_1x_coco \
+                    mask_rcnn_r50_fpn_1x_coco \
+                    cascade_rcnn_r50_fpn_1x_coco \
+                    cascade_mask_rcnn_r50_fpn_1x_coco"
+
+    for tests in ${new_rcnn_model}
+    do
+        test_gpu "new_rcnn_benchmark" "${tests}" \
+                ${model_root}/${tests}/model.pdmodel \
+                ${model_root}/${tests}/model.pdiparams \
+                "3,640,640"
+
+        test_trt "new_rcnn_benchmark" "${tests}" \
+                 ${model_root}/${tests}/model.pdmodel \
+                 ${model_root}/${tests}/model.pdiparams \
+                 "3,640,640" "40" true
     done
 
     yolo_model="ppyolo_mobilenet_v3_large \

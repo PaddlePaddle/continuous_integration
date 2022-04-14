@@ -22,6 +22,11 @@ gen_int8_calib(){
         trt_min_subgraph_size=$6
     fi
 
+    use_dynamic_shape=false
+    if [ $# -ge 7 ]; then
+        use_dynamic_shape=$7
+    fi
+
     batch_size="1"
     trt_precision="int8"
     echo " "
@@ -47,7 +52,8 @@ gen_int8_calib(){
         --trt_min_subgraph_size=${trt_min_subgraph_size} \
         --repeats=1 \
         --warmup_times=1 \
-        --use_trt=${use_trt}
+        --use_trt=${use_trt} \
+        -use_dynamic_shape=${use_dynamic_shape}
 
     printf "finish ${RED} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
     echo " "                          
@@ -70,6 +76,11 @@ test_int8(){
     trt_min_subgraph_size=10;  # ch_ppocr_mobile_v1.1_rec_infer model need set to 10
     if [ $# -ge 6 ]; then
         trt_min_subgraph_size=$6
+    fi
+
+    use_dynamic_shape=false
+    if [ $# -ge 7 ]; then
+        use_dynamic_shape=$7
     fi
 
     for batch_size in "1" "2" "4"
@@ -96,7 +107,8 @@ test_int8(){
             --model_type=${MODEL_TYPE} \
             --trt_precision=${trt_precision} \
             --trt_min_subgraph_size=${trt_min_subgraph_size} \
-            --use_trt=${use_trt} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
+            --use_trt=${use_trt} \
+            -use_dynamic_shape=${use_dynamic_shape} >> ${log_file} 2>&1 | python3.7 ${CASE_ROOT}/py_mem.py "$OUTPUT_BIN/${exe_bin}" >> ${log_file} 2>&1
 
         printf "finish ${RED} ${model_name} generate calib, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
         echo " "

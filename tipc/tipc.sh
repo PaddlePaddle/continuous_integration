@@ -96,6 +96,8 @@ if [[ $REPO == "PaddleSeg" ]]; then
     pip install -e .
     #export PYTHONPATH=`pwd`
     python -m pip install --retries 50 scikit-image
+    python -m pip install numba
+    python -m pip install sklearn
 fi
 if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp

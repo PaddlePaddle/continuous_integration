@@ -42,6 +42,8 @@ nvidia-docker run -i --rm \
                   -e "TIPC_MODE=${TIPC_MODE}" \
                   -e "http_proxy=${http_proxy}" \
                   -e "https_proxy=${https_proxy}" \
+                  -e "grep_v_models=${grep_v_models}" \
+                  -e "grep_models=${grep_models}" \
                   -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
@@ -70,7 +72,9 @@ REPO_PATH=\`pwd\`
 if [[ $REPO == "PaddleNLP" ]]; then
     cd tests
 fi
-
+if [[ $REPO == "PaddleGAN" ]]; then
+    python -m pip install -v -e . #安装ppgan
+fi
 python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro

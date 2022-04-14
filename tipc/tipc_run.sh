@@ -25,7 +25,7 @@ fi
 find . -name "*train_infer_python.txt" > full_chain_list_all_tmp
 if [[ ${grep_models} =~ "undefined" ]]; then
     if [[ ${grep_v_models} =~ "undefined" ]]; then
-        cat full_chain_list_all_tmp | sort | uniq | > full_chain_list_all
+        cat full_chain_list_all_tmp | sort | uniq > full_chain_list_all
     else
         cat full_chain_list_all_tmp | sort | uniq |grep -v -E ${grep_v_models} > full_chain_list_all  #除了剔除的都跑
     fi

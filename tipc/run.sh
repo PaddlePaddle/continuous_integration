@@ -1,7 +1,7 @@
-REPO=$1
-AGILE_PULL_ID=$2
-AGILE_REVISION=$3
-ROOT_PATH=${4:-/mnt/xly/work}
+#REPO=$1
+#AGILE_PULL_ID=$2
+#AGILE_REVISION=$3
+ROOT_PATH=${ROOT_PATH:-/mnt/xly/work}
 
 work_dir=${ROOT_PATH}/${REPO}
 mkdir -p ${work_dir}

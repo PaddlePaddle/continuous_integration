@@ -93,7 +93,7 @@ python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 visualdl 
 python -c 'from visualdl import LogWriter'
 python -m pip install --retries 10 -r requirements.txt
-wget --no-proxy ${PADDLE_WHL}
+wget --no-proxy ${PADDLE_WHL} >/dev/null
 python -m pip install ./\`basename ${PADDLE_WHL}\`
 
 if [[ $REPO == "PaddleSeg" ]]; then

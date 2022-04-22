@@ -47,6 +47,7 @@ nvidia-docker run -i --rm \
                   -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
+alias wget='wget -nv'
 unset http_proxy
 unset https_proxy
 mkdir -p run_env
@@ -93,7 +94,7 @@ python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 visualdl 
 python -c 'from visualdl import LogWriter'
 python -m pip install --retries 10 -r requirements.txt
-wget --no-proxy -q ${PADDLE_WHL}
+wget --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`
 
 if [[ $REPO == "PaddleSeg" ]]; then

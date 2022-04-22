@@ -48,6 +48,7 @@ start=`date +%s`
         mode=$(echo $mode | xargs)
         echo "==START=="$config_file"_"$mode
         echo "CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES
+        sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_train_inference_python.sh $config_file $mode
         bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`

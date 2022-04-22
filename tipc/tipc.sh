@@ -47,6 +47,7 @@ nvidia-docker run -i --rm \
                   -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
+alias wget='wget -nv'
 unset http_proxy
 unset https_proxy
 mkdir -p run_env

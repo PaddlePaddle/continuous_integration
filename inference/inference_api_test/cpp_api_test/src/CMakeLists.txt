@@ -42,6 +42,8 @@ link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}protobuf/lib")
 link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}glog/lib")
 link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}gflags/lib")
 link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}xxhash/lib")
+link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}paddle2onnx/lib")
+link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}onnxruntime/lib")
 link_directories("${PADDLE_LIB}/paddle/lib")
 
 

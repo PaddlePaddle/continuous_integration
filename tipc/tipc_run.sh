@@ -3,6 +3,35 @@
 echo $CHECK_LOSS
 test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
+TIMEOUT=${TIMEOUT:-150} #默认900s(15min)
+time_out=$[TIMEOUT*60]
+
+printmsg()
+{
+    config_file=$1
+    msg="TIMEOUT: ${config_file} time cost > ${TIMEOUT}min"
+    echo $msg
+}
+
+run()
+{
+    waitfor=${time_out}
+    command=$*
+    $command &
+    commandpid=$!
+    ( sleep $waitfor ; kill -9 $commandpid >/dev/null 2>&1 && printmsg $2 ) &
+    watchdog=$!
+    wait $commandpid >/dev/null 2>&1
+    kill -9 $watchdog  >/dev/null 2>&1
+}
+
+run_model()
+{
+    config_file=$1
+    mode=$2
+    bash test_tipc/prepare.sh $config_file $mode
+    bash test_tipc/test_train_inference_python.sh $config_file $mode 
+}
 
 echo "grep rules"
 if [ ! ${grep_models} ]; then  
@@ -43,14 +72,16 @@ cat full_chain_list_all #输出本次要跑的模型
 cat full_chain_list_all | while read config_file #手动定义
 do
 # for config_file in `find . -name "*train_infer_python.txt"`; do
+config_file_curr=${config_file}
 start=`date +%s`
     for mode in $test_mode; do
         mode=$(echo $mode | xargs)
         echo "==START=="$config_file"_"$mode
         echo "CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES
         sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
-        bash test_tipc/prepare.sh $config_file $mode
-        bash test_tipc/test_train_inference_python.sh $config_file $mode
+        run run_model $config_file $mode
+        #bash test_tipc/prepare.sh $config_file $mode
+        #bash test_tipc/test_train_inference_python.sh $config_file $mode
         bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`
         if [[ "$CHECK_LOSS" == "True" ]]; then
             sh check_loss.sh

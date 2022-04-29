@@ -3,7 +3,7 @@
 echo $CHECK_LOSS
 test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
-TIMEOUT=${TIMEOUT:-15} #默认900s(15min)
+TIMEOUT=${TIMEOUT:-150} #默认900s(15min)
 time_out=$[TIMEOUT*60]
 
 printmsg()

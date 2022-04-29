@@ -14,12 +14,11 @@ printmsg()
 
 run()
 {
-    config_file=$1
     waitfor=${TIMEOUT}
     command=$*
     $command &
     commandpid=$!
-    ( sleep $waitfor ; kill -9 $commandpid >/dev/null 2>&1 && printmsg $config_file ) &
+    ( sleep $waitfor ; kill -9 $commandpid >/dev/null 2>&1 && printmsg $2 ) &
     watchdog=$!
     wait $commandpid >/dev/null 2>&1
     kill -9 $watchdog  >/dev/null 2>&1
@@ -82,7 +81,7 @@ start=`date +%s`
         run run_model $config_file $mode
         #bash test_tipc/prepare.sh $config_file $mode
         #bash test_tipc/test_train_inference_python.sh $config_file $mode
-        bash -x upload.sh ${config_file_curr} ${mode} || echo "upload model error on"`pwd`
+        bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`
         if [[ "$CHECK_LOSS" == "True" ]]; then
             sh check_loss.sh
         fi

@@ -21,10 +21,8 @@ run()
     commandpid=$!
     ( sleep $waitfor ; kill -9 $commandpid >/dev/null 2>&1 && printmsg $config_file ) &
     watchdog=$!
-    sleeppid=$PPID
     wait $commandpid >/dev/null 2>&1
     kill -9 $watchdog  >/dev/null 2>&1
-    kill $sleeppid >/dev/null 2>&1
 }
 
 run_model()

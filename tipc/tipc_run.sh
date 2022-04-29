@@ -3,6 +3,37 @@
 echo $CHECK_LOSS
 test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
+TIMEOUT=${TIMEOUT:-900} #默认900s(15min)
+
+printmsg()
+{
+    config_file=$1
+    msg="TIMEOUT: ${config_file} time cost > 15min"
+    echo $msg
+}
+
+run()
+{
+    config_file=$1
+    waitfor=${TIMEOUT}
+    command=$*
+    $command &
+    commandpid=$!
+    ( sleep $waitfor ; kill -9 $commandpid >/dev/null 2>&1 && printmsg $config_file ) &
+    watchdog=$!
+    sleeppid=$PPID
+    wait $commandpid >/dev/null 2>&1
+    kill -9 $watchdog  >/dev/null 2>&1
+    kill $sleeppid >/dev/null 2>&1
+}
+
+run_model()
+{
+    config_file=$1
+    mode=$2
+    bash test_tipc/prepare.sh $config_file $mode
+    bash test_tipc/test_train_inference_python.sh $config_file $mode 
+}
 
 echo "grep rules"
 if [ ! ${grep_models} ]; then  
@@ -49,8 +80,9 @@ start=`date +%s`
         echo "==START=="$config_file"_"$mode
         echo "CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES
         sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
-        bash test_tipc/prepare.sh $config_file $mode
-        bash test_tipc/test_train_inference_python.sh $config_file $mode
+        run rum_model $config_file $mode
+        #bash test_tipc/prepare.sh $config_file $mode
+        #bash test_tipc/test_train_inference_python.sh $config_file $mode
         bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`
         if [[ "$CHECK_LOSS" == "True" ]]; then
             sh check_loss.sh

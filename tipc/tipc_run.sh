@@ -3,18 +3,19 @@
 echo $CHECK_LOSS
 test_mode=${TIPC_MODE:-lite_train_lite_infer}
 test_mode=$(echo $test_mode | tr "," "\n")
-TIMEOUT=${TIMEOUT:-900} #默认900s(15min)
+TIMEOUT=${TIMEOUT:-15} #默认900s(15min)
+time_out=$[TIMEOUT*60]
 
 printmsg()
 {
     config_file=$1
-    msg="TIMEOUT: ${config_file} time cost > 15min"
+    msg="TIMEOUT: ${config_file} time cost > ${TIMEOUT}min"
     echo $msg
 }
 
 run()
 {
-    waitfor=${TIMEOUT}
+    waitfor=${time_out}
     command=$*
     $command &
     commandpid=$!

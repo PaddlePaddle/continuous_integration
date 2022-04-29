@@ -72,6 +72,7 @@ cat full_chain_list_all #输出本次要跑的模型
 cat full_chain_list_all | while read config_file #手动定义
 do
 # for config_file in `find . -name "*train_infer_python.txt"`; do
+config_file_curr=${config_file}
 start=`date +%s`
     for mode in $test_mode; do
         mode=$(echo $mode | xargs)
@@ -81,7 +82,7 @@ start=`date +%s`
         run run_model $config_file $mode
         #bash test_tipc/prepare.sh $config_file $mode
         #bash test_tipc/test_train_inference_python.sh $config_file $mode
-        bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`
+        bash -x upload.sh ${config_file_curr} ${mode} || echo "upload model error on"`pwd`
         if [[ "$CHECK_LOSS" == "True" ]]; then
             sh check_loss.sh
         fi

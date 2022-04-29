@@ -40,6 +40,7 @@ nvidia-docker run -i --rm \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
                   -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
                   -e "TIPC_MODE=${TIPC_MODE}" \
+                  -e "TIMEOUT=${TIMEOUT}" \
                   -e "http_proxy=${http_proxy}" \
                   -e "https_proxy=${https_proxy}" \
                   -e "grep_v_models=${grep_v_models}" \

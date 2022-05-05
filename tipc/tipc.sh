@@ -9,6 +9,7 @@ DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}}
 PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-wheel.bj.bcebos.com/develop/linux/gpu-cuda10.2-cudnn7-mkl_gcc8.2/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl}
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
+CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1}
 
 # define version compare function
 function version_lt() { test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" != "$1"; }
@@ -39,6 +40,7 @@ nvidia-docker run -i --rm \
                   -u root \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
                   -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
+                  -e "device-ids=0,1" \
                   -e "TIPC_MODE=${TIPC_MODE}" \
                   -e "TIMEOUT=${TIMEOUT}" \
                   -e "http_proxy=${http_proxy}" \

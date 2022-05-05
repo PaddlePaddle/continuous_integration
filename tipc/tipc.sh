@@ -40,7 +40,7 @@ nvidia-docker run -i --rm \
                   -u root \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
                   -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
-                  -e "device-ids=0,1" \
+                  -e "device_ids=0,1" \
                   -e "TIPC_MODE=${TIPC_MODE}" \
                   -e "TIMEOUT=${TIMEOUT}" \
                   -e "http_proxy=${http_proxy}" \

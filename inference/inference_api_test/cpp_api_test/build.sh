@@ -32,7 +32,7 @@ if [ $# -ge 5 ]; then
     TENSORRT_ROOT=$5
 fi
 
-export CUDA_LIB=`find /usr/local -name libcudart.so`
+export CUDA_LIB="/usr/local/cuda"
 
 BUILD=$CASE_ROOT/build
 mkdir -p $BUILD

@@ -39,6 +39,5 @@ fi
 
 cd -
 
-bash $CASE_ROOT/pd-yolo-test-mini.sh
 bash $CASE_ROOT/pd-clas-test-mini.sh
 bash $CASE_ROOT/pd-rcnn-test-mini.sh

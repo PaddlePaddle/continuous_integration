@@ -78,9 +78,9 @@ test_trt(){
             echo " "
             printf "start ${YELLOW} ${model_name}, use_trt: ${use_trt}, trt_precision: ${trt_precision}, batch_size: ${batch_size}${NC}\n"
             if [ $trt_precision == "fp16" ]; then
-                accuracy=1e-3
+                accuracy=2e-3
             else
-                accuracy=1e-5
+                accuracy=2e-4
             fi
             printf "${YELLOW} ${trt_precision} accuracy set to ${accuracy} ${NC}\n"
             $OUTPUT_BIN/${exe_bin} --model_name=${model_name} \

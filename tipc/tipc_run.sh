@@ -29,6 +29,8 @@ run_model()
 {
     config_file=$1
     mode=$2
+    mkdir -p test_tipc/output
+    echo -e $config_file >>test_tipc/output/results_python.log
     bash test_tipc/prepare.sh $config_file $mode
     bash test_tipc/test_train_inference_python.sh $config_file $mode 
 }

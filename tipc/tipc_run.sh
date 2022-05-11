@@ -10,7 +10,7 @@ printmsg()
 {
     config_file=$1
     msg="TIMEOUT: ${config_file} time cost > ${TIMEOUT}min"
-    echo $msg
+    echo $msg >> TIMEOUT.log
 }
 
 run()
@@ -29,11 +29,13 @@ run_model()
 {
     config_file=$1
     mode=$2
-    mkdir -p test_tipc/output
     echo -e $config_file >>test_tipc/output/results_python.log
     bash test_tipc/prepare.sh $config_file $mode
     bash test_tipc/test_train_inference_python.sh $config_file $mode 
 }
+
+
+mkdir -p test_tipc/output
 
 echo "grep rules"
 if [ ! ${grep_models} ]; then  

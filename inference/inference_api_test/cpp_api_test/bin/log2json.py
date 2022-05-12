@@ -138,7 +138,6 @@ def send(args, josn_file, failed_num, commit_id):
             "branch": args.branch,
             "commit_id": commit_id,
             "commit_time": des_dict["commit_time"],
-            "task_type": args.task_type,
             "status": status,
             "exit_code": exit_code,
             "duration": None,

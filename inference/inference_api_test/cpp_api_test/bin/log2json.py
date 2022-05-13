@@ -35,6 +35,7 @@ def parse_args():
     parser.add_argument("--build_id", type=str, help="build_id")
     parser.add_argument("--build_number", type=str, help="build_number")
     parser.add_argument("--ce_api_version", type=str, default="V1", help="ce_api_version")
+    parser.add_argument("--job_id", type=str, default="None", help="ce_api_version")
 
     return parser.parse_args()
 
@@ -134,6 +135,7 @@ def send(args, josn_file, failed_num, commit_id):
         params = {
             "build_type_id": args.build_type,
             "build_id": args.build_id,
+            "job_id": args.job_id,
             "repo": args.repo,
             "branch": args.branch,
             "commit_id": commit_id,

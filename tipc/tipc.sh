@@ -50,6 +50,10 @@ nvidia-docker run -i --rm \
                   /bin/bash -c -x "
 unset http_proxy
 unset https_proxy
+
+apt-get install apt-transport-https
+wget -qO - https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/3bf863cc.pub | apt-key add -
+
 mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip

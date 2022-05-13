@@ -34,6 +34,8 @@ def parse_args():
     parser.add_argument("--owner", type=str, help="owner")
     parser.add_argument("--build_id", type=str, help="build_id")
     parser.add_argument("--build_number", type=str, help="build_number")
+    parser.add_argument("--ce_api_version", type=str, default="V1", help="ce_api_version")
+    parser.add_argument("--job_id", type=str, default="None", help="xly_job_id")
 
     return parser.parse_args()
 
@@ -96,6 +98,14 @@ def read_commit_id(inference_path):
     return first_line.split()[-1]
 
 
+def read_description_file(inference_path):
+    description_path = os.path.join(inference_path, "../description.txt")
+    with open(description_path) as f:
+        lines = [line.strip() for line in f.readlines()]
+    description_dict = {line.split(":")[0]: line.split(":")[1] for line in lines}
+    return description_dict
+
+
 def send(args, josn_file, failed_num, commit_id):
     if failed_num > 0:
         status = "Failed"
@@ -103,22 +113,38 @@ def send(args, josn_file, failed_num, commit_id):
     else:
         status = "Passed"
         exit_code=0
-    params = {
-        "build_type": args.build_type,
-        "repo": args.repo,
-        "commit_id": commit_id,
-        "branch": args.branch,
-        "task_type": args.task_type,
-        "task_name": args.task_name,
-        "owner": args.owner,
-        "build_id": args.build_id,
-        "build_number": args.build_number,
-        "status": status,
-        "exit_code":exit_code,
-        "create_time": time.time(),
-        "duration": None,
-        "case_detail": json.dumps(josn_file)
-    }
+    if args.ce_api_version == "V1":
+        params = {
+            "build_type": args.build_type,
+            "repo": args.repo,
+            "commit_id": commit_id,
+            "branch": args.branch,
+            "task_type": args.task_type,
+            "task_name": args.task_name,
+            "owner": args.owner,
+            "build_id": args.build_id,
+            "build_number": args.build_number,
+            "status": status,
+            "exit_code":exit_code,
+            "create_time": time.time(),
+            "duration": None,
+            "case_detail": json.dumps(josn_file)
+        }
+    else:
+        des_dict = read_description_file(inference_path=inference_path)
+        params = {
+            "build_type_id": args.build_type,
+            "build_id": args.build_id,
+            "job_id": args.job_id,
+            "repo": args.repo,
+            "branch": args.branch,
+            "commit_id": commit_id,
+            "commit_time": des_dict["commit_time"],
+            "status": status,
+            "exit_code": exit_code,
+            "duration": None,
+            "case_detail": json.dumps(josn_file)
+        }
     res = requests.post(args.url, data=params)
     print(res.content)
     print("exit_code:", exit_code)

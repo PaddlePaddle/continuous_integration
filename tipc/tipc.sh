@@ -80,6 +80,9 @@ fi
 if [[ $REPO == "PaddleGAN" ]]; then
     python -m pip install -v -e . #安装ppgan
 fi
+if [[ $REPO == "PaddleRec" ]]; then
+    python -m pip install pgl
+fi
 python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro

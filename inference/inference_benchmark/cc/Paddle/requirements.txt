@@ -1,0 +1,5 @@
+cup
+py3nvml
+pytz
+pandas
+openpyxl

@@ -1,0 +1,1 @@
+python -m pytest -m server --disable-warnings -v test_pcpvt_base_trt_fp32.py

@@ -20,7 +20,7 @@ function printmsg()
 {
     config_file=$1
     msg="TIMEOUT: ${config_file} time cost > ${time_out}min"
-    echo $msg >> TIMEOUT.log
+    echo $msg >> TIMEOUT
 }
 
 function run()

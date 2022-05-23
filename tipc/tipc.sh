@@ -61,8 +61,8 @@ export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gc
 export REPO=$REPO
 export CHAIN=$CHAIN
 
-unset http_proxy
-unset https_proxy
+export http_proxy=
+export https_proxy=
 echo $http_proxy $https_proxy
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;

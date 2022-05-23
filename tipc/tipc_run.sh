@@ -1,19 +1,29 @@
 #! /bin/bash
 
-echo $CHECK_LOSS
-test_mode=${TIPC_MODE:-lite_train_lite_infer}
-test_mode=$(echo $test_mode | tr "," "\n")
-TIMEOUT=${TIMEOUT:-150} #默认900s(15min)
-time_out=$[TIMEOUT*60]
+function func_parser_key(){
+    strs=$1
+    IFS=":"
+    array=(${strs})
+    tmp=${array[0]}
+    echo ${tmp}
+}
 
-printmsg()
+function func_parser_value(){
+    strs=$1
+    IFS=":"
+    array=(${strs})
+    tmp=${array[1]}
+    echo ${tmp}
+}
+
+function printmsg()
 {
     config_file=$1
-    msg="TIMEOUT: ${config_file} time cost > ${TIMEOUT}min"
+    msg="TIMEOUT: ${config_file} time cost > ${time_out}min"
     echo $msg >> TIMEOUT.log
 }
 
-run()
+function run()
 {
     waitfor=${time_out}
     command=$*
@@ -25,37 +35,191 @@ run()
     kill -9 $watchdog  >/dev/null 2>&1
 }
 
-run_model()
+function run_model()
 {
     config_file=$1
     mode=$2
     echo -e $config_file >>test_tipc/output/results_python.log
-    bash test_tipc/prepare.sh $config_file $mode
-    bash test_tipc/test_train_inference_python.sh $config_file $mode 
-}
+    case $CHAIN in
+    chain_base)
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_train_inference_python.sh $config_file $mode 
+        ;;
+    chain_infer_cpp)
+        bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
+        bash test_tipc/test_inference_cpp.sh $config_file $mode 
+        ;;
+    chain_amp)
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_train_inference_python.sh $config_file $mode 
+        ;;
+    chain_serving_cpp)
+        #build server
+        apt-get update
+        apt install -y libcurl4-openssl-dev libbz2-dev
+        wget -nv https://paddle-serving.bj.bcebos.com/others/centos_ssl.tar && tar xf centos_ssl.tar && rm -rf centos_ssl.tar && mv libcrypto.so.1.0.2k /usr/lib/libcrypto.so.1.0.2k && mv libssl.so.1.0.2k /usr/lib/libssl.so.1.0.2k && ln -sf /usr/lib/libcrypto.so.1.0.2k /usr/lib/libcrypto.so.10 && ln -sf /usr/lib/libssl.so.1.0.2k /usr/lib/libssl.so.10 && ln -sf /usr/lib/libcrypto.so.10 /usr/lib/libcrypto.so && ln -sf /usr/lib/libssl.so.10 /usr/lib/libssl.so
+        rm -rf /usr/local/go
+        wget -nv -qO- https://paddle-ci.cdn.bcebos.com/go1.17.2.linux-amd64.tar.gz | tar -xz -C /usr/local
+        export GOROOT=/usr/local/go
+        export GOPATH=/root/gopath
+        export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
+        go env -w GO111MODULE=on
+        go env -w GOPROXY=https://goproxy.cn,direct
+        go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@v1.15.2
+        go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger@v1.15.2
+        go install github.com/golang/protobuf/protoc-gen-go@v1.4.3
+        go install google.golang.org/grpc@v1.33.0
+        go env -w GO111MODULE=auto
 
+        wget -nv https://paddle-qa.bj.bcebos.com/PaddleServing/opencv3.tar.gz && tar -xvf opencv3.tar.gz && rm -rf opencv3.tar.gz
+        export OPENCV_DIR=$PWD/opencv3
+
+        # clone Serving
+        set http_proxy=${HTTP_PROXY}
+        set https_proxy=${HTTPS_PROXY}
+        git clone https://github.com/PaddlePaddle/Serving.git -b v0.8.3 --depth=1
+        cd Serving
+        export Serving_repo_path=$PWD
+        git submodule update --init --recursive
+        unset http_proxy
+        unset https_proxy
+
+        python -m pip install -r python/requirements.txt
+
+        export PYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
+        export PYTHON_LIBRARIES=$(python -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
+        export PYTHON_EXECUTABLE=`which python`
+
+        export CUDA_PATH='/usr/local/cuda'
+        export CUDNN_LIBRARY='/usr/local/cuda/lib64/'
+        export CUDA_CUDART_LIBRARY='/usr/local/cuda/lib64/'
+        export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT6-cuda10.1-cudnn7/targets/x86_64-linux-gnu/'
+
+        cd ../../
+        rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
+        rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
+        cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
+        cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
+
+        cd Serving/server-build-gpu-opencv
+        mkdir server-build-gpu-opencv && cd server-build-gpu-opencv
+        set http_proxy=${HTTP_PROXY}
+        set https_proxy=${HTTPS_PROXY}
+        cmake -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_DIR \
+            -DPYTHON_LIBRARIES=$PYTHON_LIBRARIES \
+            -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE \
+            -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_PATH} \
+            -DCUDNN_LIBRARY=${CUDNN_LIBRARY} \
+            -DCUDA_CUDART_LIBRARY=${CUDA_CUDART_LIBRARY} \
+            -DTENSORRT_ROOT=${TENSORRT_LIBRARY_PATH} \
+            -DOPENCV_DIR=${OPENCV_DIR} \
+            -DWITH_OPENCV=ON \
+            -DSERVER=ON \
+            -DWITH_GPU=ON ..
+        make -j32
+
+        python -m pip install python/dist/paddle*
+        export SERVING_BIN=$PWD/core/general-server/serving
+        pip install paddle_serving_client
+        pip install paddle-serving-app
+        unset http_proxy
+        unset https_proxy
+        cd  ../../../
+
+        #run models
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_serving_infer_cpp.sh $config_file $mode 
+        ;;
+    chain_serving_python)
+        pip install paddle-serving-server-gpu==0.8.3.post101
+        pip install paddle_serving_client==0.8.3
+        pip install paddle-serving-app==0.8.3
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_serving_infer_python.sh $config_file $mode 
+        ;;
+    chain_paddle2onnx)
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_paddle2onnx.sh $config_file $mode 
+        ;;
+    chain_distribution)
+        # pdc
+        ;;
+    *)
+        echo ""
+        ;;
+    chain_ptq_infer_python)
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_train_inference_python.sh $config_file $mode
+        ;;
+    chain_pact_infer_python)
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_train_inference_python.sh $config_file $mode
+        ;;
+    esac
+}
 
 mkdir -p test_tipc/output
 
-echo "grep rules"
+# 确定链条的txt、mode、timeout
+case $CHAIN in
+chain_base) 
+    file_txt=train_infer_python.txt
+    mode=lite_train_lite_infer
+    time_out=600
+    ;;
+chain_infer_cpp)
+    file_txt=inference_cpp.txt
+    mode=cpp_infer
+    time_out=60
+    ;;
+chain_amp)
+    file_txt=train_amp_infer_python.txt
+    mode=lite_train_lite_infer
+    time_out=600
+    ;;
+chain_serving_cpp)
+    file_txt=serving_infer_cpp.txt
+    mode=serving_infer
+    time_out=60
+    ;;
+chain_serving_python)
+    file_txt=serving_infer_python.txt
+    mode=serving_infer
+    time_out=60
+    ;;
+chain_paddle2onnx)
+    file_txt=paddle2onnx_infer_python.txt
+    mode=paddle2onnx_infer
+    time_out=60
+    ;;
+chain_distribution)
+    file_txt=train_infer_python.txt
+    mode=lite_train_lite_infer
+    time_out=600
+    ;;
+chain_pact_infer_python)
+    file_txt=train_pact_infer_python.txt
+    mode=lite_train_lite_infer
+    time_out=600
+chain_ptq_infer_python)
+    file_txt=train_ptq_infer_python.txt
+    mode=whole_infer
+    time_out=600
+*)
+    echo "CHAIN must be chain_base chain_infer_cpp chain_amp chain_serving_cpp chain_serving_python chain_paddle2onnx chain_distribution chain_pact_infer_python chain_ptq_infer_python"
+    echo "$CHAIN not supported at the moment"
+    exit 1
+    ;;
+esac
+
+# 确定套件的待测模型列表, 其txt保存到full_chain_list_all
+python model_list.py $REPO ${PWD}/test_tipc/configs/ $file_txt full_chain_list_all_tmp 
 if [ ! ${grep_models} ]; then  
-    echo "IS NULL"
     grep_models=undefined
-    echo ${grep_models}
-else  
-    echo "NOT NULL"  
-    echo ${grep_models}
 fi  
 if [ ! ${grep_v_models} ]; then  
-    echo "IS NULL"  
     grep_v_models=undefined
-    echo ${grep_v_models}
-else  
-    echo "NOT NULL"  
-    echo ${grep_v_models}
 fi  
-
-find . -name "*train_infer_python.txt" > full_chain_list_all_tmp
 if [[ ${grep_models} =~ "undefined" ]]; then
     if [[ ${grep_v_models} =~ "undefined" ]]; then
         cat full_chain_list_all_tmp | sort | uniq > full_chain_list_all
@@ -66,39 +230,33 @@ else
     if [[ ${grep_v_models} =~ "undefined" ]]; then
         cat full_chain_list_all_tmp | sort | uniq | grep -E ${grep_models} > full_chain_list_all
     else
-        cat full_chain_list_all_tmp | sort | uniq |grep -v -E ${grep_v_models} |grep -E ${grep_models} > full_chain_list_all  #防止选择中含被剔除的模型
+        cat full_chain_list_all_tmp | sort | uniq |grep -v -E ${grep_v_models} |grep -E ${grep_models} > full_chain_list_all
     fi
 fi
-
 echo "==length models_list=="
 wc -l full_chain_list_all #输出本次要跑的模型个数
 cat full_chain_list_all #输出本次要跑的模型
-cat full_chain_list_all | while read config_file #手动定义
+
+# 跑模型
+cat full_chain_list_all | while read config_file
 do
-# for config_file in `find . -name "*train_infer_python.txt"`; do
-config_file_curr=${config_file}
-start=`date +%s`
-    for mode in $test_mode; do
-        mode=$(echo $mode | xargs)
-        echo "==START=="$config_file"_"$mode
-        echo "CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES
-        sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
-        run run_model $config_file $mode
-        #bash test_tipc/prepare.sh $config_file $mode
-        #bash test_tipc/test_train_inference_python.sh $config_file $mode
-        bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`
-        if [[ "$CHECK_LOSS" == "True" ]]; then
-            sh check_loss.sh
-        fi
-        mv test_tipc/output "test_tipc/output_"$(echo $config_file | tr "/" "_")"_"$mode || echo "move output error on "`pwd`
-        mv test_tipc/data "test_tipc/data"$(echo $config_file | tr "/" "_")"_"$mode || echo "move data error on "`pwd`
-        echo "==END=="$config_file"_"$mode
-        sleep 2 #防止显卡未释放
-    done
-end=`date +%s`
-time=`echo $start $end | awk '{print $2-$1-2}'` #减去sleep
-echo "${config_file} spend time seconds ${time}"
+    start=`date +%s`
+    echo "==START=="$config_file"
+    sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
+    run run_model $config_file $mode $time_out
+    echo "==END=="$config_file"
+    sleep 2 #防止显卡未释放
+    end=`date +%s`
+    time=`echo $start $end | awk '{print $2-$1-2}'` #减去sleep
+    echo "${config_file} spend time seconds ${time}"
+
+    bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`
+    mv test_tipc/output "test_tipc/output_"$(echo $config_file | tr "/" "_")"_"$mode || echo "move output error on "`pwd`
+    mv test_tipc/data "test_tipc/data"$(echo $config_file | tr "/" "_")"_"$mode || echo "move data error on "`pwd`
 done
+
+
+
 
 # update model_url latest
 if [ -f "tipc_models_url_${REPO}.txt" ];then

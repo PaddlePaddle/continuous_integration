@@ -3,11 +3,11 @@
 set -ex
 
 REPO=$1
+CHAIN=$2
 DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82}
-#DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle:2.2.2-gpu-cuda10.2-cudnn7}
-DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}}
+DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
 PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
-#PADDLE_WHL=${PADDLE_WHL:-https://paddle-wheel.bj.bcebos.com/develop/linux/gpu-cuda10.2-cudnn7-mkl_gcc8.2/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl}
+PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxCentos_Gcc82_Cuda10.1_cudnn7.6_trt6015_Py38_Compile_H/latest/paddle_inference.tgz}
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
 
 # define version compare function
@@ -39,10 +39,10 @@ nvidia-docker run -i --rm \
                   -u root \
                   -e "FLAGS_fraction_of_gpu_memory_to_use=0.01" \
                   -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
-                  -e "TIPC_MODE=${TIPC_MODE}" \
                   -e "TIMEOUT=${TIMEOUT}" \
-                  -e "http_proxy=${http_proxy}" \
-                  -e "https_proxy=${https_proxy}" \
+                  -e "PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ}" \
+                  -e "https_proxy=${HTTP_PROXY}" \
+                  -e "https_proxy=${HTTPS_PROXY}" \
                   -e "grep_v_models=${grep_v_models}" \
                   -e "grep_models=${grep_models}" \
                   -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
@@ -57,12 +57,8 @@ wget -qO - https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x
 mkdir -p run_env
 ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
-#ln -s /usr/local/python3.7.0/bin/python3.7 run_env/python
-#ln -s /usr/local/python3.7.0/bin/pip3.7 run_env/pip
-#export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/python3.7.0/bin/:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export REPO=$REPO
-export CHECK_LOSS=${CHECK_LOSS:-False}
 
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
@@ -106,7 +102,6 @@ python -m pip install ./\`basename ${PADDLE_WHL}\`
 
 if [[ $REPO == "PaddleSeg" ]]; then
     pip install -e .
-    #export PYTHONPATH=`pwd`
     python -m pip install --retries 50 scikit-image
     python -m pip install numba
     python -m pip install sklearn
@@ -116,8 +111,7 @@ if [[ $REPO == "PaddleNLP" ]]; then
 fi
 cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
 cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
-cp \$REPO_PATH/../continuous_integration/tipc/check_loss.sh .
-cp \$REPO_PATH/../continuous_integration/tipc/check_loss.py .
+cp -r \$REPO_PATH/../continuous_integration/tipc/configs .
 
 bash -x tipc_run.sh
 "
@@ -125,20 +119,19 @@ bash -x tipc_run.sh
 
 # check_status
 set +x
-cd $REPO
-log_file="results"
-for f in `find . -name '*.log'`; do
-   cat $f >> $log_file
-done
+echo " "
+echo -e "=====================test summary======================"
+
 EXIT_CODE=0
 
+cd $REPO
+log_file="RESULT.log"
+for f in `find . -name '*.log'`; do
+   cat $f | grep "with command" >> $log_file
+done
+
 if [[ ! -f ${log_file} ]];then
-  echo " "
-  echo -e "=====================result summary======================"
-  echo "${log_file}: No such file or directory"
   echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
-  echo "========================================================"
-  echo " "
   EXIT_CODE=8
 else
   number_lines=$(cat ${log_file} | wc -l)
@@ -146,20 +139,17 @@ else
   zero=0
   if [ $failed_line -ne $zero ]
   then
-      echo " "
-      echo "Summary Failed Tests ..."
       echo "[ERROR] There are $number_lines results in ${log_file}, but failed number of tests is $failed_line."
-      echo -e "=====================test summary======================"
       echo "The Following Tests Failed: "
       cat ${log_file} | grep "Run failed with command"
-      echo -e "========================================================"
-      echo " "
       EXIT_CODE=8
   else
       echo "ALL TIPC COMMAND SUCCEED!"
   fi
 fi
 
+echo -e "========================================================"
+echo " "
 echo "Paddle TIPC Tests Finished."
 exit ${EXIT_CODE}
 

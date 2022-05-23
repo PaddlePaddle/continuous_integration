@@ -18,6 +18,4 @@ wget -q --no-proxy -O $PWD/bce_whl.tar.gz  https://paddle-docker-tar.bj.bcebos.c
 
 #python -m pip install paddleseg
 cp continuous_integration/tipc/tipc.sh .
-#export TIPC_MODE="whole_train_whole_infer"
-export CHECK_LOSS=True
-sh tipc.sh ${REPO}
+sh tipc.sh ${REPO} ${CHAIN}

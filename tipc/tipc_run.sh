@@ -39,7 +39,6 @@ function run_model()
 {
     config_file=$1
     mode=$2
-    echo -e $config_file >>test_tipc/output/results_python.log
     case $CHAIN in
     chain_base)
         bash test_tipc/prepare.sh $config_file $mode
@@ -155,6 +154,12 @@ function run_model()
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_train_inference_python.sh $config_file $mode
         ;;
+    *)
+        echo "CHAIN must be chain_base chain_infer_cpp chain_amp chain_serving_cpp chain_serving_python chain_paddle2onnx chain_distribution chain_pact_infer_python chain_ptq_infer_python"
+        echo "$CHAIN not supported at the moment"
+        exit 2
+        ;;
+ 
     esac
 }
 
@@ -240,13 +245,13 @@ wc -l full_chain_list_all #输出本次要跑的模型个数
 cat full_chain_list_all #输出本次要跑的模型
 
 # 跑模型
+sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
 cat full_chain_list_all | while read config_file
 do
     start=`date +%s`
-    echo "==START=="$config_file"
-    sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
+    echo "==START=="$config_file
     run run_model $config_file $mode $time_out
-    echo "==END=="$config_file"
+    echo "==END=="$config_file
     sleep 2 #防止显卡未释放
     end=`date +%s`
     time=`echo $start $end | awk '{print $2-$1-2}'` #减去sleep

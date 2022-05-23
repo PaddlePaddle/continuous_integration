@@ -19,7 +19,7 @@ function func_parser_value(){
 function printmsg()
 {
     config_file=$1
-    msg="TIMEOUT: ${config_file} time cost > ${time_out}min"
+    msg="TIMEOUT: ${config_file} time cost > ${time_out}seconds"
     echo $msg >> TIMEOUT
 }
 

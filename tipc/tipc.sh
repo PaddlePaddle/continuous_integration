@@ -116,6 +116,7 @@ fi
 cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
 cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
 cp -r \$REPO_PATH/../continuous_integration/tipc/configs .
+cp -r \$REPO_PATH/../continuous_integration/tipc/model_list.py .
 
 bash -x tipc_run.sh
 "

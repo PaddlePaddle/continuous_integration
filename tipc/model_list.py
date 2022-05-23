@@ -34,7 +34,7 @@ def run(repo, configs_path, chain_txt, dst_file):
         
     with open(dst_file, 'w') as f:
         for model in models:
-        f.write(model)
+            f.write(model)
     
     
 if __name__ == "__main__":

@@ -41,8 +41,8 @@ nvidia-docker run -i --rm \
                   -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
                   -e "TIMEOUT=${TIMEOUT}" \
                   -e "PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ}" \
-                  -e "https_proxy=${HTTP_PROXY}" \
-                  -e "https_proxy=${HTTPS_PROXY}" \
+                  -e "HTTP_PROXY=${HTTP_PROXY}" \
+                  -e "HTTPS_PROXY=${HTTPS_PROXY}" \
                   -e "grep_v_models=${grep_v_models}" \
                   -e "grep_models=${grep_models}" \
                   -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
@@ -59,6 +59,7 @@ ln -s /usr/local/bin/python3.7 run_env/python
 ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export REPO=$REPO
+export CHAIN=$CHAIN
 
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;

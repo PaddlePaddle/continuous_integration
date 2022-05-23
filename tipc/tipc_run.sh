@@ -201,10 +201,12 @@ chain_pact_infer_python)
     file_txt=train_pact_infer_python.txt
     mode=lite_train_lite_infer
     time_out=600
+    ;;
 chain_ptq_infer_python)
     file_txt=train_ptq_infer_python.txt
     mode=whole_infer
     time_out=600
+    ;;
 *)
     echo "CHAIN must be chain_base chain_infer_cpp chain_amp chain_serving_cpp chain_serving_python chain_paddle2onnx chain_distribution chain_pact_infer_python chain_ptq_infer_python"
     echo "$CHAIN not supported at the moment"

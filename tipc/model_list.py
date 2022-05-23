@@ -13,7 +13,7 @@ def run(repo, configs_path, chain_txt, dst_file):
         white = ["all"]
     else:
         white = model_list[repo]["white"].split("|") 
-        black = black_list[repo]["black"].split("|")
+        black = model_list[repo]["black"].split("|")
 
     models = []
     for item in Path(configs_path).rglob(chain_txt): 
@@ -35,7 +35,7 @@ def run(repo, configs_path, chain_txt, dst_file):
         
     with open(dst_file, 'w') as f:
         for model in models:
-            f.write(model)
+            f.write(model + "\n")
     
     
 if __name__ == "__main__":

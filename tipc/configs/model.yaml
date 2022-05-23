@@ -1,33 +1,33 @@
 PaddleClas:
   white: all
-  black: no
+  black: none
 PaddleGAN:
   white: all
-  black: no
+  black: none
 PaddleOCR:
   white: all
-  black: no
+  black: none
 PaddleVideo:
   white: all
-  black: no
+  black: none
 PaddleDetection:
   white: all
-  black: no
+  black: none
 PaddleSeg:
   white: all
-  black: no
+  black: none
 PaddleNLP:
   white: all
-  black: no
+  black: none
 PaddleRec:
   white: all
-  black: no
+  black: none
 PaddleSpeech:
   white: all
-  black: no
+  black: none
 PaddleSlim:
   white: all
-  black: no
+  black: none
 PARL:
   white: all
-  black: no
+  black: none

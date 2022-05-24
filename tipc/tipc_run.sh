@@ -94,13 +94,13 @@ function run_model()
         export CUDA_CUDART_LIBRARY='/usr/local/cuda/lib64/'
         export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT6-cuda10.1-cudnn7/targets/x86_64-linux-gnu/'
 
-        cd ../../
+        cd ../
         rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
         rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
         cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
         cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
 
-        cd Serving/server-build-gpu-opencv
+        cd Serving/
         mkdir server-build-gpu-opencv && cd server-build-gpu-opencv
         set http_proxy=${HTTP_PROXY}
         set https_proxy=${HTTPS_PROXY}
@@ -123,7 +123,7 @@ function run_model()
         pip install paddle-serving-app
         unset http_proxy
         unset https_proxy
-        cd  ../../../
+        cd  ../../
 
         #run models
         bash test_tipc/prepare.sh $config_file $mode

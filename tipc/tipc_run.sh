@@ -143,9 +143,6 @@ function run_model()
     chain_distribution)
         # pdc
         ;;
-    *)
-        echo ""
-        ;;
     chain_ptq_infer_python)
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_train_inference_python.sh $config_file $mode

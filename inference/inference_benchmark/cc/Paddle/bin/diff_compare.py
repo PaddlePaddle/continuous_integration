@@ -106,6 +106,7 @@ if __name__ == '__main__':
     merge_df["gpu_used_diff(MB)"] = merge_df[["gpu_used(MB)", "gpu_used(MB)_last"]].apply(lambda x: x["gpu_used(MB)_last"] - x["gpu_used(MB)"], axis=1)
     print(merge_df)
     merge_df.sort_values(by=["model_name", "batch_size", "trt_precision"], inplace=True)
+    merge_df = merge_df.dropna(subset=["model_name"])
     merge_df.to_excel(args.output_name)
     # postprocess
     set_style(args.output_name)

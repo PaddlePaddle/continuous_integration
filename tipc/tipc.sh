@@ -135,7 +135,8 @@ for f in `find . -name '*.log'`; do
    cat $f | grep "with command" >> $log_file
 done
 
-if  [[ -f TIMEOUT ]];then
+zero=0
+if [[ -f TIMEOUT ]];then
   timeout_number=$(cat TIMEOUT | wc -l)
   if [ $timeout_number -ne $zero ];then
       echo "[TIMEOUT] There are $timeout_number models timeout:" 
@@ -155,7 +156,6 @@ else
       EXIT_CODE=8
   else
       failed_line=$(grep -o "Run failed with command" ${log_file}|wc -l)
-      zero=0
       if [ $failed_line -ne $zero ]
       then
           echo "[ERROR] There are $number_lines results, but failed number of tests is $failed_line."

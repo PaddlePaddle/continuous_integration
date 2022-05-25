@@ -54,53 +54,13 @@ function run_model()
         ;;
     chain_serving_cpp)
         #build server
-        apt-get update
-        apt install -y libcurl4-openssl-dev libbz2-dev
-        wget -nv https://paddle-serving.bj.bcebos.com/others/centos_ssl.tar && tar xf centos_ssl.tar && rm -rf centos_ssl.tar && mv libcrypto.so.1.0.2k /usr/lib/libcrypto.so.1.0.2k && mv libssl.so.1.0.2k /usr/lib/libssl.so.1.0.2k && ln -sf /usr/lib/libcrypto.so.1.0.2k /usr/lib/libcrypto.so.10 && ln -sf /usr/lib/libssl.so.1.0.2k /usr/lib/libssl.so.10 && ln -sf /usr/lib/libcrypto.so.10 /usr/lib/libcrypto.so && ln -sf /usr/lib/libssl.so.10 /usr/lib/libssl.so
-        rm -rf /usr/local/go
-        wget -nv -qO- https://paddle-ci.cdn.bcebos.com/go1.17.2.linux-amd64.tar.gz | tar -xz -C /usr/local
-        export GOROOT=/usr/local/go
-        export GOPATH=/root/gopath
-        export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
-        go env -w GO111MODULE=on
-        go env -w GOPROXY=https://goproxy.cn,direct
-        go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@v1.15.2
-        go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger@v1.15.2
-        go install github.com/golang/protobuf/protoc-gen-go@v1.4.3
-        go install google.golang.org/grpc@v1.33.0
-        go env -w GO111MODULE=auto
-
-        wget -nv https://paddle-qa.bj.bcebos.com/PaddleServing/opencv3.tar.gz && tar -xvf opencv3.tar.gz && rm -rf opencv3.tar.gz
-        export OPENCV_DIR=$PWD/opencv3
-
-        # clone Serving
-        set http_proxy=${HTTP_PROXY}
-        set https_proxy=${HTTPS_PROXY}
-        git clone https://github.com/PaddlePaddle/Serving.git -b v0.8.3 --depth=1
-        cd Serving
-        export Serving_repo_path=$PWD
-        git submodule update --init --recursive
-        unset http_proxy
-        unset https_proxy
-
-        python -m pip install -r python/requirements.txt
-
-        export PYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
-        export PYTHON_LIBRARIES=$(python -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
-        export PYTHON_EXECUTABLE=`which python`
-
-        export CUDA_PATH='/usr/local/cuda'
-        export CUDNN_LIBRARY='/usr/local/cuda/lib64/'
-        export CUDA_CUDART_LIBRARY='/usr/local/cuda/lib64/'
-        export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT6-cuda10.1-cudnn7/targets/x86_64-linux-gnu/'
-
-        cd ../
         rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
         rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
         cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
         cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
 
         cd Serving/
+        rm -rf server-build-gpu-opencv
         mkdir server-build-gpu-opencv && cd server-build-gpu-opencv
         set http_proxy=${HTTP_PROXY}
         set https_proxy=${HTTPS_PROXY}
@@ -119,8 +79,6 @@ function run_model()
 
         python -m pip install python/dist/paddle*
         export SERVING_BIN=$PWD/core/general-server/serving
-        pip install paddle_serving_client
-        pip install paddle-serving-app
         unset http_proxy
         unset https_proxy
         cd  ../../
@@ -130,9 +88,9 @@ function run_model()
         bash test_tipc/test_serving_infer_cpp.sh $config_file $mode 
         ;;
     chain_serving_python)
-        pip install paddle-serving-server-gpu==0.8.3.post101
-        pip install paddle_serving_client==0.8.3
-        pip install paddle-serving-app==0.8.3
+        #pip install paddle-serving-server-gpu==0.8.3.post101
+        #pip install paddle_serving_client==0.8.3
+        #pip install paddle-serving-app==0.8.3
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_serving_infer_python.sh $config_file $mode 
         ;;
@@ -162,6 +120,60 @@ function run_model()
 
 mkdir -p test_tipc/output
 
+if [[ $CHAIN == "chain_serving_python" ]]; then
+    pip install paddle-serving-server-gpu==0.8.3.post101
+    pip install paddle_serving_client==0.8.3
+    pip install paddle-serving-app==0.8.3
+fi
+
+if [[ $CHAIN == chain_serving_cpp ]]; then
+        # 安装client 和 app
+        pip install paddle_serving_client
+        pip install paddle-serving-app
+
+        # 准备server的编译环境
+        apt-get update
+        apt install -y libcurl4-openssl-dev libbz2-dev
+        wget -nv https://paddle-serving.bj.bcebos.com/others/centos_ssl.tar && tar xf centos_ssl.tar && rm -rf centos_ssl.tar && mv libcrypto.so.1.0.2k /usr/lib/libcrypto.so.1.0.2k && mv libssl.so.1.0.2k /usr/lib/libssl.so.1.0.2k && ln -sf /usr/lib/libcrypto.so.1.0.2k /usr/lib/libcrypto.so.10 && ln -sf /usr/lib/libssl.so.1.0.2k /usr/lib/libssl.so.10 && ln -sf /usr/lib/libcrypto.so.10 /usr/lib/libcrypto.so && ln -sf /usr/lib/libssl.so.10 /usr/lib/libssl.so
+        rm -rf /usr/local/go
+        wget -nv -qO- https://paddle-ci.cdn.bcebos.com/go1.17.2.linux-amd64.tar.gz | tar -xz -C /usr/local
+        export GOROOT=/usr/local/go
+        export GOPATH=/root/gopath
+        export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
+        go env -w GO111MODULE=on
+        go env -w GOPROXY=https://goproxy.cn,direct
+        go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@v1.15.2
+        go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger@v1.15.2
+        go install github.com/golang/protobuf/protoc-gen-go@v1.4.3
+        go install google.golang.org/grpc@v1.33.0
+        go env -w GO111MODULE=auto
+
+        wget -nv https://paddle-qa.bj.bcebos.com/PaddleServing/opencv3.tar.gz && tar -xvf opencv3.tar.gz && rm -rf opencv3.tar.gz
+        export OPENCV_DIR=$PWD/opencv3
+
+        # clone Serving
+        set http_proxy=${HTTP_PROXY}
+        set https_proxy=${HTTPS_PROXY}
+        git clone https://github.com/PaddlePaddle/Serving.git -b v0.8.3 --depth=1
+        cd Serving
+        export Serving_repo_path=$PWD
+        git submodule update --init --recursive
+        set http_proxy=
+        set https_proxy=
+
+        python -m pip install -r python/requirements.txt
+
+        export PYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
+        export PYTHON_LIBRARIES=$(python -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
+        export PYTHON_EXECUTABLE=`which python`
+
+        export CUDA_PATH='/usr/local/cuda'
+        export CUDNN_LIBRARY='/usr/local/cuda/lib64/'
+        export CUDA_CUDART_LIBRARY='/usr/local/cuda/lib64/'
+        export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT6-cuda10.1-cudnn7/targets/x86_64-linux-gnu/'
+        cd ..
+fi
+
 # 确定链条的txt、mode、timeout
 case $CHAIN in
 chain_base) 
@@ -187,7 +199,7 @@ chain_serving_cpp)
 chain_serving_python)
     file_txt=serving_infer_python.txt
     mode=serving_infer
-    time_out=120
+    time_out=60
     ;;
 chain_paddle2onnx)
     file_txt=paddle2onnx_infer_python.txt

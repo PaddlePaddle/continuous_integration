@@ -150,21 +150,15 @@ if [[ ! -f ${log_file} ]];then
   EXIT_CODE=8
 else
   number_lines=$(cat ${log_file} | wc -l)
-  if [ $number_lines -e  $zero ]
+  failed_line=$(grep -o "Run failed with command" ${log_file}|wc -l)
+  if [ $failed_line -ne $zero ]
   then
-      echo "[ERROR] There are 0 results, all test cases may fail"
-      EXIT_CODE=8
-  else
-      failed_line=$(grep -o "Run failed with command" ${log_file}|wc -l)
-      if [ $failed_line -ne $zero ]
-      then
           echo "[ERROR] There are $number_lines results, but failed number of tests is $failed_line."
           echo "The Following Tests Failed: "
           cat ${log_file} | grep "Run failed with command"
           EXIT_CODE=8
-      else
+  else
           echo "[SUCCEED] There are $number_lines results, all tipc ${CHAIN} command succeed!"
-      fi
   fi
 fi
 

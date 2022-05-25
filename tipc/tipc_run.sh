@@ -259,6 +259,7 @@ do
     mv test_tipc/data "test_tipc/data"$(echo $config_file | tr "/" "_")"_"$mode || echo "move data error on "`pwd`
 done
 
+exit 0
 
 
 

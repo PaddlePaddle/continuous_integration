@@ -135,6 +135,15 @@ for f in `find . -name '*.log'`; do
    cat $f | grep "with command" >> $log_file
 done
 
+if  [[ -f TIMEOUT ]];then
+  timeout_number=$(cat TIMEOUT | wc -l)
+  if [ $timeout_number -ne $zero ];then
+      echo "[TIMEOUT] There are $timeout_number models timeout:" 
+      cat TIMEOUT
+      EXIT_CODE=8
+  fi
+fi
+
 if [[ ! -f ${log_file} ]];then
   echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
   EXIT_CODE=8

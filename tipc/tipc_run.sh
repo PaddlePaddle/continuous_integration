@@ -19,7 +19,7 @@ function func_parser_value(){
 function printmsg()
 {
     config_file=$1
-    msg="TIMEOUT: ${config_file} time cost > ${time_out}seconds"
+    msg="${config_file} time cost > ${time_out}seconds"
     echo $msg >> TIMEOUT
 }
 
@@ -172,7 +172,7 @@ chain_base)
 chain_infer_cpp)
     file_txt=inference_cpp.txt
     mode=cpp_infer
-    time_out=60
+    time_out=120
     ;;
 chain_amp)
     file_txt=train_amp_infer_python.txt
@@ -182,12 +182,12 @@ chain_amp)
 chain_serving_cpp)
     file_txt=serving_infer_cpp.txt
     mode=serving_infer
-    time_out=60
+    time_out=600
     ;;
 chain_serving_python)
     file_txt=serving_infer_python.txt
     mode=serving_infer
-    time_out=60
+    time_out=120
     ;;
 chain_paddle2onnx)
     file_txt=paddle2onnx_infer_python.txt

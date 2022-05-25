@@ -184,7 +184,7 @@ chain_base)
 chain_infer_cpp)
     file_txt=inference_cpp.txt
     mode=cpp_infer
-    time_out=120
+    time_out=600
     ;;
 chain_amp)
     file_txt=train_amp_infer_python.txt

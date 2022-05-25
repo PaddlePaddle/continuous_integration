@@ -123,7 +123,7 @@ bash -x tipc_run.sh
 
 
 # check_status
-set +x
+set +ex
 echo " "
 echo -e "=====================test summary======================"
 

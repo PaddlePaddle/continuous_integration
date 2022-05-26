@@ -9,7 +9,8 @@ tar -zxf ${REPO}.tar.gz
 
 cd Paddle
 cp -r models/tutorials/mobilenetv3_prod/Step6 ./
-mv Step6 ${REPO}
+rm -rf models
+mv Step6 models
 
 unlink /usr/local/bin/python
 unlink /usr/local/bin/pip

@@ -17,7 +17,7 @@ def run(repo, configs_path, chain_txt, dst_file):
 
     models = []
     for item in Path(configs_path).rglob(chain_txt): 
-        file_path = 'test_tipc/ + 'str(item).split('/test_tipc/')[-1]
+        file_path = 'test_tipc/' + str(item).split('/test_tipc/')[-1]
         if "all" in white:
             models.append(file_path)
             continue

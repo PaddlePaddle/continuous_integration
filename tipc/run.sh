@@ -27,7 +27,7 @@ if [[ ${CHAIN} == "chain_distribution" ]]
 then
     cd ${REPO}
     cp -r ../continuous_integration/tipc/* .
-    sh tipc_run.sh ${REPO} ${CHAIN} ${DOCKER_IMAGE} ${PADDLE_WHL} ${CODE_BOS} 
+    sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} 
 else
     sh tipc.sh ${REPO} ${CHAIN}
 fi

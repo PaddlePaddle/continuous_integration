@@ -100,6 +100,9 @@ function run_model()
         ;;
     chain_distribution)
         # pdc
+        export FLAGS_selected_gpus=0,1
+        bash test_tipc/prepare.sh test_tipc/configs/mobilenet_v3_small/train_fleet_infer_python.txt lite_train_lite_infer
+bash test_tipc/test_train_inference_python.sh test_tipc/configs/mobilenet_v3_small/train_fleet_infer_python.txt lite_train_lite_infer
         ;;
     chain_ptq_infer_python)
         bash test_tipc/prepare.sh $config_file $mode
@@ -257,6 +260,15 @@ cat full_chain_list_all #输出本次要跑的模型
 sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
 cat full_chain_list_all | while read config_file
 do
+  if [[ $CHAIN == "chain_distribution" ]]
+  then
+    echo "==START=="$config_file
+    JOB_NAME=tipc_ # todo
+    PADDLE_WHL=$3
+    DOCKER_IMAGE=$4
+    CODE_BOS=$5
+    sh pdc.sh ${JOB_NAME} ${REPO} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS}
+  else
     start=`date +%s`
     echo "==START=="$config_file
     run run_model $config_file $mode $time_out
@@ -269,10 +281,10 @@ do
     bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`
     mv test_tipc/output "test_tipc/output_"$(echo $config_file | tr "/" "_")"_"$mode || echo "move output error on "`pwd`
     mv test_tipc/data "test_tipc/data"$(echo $config_file | tr "/" "_")"_"$mode || echo "move data error on "`pwd`
+  fi
 done
 
 exit 0
-
 
 
 # update model_url latest

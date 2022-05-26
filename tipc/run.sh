@@ -13,15 +13,19 @@ wget -q --no-proxy ${CODE_BOS}
 
 tar -xpf ${REPO}.tar.gz
 cd Paddle
+cp -r models/tutorials/mobilenetv3_prod/Step6 ./
+rm -rf models
+mv Step6 models
 
 #add upload
 wget -q --no-proxy -O $PWD/bce_whl.tar.gz  https://paddle-docker-tar.bj.bcebos.com/home/bce_whl.tar.gz --no-check-certificate
 
 #python -m pip install paddleseg
 #cp continuous_integration/tipc/tipc.sh .
-cp -r continuous_integration/tipc/* .
 if [[ ${CHAIN} == "chain_distribution" ]]
 then
+    cd ${REPO}
+    cp -r continuous_integration/tipc/* .
     sh tipc_run.sh ${REPO} ${CHAIN} ${DOCKER_IMAGE} ${PADDLE_WHL} ${CODE_BOS} 
 else
     sh tipc.sh ${REPO} ${CHAIN}

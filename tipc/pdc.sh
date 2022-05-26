@@ -18,6 +18,8 @@ REPO=$2
 PADDLE_WHL=$3
 DOCKER_IMAGE=$4
 CODE_BOS=$5
+CONFIG_FILE=$6
+MODE=$7
 
 k8s_wall_time="00:00:00"
 
@@ -35,7 +37,7 @@ paddlecloud job \
     --k8s-memory 350Gi \
     --job-name ${JOB_MANE} \
     --permission group \
-    --start-cmd "bash distribution.sh ${REPO} ${CODE_BOS} ${PADDLE_WHL}" \
+    --start-cmd "bash distribution.sh ${REPO} ${CODE_BOS} ${PADDLE_WHL} ${CONFIG_FILE} ${MODE}" \
     --files distribution.sh \
     --job-conf config.ini \
     --k8s-trainers ${num_trainers} ${distribute} \

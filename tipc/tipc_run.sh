@@ -210,7 +210,7 @@ chain_paddle2onnx)
     time_out=60
     ;;
 chain_distribution)
-    file_txt=train_infer_python.txt
+    file_txt=train_fleet_infer_python.txt
     mode=lite_train_lite_infer
     time_out=600
     ;;
@@ -267,7 +267,7 @@ do
     PADDLE_WHL=$3
     DOCKER_IMAGE=$4
     CODE_BOS=$5
-    sh pdc.sh ${JOB_NAME} ${REPO} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS}
+    sh pdc.sh ${JOB_NAME} ${REPO} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} $config_file ${mode} ${time_out}
   else
     start=`date +%s`
     echo "==START=="$config_file

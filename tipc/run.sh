@@ -8,7 +8,7 @@ cd ${work_dir} && rm -rf *
 
 # download latest tag paddle-wheel
 CODE_BOS=https://xly-devops.bj.bcebos.com/PR/Paddle/fullchain_ce_test/${AGILE_PULL_ID}/${AGILE_REVISION}/${REPO}.tar.gz
-wget -q --no-proxy ${CODE_BOS}
+wget -q --no-proxy ${CODE_BOS} --no-check-certificate
 #wget -q --no-proxy https://xly-devops.bj.bcebos.com/PR/Paddle/fullchain_ce_test/${AGILE_PULL_ID}/${AGILE_REVISION}/${REPO}.tar.gz
 
 tar -xpf ${REPO}.tar.gz

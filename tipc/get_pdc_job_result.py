@@ -128,8 +128,8 @@ def watch_job_thread_finished():
     '''
     finished = True
     for model, infos in JOBS_INFO.items():
-        print("job_info:", model, infos)
-        if infos["status"] in ["submit", "queue", "running", "schedule"]:
+        print("watch_job:", model, infos)
+        if infos["status"] in ["submit", "queue", "running", "schedule", "UNK"]:
              finished = False
              break
     return finished

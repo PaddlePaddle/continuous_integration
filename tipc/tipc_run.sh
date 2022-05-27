@@ -275,7 +275,6 @@ do
     pdc_job_id=`cat log.pdc | grep "jobId = job-" | awk -F ',' '{print $1}' | awk -F '= ' '{print $2}'`
     # todo 判断pdc任务是否提交成功
     echo ${model_name},${pdc_job_id} >> pdc_job_id
-    python get_pdc_job_result.py pdc_job_id
   else
     start=`date +%s`
     echo "==START=="$config_file
@@ -293,6 +292,10 @@ do
 done
 
 # watch_job_status and get log, job_id in file pdc_job_id
+if [[ $CHAIN == "chain_distribution" ]]
+then
+  python get_pdc_job_result.py pdc_job_id
+fi
 
 exit 0
 

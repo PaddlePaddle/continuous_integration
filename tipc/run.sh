@@ -23,6 +23,8 @@ wget -q --no-proxy -O $PWD/bce_whl.tar.gz  https://paddle-docker-tar.bj.bcebos.c
 
 #python -m pip install paddleseg
 #cp continuous_integration/tipc/tipc.sh .
+#cp continuous_integration/tipc/checkout_result.sh .
+cp -r continuous_integration/tipc/* .
 if [[ ${CHAIN} == "chain_distribution" ]]
 then
     cd ${REPO}

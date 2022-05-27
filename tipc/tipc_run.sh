@@ -267,7 +267,7 @@ do
   if [[ $CHAIN == "chain_distribution" ]]
   then
     echo "==START=="$config_file
-    JOB_NAME=tipc_${model_name}_${mode}
+    JOB_NAME=tipc-${model_name}-${mode}
     PADDLE_WHL=$3
     DOCKER_IMAGE=$4
     CODE_BOS=$5

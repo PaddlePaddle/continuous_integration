@@ -64,6 +64,7 @@ def get_log():
     """
     """
     for model, infos in JOBS_INFO.items():
+        print("get_log:", model, infos)
         job_id = infos["job_id"]
         get_pdc_log(job_id) 
 
@@ -127,7 +128,8 @@ def watch_job_thread_finished():
     '''
     finished = True
     for model, infos in JOBS_INFO.items():
-        if JOBS_INFO[model]["status"] in ["submit", "queue", "running", "schedule"]:
+        print("job_info:", model, infos)
+        if infos["status"] in ["submit", "queue", "running", "schedule"]:
              finished = False
              break
     return finished

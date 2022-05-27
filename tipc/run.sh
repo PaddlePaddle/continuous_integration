@@ -28,6 +28,9 @@ then
     cd ${REPO}
     cp -r ../continuous_integration/tipc/* .
     sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} 
+    cd ..
 else
     sh tipc.sh ${REPO} ${CHAIN}
 fi
+
+sh checkout_result.sh

@@ -260,14 +260,22 @@ cat full_chain_list_all #输出本次要跑的模型
 sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
 cat full_chain_list_all | while read config_file
 do
+  dataline=$(awk 'NR==1, NR==32{print}'  $config_file)
+  IFS=$'\n'
+  lines=(${dataline})
+  model_name=$(func_parser_value "${lines[1]}")
   if [[ $CHAIN == "chain_distribution" ]]
   then
     echo "==START=="$config_file
-    JOB_NAME=tipc_ # todo
+    JOB_NAME=tipc_${model_name}_${mode}
     PADDLE_WHL=$3
     DOCKER_IMAGE=$4
     CODE_BOS=$5
-    sh pdc.sh ${JOB_NAME} ${REPO} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} $config_file ${mode} ${time_out}
+    sh pdc.sh ${JOB_NAME} ${REPO} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} $config_file ${mode} ${time_out} >log.pdc 2>&1
+    pdc_job_id=`cat log.pdc | grep "jobId = job-" | awk -F ',' '{print $1}' | awk -F '= ' '{print $2}'`
+    # todo 判断pdc任务是否提交成功
+    echo ${model_name},${pdc_job_id} >> pdc_job_id
+    python get_pdc_job_result.py pdc_job_id
   else
     start=`date +%s`
     echo "==START=="$config_file
@@ -283,6 +291,8 @@ do
     mv test_tipc/data "test_tipc/data"$(echo $config_file | tr "/" "_")"_"$mode || echo "move data error on "`pwd`
   fi
 done
+
+# watch_job_status and get log, job_id in file pdc_job_id
 
 exit 0
 

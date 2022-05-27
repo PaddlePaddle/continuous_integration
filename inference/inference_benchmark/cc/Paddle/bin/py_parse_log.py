@@ -74,7 +74,7 @@ def process_log(file_name : str) -> dict:
                     output_dict["cpu_usage(%)"] = line_lists[pos_buf + 7].split(',')[0]
                 if "total(MB):" in line_lists and "free(MB):" in line_lists:
                     pos_buf = line_lists.index("gpu_utilization_rate(%):")
-                    output_dict["gpu_used(MB)"] = line_lists[pos_buf - 1].split(',')[0]
+                    output_dict["gpu_mem(MB)"] = line_lists[pos_buf - 1].split(',')[0]
                     output_dict["gpu_utilization_rate(%)"] = line_lists[pos_buf + 1].split(',')[0]
                     output_dict["gpu_mem_utilization_rate(%)"] = line_lists[pos_buf + 3].split(',')[0]
         except Exception as e:
@@ -141,7 +141,7 @@ def main():
                                       "Average_latency", "QPS",
                                       "cpu_rss(MB)", "cpu_vms(MB)",
                                       "cpu_shared(MB)", "cpu_dirty(MB)",
-                                      "cpu_usage(%)", "gpu_used(MB)",
+                                      "cpu_usage(%)", "gpu_mem(MB)",
                                       "gpu_utilization_rate(%)",
                                       "gpu_mem_utilization_rate(%)"])
 
@@ -162,3 +162,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

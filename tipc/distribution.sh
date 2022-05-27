@@ -35,7 +35,7 @@ python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
 cd ./${REPO}
-REPO_PATH=\`pwd\`
+REPO_PATH=`pwd`
 if [[ $REPO == "PaddleNLP" ]]; then
     cd tests
 fi
@@ -64,7 +64,8 @@ python -m pip install --retries 10 visualdl
 python -c 'from visualdl import LogWriter'
 python -m pip install --retries 10 -r requirements.txt
 wget -q --no-proxy ${PADDLE_WHL}
-python -m pip install ./\`basename ${PADDLE_WHL}\`
+#python -m pip install ./\`basename ${PADDLE_WHL}\`
+python -m pip install paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
 
 if [[ $REPO == "PaddleSeg" ]]; then
     pip install -e .
@@ -75,7 +76,7 @@ fi
 if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp
 fi
-cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
+cp ${REPO_PATH}/../continuous_integration/tipc/upload.sh .
 
 export FLAGS_selected_gpus=0,1
 #bash test_tipc/prepare.sh test_tipc/configs/mobilenet_v3_small/train_fleet_infer_python.txt lite_train_lite_infer

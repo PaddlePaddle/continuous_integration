@@ -36,6 +36,9 @@ output_dir="test_tipc/output/${model_name}"
 if [[ ${REPO} == "PaddleDetection" ]]; then
     output_dir="test_tipc/output"
 fi
+if [[ ${REPO} == "Step6" ]]; then
+  output_dir="log/${model_name}/${mode}"
+fi
 echo ${output_dir}
 if [ ! -d ${output_dir} ]; then
     echo "output_dir not found"

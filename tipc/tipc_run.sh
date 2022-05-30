@@ -294,6 +294,8 @@ done
 # watch_job_status and get log, job_id in file pdc_job_id
 if [[ $CHAIN == "chain_distribution" ]]
 then
+  export http_proxy=
+  export https_proxy=
   python get_pdc_job_result.py pdc_job_id
 fi
 

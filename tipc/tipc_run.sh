@@ -285,29 +285,30 @@ do
     time=`echo $start $end | awk '{print $2-$1-2}'` #减去sleep
     echo "${config_file} spend time seconds ${time}"
 
-    bash -x upload.sh ${config_file} ${mode} || echo "upload model error on"`pwd`
+    if [[ "${DEBUG}" == "True" ]]
+    then
+      bash -x upload.sh ${config_file} ${mode} ${CHAIN} || echo "upload model error on"`pwd`
+    fi
     mv test_tipc/output "test_tipc/output_"$(echo $config_file | tr "/" "_")"_"$mode || echo "move output error on "`pwd`
     mv test_tipc/data "test_tipc/data"$(echo $config_file | tr "/" "_")"_"$mode || echo "move data error on "`pwd`
   fi
 done
 
 # watch_job_status and get log, job_id in file pdc_job_id
-if [[ $CHAIN == "chain_distribution" ]]
+if [[ "$CHAIN" == "chain_distribution" ]]
 then
   export http_proxy=
   export https_proxy=
   python get_pdc_job_result.py pdc_job_id
 fi
 
-exit 0
-
 
 # update model_url latest
 if [ -f "tipc_models_url_${REPO}.txt" ];then
     date_stamp=`date +%m_%d`
     push_file=./bce-python-sdk-0.8.27/BosClient.py
-    cp "tipc_models_url_${REPO}.txt" "tipc_models_url_${REPO}_latest.txt"
-    cp "tipc_models_url_${REPO}.txt" "tipc_models_url_${REPO}_${date_stamp}.txt"
-    python2 ${push_file} "tipc_models_url_${REPO}_latest.txt" paddle-qa/fullchain_ce_test/model_download_link
-    python2 ${push_file} "tipc_models_url_${REPO}_${date_stamp}.txt" paddle-qa/fullchain_ce_test/model_download_link
+    cp "tipc_models_url_${REPO}_${CHAIN}.txt" "tipc_models_url_${REPO}_${CHAIN}_latest.txt"
+    cp "tipc_models_url_${REPO}_${CHAIN}.txt" "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt"
+    python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_latest.txt" paddle-qa/fullchain_ce_test/model_download_link
+    python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt" paddle-qa/fullchain_ce_test/model_download_link
 fi

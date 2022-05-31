@@ -10,9 +10,12 @@ wget $CODE_BOS --no-check-certificate
 tar -zxf ${REPO}.tar.gz
 
 cd Paddle
+if [[ ${REPO} == "models" ]]
+then
 cp -r models/tutorials/mobilenetv3_prod/Step6 ./
 rm -rf models
 mv Step6 models
+fi
 
 unlink /usr/local/bin/python
 unlink /usr/local/bin/pip

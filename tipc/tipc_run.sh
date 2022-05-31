@@ -180,7 +180,7 @@ fi
 # 确定链条的txt、mode、timeout
 case $CHAIN in
 chain_base) 
-    file_txt=train_infer_python.txt
+    file_txt=*rain_infer_python.txt
     mode=lite_train_lite_infer
     time_out=600
     ;;

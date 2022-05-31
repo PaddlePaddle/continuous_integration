@@ -14,9 +14,12 @@ wget -q --no-proxy ${CODE_BOS} --no-check-certificate
 
 tar -xpf ${REPO}.tar.gz
 cd Paddle
+if [[ ${REPO} == "models" ]]
+then
 cp -r models/tutorials/mobilenetv3_prod/Step6 ./
 rm -rf models
 mv Step6 models
+fi
 
 #add upload
 wget -q --no-proxy -O $PWD/bce_whl.tar.gz  https://paddle-docker-tar.bj.bcebos.com/home/bce_whl.tar.gz --no-check-certificate

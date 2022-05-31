@@ -122,6 +122,9 @@ bash test_tipc/test_train_inference_python.sh test_tipc/configs/mobilenet_v3_sma
 }
 
 mkdir -p test_tipc/output
+if [[ $CHAIN == "chain_paddle2onnx" ]]; then
+    pip install onnx
+fi
 
 if [[ $CHAIN == "chain_serving_python" ]]; then
     pip install paddle-serving-server-gpu==0.8.3.post101

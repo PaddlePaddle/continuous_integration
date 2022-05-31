@@ -98,12 +98,6 @@ function run_model()
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_paddle2onnx.sh $config_file $mode 
         ;;
-    chain_distribution)
-        # pdc
-        export FLAGS_selected_gpus=0,1
-        bash test_tipc/prepare.sh test_tipc/configs/mobilenet_v3_small/train_fleet_infer_python.txt lite_train_lite_infer
-bash test_tipc/test_train_inference_python.sh test_tipc/configs/mobilenet_v3_small/train_fleet_infer_python.txt lite_train_lite_infer
-        ;;
     chain_ptq_infer_python)
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_train_inference_python.sh $config_file $mode
@@ -188,22 +182,22 @@ chain_base)
     time_out=600
     ;;
 chain_infer_cpp)
-    file_txt=inference_cpp.txt
+    file_txt=*_infer_cpp_*
     mode=cpp_infer
     time_out=600
     ;;
 chain_amp)
-    file_txt=train_amp_infer_python.txt
+    file_txt=*_amp_*
     mode=lite_train_lite_infer
     time_out=600
     ;;
 chain_serving_cpp)
-    file_txt=serving_infer_cpp.txt
+    file_txt=*_serving_cpp_*
     mode=serving_infer
     time_out=600
     ;;
 chain_serving_python)
-    file_txt=serving_infer_python.txt
+    file_txt=*_serving_python_*
     mode=serving_infer
     time_out=60
     ;;
@@ -213,7 +207,7 @@ chain_paddle2onnx)
     time_out=60
     ;;
 chain_distribution)
-    file_txt=train_fleet_infer_python.txt
+    file_txt=*_fleet_*
     mode=lite_train_lite_infer
     time_out=600
     ;;

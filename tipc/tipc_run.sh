@@ -117,7 +117,7 @@ function run_model()
 
 mkdir -p test_tipc/output
 if [[ $CHAIN == "chain_paddle2onnx" ]]; then
-    pip install onnx
+    pip install onnx==1.9.0
 fi
 
 if [[ $CHAIN == "chain_serving_python" ]]; then

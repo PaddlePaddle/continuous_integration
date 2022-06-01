@@ -39,10 +39,5 @@ else
 fi
 
 cd $REPO
-log_file="RESULT"
-for f in `find . -name '*.log'`; do
-   cat $f | grep "with command" >> $log_file
-done
-cp ../continuous_integration/tipc/report.py ./
-python report.py
+cp ../continuous_integration/tipc/checkout_result.sh ./
 sh checkout_result.sh

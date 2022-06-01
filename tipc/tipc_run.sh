@@ -312,6 +312,10 @@ then
   python get_pdc_job_result.py pdc_job_id
 fi
 
+log_file="RESULT"
+for f in `find . -name '*.log'`; do
+   cat $f | grep "with command" >> $log_file
+done
 
 # update model_url latest
 if [ -f "tipc_models_url_${REPO}.txt" ];then

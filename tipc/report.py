@@ -25,7 +25,7 @@ def get_info():
             tmp = line.split(" ")
             model_name = tmp[0]
             models_timeout.append(model_name)
-    with open("RESULT", "r") ad fin:
+    with open("RESULT", "r") as fin:
         lines = fin.readlines()
         for line in lines:
             tmp = line.split(" - ")

@@ -53,7 +53,7 @@ function run_model()
         ;;
     chain_infer_cpp)
         bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
-        bash test_tipc/test_inference_cpp.sh $config_file $mode '1' 
+        bash test_tipc/test_inference_cpp.sh $config_file $mode 
         ;;
     chain_amp)
         bash test_tipc/prepare.sh $config_file $mode

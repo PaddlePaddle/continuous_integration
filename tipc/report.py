@@ -1,4 +1,3 @@
-#!/usr/env/bin python
 
 models_status = {}
 total_num = 0

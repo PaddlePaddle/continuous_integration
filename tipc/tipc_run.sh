@@ -35,12 +35,12 @@ function run()
     kill -9 $watchdog  >/dev/null 2>&1
 }
 
-if [[ ${REPO} == "PaddleOCR" ]]
-then
-sed -i '192 i if [ ! -d "paddle_inference" ]; then' test_tipc/test_inference_cpp.sh
-sed -i '193 i ln -s paddle_inference_install_dir paddle_inference' test_tipc/test_inference_cpp.sh
-sed -i '194 i fi' test_tipc/test_inference_cpp.sh
-fi
+#if [[ ${REPO} == "PaddleOCR" ]]
+#then
+#sed -i '192 i if [ ! -d "paddle_inference" ]; then' test_tipc/test_inference_cpp.sh
+#sed -i '193 i ln -s paddle_inference_install_dir paddle_inference' test_tipc/test_inference_cpp.sh
+#sed -i '194 i fi' test_tipc/test_inference_cpp.sh
+#fi
 
 function run_model()
 {
@@ -53,7 +53,7 @@ function run_model()
         ;;
     chain_infer_cpp)
         bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
-        bash test_tipc/test_inference_cpp.sh $config_file '1' 
+        bash test_tipc/test_inference_cpp.sh $config_file 
         ;;
     chain_amp)
         bash test_tipc/prepare.sh $config_file $mode
@@ -123,6 +123,7 @@ function run_model()
 }
 
 mkdir -p test_tipc/output
+touch TIMEOUT
 if [[ $CHAIN == "chain_paddle2onnx" ]]; then
     pip install onnx==1.9.0
 fi
@@ -189,8 +190,11 @@ chain_base)
     time_out=600
     ;;
 chain_infer_cpp)
-    #file_txt=*inference_cpp.txt*
     file_txt=*_infer_cpp_*
+    if [[ ${REPO} == "PaddleSeg" ]]
+    then
+        file_txt=*inference_cpp.txt*
+    fi
     mode=cpp_infer
     time_out=600
     ;;

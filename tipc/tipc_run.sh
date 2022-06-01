@@ -182,7 +182,8 @@ chain_base)
     time_out=600
     ;;
 chain_infer_cpp)
-    file_txt=*_infer_cpp_*
+    file_txt=*inference_cpp.txt*
+    #file_txt=*_infer_cpp_*
     mode=cpp_infer
     time_out=600
     ;;

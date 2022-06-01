@@ -38,5 +38,8 @@ else
     sh tipc.sh ${REPO} ${CHAIN}
 fi
 
+cd ${REPO}
+cp ../continuous_integration/tipc/report.py ./
 python report.py
+cd ..
 sh checkout_result.sh

@@ -35,7 +35,7 @@ function run()
     kill -9 $watchdog  >/dev/null 2>&1
 }
 
-if [[ ${CHAIN} == "chain_infer_cpp" ]]
+if [[ ${REPO} == "PaddleOCR" ]]
 then
 sed -i '192 i if [ ! -d "paddle_inference" ]; then' test_tipc/test_train_inference_cpp.sh
 sed -i '193 i ln -s paddle_inference_install_dir paddle_inference' test_tipc/test_train_inference_cpp.sh

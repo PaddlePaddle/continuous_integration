@@ -44,7 +44,8 @@ def get_info():
                 stage = "dygraph2static"
             if ("infer.py" in case) or ("predict_det.py" in case):
                 stage = "inference"
-            models_status.setdefault(model_name, [])
+            if model_name not in models_status.keys():
+                models_status.setdefault(model_name, [])
             models_status[model_name].append({"status": tag, "case": case, "stage": stage})
     for model, infos in models_status.items():
         tag = "success"

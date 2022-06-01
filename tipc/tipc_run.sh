@@ -18,8 +18,9 @@ function func_parser_value(){
 
 function printmsg()
 {
-    config_file=$1
-    msg="${config_file} time cost > ${time_out}seconds"
+    model_name=$1
+    config_file=$2
+    msg="${model_name} ${config_file} time cost > ${time_out}seconds"
     echo $msg >> TIMEOUT
 }
 
@@ -287,7 +288,7 @@ do
   else
     start=`date +%s`
     echo "==START=="$config_file
-    run run_model $config_file $mode $time_out
+    run run_model $config_file $mode $time_out $model_name
     echo "==END=="$config_file
     sleep 2 #防止显卡未释放
     end=`date +%s`

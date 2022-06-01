@@ -38,4 +38,5 @@ else
     sh tipc.sh ${REPO} ${CHAIN}
 fi
 
-sh checkout_result.sh
+#sh checkout_result.sh
+python report.py

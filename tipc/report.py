@@ -18,7 +18,6 @@ def get_info():
     with open("full_chain_list_all", "r") as fin:
         lines = fin.readlines()
         total_num = len(lines)
-        print("11111", total_num)
     with open("TIMEOUT", "r") as fin:
         lines = fin.readlines()
         timeout_num = len(lines)

@@ -5,11 +5,6 @@ echo -e "=====================test summary======================"
 
 EXIT_CODE=0
 
-cd $REPO
-log_file="RESULT"
-for f in `find . -name '*.log'`; do
-   cat $f | grep "with command" >> $log_file
-done
 
 zero=0
 if [[ -f TIMEOUT ]];then

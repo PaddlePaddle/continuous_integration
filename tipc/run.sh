@@ -38,8 +38,11 @@ else
     sh tipc.sh ${REPO} ${CHAIN}
 fi
 
-cd ${REPO}
+cd $REPO
+log_file="RESULT"
+for f in `find . -name '*.log'`; do
+   cat $f | grep "with command" >> $log_file
+done
 cp ../continuous_integration/tipc/report.py ./
 python report.py
-cd ..
 sh checkout_result.sh

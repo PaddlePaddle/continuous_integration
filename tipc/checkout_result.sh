@@ -1,7 +1,6 @@
 # check_status
 set +ex
 echo " "
-echo -e "=====================test summary======================"
 
 EXIT_CODE=0
 

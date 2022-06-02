@@ -123,8 +123,6 @@ cp -r \$REPO_PATH/../continuous_integration/tipc/model_list.py .
 
 bash -x tipc_run.sh
 
-cp \$REPO_PATH/../continuous_integration/tipc/report.py ./
-python report.py
 "
 
 

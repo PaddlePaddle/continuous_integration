@@ -1,3 +1,5 @@
+import sys
+import mail
 
 res = {
     "models_status": {},
@@ -10,6 +12,10 @@ res = {
     "timeout_models": [],
     "failed_cases_num": 0,
     "success_cases_num": 0,
+    "content": "",
+    "sender_addr": "",
+    "receiver_addr": "",
+    "subject": "",
 }
 
 
@@ -82,6 +88,52 @@ def print_result():
     msg = "=" * 50
 
 
+def send_mail(sender_addr, receiver_addr, repo, chain):
+    content = """
+<html>
+    <body>
+        <div style="text-align:center;">
+        </div>
+        <table border="1" align=center>
+        <caption bgcolor="#989898">任务执行情况汇总</caption>
+        <tr><td></td><td>成功</td><td>失败</td><td>超时</td></tr>
+"""
+    content += """
+        <tr><td>模型</td><td>{}</td><td>{}</td><td>{}</td></tr>
+""".format(res["success_num"], res["failed_num"], res["timeout_num"])
+    content += """
+        <tr><td>case</td><td>{}</td><td>{}</td><td>-</td></tr>
+""".format(res["success_cases_num"], res["failed_cases_num"])
+    content += """
+        </table>
+        <br><br>
+        <table border="1" align=center>
+        <caption bgcolor="#989898">失败列表</caption>
+        <tr><td>模型</td><td>case</td></tr>
+"""
+    for model in res["failed_models"]:
+        for item in res["models_status"][model]:
+            if item["status"] == "failed":
+                content += """
+        <tr><td>{}</td><td>{}</td></tr>
+""".format(model, item["case"])
+    content += """
+        </table>
+    </body>
+</html>
+"""
+    res["content"] = content
+    res["sender_addr"] = sender_addr
+    res["receiver_addr"] = receiver_addr
+    res["subject"] = "【TIPC:{}:{}】执行结果".format(repo, chain)
+    mail.send_mail(res["sender_addr"], res["receiver_addr"], res["subject"], res["content"])
+
+
 if __name__ == "__main__":
+    repo = sys.argv[1]
+    chain = sys.argv[2]
+    sender_addr = sys.argv[3]
+    receiver_addr = sys.argv[4]
     get_info()
     print_result()
+    send_mail()

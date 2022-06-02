@@ -100,7 +100,7 @@ function run_model()
         #pip install paddle_serving_client==0.8.3
         #pip install paddle-serving-app==0.8.3
         bash test_tipc/prepare.sh $config_file $mode
-        bash test_tipc/test_serving_infer_python.sh $config_file $mode 
+        bash test_tipc/test_serving_infer_python.sh $config_file $mode
         ;;
     chain_paddle2onnx)
         bash test_tipc/prepare.sh $config_file $mode
@@ -122,6 +122,10 @@ function run_model()
  
     esac
 }
+
+if [[ $REPO == "PaddleOCR" ]]; then
+sed -i "s/GPUID=\$2/GPUID=\$3/g" test_tipc/test_serving_infer_python.sh
+fi
 
 mkdir -p test_tipc/output
 touch TIMEOUT

@@ -1,7 +1,9 @@
 #coding=utf-8
 
 import sys
-import mail
+import smtplib
+from email.mime.text import MIMEText
+from email.header    import Header
 
 res = {
     "models_status": {},
@@ -19,6 +21,23 @@ res = {
     "receiver_addr": "",
     "subject": "",
 }
+
+
+def mail(sender_addr, receiver_addr, subject, content, proxy):
+    msg =  MIMEText(content, 'html', 'UTF-8')
+    msg['From'] = sender_addr
+    msg['To'] = receiver_addr
+    msg['Subject'] = Header(subject, 'UTF-8')
+
+    server = smtplib.SMTP()
+    server.connect(proxy)
+    try:
+        server.sendmail(sender_addr, msg['To'].split(','), msg.as_string())
+        print("email send")
+    except Exception as e:
+        print("发送邮件失败:%s" % (e))
+    finally:
+        server.quit()
 
 
 def get_info():
@@ -90,7 +109,7 @@ def print_result():
     msg = "=" * 50
 
 
-def send_mail(sender_addr, receiver_addr, repo, chain):
+def send_mail(sender_addr, receiver_addr, repo, chain, proxy):
     content = """
 <html>
     <body>
@@ -128,7 +147,7 @@ def send_mail(sender_addr, receiver_addr, repo, chain):
     res["sender_addr"] = sender_addr
     res["receiver_addr"] = receiver_addr
     res["subject"] = "【TIPC:{}:{}】执行结果".format(repo, chain)
-    mail.send_mail(res["sender_addr"], res["receiver_addr"], res["subject"], res["content"])
+    mail(res["sender_addr"], res["receiver_addr"], res["subject"], res["content"], proxy)
 
 
 if __name__ == "__main__":

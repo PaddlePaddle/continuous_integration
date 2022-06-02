@@ -45,5 +45,5 @@ for f in `find . -name '*.log'`; do
 done
 cp ../continuous_integration/tipc/checkout_result.sh ./
 cp ../continuous_integration/tipc/report.py ./
-python report.py
+python report.py ${REPO} ${CHAIN} ${SENDER} ${RECVIER} ${PROXY}
 sh checkout_result.sh

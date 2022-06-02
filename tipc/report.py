@@ -155,6 +155,7 @@ if __name__ == "__main__":
     chain = sys.argv[2]
     sender_addr = sys.argv[3]
     receiver_addr = sys.argv[4]
+    proxy = sys.argv[5]
     get_info()
     print_result()
-    send_mail()
+    send_mail(sender_addr, receiver_addr, repo, chain, proxy)

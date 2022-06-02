@@ -15,6 +15,7 @@ if [[ -f TIMEOUT ]];then
   fi
 fi
 
+log_file=RESULT
 if [[ ! -f ${log_file} ]];then
   #echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
   EXIT_CODE=8

@@ -63,7 +63,7 @@ def get_info():
 def print_result():
     """
     """
-    msg = "=" * 20
+    msg = "=" * 50
     msg += "\n"
     msg += "TOTAL: {} models\n\n".format(str(res["total_num"]))
     msg += "SUCCESS: {} models\n\n".format(str(res["success_num"]))
@@ -72,13 +72,14 @@ def print_result():
     msg += "\n\n"
     msg += "FAILED: {} models:\n".format(str(res["failed_num"]))
     msg += " ".join(res["failed_models"])
-    msg += "\n{} cases failed:\n".format(str(res["failed_cases_num"]))
-    for model in res["failed_models"]:
-        for item in res["models_status"][model]:
-            if item["status"] == "failed":
-                msg += "{}-{}-{}\n".format(model, item["stage"], item["case"])
+    if res["failed_cases_num"] > 0:
+        msg += "\n{} cases failed:\n".format(str(res["failed_cases_num"]))
+        for model in res["failed_models"]:
+            for item in res["models_status"][model]:
+                if item["status"] == "failed":
+                    msg += "{}-{}-{}\n".format(model, item["stage"], item["case"])
     print(msg)
-    msg = "=" * 20
+    msg = "=" * 50
 
 
 if __name__ == "__main__":

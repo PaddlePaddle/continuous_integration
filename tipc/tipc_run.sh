@@ -292,7 +292,10 @@ do
   else
     start=`date +%s`
     echo "==START=="$config_file
-    run run_model $config_file $mode $time_out $model_name
+    #run run_model $config_file $mode $time_out $model_name
+        bash test_tipc/prepare.sh $config_file $mode
+        bash test_tipc/test_serving_infer_python.sh $config_file $mode
+
     echo "==END=="$config_file
     sleep 2 #防止显卡未释放
     end=`date +%s`

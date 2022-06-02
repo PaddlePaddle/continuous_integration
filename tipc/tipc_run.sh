@@ -125,6 +125,7 @@ function run_model()
 
 if [[ $REPO == "PaddleOCR" ]]; then
 sed -i "s/GPUID=\$2/GPUID=\$3/g" test_tipc/test_serving_infer_python.sh
+sed -i "s/web_service|pipeline/web_service/g" test_tipc/test_serving_infer_python.sh
 fi
 
 mkdir -p test_tipc/output
@@ -292,9 +293,7 @@ do
   else
     start=`date +%s`
     echo "==START=="$config_file
-    #run run_model $config_file $mode $time_out $model_name
-        bash test_tipc/prepare.sh $config_file $mode
-        bash test_tipc/test_serving_infer_python.sh $config_file $mode
+    run run_model $config_file $mode $time_out $model_name
 
     echo "==END=="$config_file
     sleep 2 #防止显卡未释放

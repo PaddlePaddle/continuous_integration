@@ -83,6 +83,10 @@ fi
 if [[ $REPO == "PaddleRec" ]]; then
     python -m pip install pgl
 fi
+if [[ $REPO == "PARL" ]]; then
+    pip uninstall protobuf -y
+    pip install protobuf=3.19.0
+fi
 python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro

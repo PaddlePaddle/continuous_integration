@@ -127,10 +127,10 @@ if [[ $REPO == "PaddleOCR" ]]; then
 #sed -i "s/GPUID=\$2/GPUID=\$3/g" test_tipc/test_serving_infer_python.sh
 #sed -i "s/web_service|pipeline/web_service/g" test_tipc/test_serving_infer_python.sh
 sed -i "s/ps ux/#ps ux/g" test_tipc/test_serving_infer_python.sh
-sed -i '200 i             stop_cmd="${python} -m paddle_serving_server.serve stop"'
-sed -i '201 i             eval $stop_cmd'
-sed -i '150 i             stop_cmd="${python} -m paddle_serving_server.serve stop"'
-sed -i '151 i             eval $stop_cmd'
+sed -i '200 i             stop_cmd="${python} -m paddle_serving_server.serve stop"' test_tipc/test_serving_infer_python.sh
+sed -i '201 i             eval $stop_cmd' test_tipc/test_serving_infer_python.sh
+sed -i '150 i             stop_cmd="${python} -m paddle_serving_server.serve stop"' test_tipc/test_serving_infer_python.sh
+sed -i '151 i             eval $stop_cmd' test_tipc/test_serving_infer_python.sh
 fi
 
 mkdir -p test_tipc/output

@@ -204,10 +204,6 @@ chain_base)
     ;;
 chain_infer_cpp)
     file_txt=*_infer_cpp_*
-    if [[ ${REPO} == "PaddleSeg" ]]
-    then
-        file_txt=*inference_cpp.txt*
-    fi
     mode=cpp_infer
     time_out=600
     ;;

@@ -54,7 +54,7 @@ function run_model()
         ;;
     chain_infer_cpp)
         bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
-        bash test_tipc/test_inference_cpp.sh $config_file 
+        bash test_tipc/test_inference_cpp.sh $config_file '1' 
         ;;
     chain_amp)
         bash test_tipc/prepare.sh $config_file $mode
@@ -123,17 +123,17 @@ function run_model()
     esac
 }
 
-if [[ $REPO == "PaddleOCR" ]]; then
-sed -i "s/GPUID=\$2/GPUID=\$3/g" test_tipc/test_serving_infer_python.sh
+#if [[ $REPO == "PaddleOCR" ]]; then
+#sed -i "s/GPUID=\$2/GPUID=\$3/g" test_tipc/test_serving_infer_python.sh
 #sed -i "s/web_service|pipeline/web_service/g" test_tipc/test_serving_infer_python.sh
 #sed -i "s/ps ux/#ps ux/g" test_tipc/test_serving_infer_python.sh
-sed -i '199 d' test_tipc/test_serving_infer_python.sh
-sed -i '199 i             stop_cmd="${python} -m paddle_serving_server.serve stop"' test_tipc/test_serving_infer_python.sh
-sed -i '200 i             eval $stop_cmd' test_tipc/test_serving_infer_python.sh
-sed -i '149 d' test_tipc/test_serving_infer_python.sh
-sed -i '149 i             stop_cmd="${python} -m paddle_serving_server.serve stop"' test_tipc/test_serving_infer_python.sh
-sed -i '150 i             eval $stop_cmd' test_tipc/test_serving_infer_python.sh
-fi
+#sed -i '199 d' test_tipc/test_serving_infer_python.sh
+#sed -i '199 i             stop_cmd="${python} -m paddle_serving_server.serve stop"' test_tipc/test_serving_infer_python.sh
+#sed -i '200 i             eval $stop_cmd' test_tipc/test_serving_infer_python.sh
+#sed -i '149 d' test_tipc/test_serving_infer_python.sh
+#sed -i '149 i             stop_cmd="${python} -m paddle_serving_server.serve stop"' test_tipc/test_serving_infer_python.sh
+#sed -i '150 i             eval $stop_cmd' test_tipc/test_serving_infer_python.sh
+#fi
 
 mkdir -p test_tipc/output
 touch TIMEOUT

@@ -76,7 +76,7 @@ def get_info():
             elif ("infer.py" in case) or ("predict_det.py" in case):
                 stage = "inference"
             else:
-                stage = "UNK"
+                stage = "inference"
             if model_name not in res["models_status"].keys():
                 res["models_status"].setdefault(model_name, [])
             res["models_status"][model_name].append({"status": tag, "case": case, "stage": stage})

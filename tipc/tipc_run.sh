@@ -168,6 +168,11 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
         cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
         cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
+        if [[ $REPO == "PaddleSeg" ]]
+        then
+            rm -f ${Serving_repo_path}/core/general-server/op/general_seg_op.*
+            cp -rf test_tipc/serving_cpp/general_seg_op.* ${Serving_repo_path}/core/general-server/op
+        fi
 
         cd Serving/
         rm -rf server-build-gpu-opencv

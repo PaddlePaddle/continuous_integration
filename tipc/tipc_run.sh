@@ -61,37 +61,6 @@ function run_model()
         bash test_tipc/test_train_inference_python.sh $config_file $mode 
         ;;
     chain_serving_cpp)
-        #build server
-        rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
-        rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
-        cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
-        cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
-
-        cd Serving/
-        rm -rf server-build-gpu-opencv
-        mkdir server-build-gpu-opencv && cd server-build-gpu-opencv
-        set http_proxy=${HTTP_PROXY}
-        set https_proxy=${HTTPS_PROXY}
-        cmake -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_DIR \
-            -DPYTHON_LIBRARIES=$PYTHON_LIBRARIES \
-            -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE \
-            -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_PATH} \
-            -DCUDNN_LIBRARY=${CUDNN_LIBRARY} \
-            -DCUDA_CUDART_LIBRARY=${CUDA_CUDART_LIBRARY} \
-            -DTENSORRT_ROOT=${TENSORRT_LIBRARY_PATH} \
-            -DOPENCV_DIR=${OPENCV_DIR} \
-            -DWITH_OPENCV=ON \
-            -DSERVER=ON \
-            -DWITH_GPU=ON ..
-        make -j32
-
-        python -m pip install python/dist/paddle*
-        export SERVING_BIN=$PWD/core/general-server/serving
-        unset http_proxy
-        unset https_proxy
-        cd  ../../
-
-        #run models
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_serving_infer_cpp.sh $config_file $mode 
         ;;
@@ -193,6 +162,36 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         export CUDA_CUDART_LIBRARY='/usr/local/cuda/lib64/'
         export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT6-cuda10.1-cudnn7/targets/x86_64-linux-gnu/'
         cd ..
+
+        #build server
+        rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
+        rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
+        cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
+        cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
+
+        cd Serving/
+        rm -rf server-build-gpu-opencv
+        mkdir server-build-gpu-opencv && cd server-build-gpu-opencv
+        set http_proxy=${HTTP_PROXY}
+        set https_proxy=${HTTPS_PROXY}
+        cmake -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_DIR \
+            -DPYTHON_LIBRARIES=$PYTHON_LIBRARIES \
+            -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE \
+            -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_PATH} \
+            -DCUDNN_LIBRARY=${CUDNN_LIBRARY} \
+            -DCUDA_CUDART_LIBRARY=${CUDA_CUDART_LIBRARY} \
+            -DTENSORRT_ROOT=${TENSORRT_LIBRARY_PATH} \
+            -DOPENCV_DIR=${OPENCV_DIR} \
+            -DWITH_OPENCV=ON \
+            -DSERVER=ON \
+            -DWITH_GPU=ON ..
+        make -j32
+
+        python -m pip install python/dist/paddle*
+        export SERVING_BIN=$PWD/core/general-server/serving
+        unset http_proxy
+        unset https_proxy
+        cd  ../../
 fi
 
 # 确定链条的txt、mode、timeout

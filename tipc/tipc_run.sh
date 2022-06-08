@@ -251,6 +251,10 @@ esac
 
 # 确定套件的待测模型列表, 其txt保存到full_chain_list_all
 python model_list.py $REPO ${PWD}/test_tipc/configs/ $file_txt full_chain_list_all_tmp 
+if [[ ${REPO} == "PaddleClas" ]]
+then
+python model_list.py $REPO ${PWD}/test_tipc/config/ $file_txt full_chain_list_all_tmp
+fi
 if [ ! ${grep_models} ]; then  
     grep_models=undefined
 fi  

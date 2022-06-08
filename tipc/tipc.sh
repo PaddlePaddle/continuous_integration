@@ -53,6 +53,7 @@ nvidia-docker run -i --rm \
 unset http_proxy
 unset https_proxy
 
+apt-get update
 apt-get install apt-transport-https
 wget -qO - https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/3bf863cc.pub | apt-key add -
 

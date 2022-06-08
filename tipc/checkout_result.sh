@@ -24,12 +24,12 @@ else
   failed_line=$(grep -o "Run failed with command" ${log_file}|wc -l)
   if [ $failed_line -ne $zero ]
   then
-          #echo "[ERROR] There are $number_lines results, but failed number of tests is $failed_line."
-          #echo "The Following Tests Failed: "
-          #cat ${log_file} | grep "Run failed with command"
+          echo "[ERROR] There are $number_lines results, but failed number of tests is $failed_line."
+          echo "The Following Tests Failed: "
+          cat ${log_file} | grep "Run failed with command"
           EXIT_CODE=8
-  #else
-          #echo "[SUCCEED] There are $number_lines results, all tipc ${CHAIN} command succeed!"
+  else
+          echo "[SUCCEED] There are $number_lines results, all tipc ${CHAIN} command succeed!"
           
   fi
 fi

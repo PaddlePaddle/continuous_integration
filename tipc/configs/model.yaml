@@ -6,7 +6,7 @@ PaddleGAN:
   black: none
 PaddleOCR:
   white: all
-  black: en_table_structure|ch_ppocr_mobile_v2.0_det
+  black: en_table_structure|ocr_det
 PaddleVideo:
   white: all
   black: none

@@ -168,12 +168,6 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
         cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
         cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
-        if [[ $REPO == "PaddleSeg" ]]
-        then
-            rm -f ${Serving_repo_path}/core/general-server/op/general_seg_op.*
-            cp -rf test_tipc/serving_cpp/general_seg_op.* ${Serving_repo_path}/core/general-server/op
-        fi
-
         cd Serving/
         rm -rf server-build-gpu-opencv
         mkdir server-build-gpu-opencv && cd server-build-gpu-opencv
@@ -212,7 +206,7 @@ chain_infer_cpp)
     time_out=600
     ;;
 chain_amp)
-    file_txt=*_amp_*
+    file_txt=*train_linux_gpu_normal_amp_infer_python_linux_gpu_cpu.txt
     mode=lite_train_lite_infer
     time_out=600
     ;;

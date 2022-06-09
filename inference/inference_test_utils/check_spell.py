@@ -28,11 +28,15 @@ def parse_args():
 
 def check_file(file_path: str):
     failed_lines = []
-    if file_path.endswith("en.md"):
-        pattern_prefix = "\\b"
-        pattern_suffix = "\\b"
+    if file_path.endswith("en.md") or file_path.endswith("en.rst"):
+        pre_suffix_dict = {
+            "\\b": "\\b",
+        }
     else:
-        pattern_prefix = pattern_suffix = ""
+        pre_suffix_dict = {
+            "\\b": "\\b",
+            r"[\u4e00-\u9fa5]": r"[\u4e00-\u9fa5]",
+        }
 
     with open(file_path, "r") as file:
         data_list = [line.strip() for line in file.readlines()]
@@ -50,9 +54,13 @@ def check_file(file_path: str):
             line_num = cursor + 1
             line = data_list[cursor]
 
+        # skip link
+        line_processed = re.sub(r"(.*/.*)", "", line)
+
         for k, v in keywords_dict.items():
-            if re.search(f"{pattern_prefix}{k}{pattern_suffix}", line) is not None:
-                failed_lines.append(f"line {line_num}: '{line}' contains non-standard word '{k}' should be '{v}'")
+            for pre, suf in pre_suffix_dict.items():
+                if re.search(rf"{pre}{k}{suf}", line_processed) is not None:
+                    failed_lines.append(f"line {line_num}: '{line}' contains non-standard word '{k}' should be '{v}'")
 
         cursor += 1
 
@@ -68,8 +76,11 @@ def main():
             failed_lines = check_file(single_file)
             all_failed_lines.extend(failed_lines)
             print(single_file)
-            for line in failed_lines:
-                print(line)
+            if failed_lines:
+                for line in failed_lines:
+                    print(line)
+            else:
+                print(f"{single_file} passed")
             os.system(f"grep -nr '预测' {single_file}")
 
     if all_failed_lines:

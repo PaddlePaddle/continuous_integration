@@ -155,7 +155,8 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         set http_proxy=
         set https_proxy=
 
-        python -m pip install -r python/requirements.txt
+        python -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+        python -m pip install --retries 10 -r python/requirements.txt
 
         export PYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
         export PYTHON_LIBRARIES=$(python -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
@@ -302,6 +303,13 @@ do
   else
     start=`date +%s`
     echo "==START=="$config_file
+    if [[ $CHAIN == "chain_base" ]]
+    then
+        if [[ $config_file =~ test_tipc/configs/.*_PACT/ ]] || [[ $config_file =~ test_tipc/configs/.*_KL/ ]]
+        then
+            time_out=1800
+        fi
+    fi
     run run_model $config_file $mode $time_out $model_name
 
     #    bash test_tipc/prepare.sh $config_file $mode

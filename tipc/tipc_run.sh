@@ -117,6 +117,10 @@ if [[ $CHAIN == "chain_serving_python" ]]; then
 fi
 
 if [[ $CHAIN == chain_serving_cpp ]]; then
+        if [[ $REPO == "PaddleSeg" ]]; then
+            bash test_tipc/serving_cpp/prepare_server.sh
+            export SERVING_BIN=${PWD}/Serving/build_server_gpu_opencv_seg/core/general-server/serving
+        fi
         # 安装client 和 app
         pip install paddle_serving_client
         pip install paddle-serving-app
@@ -274,11 +278,11 @@ else
 fi
 echo "==length models_list=="
 wc -l full_chain_list_all #输出本次要跑的模型个数
-cat full_chain_list_all #输出本次要跑的模型
+head -1 full_chain_list_all #输出本次要跑的模型
 
 # 跑模型
 sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
-cat full_chain_list_all | while read config_file
+head -1 full_chain_list_all | while read config_file
 do
   dataline=$(awk 'NR==1, NR==32{print}'  $config_file)
   IFS=$'\n'

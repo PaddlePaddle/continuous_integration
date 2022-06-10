@@ -303,7 +303,7 @@ do
   else
     start=`date +%s`
     echo "==START=="$config_file
-    if [[ $CHAIN == "chain_base" ]]
+    if [[ $CHAIN == "chain_base" ]] || [[ $CHAIN == "chain_amp" ]]
     then
         if [[ $config_file =~ test_tipc/configs/.*_PACT/ ]] || [[ $config_file =~ test_tipc/configs/.*_KL/ ]]
         then

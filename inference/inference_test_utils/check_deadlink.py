@@ -96,6 +96,7 @@ def main():
             for link in all_dead_links:
                 f.write(f"{link}\n")
         with open("dead_links.txt", "r") as f:
+            print("All dead links:")
             print(f.read())
         exit(8)
     else:

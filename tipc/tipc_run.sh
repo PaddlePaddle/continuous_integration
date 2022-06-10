@@ -278,11 +278,11 @@ else
 fi
 echo "==length models_list=="
 wc -l full_chain_list_all #输出本次要跑的模型个数
-head -1 full_chain_list_all #输出本次要跑的模型
+cat full_chain_list_all #输出本次要跑的模型
 
 # 跑模型
 sed -i 's/wget /wget -nv /g' test_tipc/prepare.sh
-head -1 full_chain_list_all | while read config_file
+cat full_chain_list_all | while read config_file
 do
   dataline=$(awk 'NR==1, NR==32{print}'  $config_file)
   IFS=$'\n'

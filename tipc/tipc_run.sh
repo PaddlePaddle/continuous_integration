@@ -117,13 +117,9 @@ if [[ $CHAIN == "chain_serving_python" ]]; then
 fi
 
 if [[ $CHAIN == chain_serving_cpp ]]; then
-        if [[ $REPO == "PaddleSeg" ]]; then
-            bash test_tipc/serving_cpp/prepare_server.sh
-            export SERVING_BIN=${PWD}/Serving/build_server_gpu_opencv_seg/core/general-server/serving
-        fi
         # 安装client 和 app
-        pip install paddle_serving_client
-        pip install paddle-serving-app
+        pip install paddle_serving_client==0.8.3
+        pip install paddle-serving-app==0.8.3
 
         # 准备server的编译环境
         apt-get update
@@ -169,10 +165,16 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         cd ..
 
         #build server
-        rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
-        rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
-        cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
-        cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
+        if [[ $REPO == PaddleSeg ]]
+        then
+            rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
+            cp test_tipc/serving_cpp/general_seg_op.* ${Serving_repo_path}/core/general-server/op
+        else
+            rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
+            rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
+            cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
+            cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
+        fi
         cd Serving/
         rm -rf server-build-gpu-opencv
         mkdir server-build-gpu-opencv && cd server-build-gpu-opencv

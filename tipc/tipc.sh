@@ -53,6 +53,7 @@ nvidia-docker run -i --rm \
 unset http_proxy
 unset https_proxy
 
+apt-get update
 apt-get install apt-transport-https
 wget -qO - https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/3bf863cc.pub | apt-key add -
 
@@ -112,6 +113,11 @@ if [[ $REPO == "PaddleSeg" ]]; then
     python -m pip install --retries 50 scikit-image
     python -m pip install numba
     python -m pip install sklearn
+    if [[ $CHAIN == "chain_serving_cpp" ]]; then
+        pip install SimpleITK -i https://pypi.tuna.tsinghua.edu.cn/simple
+        pip install decord==0.4.2 -i https://pypi.tuna.tsinghua.edu.cn/simple
+        pip install av==8.0.3 -i https://pypi.tuna.tsinghua.edu.cn/simple
+    fi
 fi
 if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp

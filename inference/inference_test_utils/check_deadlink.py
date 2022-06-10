@@ -56,7 +56,7 @@ def link_check(link, file_path):
         try:
             with request.urlopen(link, timeout=10) as res:
                 status = res.status
-                if res.status == 200:
+                if res.status in [200, 401, 403]:
                     print('{} check passed'.format(link))
                     status_flag = True
                     status = "[200]"

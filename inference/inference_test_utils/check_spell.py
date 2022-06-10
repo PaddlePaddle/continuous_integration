@@ -39,17 +39,25 @@ def check_file(file_path: str):
         }
 
     with open(file_path, "r") as file:
-        data_list = [line.strip() for line in file.readlines()]
+        data_list = [line.rstrip() for line in file.readlines()]
 
     cursor = 0
     while cursor < len(data_list):
         line_num = cursor + 1
         line = data_list[cursor]
 
-        # skip code block
+        # skip md code block
         if line.startswith("```"):
             cursor += 1
             while not data_list[cursor].startswith("```"):
+                cursor += 1
+            line_num = cursor + 1
+            line = data_list[cursor]
+
+        # skip rst code block
+        if ".. code::" in line:
+            cursor += 1
+            while cursor < len(data_list) - 1 and not data_list[cursor].startswith(" "):
                 cursor += 1
             line_num = cursor + 1
             line = data_list[cursor]
@@ -73,9 +81,9 @@ def main():
         file_list = [file.strip() for file in f.readlines()]
     for single_file in file_list:
         if single_file.endswith(".md") or single_file.endswith(".rst"):
+            print(single_file)
             failed_lines = check_file(single_file)
             all_failed_lines.extend(failed_lines)
-            print(single_file)
             if failed_lines:
                 for line in failed_lines:
                     print(line)

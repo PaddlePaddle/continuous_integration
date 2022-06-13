@@ -32,6 +32,8 @@ if [[ ${CHAIN} == "chain_distribution" ]]
 then
     cd ${REPO}
     cp -r ../continuous_integration/tipc/* .
+    cp ${ROOT_PATH}/config.ini .
+    cp ${ROOT_PATH}/pdc.sh .
     sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} 
     cd ..
 else

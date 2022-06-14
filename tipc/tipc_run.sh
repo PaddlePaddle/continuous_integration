@@ -233,7 +233,7 @@ chain_paddle2onnx)
     time_out=60
     ;;
 chain_distribution)
-    file_txt=*_fleet_*
+    file_txt=*train_linux_gpu_fleet_normal_infer_python_linux_gpu_cpu.txt
     mode=lite_train_lite_infer
     time_out=600
     ;;
@@ -323,7 +323,7 @@ do
     time=`echo $start $end | awk '{print $2-$1-2}'` #减去sleep
     echo "${config_file} spend time seconds ${time}"
 
-    if [[ "${DEBUG}" == "True" ]]
+    if [[ "${DEBUG}" == "False" ]]
     then
       bash -x upload.sh ${config_file} ${mode} ${CHAIN} || echo "upload model error on"`pwd`
     fi

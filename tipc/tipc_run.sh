@@ -170,6 +170,7 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
             rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
             cp test_tipc/serving_cpp/general_seg_op.* ${Serving_repo_path}/core/general-server/op
         elif [[ $REPO == PaddleDetection ]]
+        then
             cp deploy/serving/cpp/preprocess/*.h ${Serving_repo_path}/core/general-server/op
             cp deploy/serving/cpp/preprocess/*.cpp ${Serving_repo_path}/core/general-server/op
         else

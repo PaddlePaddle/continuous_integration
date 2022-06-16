@@ -71,7 +71,7 @@ def get_info():
                 stage = "eval"
             elif "train.py" in case:
                 stage = "train"
-            elif ("export_model.py" in case) or ("export.py" in case):
+            elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case):
                 stage = "dygraph2static"
             elif ("infer.py" in case) or ("predict_det.py" in case):
                 stage = "inference"

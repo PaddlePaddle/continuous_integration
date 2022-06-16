@@ -63,7 +63,7 @@ ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export REPO=$REPO
 export CHAIN=$CHAIN
-export DEBUG=${DEBUG:-False}
+export DEBUG=${DEBUG:-True}
 
 export http_proxy=
 export https_proxy=
@@ -86,6 +86,8 @@ if [[ $REPO == "PaddleGAN" ]]; then
 fi
 if [[ $REPO == "PaddleRec" ]]; then
     python -m pip install pgl
+    python -m pip install h5py
+    python -m pip install nltk
 fi
 python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython

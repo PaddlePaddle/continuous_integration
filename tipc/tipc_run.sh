@@ -111,15 +111,15 @@ if [[ $CHAIN == "chain_paddle2onnx" ]]; then
 fi
 
 if [[ $CHAIN == "chain_serving_python" ]]; then
-    pip install paddle-serving-server-gpu==0.8.3.post101
-    pip install paddle_serving_client==0.8.3
-    pip install paddle-serving-app==0.8.3
+    pip install paddle-serving-server-gpu==0.9.0.post101
+    pip install paddle_serving_client==0.9.0
+    pip install paddle-serving-app==0.9.0
 fi
 
 if [[ $CHAIN == chain_serving_cpp ]]; then
         # 安装client 和 app
-        pip install paddle_serving_client==0.8.3
-        pip install paddle-serving-app==0.8.3
+        pip install paddle_serving_client==0.9.0
+        pip install paddle-serving-app==0.9.0
 
         # 准备server的编译环境
         apt-get update
@@ -144,7 +144,7 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         # clone Serving
         set http_proxy=${HTTP_PROXY}
         set https_proxy=${HTTPS_PROXY}
-        git clone https://github.com/PaddlePaddle/Serving.git -b v0.8.3 --depth=1
+        git clone https://github.com/PaddlePaddle/Serving.git -b v0.9.0 --depth=1
         cd Serving
         export Serving_repo_path=$PWD
         git submodule update --init --recursive
@@ -169,6 +169,9 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         then
             rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
             cp test_tipc/serving_cpp/general_seg_op.* ${Serving_repo_path}/core/general-server/op
+        elif [[ $REPO == PaddleDetection ]]
+            cp deploy/serving/cpp/preprocess/*.h ${Serving_repo_path}/core/general-server/op
+            cp deploy/serving/cpp/preprocess/*.cpp ${Serving_repo_path}/core/general-server/op
         else
             rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
             rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*

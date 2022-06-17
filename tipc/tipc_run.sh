@@ -125,6 +125,8 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         apt-get update
         apt install -y libcurl4-openssl-dev libbz2-dev
         wget -nv https://paddle-serving.bj.bcebos.com/others/centos_ssl.tar && tar xf centos_ssl.tar && rm -rf centos_ssl.tar && mv libcrypto.so.1.0.2k /usr/lib/libcrypto.so.1.0.2k && mv libssl.so.1.0.2k /usr/lib/libssl.so.1.0.2k && ln -sf /usr/lib/libcrypto.so.1.0.2k /usr/lib/libcrypto.so.10 && ln -sf /usr/lib/libssl.so.1.0.2k /usr/lib/libssl.so.10 && ln -sf /usr/lib/libcrypto.so.10 /usr/lib/libcrypto.so && ln -sf /usr/lib/libssl.so.10 /usr/lib/libssl.so
+
+        # 安装go依赖
         rm -rf /usr/local/go
         wget -nv -qO- https://paddle-ci.cdn.bcebos.com/go1.17.2.linux-amd64.tar.gz | tar -xz -C /usr/local
         export GOROOT=/usr/local/go
@@ -138,6 +140,7 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         go install google.golang.org/grpc@v1.33.0
         go env -w GO111MODULE=auto
 
+        # 下载opencv库
         wget -nv https://paddle-qa.bj.bcebos.com/PaddleServing/opencv3.tar.gz && tar -xvf opencv3.tar.gz && rm -rf opencv3.tar.gz
         export OPENCV_DIR=$PWD/opencv3
 
@@ -154,6 +157,7 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         python -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
         python -m pip install --retries 10 -r python/requirements.txt
 
+        # set env
         export PYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
         export PYTHON_LIBRARIES=$(python -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
         export PYTHON_EXECUTABLE=`which python`
@@ -164,7 +168,7 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT6-cuda10.1-cudnn7/targets/x86_64-linux-gnu/'
         cd ..
 
-        #build server
+        # cp 自定义op代码
         if [[ $REPO == PaddleSeg ]]
         then
             rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
@@ -173,12 +177,18 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
         then
             cp deploy/serving/cpp/preprocess/*.h ${Serving_repo_path}/core/general-server/op
             cp deploy/serving/cpp/preprocess/*.cpp ${Serving_repo_path}/core/general-server/op
+        elif [[ $REPO == PaddleClas ]]
+        then
+            cp deploy/paddleserving/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
+            cp deploy/paddleserving/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
         else
             rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*
             rm -f ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools/preprocess_op.*
             cp deploy/serving_cpp/preprocess/general_clas_op.* ${Serving_repo_path}/core/general-server/op
             cp deploy/serving_cpp/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
         fi
+
+        #build server
         cd Serving/
         rm -rf server-build-gpu-opencv
         mkdir server-build-gpu-opencv && cd server-build-gpu-opencv
@@ -197,6 +207,7 @@ if [[ $CHAIN == chain_serving_cpp ]]; then
             -DWITH_GPU=ON ..
         make -j32
 
+        # 安装serving ， 设置环境变量
         python -m pip install python/dist/paddle*
         export SERVING_BIN=$PWD/core/general-server/serving
         unset http_proxy

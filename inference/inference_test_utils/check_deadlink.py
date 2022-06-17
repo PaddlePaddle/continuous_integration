@@ -107,6 +107,8 @@ def main():
     os.system("rm -rf dead_links.txt")
 
     for single_file in file_list:
+        if os.path.exists(single_file) is False:
+            continue
         if single_file.endswith(".md") or single_file.endswith(".rst"):
             md2html(single_file)
             print(single_file)

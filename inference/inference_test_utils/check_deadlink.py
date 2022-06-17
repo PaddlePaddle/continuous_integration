@@ -1,4 +1,5 @@
 import os
+import re
 from xml.dom.minidom import parse
 from urllib import request
 import codecs
@@ -50,7 +51,7 @@ def parse_linkchecker_result(file_path):
     return total_url
 
 
-def link_check(link, file_path):
+def http_link_check(link, file_path):
     status_flag = False
     for _ in range(3):
         try:
@@ -74,6 +75,31 @@ def link_check(link, file_path):
     return status_flag, result
 
 
+def relative_link_check(file_path):
+    file_dir = os.path.dirname(os.path.abspath(file_path))
+    dead_links = []
+    with open(file_path, "r") as file:
+        data = file.read()
+    regex = r"\[.*?\]\((.*?)\)"
+    link_list = re.findall(regex, data)
+
+    relative_links = []
+    for link in link_list:
+        if link.startswith("http") is False:
+            relative_links.append(link)
+
+    relative_files = [f"{file_dir}/{link}" for link in relative_links]
+    for i, file in enumerate(relative_files):
+        if os.path.exists(file) is False:
+            dead_links.append(f"[404 Not Found]:{file_path}:{relative_links[i]}")
+        else:
+            print(f"{relative_files[i]} check passed")
+
+    for i in dead_links:
+        print(i)
+    return dead_links
+
+
 def main():
     all_dead_links = []
     with open(args.changed_files, "r") as f:
@@ -87,9 +113,11 @@ def main():
             exec_linkchecker(single_file)
             all_urls = parse_linkchecker_result(single_file)
             for link in all_urls:
-                flag, msg = link_check(link, single_file)
+                flag, msg = http_link_check(link, single_file)
                 if not flag:
                     all_dead_links.append(msg)
+            relative_dead_links = relative_link_check(single_file)
+            all_dead_links.extend(relative_dead_links)
 
     if all_dead_links:
         with open("dead_links.txt", "a") as f:

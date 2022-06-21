@@ -240,7 +240,7 @@ chain_serving_cpp)
 chain_serving_python)
     file_txt=*_serving_python_*
     mode=serving_infer
-    time_out=60
+    time_out=80
     ;;
 chain_paddle2onnx)
     file_txt=*paddle2onnx*

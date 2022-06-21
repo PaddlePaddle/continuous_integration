@@ -245,7 +245,7 @@ chain_serving_python)
 chain_paddle2onnx)
     file_txt=*paddle2onnx*
     mode=paddle2onnx_infer
-    time_out=60
+    time_out=80
     ;;
 chain_distribution)
     file_txt=*train_linux_gpu_fleet_normal_infer_python_linux_gpu_cpu.txt

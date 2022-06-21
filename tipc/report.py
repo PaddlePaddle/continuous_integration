@@ -109,10 +109,10 @@ def print_result():
     msg += " ".join(res["failed_models"])
     if res["failed_cases_num"] > 0:
         msg += "\n{} cases failed:\n".format(str(res["failed_cases_num"]))
-        for model in res["failed_models"]:
-            for item in res["models_status"][model]:
-                if item["status"] == "failed":
-                    msg += "Failed: {} {} {}\n".format(model, item["stage"], item["case"])
+        #for model in res["failed_models"]:
+        #    for item in res["models_status"][model]:
+        #        if item["status"] == "failed":
+        #            msg += "Failed: {} {} {}\n".format(model, item["stage"], item["case"])
     print(msg)
     msg = "=" * 50
 

@@ -59,7 +59,7 @@ else
   then
       echo " "
       echo "Summary Failed Tests ..."
-      echo "[ERROR] There are $number_lines results in ${log_file}, but failed number of tests is $failed_line."
+      echo "[ERROR] There are $number_lines cases in ${log_file}, but failed number of tests is $failed_line."
       echo -e "=====================test summary======================"
       echo "The Following Tests Failed: "
       grep "[CHECK]" ${log_file} | grep "False"

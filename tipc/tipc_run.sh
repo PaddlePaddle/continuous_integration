@@ -310,6 +310,7 @@ do
   then
     echo "==START=="$config_file
     JOB_NAME=tipc-${model_name}-${mode}
+    JOB_NAME=`echo ${JOB_NAME//./_}`
     PADDLE_WHL=$3
     DOCKER_IMAGE=$4
     CODE_BOS=$5

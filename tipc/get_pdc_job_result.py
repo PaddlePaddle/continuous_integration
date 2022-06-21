@@ -13,6 +13,8 @@ def get_pdc_job_id(model_job_file):
         lines = fin.readlines()
         for line in lines:
             model, job_id = line.strip().split(",")
+            if "job-" not in job_id:
+                continue
             JOBS_INFO[model] = {"job_id": job_id,
                                 "used_time": "",
                                 "status": "UNK",

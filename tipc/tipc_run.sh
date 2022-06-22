@@ -108,6 +108,8 @@ mkdir -p test_tipc/output
 touch TIMEOUT
 if [[ $CHAIN == "chain_paddle2onnx" ]]; then
     pip install onnx==1.9.0
+    pip install paddle2onnx
+    pip install onnxruntime
 fi
 
 if [[ $CHAIN == "chain_serving_python" ]]; then

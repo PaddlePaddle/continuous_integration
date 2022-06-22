@@ -101,12 +101,17 @@ python -m pip install --retries 10 pandas
 python -m pip install --retries 10 openpyxl
 python -m pip install --retries 10 psutil
 python -m pip install --retries 10 GPUtil
-python -m pip install --retries 10 paddleslim
+#python -m pip install --retries 10 paddleslim
 #python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 visualdl 
 python -c 'from visualdl import LogWriter'
+git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
+cd PaddleSlim     
+python -m pip install -r requirements.txt
+python setup.py install
+cd ..
 python -m pip install --retries 10 -r requirements.txt
 wget -q --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`

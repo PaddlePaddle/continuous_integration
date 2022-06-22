@@ -77,7 +77,7 @@ function run_model()
         ;;
     chain_ptq_infer_python)
         bash test_tipc/prepare.sh $config_file $mode
-        bash test_tipc/test_train_inference_python.sh $config_file $mode
+        bash test_tipc/test_ptq_inference_python.sh $config_file $mode
         ;;
     chain_pact_infer_python)
         bash test_tipc/prepare.sh $config_file $mode
@@ -255,12 +255,12 @@ chain_distribution)
 chain_pact_infer_python)
     file_txt=train_pact_infer_python.txt
     mode=lite_train_lite_infer
-    time_out=600
+    time_out=1800
     ;;
 chain_ptq_infer_python)
     file_txt=train_ptq_infer_python.txt
     mode=whole_infer
-    time_out=60
+    time_out=1800
     ;;
 *)
     echo "CHAIN must be chain_base chain_infer_cpp chain_amp chain_serving_cpp chain_serving_python chain_paddle2onnx chain_distribution chain_pact_infer_python chain_ptq_infer_python"

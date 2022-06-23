@@ -272,6 +272,7 @@ chain_ptq_infer_python)
 esac
 
 # 确定套件的待测模型列表, 其txt保存到full_chain_list_all
+touch full_chain_list_all_tmp full_chain_list_all
 python model_list.py $REPO ${PWD}/test_tipc/configs/ $file_txt full_chain_list_all_tmp 
 if [[ ${REPO} == "PaddleClas" ]]
 then

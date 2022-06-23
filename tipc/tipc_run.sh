@@ -53,8 +53,14 @@ function run_model()
         bash test_tipc/test_train_inference_python.sh $config_file $mode 
         ;;
     chain_infer_cpp)
-        bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
-        bash test_tipc/test_inference_cpp.sh $config_file '1' 
+        if [[ $REPO == PaddleDetection ]]; then
+        do
+            bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
+            bash test_tipc/test_inference_cpp.sh $config_file $PADDLE_INFERENCE_TGZ '1'
+        else
+            bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
+            bash test_tipc/test_inference_cpp.sh $config_file '1' 
+        fi
         ;;
     chain_amp)
         bash test_tipc/prepare.sh $config_file $mode

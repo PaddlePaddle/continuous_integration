@@ -54,7 +54,6 @@ function run_model()
         ;;
     chain_infer_cpp)
         if [[ $REPO == PaddleDetection ]]; then
-        do
             bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
             bash test_tipc/test_inference_cpp.sh $config_file $PADDLE_INFERENCE_TGZ '1'
         else

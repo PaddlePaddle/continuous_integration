@@ -83,7 +83,7 @@ def relative_link_check(file_path):
     regex = r"\[.*?\]\((.*?)\)"
     link_list = re.findall(regex, data)
 
-    reg_a_label = r'<a name="(.*?)"></a>'
+    reg_a_label = r'<a name="(.*?)"> *</a>'
     a_label_list = re.findall(reg_a_label, data)
 
     relative_links = []

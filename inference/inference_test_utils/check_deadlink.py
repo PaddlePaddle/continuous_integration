@@ -108,6 +108,7 @@ def relative_link_check(file_path):
             file = f"{file_dir}/{file_name}"
             if os.path.exists(file) is False:
                 dead_links.append(f"[404 Not Found]:{file_path}:{a_label_links[i]}")
+                a_labels = []
             else:
                 with open(f"{file_dir}/{file_name}", "r") as f:
                     a_labels = re.findall(reg_a_label, f.read())

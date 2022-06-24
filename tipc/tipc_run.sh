@@ -263,12 +263,12 @@ chain_distribution)
     time_out=600
     ;;
 chain_pact_infer_python)
-    file_txt=train_pact_infer_python.txt
+    file_txt=*train_pact_infer_python.txt
     mode=lite_train_lite_infer
     time_out=1800
     ;;
 chain_ptq_infer_python)
-    file_txt=train_ptq_infer_python.txt
+    file_txt=*train_ptq_infer_python.txt
     mode=whole_infer
     time_out=1800
     ;;

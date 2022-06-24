@@ -56,6 +56,8 @@ function run_model()
         if [[ $REPO == PaddleDetection ]]; then
             bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
             bash test_tipc/test_inference_cpp.sh $config_file $PADDLE_INFERENCE_TGZ '1'
+        elif [[ $REPO == PaddleClas ]]; then
+            bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ bash test_tipc/test_inference_cpp.sh $config_file '1' '1'
         else
             bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
             bash test_tipc/test_inference_cpp.sh $config_file '1' 
@@ -111,6 +113,7 @@ function run_model()
 
 mkdir -p test_tipc/output
 touch TIMEOUT
+touch RESULT
 if [[ $CHAIN == "chain_paddle2onnx" ]]; then
     pip install onnx==1.9.0
     pip install paddle2onnx
@@ -277,7 +280,8 @@ chain_ptq_infer_python)
 esac
 
 # 确定套件的待测模型列表, 其txt保存到full_chain_list_all
-touch full_chain_list_all_tmp full_chain_list_all
+touch full_chain_list_all_tmp
+touch full_chain_list_all
 python model_list.py $REPO ${PWD}/test_tipc/configs/ $file_txt full_chain_list_all_tmp 
 if [[ ${REPO} == "PaddleClas" ]]
 then

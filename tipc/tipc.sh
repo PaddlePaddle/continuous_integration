@@ -120,6 +120,7 @@ if [[ $REPO == "PaddleSeg" ]]; then
     python -m pip install --retries 50 scikit-image
     python -m pip install numba
     python -m pip install sklearn
+    python -m pip install pymatting
     if [[ $CHAIN == "chain_serving_cpp" ]]; then
         pip install SimpleITK -i https://pypi.tuna.tsinghua.edu.cn/simple
         pip install decord==0.4.2 -i https://pypi.tuna.tsinghua.edu.cn/simple

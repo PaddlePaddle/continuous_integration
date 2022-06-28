@@ -286,6 +286,7 @@ touch full_chain_list_all
 python model_list.py $REPO ${PWD}/test_tipc/configs/ $file_txt full_chain_list_all_tmp 
 if [[ ${REPO} == "PaddleClas" ]]
 then
+sed -i "95 i ln -s paddle_inference_install_dir paddle_inference" ${PWD}/test_tipc/prepare.sh
 python model_list.py $REPO ${PWD}/test_tipc/config/ $file_txt full_chain_list_all_tmp
 fi
 if [ ! ${grep_models} ]; then  

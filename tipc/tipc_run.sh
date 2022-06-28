@@ -58,7 +58,7 @@ function run_model()
             bash test_tipc/test_inference_cpp.sh $config_file $PADDLE_INFERENCE_TGZ '1'
         elif [[ $REPO == PaddleClas ]]; then
             bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
-            bash test_tipc/test_inference_cpp.sh $config_file '1' '1'
+            bash test_tipc/test_inference_cpp.sh $config_file cpp_infer 0
         else
             bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
             bash test_tipc/test_inference_cpp.sh $config_file '1' 

@@ -350,6 +350,10 @@ do
             time_out=1800
         fi
     fi
+    
+    if [[ $config_file =~ "test_tipc/config/PP-ShiTu/PPShiTu_linux_gpu_normal_normal_infer_cpp_linux_gpu_cpu.txt" ]]; then
+        time_out=1800
+    fi
     run run_model $config_file $mode $time_out $model_name
 
     #    bash test_tipc/prepare.sh $config_file $mode

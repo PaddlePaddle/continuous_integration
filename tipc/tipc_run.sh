@@ -58,7 +58,7 @@ function run_model()
             bash test_tipc/test_inference_cpp.sh $config_file $PADDLE_INFERENCE_TGZ '1'
         elif [[ $REPO == PaddleClas ]]; then
             bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
-            if [[ $config_file =~ "test_tipc/config/PP-ShiTu/PPShiTu_linux_gpu_normal_normal_infer_cpp_linux_gpu_cpu.txt"]]; then
+            if [[ $config_file =~ "test_tipc/config/PP-ShiTu/PPShiTu_linux_gpu_normal_normal_infer_cpp_linux_gpu_cpu.txt" ]]; then
                 set http_proxy=${HTTP_PROXY}
                 set https_proxy=${HTTPS_PROXY}
                 bash test_tipc/test_inference_cpp.sh $config_file cpp_infer 0

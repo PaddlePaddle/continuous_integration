@@ -92,7 +92,9 @@ def get_info():
         if tag == "failed":
             res["failed_num"] += 1
             res["failed_models"].append(model)
-    res["success_num"] = res["total_num"] - res["timeout_num"] - res["failed_num"]
+        else:
+            res["success_num"] += 1
+    #res["success_num"] = res["total_num"] - res["timeout_num"] - res["failed_num"]
 
 
 def print_result():

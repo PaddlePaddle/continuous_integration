@@ -130,6 +130,11 @@ fi
 if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp
 fi
+if [[ $REPO == "PaddleVideo" ]]; then
+    python -m pip install --retries 10 paddlenlp
+    python -m pip install --retries 10 SimpleITK
+    python -m pip install --retries 10 lmdb 
+fi
 cp \$REPO_PATH/../continuous_integration/tipc/tipc_run.sh .
 cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
 cp -r \$REPO_PATH/../continuous_integration/tipc/configs .

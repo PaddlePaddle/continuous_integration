@@ -36,13 +36,6 @@ function run()
     kill -9 $watchdog  >/dev/null 2>&1
 }
 
-#if [[ ${REPO} == "PaddleOCR" ]]
-#then
-#sed -i '192 i if [ ! -d "paddle_inference" ]; then' test_tipc/test_inference_cpp.sh
-#sed -i '193 i ln -s paddle_inference_install_dir paddle_inference' test_tipc/test_inference_cpp.sh
-#sed -i '194 i fi' test_tipc/test_inference_cpp.sh
-#fi
-
 function run_model()
 {
     config_file=$1
@@ -119,6 +112,15 @@ function run_model()
 #sed -i '149 i             stop_cmd="${python} -m paddle_serving_server.serve stop"' test_tipc/test_serving_infer_python.sh
 #sed -i '150 i             eval $stop_cmd' test_tipc/test_serving_infer_python.sh
 #fi
+
+if [[ ${REPO} == "PaddleOCR" ]]
+then
+#sed -i '192 i if [ ! -d "paddle_inference" ]; then' test_tipc/test_inference_cpp.sh
+#sed -i '193 i ln -s paddle_inference_install_dir paddle_inference' test_tipc/test_inference_cpp.sh
+#sed -i '194 i fi' test_tipc/test_inference_cpp.sh
+sed -i 's#https://github.com/LDOUBLEV/AutoLog.git#https://gitee.com/Double_V/AutoLog#g' deploy/cpp_infer/external-cmake/auto-log.cmake
+fi
+
 
 mkdir -p test_tipc/output
 touch TIMEOUT

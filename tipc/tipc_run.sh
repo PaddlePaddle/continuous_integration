@@ -243,7 +243,7 @@ case $CHAIN in
 chain_base) 
     file_txt=*train_infer_python.txt
     mode=lite_train_lite_infer
-    time_out=600
+    time_out=700
     ;;
 chain_infer_cpp)
     file_txt=*_infer_cpp_*

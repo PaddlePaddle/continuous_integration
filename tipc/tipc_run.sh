@@ -367,6 +367,10 @@ do
     if [[ $config_file =~ "test_tipc/config/PP-ShiTu/PPShiTu_linux_gpu_normal_normal_infer_cpp_linux_gpu_cpu.txt" ]]; then
         time_out=1800
     fi
+    if [[ $config_file =~ "test_tipc/configs/mask_rcnn/mask_rcnn_r50_fpn_1x_coco_model_linux_gpu_normal_normal_serving_python_linux_gpu_cpu.txt" ]]
+    then
+        time_out=180
+    fi
     run run_model $config_file $mode $time_out $model_name
 
     #    bash test_tipc/prepare.sh $config_file $mode

@@ -57,7 +57,7 @@ def http_link_check(link, file_path):
         try:
             with request.urlopen(link, timeout=10) as res:
                 status = res.status
-                if res.status in [200, 401, 403]:
+                if res.status in [200, 401, 403, 503]:
                     print('{} check passed'.format(link))
                     status_flag = True
                     status = "[200]"

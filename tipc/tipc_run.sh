@@ -365,7 +365,7 @@ do
     fi
     
     if [[ $config_file =~ "test_tipc/config/PP-ShiTu/PPShiTu_linux_gpu_normal_normal_infer_cpp_linux_gpu_cpu.txt" ]]; then
-        time_out=1800
+        time_out=3000
     fi
     if [[ $config_file =~ "test_tipc/configs/mask_rcnn/mask_rcnn_r50_fpn_1x_coco_model_linux_gpu_normal_normal_serving_python_linux_gpu_cpu.txt" ]]
     then

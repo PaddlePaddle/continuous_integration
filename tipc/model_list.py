@@ -8,7 +8,7 @@ def run(repo, configs_path, chain_txt, dst_file):
     """
     """
     with open("configs/model.yaml", 'r') as f:
-        model_list = yaml.load(f)
+        model_list = yaml.load(f, Loader=yaml.FullLoader)
     if repo not in model_list.keys():
         white = ["all"]
     else:

@@ -42,6 +42,9 @@ function run_model()
     mode=$2
     case $CHAIN in
     chain_base)
+        if [[ $TF == "True" ]]; then
+            bash test_export_shell.sh $config_file
+        fi
         bash test_tipc/prepare.sh $config_file $mode
         bash test_tipc/test_train_inference_python.sh $config_file $mode 
         ;;

@@ -86,7 +86,5 @@ export FLAGS_selected_gpus=0,1
 export FLAGS_START_PORT=17000
 #bash test_tipc/prepare.sh test_tipc/configs/mobilenet_v3_small/train_fleet_infer_python.txt lite_train_lite_infer
 #bash test_tipc/test_train_inference_python.sh test_tipc/configs/mobilenet_v3_small/train_fleet_infer_python.txt lite_train_lite_infer
-export http_proxy=
-export https_proxy=
 bash test_tipc/prepare.sh ${CONFIG_FILE} ${MODE}
 bash test_tipc/test_train_inference_python.sh ${CONFIG_FILE} ${MODE}

@@ -84,6 +84,8 @@ def get_info():
                 res["model_func"].setdefault(model_name, {"train": {"success": 0, "failed": 0}, "eval": {"success": 0, "failed": 0}, "dygraph2static": {"success": 0, "failed": 0}, "inference": {"success": 0, "failed": 0}, "UNK": {"success": 0, "failed": 0}})
             res["model_func"][model_name][stage][tag] += 1
     for model, infos in res["models_status"].items():
+        if model in res["timeout_models"]:
+            continue
         tag = "success"
         for item in infos:
             if item["status"] == "failed":

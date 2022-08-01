@@ -30,7 +30,7 @@ function run()
     command=$*
     $command &
     commandpid=$!
-    ( sleep $waitfor ; kill -9 $commandpid >/dev/null 2>&1 && printmsg $2 ) &
+    ( sleep $waitfor ; kill -9 $commandpid >/dev/null 2>&1 && printmsg $5 $2 ) &
     watchdog=$!
     wait $commandpid >/dev/null 2>&1
     kill -9 $watchdog  >/dev/null 2>&1

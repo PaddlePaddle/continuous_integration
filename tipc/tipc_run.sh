@@ -129,6 +129,11 @@ else
 echo ""
 fi
 
+if [[ ${REPO} == "PaddleDetection" ]]
+then
+sed -i 's/sleep 2s/sleep 5s/g' test_tipc/test_serving_infer_python.sh
+fi
+
 
 mkdir -p test_tipc/output
 touch TIMEOUT

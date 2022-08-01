@@ -364,10 +364,10 @@ do
     then
         time_out=1200
     fi
-    if [[ $CHAIN == "chain_serving_python" ]] && [[ $REPO == "PaddleDetection" ]]
-    then
-        time_out=600
-    fi
+    #if [[ $CHAIN == "chain_serving_python" ]] && [[ $REPO == "PaddleDetection" ]]
+    #then
+    #    time_out=600
+    #fi
     if [[ $CHAIN == "chain_base" ]] || [[ $CHAIN == "chain_amp" ]]
     then
         if [[ $config_file =~ test_tipc/configs/.*_PACT/ ]] || [[ $config_file =~ test_tipc/configs/.*_KL/ ]]

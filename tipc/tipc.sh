@@ -121,9 +121,9 @@ python -c 'from visualdl import LogWriter'
 python -m pip install --retries 10 -r requirements.txt
 wget -q --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`
-python -c "import paddle; print(paddle.version.commit)" >>paddle_info
-python -c "import paddle; print(paddle.version.cuda_version)" >>paddle_info
-python -c "import paddle; print(paddle.version.cudnn_version)" >>paddle_info
+#python -c "import paddle; print(paddle.version.commit)" >>paddle_info
+#python -c "import paddle; print(paddle.version.cuda_version)" >>paddle_info
+#python -c "import paddle; print(paddle.version.cudnn_version)" >>paddle_info
 
 if [[ $REPO == "PaddleSeg" ]]; then
     pip install -e .

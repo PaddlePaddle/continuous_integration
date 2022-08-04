@@ -70,6 +70,9 @@ wget -q --no-proxy ${PADDLE_WHL}
 #python -m pip install ./\`basename ${PADDLE_WHL}\`
 #python -m pip install paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 
 python -m pip install `basename ${PADDLE_WHL}`
+#python -c "import paddle; print(paddle.version.commit)" >>paddle_info
+#python -c "import paddle; print(paddle.version.cuda_version)" >>paddle_info
+#python -c "import paddle; print(paddle.version.cudnn_version)" >>paddle_info
 
 if [[ $REPO == "PaddleSeg" ]]; then
     pip install -e .

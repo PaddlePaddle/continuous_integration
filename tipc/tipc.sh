@@ -4,7 +4,8 @@ set -ex
 
 REPO=$1
 CHAIN=$2
-DOCKER_IMAGE=${DOCKER_IMAGE:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82}
+PADDLE_WHL=${3:-https://paddle-qa.bj.bcebos.com/develop-gpu-cuda10.1-cudnn7-mkl-gcc8.2/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
+DOCKER_IMAGE=${4:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82}
 DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
@@ -13,7 +14,6 @@ PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/pad
 #PADDLE_INFERENCE_TGZ=https://paddle-inference-lib.bj.bcebos.com/2.2.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.1_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
 CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1}
-PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/develop-gpu-cuda10.1-cudnn7-mkl-gcc8.2/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
 TF=${TF:-False}
 
 # define version compare function
@@ -121,6 +121,9 @@ python -c 'from visualdl import LogWriter'
 python -m pip install --retries 10 -r requirements.txt
 wget -q --no-proxy ${PADDLE_WHL}
 python -m pip install ./\`basename ${PADDLE_WHL}\`
+python -c "import paddle; print(paddle.version.commit)" >>paddle_info
+python -c "import paddle; print(paddle.version.cuda_version)" >>paddle_info
+python -c "import paddle; print(paddle.version.cudnn_version)" >>paddle_info
 
 if [[ $REPO == "PaddleSeg" ]]; then
     pip install -e .

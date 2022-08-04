@@ -21,7 +21,7 @@ def get_pdc_job_id(model_job_file):
                                 "log": 0}
 
 
-def get_pdc_log(job_id):
+def get_pdc_log(job_id, REPO):
     """
     """
     if "job-" not in job_id:
@@ -48,6 +48,7 @@ def get_pdc_log(job_id):
     addr_list = addr.split("/")
     ip = addr_list[2]
     code = addr_list[5]
+    tag = True
     #此处需要按照jobName找到相应的log
     result_addr = ("http://" + ip + "/filetree?action=cat&path=/home/work/containers_backup/" +
                code + "/root/paddlejob/workspace/log/train.log")
@@ -55,20 +56,30 @@ def get_pdc_log(job_id):
         result_data = requests.get(result_addr).content
     except Exception as e:
         print("get_log_thread:request get content except:", e)
-        return False
+        tag = False
     if result_data != bytes():
         with open("pdc_" + job_id + "_" + job_name + "_train.log", "wb") as fout:
             fout.write(result_data)
-    return True
+    #获取运行时的paddle信息paddle_info
+    result_addr = ("http://" + ip + "/filetree?action=cat&path=/home/work/containers_backup/" +
+               code + "/root/paddlejob/workspace/env_run/Paddle/" + REPO + "/paddle_info")
+    try:
+        result_data = requests.get(result_addr).content
+    except Exception as e:
+        print("get_log_thread:request get content except:", e)
+    if result_data != bytes():
+        with open("paddle_info", "wb") as fout:
+            fout.write(result_data)
+    return tag
 
 
-def get_log():
+def get_log(REPO):
     """
     """
     for model, infos in JOBS_INFO.items():
         print("get_log:", model, infos)
         job_id = infos["job_id"]
-        get_pdc_log(job_id) 
+        get_pdc_log(job_id, REPO) 
 
 
 def get_job_status(pdc_job_id):
@@ -152,7 +163,8 @@ def watch_job():
 
 if __name__ == "__main__":
     model_job_file = sys.argv[1]
+    REPO = sys.argv[2]
     get_pdc_job_id(model_job_file)
     watch_job() 
-    get_log()
+    get_log(REPO)
     

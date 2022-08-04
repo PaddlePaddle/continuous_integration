@@ -411,7 +411,7 @@ if [[ "$CHAIN" == "chain_distribution" ]]
 then
   export http_proxy=
   export https_proxy=
-  python get_pdc_job_result.py pdc_job_id
+  python get_pdc_job_result.py pdc_job_id $REPO
 fi
 
 

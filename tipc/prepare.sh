@@ -28,10 +28,8 @@ git clone --depth=100 https://github.com/LDOUBLEV/AutoLog;
 #git clone --depth=100 https://github.com/PaddlePaddle/continuous_integration.git;
 git clone --depth=100 https://github.com/zhengya01/continuous_integration.git -b v1;
 if [[ $REPO == PaddleVideo ]]; then
-  git clone https://github.com/huangjun12/PaddleVideo.git -b tipc-timeslow-0701
-elif [[ $REPO == PaddleClas ]]; then
-    #git clone https://github.com/HydrogenSulfate/PaddleClas.git -b fix_2022_7_4
-    git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
+  #git clone https://github.com/huangjun12/PaddleVideo.git -b benchmark-0728 
+  git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
 else
   git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
 fi

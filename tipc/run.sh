@@ -57,6 +57,7 @@ cp ../continuous_integration/tipc/report.py ./
 python report.py ${REPO} ${CHAIN} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 sh checkout_result.sh
 
+:<<EOF
 #-------------------------------------------------
 ### baobiao
 #cd $REPO
@@ -100,3 +101,4 @@ echo $python
 #log 需遍历结果来确定
 
 # 结合report.py入库
+EOF

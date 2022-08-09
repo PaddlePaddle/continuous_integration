@@ -1,7 +1,5 @@
 #! /bin/bash
 
-export DEBUG=${DEBUG:-False}
-
 function func_parser_key(){
     strs=$1
     IFS=":"
@@ -396,7 +394,7 @@ do
     time=`echo $start $end | awk '{print $2-$1-2}'` #减去sleep
     echo "${config_file} spend time seconds ${time}"
 
-      bash -x upload.sh ${config_file} ${mode} ${CHAIN} || echo "upload model error on"`pwd`
+    #  bash -x upload.sh ${config_file} ${mode} ${CHAIN} || echo "upload model error on"`pwd`
 
 
     if [[ "${DEBUG}" == "False" ]]

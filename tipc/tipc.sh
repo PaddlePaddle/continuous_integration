@@ -14,6 +14,7 @@ PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/pad
 #PADDLE_INFERENCE_TGZ=https://paddle-inference-lib.bj.bcebos.com/2.2.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.1_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
 CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1}
+DEBUG=${DEBUG:-False}
 TF=${TF:-False}
 
 # define version compare function
@@ -70,6 +71,7 @@ ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export REPO=$REPO
 export CHAIN=$CHAIN
+export DEBUG=${DEBUG:-False}
 export TF=${TF:-False}
 
 export http_proxy=

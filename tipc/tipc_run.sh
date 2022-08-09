@@ -1,5 +1,10 @@
 #! /bin/bash
 
+export DEBUG=${DEBUG:-False}
+
+echo "1111111111" ${DEBUG}
+exit 0
+
 function func_parser_key(){
     strs=$1
     IFS=":"

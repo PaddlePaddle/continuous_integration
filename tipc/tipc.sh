@@ -52,9 +52,13 @@ nvidia-docker run -i --rm \
                   -e "grep_v_models=${grep_v_models}" \
                   -e "grep_models=${grep_models}" \
                   -e "TF=${TF}" \
+                  -e "DEBUG=${DEBUG:-False}" \
                   -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
+bash -x tipc_run.sh
+exit 0
+
 unset http_proxy
 unset https_proxy
 
@@ -68,7 +72,6 @@ ln -s /usr/local/bin/pip3.7 run_env/pip
 export PATH=/home/cmake-3.16.0-Linux-x86_64/bin:/workspace/run_env:/usr/local/gcc-8.2/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export REPO=$REPO
 export CHAIN=$CHAIN
-export DEBUG=${DEBUG:-True}
 export TF=${TF:-False}
 
 export http_proxy=

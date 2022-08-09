@@ -2,9 +2,6 @@
 
 export DEBUG=${DEBUG:-False}
 
-echo "1111111111" ${DEBUG}
-exit 0
-
 function func_parser_key(){
     strs=$1
     IFS=":"
@@ -398,6 +395,9 @@ do
     end=`date +%s`
     time=`echo $start $end | awk '{print $2-$1-2}'` #减去sleep
     echo "${config_file} spend time seconds ${time}"
+
+      bash -x upload.sh ${config_file} ${mode} ${CHAIN} || echo "upload model error on"`pwd`
+
 
     if [[ "${DEBUG}" == "False" ]]
     then

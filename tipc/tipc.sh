@@ -56,8 +56,6 @@ nvidia-docker run -i --rm \
                   -e "no_proxy=${no_proxy:-baidu.com,bcebos.com}" \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
-bash -x tipc_run.sh
-exit 0
 
 unset http_proxy
 unset https_proxy

@@ -28,6 +28,7 @@ cd "/workspace/${REPO}"
 repo_commit=`git rev-parse HEAD`
 cd -
 cd /workspace
+# paddle_commit 需通过安装查询 todo
 paddle_commit=`git rev-parse HEAD`
 cd -
 model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | head -n 1`

@@ -419,7 +419,7 @@ fi
 
 
 # update model_url latest
-if [ -f "tipc_models_url_${REPO}.txt" ];then
+if [ -f "tipc_models_url_${REPO}_${CHAIN}.txt" ];then
     date_stamp=`date +%m_%d`
     push_file=./bce-python-sdk-0.8.27/BosClient.py
     cp "tipc_models_url_${REPO}_${CHAIN}.txt" "tipc_models_url_${REPO}_${CHAIN}_latest.txt"

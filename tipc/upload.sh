@@ -32,13 +32,7 @@ paddle_commit=`git rev-parse HEAD`
 cd -
 model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | head -n 1`
 echo ${model_name}
-output_dir="test_tipc/output/${model_name}"
-if [[ ${REPO} == "PaddleDetection" ]]; then
-    output_dir="test_tipc/output"
-fi
-if [[ ${REPO} == "Step6" ]]; then
-  output_dir="log/${model_name}/${mode}"
-fi
+output_dir="test_tipc/output/${model_name}/${mode}"
 echo ${output_dir}
 if [ ! -d ${output_dir} ]; then
     echo "output_dir not found"

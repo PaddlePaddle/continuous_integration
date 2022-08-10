@@ -1,10 +1,14 @@
+"""
+包含上传log、创建icafe、结果入库
+"""
 #coding=utf-8
 
 import sys
 import pymysql
 import yaml
 import copy
-
+import subprocess
+import os
 
 task_env = {
     "task_dt": sys.argv[1],
@@ -77,14 +81,16 @@ def get_model_info():
             tmp = line.split(" - ")
             model_name = tmp[1].strip()
             case = tmp[2]
-            log_path = "" ## 计划在RESULT中加上日志地址tmp[3]
+            log_path = tmp[3].split(" ")[0].strip() ## 计划在RESULT中加上日志地址tmp[3]
             if model_name in res["timeout_models"]:
                 continue
             if "successfully" in tmp[0]:
                 tag = "success"
+                log_path = ""
                 res["success_cases_num"] += 1
             else:
                 tag = "failed"
+                log_path = upload_log(model_name, log_path, task_env["chain"]) # 上传log到bos
                 res["failed_cases_num"] += 1
             stage = ""
             if "train.py --test-only" in case:
@@ -108,10 +114,26 @@ def get_model_info():
                item["icafe"] = icafe_url
 
 
+def upload_log(model_name, log_path, chain):
+    """
+    日志上传地址：https://paddle-qa.bj.bcebos.com/fullchain_ce_test/${time_stamp}^${REPO}^${CHAIN}^${model_name}^${paddle_commit}^${repo_commit}^${log_path}
+    """
+    cmd = "bash upload_log.sh {} {} {}".format(config_file, log_path, chain)
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        shell=True, universal_newlines=True)
+    out, err = process.communicate()
+    log_path = out.split("\n")[-2]
+    if "paddle-qa.bj.bcebos.com" not in log_path:
+        log_path = ""
+    return log_path
+
+
 def creat_icafe(model, item):
     """TODO
     """
     return ""
+
 
 def write():
     """
@@ -164,7 +186,6 @@ def run():
     """
     """
     get_model_info()
-    #get_env_info()
     print(task_env)
     get_db_info()
     write()

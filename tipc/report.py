@@ -69,7 +69,7 @@ def get_info():
             stage = ""
             if ("train.py --test-only" in case) or ("main.py --test" in case):
                 stage = "eval"
-            elif "train.py" in case) or ("main.py --validat" in case):
+            elif ("train.py" in case) or ("main.py --validat" in case):
                 stage = "train"
             elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case):
                 stage = "dygraph2static"

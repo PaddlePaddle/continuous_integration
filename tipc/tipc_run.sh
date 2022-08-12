@@ -425,7 +425,6 @@ if [ -f "tipc_models_url_${REPO}_${CHAIN}.txt" ];then
     python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt" paddle-qa/fullchain_ce_test/model_download_link
 fi
 
-exit 0
 
 # upload log, create icafe, write result to db
 task_dt=`date +%Y-%m-%d`

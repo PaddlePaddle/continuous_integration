@@ -394,8 +394,6 @@ do
     time=`echo $start $end | awk '{print $2-$1-2}'` #减去sleep
     echo "${config_file} spend time seconds ${time}"
 
-    #  bash -x upload.sh ${config_file} ${mode} ${CHAIN} || echo "upload model error on"`pwd`
-
 
     if [[ "${DEBUG}" == "False" ]]
     then
@@ -417,7 +415,6 @@ then
   python get_pdc_job_result.py pdc_job_id $REPO
 fi
 
-
 # update model_url latest
 if [ -f "tipc_models_url_${REPO}_${CHAIN}.txt" ];then
     date_stamp=`date +%m_%d`
@@ -427,3 +424,21 @@ if [ -f "tipc_models_url_${REPO}_${CHAIN}.txt" ];then
     python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_latest.txt" paddle-qa/fullchain_ce_test/model_download_link
     python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt" paddle-qa/fullchain_ce_test/model_download_link
 fi
+
+exit 0
+
+# upload log, create icafe, write result to db
+task_dt=`date +%Y-%m-%d`
+repo=$1
+repo_branch=`git branch | awk '{print $2}'`
+repo_commit=`git log | head -1 | awk '{print $2}'`
+chain=$2
+paddle_whl=$3
+frame_branch=$4
+frame_commit=`python -c 'import paddle; print(paddle.version.commit)'`
+docker_image=$5
+cuda_version=`python -c 'import paddle; print(paddle.version.cuda_version)'`
+cudnn_version=`python -c 'import paddle; print(paddle.version.cudnn_version)'`
+python_version=3.7
+python wirtedb.py $task_dt $repo $repo_branch $repo_commit $chain $paddle_whl $frame_branch $frame_commit $docker_image $cuda_version $cudnn_version $python_version 
+

@@ -6,12 +6,13 @@ REPO=$1
 CHAIN=$2
 PADDLE_WHL=${3:-https://paddle-qa.bj.bcebos.com/develop-gpu-cuda10.1-cudnn7-mkl-gcc8.2/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
 DOCKER_IMAGE=${4:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82}
+CODE_BOS=$5
+FRAME_BRANCH=$6
 DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/develop-gpu-cuda10.1-cudnn7-mkl-gcc8.2/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
 PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxCentos_Gcc82_Cuda10.1_cudnn7.6_trt6015_onort_Py38_Compile_H/latest/paddle_inference.tgz}
-#PADDLE_INFERENCE_TGZ=https://paddle-inference-lib.bj.bcebos.com/2.2.2/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.1_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
 CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1}
 DEBUG=${DEBUG:-False}
@@ -58,6 +59,11 @@ nvidia-docker run -i --rm \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
 
+if [[ ${CHAIN} == "chain_distribution" ]]
+then
+    cd ${REPO}
+    sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS}
+else
 unset http_proxy
 unset https_proxy
 
@@ -152,7 +158,9 @@ cp -r \$REPO_PATH/../continuous_integration/tipc/model_list.py .
 cp \$REPO_PATH/../continuous_integration/tipc/test_export_shell.sh .
 
 
-bash -x tipc_run.sh
+bash -x tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS}
+
+fi
 
 "
 

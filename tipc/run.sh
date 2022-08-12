@@ -41,11 +41,12 @@ then
     cp -r ../continuous_integration/tipc/* .
     cp ${ROOT_PATH}/config.ini .
     cp ${ROOT_PATH}/pdc.sh .
-    sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} 
+    sh tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} 
     cd ..
 else
-    sh tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE}
+    sh tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH}
 fi
+
 
 cd $REPO
 log_file="RESULT"
@@ -55,6 +56,7 @@ done
 cp ../continuous_integration/tipc/checkout_result.sh ./
 cp ../continuous_integration/tipc/report.py ./
 python report.py ${REPO} ${CHAIN} ${SENDER} ${RECVIER} ${MAIL_PROXY}
+
 
 #-------------------------------------------------
 ### baobiao

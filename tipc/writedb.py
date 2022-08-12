@@ -9,6 +9,11 @@ import yaml
 import copy
 import subprocess
 import os
+import requests
+import json
+import re
+
+import icafe_conf
 
 task_env = {
     "task_dt": sys.argv[1],
@@ -82,16 +87,9 @@ def get_model_info():
             model_name = tmp[1].strip()
             case = tmp[2]
             log_path = tmp[3].split(" ")[0].strip() ## 计划在RESULT中加上日志地址tmp[3]
+            icafe_path = ""
             if model_name in res["timeout_models"]:
                 continue
-            if "successfully" in tmp[0]:
-                tag = "success"
-                log_path = ""
-                res["success_cases_num"] += 1
-            else:
-                tag = "failed"
-                log_path = upload_log(model_name, log_path, task_env["chain"]) # 上传log到bos
-                res["failed_cases_num"] += 1
             stage = ""
             if ("train.py --test-only" in case) or ("main.py --test" in case):
                 stage = "eval"
@@ -103,22 +101,32 @@ def get_model_info():
                 stage = "inference"
             else:
                 stage = "inference"
+            if "successfully" in tmp[0]:
+                tag = "success"
+                res["success_cases_num"] += 1
+                log_path = ""
+            else:
+                tag = "failed"
+                res["failed_cases_num"] += 1
+                # upload log to bos
+                log_path = upload_log(model_name, log_path, task_env["chain"]) # 上传log到bos
+                # create icafe
+                icafe_params = {"title": "", "detail": "", "repo": "", "rd": ""}
+                icafe_params["title"] = "[auto][tipc][{}]{} {} {} {} 失败".format(task_env["task_dt"], task_env["repo"], task_env["chain"], model_name, stage)
+                icafe_params["detail"] = "套件：{}\r\n链条：{}\r\n模型：{}\r\ncase：{}\r\n日志：{}".format(task_env["repo"], task_env["chain"], model_name, case, log_path)
+                icafe_params["repo"] = task_env["repo"]
+                icafe_params["rd"] = icafe_conf.RD[task_env["repo"]]
+                icafe_path = create_icafe(icafe_params)
             if model_name not in res["models_status"].keys():
                 res["models_status"].setdefault(model_name, [])
             res["models_status"][model_name].append({"status": tag, "case": case, "stage": stage, "icafe": "", "log": log_path})
-
-    for model, infos in res["models_status"].items():
-        for item in infos:
-            if item["status"] == "failed":
-               icafe_url = creat_icafe(model, item)
-               item["icafe"] = icafe_url
 
 
 def upload_log(model_name, log_path, chain):
     """
     日志上传地址：https://paddle-qa.bj.bcebos.com/fullchain_ce_test/${time_stamp}^${REPO}^${CHAIN}^${model_name}^${paddle_commit}^${repo_commit}^${log_path}
     """
-    cmd = "bash upload_log.sh {} {} {}".format(config_file, log_path, chain)
+    cmd = "bash upload_log.sh {} {} {}".format(model_name, log_path, chain)
     process = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         shell=True, universal_newlines=True)
@@ -129,10 +137,46 @@ def upload_log(model_name, log_path, chain):
     return log_path
 
 
-def creat_icafe(model, item):
-    """TODO
+def create_icafe(icafe_params):
     """
-    return ""
+    失败case创建icafe bug卡片
+    icafe_params:
+        title
+        detail
+        repo
+        rd
+    """
+    icafe_dict = {'username': icafe_conf.ICAFE_USERNAME, 'password': icafe_conf.ICAFE_PASSWORD, 'issues': []}
+    item_dict = {
+         'title': icafe_params['title'],
+         'detail': icafe_params['detail'],
+         'type': 'Bug',
+         'parent': '55012',
+         'fields': {
+            '流程状态': '新建',
+            'auto_tag': 'auto_bug',
+            'repo': icafe_params['repo'],
+            '需求来源': 'QA团队',
+            '负责人': 'zhengya01',
+            'QA负责人': 'zhengya01',
+            'RD负责人': icafe_params['rd'],
+            '负责人所属团队': 'QA团队',
+            'bug发现方式': '模型套件',
+            '优先级': 'P1-严重问题 High',
+        }
+    }
+    icafe_dict['issues'].append(item_dict)
+
+    r = requests.post(icafe_conf.ICAFE_API_NEWCARD_ONLINE, data=json.dumps(icafe_dict))
+    res_json = r.json()
+    icafe_url = ""
+    if res_json["status"] == 200:
+        icafe_url = res_json["issues"][0]["url"]
+    else:
+        print("failed")
+        print(res_json)
+
+    return icafe_url
 
 
 def write():

@@ -58,49 +58,4 @@ cp ../continuous_integration/tipc/report.py ./
 python report.py ${REPO} ${CHAIN} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 
 
-#-------------------------------------------------
-### baobiao
-#cd $REPO
-repo=$REPO
-repo_branch=`git branch | awk '{print $2}'`
-repo_commit=`git log | head -1 | awk '{print $2}'`
-chain=$CHAIN
-paddle_whl=$PADDLE_WHL
-docker_image=$DOCKER_IMAGE
-if [[ $CHAIN == "chain_distribution" ]]
-then
-    docker_image=$DOCKER_IMAGE_PDC
-fi
-#frame_branch: 
-#frame_commit: 需安装确定, 在tipc.sh和distribution.sh中安装后判断，并将结果保存>到本地文件，这里读文件获取
-#cuda: 同frame_commit
-#cudnn： 同frame_commit
-frame_branch=$FRAME_BRANCH
-frame_commit=`head -1 paddle_info`
-cuda=`head -2 paddle_info | tail -1`
-cudnn=`tail -1 paddle_info`
-python=3.7 #只支持3.7
-
-echo $repo
-echo $repo_branch
-echo $repo_commit
-echo $CHAIN
-echo $paddle_whl
-echo $docker_image
-echo $frame_branch
-echo $frame_commit
-echo $cuda
-echo $cudnn
-echo $python
-
-#model 需遍历结果来确定 
-#stag 需遍历结果来确定
-#cmd 需遍历结果来确定
-#status 需遍历结果来确定
-#icafe 需遍历结果来确定,自动创建icafe卡片，返回icafe地址
-#log 需遍历结果来确定
-
-# 结合report.py入库
-
-
 sh checkout_result.sh

@@ -219,7 +219,14 @@ def write():
                          docker_image, cuda_version, cudnn_version, python_version, \
                          model) \
                         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    val = res["timeout_models"]
+    val = []
+    for model in res["timeout_models"]:
+         val.append((task_env["task_dt"],
+                       task_env["repo"], task_env["repo_branch"], task_env["repo_commit"],
+                       task_env["chain"],
+                       task_env["paddle_whl"], task_env["frame_branch"], task_env["frame_commit"],
+                       task_env["docker_image"], task_env["cuda_version"], task_env["cudnn_version"], task_env["python_version"],
+                       model))
     cursor.executemany(sql_str, val)
     db.commit()
 

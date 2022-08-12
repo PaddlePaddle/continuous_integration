@@ -440,5 +440,5 @@ docker_image=$5
 cuda_version=`python -c 'import paddle; print(paddle.version.cuda_version)'`
 cudnn_version=`python -c 'import paddle; print(paddle.version.cudnn_version)'`
 python_version=3.7
-python wirtedb.py $task_dt $repo $repo_branch $repo_commit $chain $paddle_whl $frame_branch $frame_commit $docker_image $cuda_version $cudnn_version $python_version 
+python writedb.py $task_dt $repo $repo_branch $repo_commit $chain $paddle_whl $frame_branch $frame_commit $docker_image $cuda_version $cudnn_version $python_version 
 

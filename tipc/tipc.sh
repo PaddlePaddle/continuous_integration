@@ -59,6 +59,8 @@ nvidia-docker run -i --rm \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
 
+python -m pip install pymysql
+
 if [[ ${CHAIN} == "chain_distribution" ]]
 then
     cd ${REPO}

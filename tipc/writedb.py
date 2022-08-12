@@ -126,7 +126,7 @@ def upload_log(model_name, log_path, chain):
     """
     日志上传地址：https://paddle-qa.bj.bcebos.com/fullchain_ce_test/${time_stamp}^${REPO}^${CHAIN}^${model_name}^${paddle_commit}^${repo_commit}^${log_path}
     """
-    cmd = "bash upload_log.sh {} {} {}".format(model_name, log_path, chain)
+    cmd = "bash upload_log.sh {} {} {} {} {}".format(model_name, log_path, chain, task_env["frame_commit"], task_env["repo_commit"])
     process = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         shell=True, universal_newlines=True)

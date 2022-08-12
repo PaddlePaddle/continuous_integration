@@ -3,6 +3,8 @@
 model_name=$1
 log_path=$2
 CHAIN=$3
+paddle_commit=$4
+repo_commit=$5
 
 # prepare SDK
 push_dir=$PWD
@@ -18,13 +20,6 @@ fi
 
 # get model info
 time_stamp=`date +%Y_%m_%d_%H_%m_%s`
-cd "/workspace/${REPO}"
-repo_commit=`git rev-parse HEAD`
-cd -
-cd /workspace
-# paddle_commit 需通过安装查询 todo
-paddle_commit=`git rev-parse HEAD`
-cd -
 
 # copy log file
 log_file=`echo "${log_path}" | awk -F '/' '{print $NF}'`

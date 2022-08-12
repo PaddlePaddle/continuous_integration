@@ -156,6 +156,7 @@ cp \$REPO_PATH/../continuous_integration/tipc/upload.sh .
 cp -r \$REPO_PATH/../continuous_integration/tipc/configs .
 cp -r \$REPO_PATH/../continuous_integration/tipc/model_list.py .
 cp \$REPO_PATH/../continuous_integration/tipc/test_export_shell.sh .
+cp \$REPO_PATH/../continuous_integration/tipc/writedb.py .
 
 
 bash -x tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS}

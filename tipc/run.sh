@@ -35,6 +35,10 @@ wget -q --no-proxy -O $PWD/bce_whl.tar.gz  https://paddle-docker-tar.bj.bcebos.c
 #cp continuous_integration/tipc/tipc.sh .
 #cp continuous_integration/tipc/checkout_result.sh .
 cp -r continuous_integration/tipc/* .
+cd ${REPO}
+cp ${ROOT_PATH}/db_info.yaml ./
+cp ${ROOT_PATH}/icafe_conf.py ./
+cd -
 if [[ ${CHAIN} == "chain_distribution" ]]
 then
     cd ${REPO}

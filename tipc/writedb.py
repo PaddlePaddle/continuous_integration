@@ -237,7 +237,6 @@ def run():
     """
     """
     get_model_info()
-    print(task_env)
     get_db_info()
     write()
 

@@ -116,7 +116,7 @@ def get_model_info():
                 icafe_params["detail"] = "套件：{}\r\n链条：{}\r\n模型：{}\r\ncase：{}\r\n日志：{}".format(task_env["repo"], task_env["chain"], model_name, case, log_path)
                 icafe_params["repo"] = task_env["repo"]
                 icafe_params["rd"] = icafe_conf.RD[task_env["repo"]]
-                icafe_path = create_icafe(icafe_params)
+                ##icafe_path = create_icafe(icafe_params)
             if model_name not in res["models_status"].keys():
                 res["models_status"].setdefault(model_name, [])
             res["models_status"][model_name].append({"status": tag, "case": case, "stage": stage, "icafe": "", "log": log_path})

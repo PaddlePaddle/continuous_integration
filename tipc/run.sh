@@ -45,8 +45,8 @@ then
     cp -r ../continuous_integration/tipc/* .
     cp ${ROOT_PATH}/config.ini .
     cp ${ROOT_PATH}/pdc.sh .
-    sh tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} 
     cd ..
+    sh tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} 
 else
     sh tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH}
 fi

@@ -33,6 +33,8 @@ if [[ $REPO == PaddleOCR ]]; then
   git clone https://github.com/zhengya01/PaddleOCR.git -b tipc_log
 elif [[ $REPO == PaddleDetection ]]; then
   git clone https://github.com/zhengya01/PaddleDetection.git -b tipc_log
+elif [[ $REPO == PaddleSeg ]]; then
+  git clone https://github.com/zhengya01/PaddleSeg.git -b tipc_log
 else
   git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
 fi

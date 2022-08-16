@@ -46,9 +46,9 @@ then
     cp ${ROOT_PATH}/config.ini .
     cp ${ROOT_PATH}/pdc.sh .
     cd ..
-    sh tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} 
+    bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} 
 else
-    sh tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH}
+    bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH}
 fi
 
 
@@ -62,4 +62,4 @@ cp ../continuous_integration/tipc/report.py ./
 python report.py ${REPO} ${CHAIN} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 
 
-sh checkout_result.sh
+bash checkout_result.sh

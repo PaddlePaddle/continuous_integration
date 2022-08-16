@@ -353,7 +353,7 @@ do
     PADDLE_WHL=$3
     DOCKER_IMAGE=$4
     CODE_BOS=$5
-    sh pdc.sh ${JOB_NAME} ${REPO} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} $config_file ${mode} ${time_out} >log.pdc 2>&1
+    bash pdc.sh ${JOB_NAME} ${REPO} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} $config_file ${mode} ${time_out} >log.pdc 2>&1
     pdc_job_id=`cat log.pdc | grep "jobId = job-" | awk -F ',' '{print $1}' | awk -F '= ' '{print $2}'`
     # todo 判断pdc任务是否提交成功
     echo ${model_name},${pdc_job_id} >> pdc_job_id

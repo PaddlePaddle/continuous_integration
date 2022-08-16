@@ -59,13 +59,6 @@ nvidia-docker run -i --rm \
                   ${DOCKER_IMAGE} \
                   /bin/bash -c -x "
 
-python -m pip install pymysql
-
-if [[ ${CHAIN} == "chain_distribution" ]]
-then
-    cd ${REPO}
-    sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS}
-else
 unset http_proxy
 unset https_proxy
 
@@ -85,6 +78,14 @@ export TF=${TF:-False}
 export http_proxy=
 export https_proxy=
 echo $http_proxy $https_proxy
+
+python -m pip install pymysql
+
+if [[ ${CHAIN} == "chain_distribution" ]]
+then
+    cd ${REPO}
+    sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS}
+else
 python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
 python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 cd ./AutoLog

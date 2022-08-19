@@ -80,6 +80,14 @@ fi
 if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp
 fi
+if [[ $REPO == "PaddleVideo" ]]; then
+    python -m pip install --retries 10 paddlenlp
+    python -m pip install --retries 10 SimpleITK
+    python -m pip install --retries 10 lmdb
+fi
+if [[ $REPO == "PaddleClas" ]]; then
+    python -m pip install --retries 10 paddleclas
+fi
 cp ${REPO_PATH}/../continuous_integration/tipc/upload.sh .
 
 export FLAGS_selected_gpus=0,1

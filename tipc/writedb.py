@@ -87,13 +87,18 @@ def get_model_info():
             model_name = tmp[1].strip()
             case = tmp[2]
             log_path = tmp[3].split(" ")[0].strip() ## 计划在RESULT中加上日志地址tmp[3]
-            icafe_path = ""
+            icafe_url = ""
+            icafe_createtime = None
+            icafe_sequence = 0
+            icafe_title = ""
+            icafe_status = ""
+            icafe_rd = ""
             if model_name in res["timeout_models"]:
                 continue
             stage = ""
             if ("train.py --test-only" in case) or ("main.py --test" in case):
                 stage = "eval"
-            elif ("train.py" in case) or ("main.py --validat" in case):
+            elif ("train.py" in case) or ("main.py --validat" in case) or ("train_copy.py" in case):
                 stage = "train"
             elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case):
                 stage = "dygraph2static"
@@ -116,10 +121,11 @@ def get_model_info():
                 icafe_params["detail"] = "套件：{}\r\n链条：{}\r\n模型：{}\r\ncase：{}\r\n日志：{}".format(task_env["repo"], task_env["chain"], model_name, case, log_path)
                 icafe_params["repo"] = task_env["repo"]
                 icafe_params["rd"] = icafe_conf.RD[task_env["repo"]]
-                ##icafe_path = create_icafe(icafe_params)
+                icafe_url, icafe_createtime, icafe_sequence, icafe_title, icafe_status = create_icafe(icafe_params)
+                icafe_rd = icafe_params["rd"]
             if model_name not in res["models_status"].keys():
                 res["models_status"].setdefault(model_name, [])
-            res["models_status"][model_name].append({"status": tag, "case": case, "stage": stage, "icafe": "", "log": log_path})
+            res["models_status"][model_name].append({"status": tag, "case": case, "stage": stage, "icafe_url": icafe_url, "icafe_status": icafe_status, "icafe_createtime": icafe_createtime, "icafe_rd": icafe_rd, "icafe_sequence": icafe_sequence, "icafe_title": icafe_title, "log": log_path})
 
 
 def upload_log(model_name, log_path, chain):
@@ -168,15 +174,23 @@ def create_icafe(icafe_params):
     icafe_dict['issues'].append(item_dict)
 
     r = requests.post(icafe_conf.ICAFE_API_NEWCARD_ONLINE, data=json.dumps(icafe_dict))
+    print(r)
     res_json = r.json()
     icafe_url = ""
+    icafe_createtime = None
+    icafe_sequence = ""
+    icafe_title = ""
+    icafe_status = ""
     if res_json["status"] == 200:
         icafe_url = res_json["issues"][0]["url"]
+        icafe_sequence = res_json["issues"][0]["sequence"]
+        icafe_title = res_json["issues"][0]["title"]
+        icafe_status = "新建"
     else:
         print("failed")
         print(res_json)
 
-    return icafe_url
+    return icafe_url, icafe_createtime, icafe_sequence, icafe_title, icafe_status
 
 
 def write():
@@ -196,8 +210,8 @@ def write():
                          chain, \
                          paddle_whl, frame_branch, frame_commit, \
                          docker_image, cuda_version, cudnn_version, python_version, \
-                         model, stage, cmd, status, icafe, log) \
-                        values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                         model, stage, cmd, status, icafe_url, log, icafe_status, icafe_createtime, icafe_rd, icafe_sequence, icafe_title) \
+                        values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     val = []
     for model, infos in res["models_status"].items():
         for item in infos:
@@ -206,7 +220,7 @@ def write():
                        task_env["chain"],
                        task_env["paddle_whl"], task_env["frame_branch"], task_env["frame_commit"],
                        task_env["docker_image"], task_env["cuda_version"], task_env["cudnn_version"], task_env["python_version"],
-                       model, item["stage"], item["case"], item["status"], item["icafe"], item["log"]))
+                       model, item["stage"], item["case"], item["status"], item["icafe_url"], item["log"], item["icafe_status"], item["icafe_createtime"], item["icafe_rd"], item["icafe_sequence"], item["icafe_title"]))
     cursor.executemany(sql_str, val)
     db.commit()
 

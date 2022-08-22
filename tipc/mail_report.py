@@ -476,7 +476,7 @@ def create_table_week(total_res, icafe_res):
     return subject, content
 
 
-def report_day():
+def report_day(sender, reciver, proxy):
     """
     天级报告
     """
@@ -484,7 +484,7 @@ def report_day():
     task_dt = "2022-08-19"
     total_res, fail_case, timeout_model, task_env = select_data_day(task_dt)
     subject, content = create_table_day(total_res, fail_case, timeout_model, task_env, task_dt)
-    mail("tipc_test@baidu.com", "zhengya01@baidu.com", subject, content, "proxy-in.baidu.com")
+    mail(sender, reciver, subject, content, proxy)
 
 
 def report_week():
@@ -494,9 +494,12 @@ def report_week():
     get_db_info()
     total_res, icafe_res = select_data_week()
     subject, content = create_table_week(total_res, icafe_res)
-    mail("tipc_test@baidu.com", "zhengya01@baidu.com", subject, content, "proxy-in.baidu.com")
+    mail(sender, reciver, subject, content, proxy)
 
 
 if __name__ == "__main__":
     #report_day()
-    report_week()
+    sender=sys.argv[1]
+    reciver=sys.argv[2]
+    proxy=sys.argv[3]
+    report_week(sender, reciver, proxy)

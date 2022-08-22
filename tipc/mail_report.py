@@ -287,6 +287,7 @@ def select_data_week():
         _icafe_rd = item[21]
         _icafe_sequence = item[22]
         _icafe_title = item[23]
+        _log = item[11]
         if _icafe_status not in ["关闭", "测试完成"]:
             # 查询卡片，更新_icafe_status, _icafe_createtime
             # 查询 http://hetu.baidu.com/api/platform/api/show?apiId=540&platformId=1615
@@ -294,16 +295,16 @@ def select_data_week():
             if icafe_info["code"] == 200:
                 _icafe_status = icafe_info["cards"][0]["status"]
                 _icafe_createtime = icafe_info["cards"][0]["createdTime"]
-            # 同步更新_icafe_status, _icafe_createtime到数据库
-            if _icafe_status in ["关闭", "测试完成"]:
+                # 同步更新_icafe_status, _icafe_createtime到数据库
                 update_icafe_info(_id, _icafe_status, _icafe_createtime)
-            else:
+            if _icafe_status not in ["关闭", "测试完成"]:
                 icafe_res["fix"] += 1
         if _icafe_status not in ["关闭", "测试完成"]:
             _fixed = "否"
         else:
             _fixed = "是"
-        icafe_res["case"].append([_icafe_url, _icafe_createtime, _icafe_rd, _fixed])
+        
+        icafe_res["case"].append([_icafe_url, _icafe_createtime, _icafe_rd, _fixed, _log])
 
     return total_res, icafe_res
 
@@ -412,7 +413,7 @@ def create_table_week(total_res, icafe_res):
     #table1
     content += """
         <table border="1" align=center>
-        <caption bgcolor="#989898">整体结果汇总</caption>
+        <caption bgcolor="#989898">本周整体结果汇总</caption>
     """
     _chain = "[" + str(len(total_res["chain_list"])) + "个] " + ", ".join(total_res["chain_list"])
     _repo = "[" + str(len(total_res["repo_list"])) + "个] " + ", ".join(total_res["repo_list"])
@@ -446,18 +447,21 @@ def create_table_week(total_res, icafe_res):
         <table border="1" align=center>
         <caption bgcolor="#989898">失败case列表</caption>
     """
+    #content += """
+    #    <caption bgcolor="#989898">总计: {}个</caption>
+    #    <caption bgcolor="#989898">本周新增: {}个</caption>
+    #    <caption bgcolor="#989898">待修复: {}个</caption>
+    #""".format(icafe_res["total"], icafe_res["week_new"], icafe_res["fix"])
     content += """
-        <caption bgcolor="#989898">总计: {}个</caption>
-        <caption bgcolor="#989898">本周新增: {}个</caption>
-        <caption bgcolor="#989898">待修复: {}个</caption>
+       <tr><td>总计: {}个<br>本周新增: {}个<br>待修复: {}个<br></td></tr>
     """.format(icafe_res["total"], icafe_res["week_new"], icafe_res["fix"])
     content += """
-        <tr><td>icafe地址</td><td>创建时间</td><td>rd负责人</td><td>是否修复</td></tr>
+        <tr><td>icafe地址</td><td>创建时间</td><td>rd负责人</td><td>是否修复</td><td>原始log</td></tr>
     """
     for item in icafe_res["case"]:
         content += """
-            <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr> 
-        """.format(item[0], item[1], item[2], item[3])
+            <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr> 
+        """.format(item[0], item[1], item[2], item[3], item[4])
     content += """
         </table>
         <br><br>

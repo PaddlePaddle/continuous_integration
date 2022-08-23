@@ -53,7 +53,4 @@ else
     bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 fi
 
-
-
-
 bash checkout_result.sh

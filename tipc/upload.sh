@@ -3,6 +3,8 @@
 config_file=$1
 mode=$2
 CHAIN=$3
+repo_commit=$4
+paddle_commit=$5
 
 # skip other modes
 if [ ${mode} != "lite_train_lite_infer" ]; then
@@ -24,13 +26,6 @@ fi
 
 # get model info
 time_stamp=`date +%Y_%m_%d`
-cd "/workspace/${REPO}"
-repo_commit=`git rev-parse HEAD`
-cd -
-cd /workspace
-# paddle_commit 需通过安装查询 todo
-paddle_commit=`git rev-parse HEAD`
-cd -
 model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | head -n 1`
 echo ${model_name}
 output_dir="test_tipc/output/${model_name}/${mode}"

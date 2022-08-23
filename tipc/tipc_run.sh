@@ -1,5 +1,21 @@
 #! /bin/bash
 
+task_dt=`date +%Y-%m-%d`
+repo=$1
+repo_branch=`git branch | awk '{print $2}'`
+repo_commit=`git log | head -1 | awk '{print $2}'`
+chain=$2
+paddle_whl=$3
+frame_branch=$4
+frame_commit=`python -c 'import paddle; print(paddle.version.commit)'`
+docker_image=$5
+cuda_version=`python -c 'import paddle; print(paddle.version.cuda_version)'`
+cudnn_version=`python -c 'import paddle; print(paddle.version.cudnn_version)'`
+python_version=3.7
+sender=$7
+reciver=$8
+mail_proxy=$9
+
 function func_parser_key(){
     strs=$1
     IFS=":"
@@ -397,7 +413,7 @@ do
 
     if [[ "${DEBUG}" == "False" ]]
     then
-      bash -x upload.sh ${config_file} ${mode} ${CHAIN} || echo "upload model error on"`pwd`
+      bash -x upload.sh ${config_file} ${mode} ${CHAIN} $repo_commit $frame_commit || echo "upload model error on"`pwd`
     fi
     if [[ $REPO != PaddleSeg ]]
     then
@@ -425,21 +441,6 @@ for f in `find . -name '*.log'`; do
 done
 
 # upload log, create icafe, write result to db
-task_dt=`date +%Y-%m-%d`
-repo=$1
-repo_branch=`git branch | awk '{print $2}'`
-repo_commit=`git log | head -1 | awk '{print $2}'`
-chain=$2
-paddle_whl=$3
-frame_branch=$4
-frame_commit=`python -c 'import paddle; print(paddle.version.commit)'`
-docker_image=$5
-cuda_version=`python -c 'import paddle; print(paddle.version.cuda_version)'`
-cudnn_version=`python -c 'import paddle; print(paddle.version.cudnn_version)'`
-python_version=3.7
-sender=$7
-reciver=$8
-mail_proxy=$9
 python report.py ${REPO} ${CHAIN} ${sender} ${reciver} ${mail_proxy}
 #python writedb.py $task_dt $repo $repo_branch $repo_commit $chain $paddle_whl $frame_branch $frame_commit $docker_image $cuda_version $cudnn_version $python_version 
 

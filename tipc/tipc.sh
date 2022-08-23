@@ -8,6 +8,9 @@ PADDLE_WHL=${3:-https://paddle-qa.bj.bcebos.com/develop-gpu-cuda10.1-cudnn7-mkl-
 DOCKER_IMAGE=${4:-registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82}
 CODE_BOS=$5
 FRAME_BRANCH=$6
+SENDER=$7
+RECVIER=$8
+MAIL_PROXY=$9
 DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE_Release/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Debug_GpuAll_LinuxUbuntu_Gcc82_Cuda10.1_Trton_Py37_Compile_H_DISTRIBUTE/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
@@ -79,15 +82,17 @@ export http_proxy=
 export https_proxy=
 echo $http_proxy $https_proxy
 
+python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 python -m pip install pymysql
+wget -q --no-proxy ${PADDLE_WHL}
+python -m pip install ./\`basename ${PADDLE_WHL}\`
 
 if [[ ${CHAIN} == "chain_distribution" ]]
 then
     cd ${REPO}
-    bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS}
+    bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else
-python -m pip install --retries 50 --upgrade pip -i https://mirror.baidu.com/pypi/simple
-python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 cd ./AutoLog
 python -m pip install --retries 10 -r requirements.txt
 python setup.py bdist_wheel
@@ -131,8 +136,6 @@ python -c 'from visualdl import LogWriter'
 #python setup.py install
 #cd ..
 python -m pip install --retries 10 -r requirements.txt
-wget -q --no-proxy ${PADDLE_WHL}
-python -m pip install ./\`basename ${PADDLE_WHL}\`
 
 if [[ $REPO == "PaddleSeg" ]]; then
     pip install -e .
@@ -166,7 +169,7 @@ cp \$REPO_PATH/../continuous_integration/tipc/writedb.py .
 cp \$REPO_PATH/../continuous_integration/tipc/upload_log.sh .
 
 
-bash -x tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS}
+bash -x tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 
 fi
 

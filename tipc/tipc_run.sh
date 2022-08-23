@@ -413,18 +413,16 @@ then
   export http_proxy=
   export https_proxy=
   python get_pdc_job_result.py pdc_job_id $REPO
+  #python get_pdc_job_log.py $REPO
+  
+  
 fi
 
-# update model_url latest
-if [ -f "tipc_models_url_${REPO}_${CHAIN}.txt" ];then
-    date_stamp=`date +%m_%d`
-    push_file=./bce-python-sdk-0.8.27/BosClient.py
-    cp "tipc_models_url_${REPO}_${CHAIN}.txt" "tipc_models_url_${REPO}_${CHAIN}_latest.txt"
-    cp "tipc_models_url_${REPO}_${CHAIN}.txt" "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt"
-    python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_latest.txt" paddle-qa/fullchain_ce_test/model_download_link
-    python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt" paddle-qa/fullchain_ce_test/model_download_link
-fi
-
+# get cmd RESULT
+log_file="RESULT"
+for f in `find . -name '*.log'`; do
+   cat $f | grep "with command" >> $log_file
+done
 
 # upload log, create icafe, write result to db
 task_dt=`date +%Y-%m-%d`
@@ -439,5 +437,20 @@ docker_image=$5
 cuda_version=`python -c 'import paddle; print(paddle.version.cuda_version)'`
 cudnn_version=`python -c 'import paddle; print(paddle.version.cudnn_version)'`
 python_version=3.7
+sender=$6
+reciver=$7
+mail_proxy=$8
+python report.py ${REPO} ${CHAIN} ${sender} ${reciver} ${mail_proxy}
 #python writedb.py $task_dt $repo $repo_branch $repo_commit $chain $paddle_whl $frame_branch $frame_commit $docker_image $cuda_version $cudnn_version $python_version 
+
+
+# update model_url latest
+if [ -f "tipc_models_url_${REPO}_${CHAIN}.txt" ];then
+    date_stamp=`date +%m_%d`
+    push_file=./bce-python-sdk-0.8.27/BosClient.py
+    cp "tipc_models_url_${REPO}_${CHAIN}.txt" "tipc_models_url_${REPO}_${CHAIN}_latest.txt"
+    cp "tipc_models_url_${REPO}_${CHAIN}.txt" "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt"
+    python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_latest.txt" paddle-qa/fullchain_ce_test/model_download_link
+    python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt" paddle-qa/fullchain_ce_test/model_download_link
+fi
 

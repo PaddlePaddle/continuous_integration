@@ -38,6 +38,8 @@ cp -r continuous_integration/tipc/* .
 cd ${REPO}
 cp ${ROOT_PATH}/db_info.yaml ./
 cp ${ROOT_PATH}/icafe_conf.py ./
+cp ../continuous_integration/tipc/checkout_result.sh ./
+cp ../continuous_integration/tipc/report.py ./
 cd -
 if [[ ${CHAIN} == "chain_distribution" ]]
 then
@@ -46,20 +48,12 @@ then
     cp ${ROOT_PATH}/config.ini .
     cp ${ROOT_PATH}/pdc.sh .
     cd ..
-    bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} 
+    bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}  
 else
-    bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH}
+    bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 fi
 
 
-cd $REPO
-log_file="RESULT"
-for f in `find . -name '*.log'`; do
-   cat $f | grep "with command" >> $log_file
-done
-cp ../continuous_integration/tipc/checkout_result.sh ./
-cp ../continuous_integration/tipc/report.py ./
-python report.py ${REPO} ${CHAIN} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 
 
 bash checkout_result.sh

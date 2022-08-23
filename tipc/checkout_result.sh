@@ -11,14 +11,14 @@ if [[ -f TIMEOUT ]];then
   if [ $timeout_number -ne $zero ];then
       #echo "[TIMEOUT] There are $timeout_number models timeout:"
       #cat TIMEOUT
-      EXIT_CODE=8
+      EXIT_CODE=1
   fi
 fi
 
 log_file=RESULT
 if [[ ! -f ${log_file} ]];then
   #echo "[ERROR] ${log_file} not exist, all test cases may fail, please check CI task log"
-  EXIT_CODE=8
+  EXIT_CODE=2
 else
   number_lines=$(cat ${log_file} | wc -l)
   failed_line=$(grep -o "Run failed with command" ${log_file}|wc -l)
@@ -27,7 +27,7 @@ else
           echo "[ERROR] There are $number_lines results, but failed number of tests is $failed_line."
           echo "The Following Tests Failed: "
           cat ${log_file} | grep "Run failed with command"
-          EXIT_CODE=8
+          EXIT_CODE=3
   else
           echo "[SUCCEED] There are $number_lines results, all tipc ${CHAIN} command succeed!"
           
@@ -37,6 +37,7 @@ fi
 echo -e "========================================================"
 echo " "
 echo "Paddle TIPC Tests Finished."
+echo ${EXIT_CODE}
 exit ${EXIT_CODE}
 
 

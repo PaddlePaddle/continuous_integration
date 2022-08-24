@@ -6,6 +6,7 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 from email.header    import Header
+import datetime
 
 import icafe_conf
 
@@ -55,8 +56,15 @@ def get_icafe_info(icafe_sequence):
     get_data = "/{}?".format(icafe_sequence)
     get_data += "&u={}".format(icafe_conf.ICAFE_USERNAME)
     get_data += "&pw={}".format(icafe_conf.ICAFE_PASSWORD)
-    content = requests.get(icafe_conf.ICAFE_API_GETCARD_ONLINE+get_data)
-    return content.json()
+    res = None
+    count = 3
+    while count > 0:
+        count -= 1 
+        content = requests.get(icafe_conf.ICAFE_API_GETCARD_ONLINE+get_data)
+        if content.status_code == 200:
+            res = content.json()
+            break
+    return res
 
 
 def update_icafe_info(id, icafe_status, icafe_createtime):
@@ -292,11 +300,14 @@ def select_data_week():
             # 查询卡片，更新_icafe_status, _icafe_createtime
             # 查询 http://hetu.baidu.com/api/platform/api/show?apiId=540&platformId=1615
             icafe_info = get_icafe_info(_icafe_sequence)
+            if icafe_info == None:
+                break
             if icafe_info["code"] == 200:
                 _icafe_status = icafe_info["cards"][0]["status"]
                 _icafe_createtime = icafe_info["cards"][0]["createdTime"]
                 # 同步更新_icafe_status, _icafe_createtime到数据库
-                update_icafe_info(_id, _icafe_status, _icafe_createtime)
+                if (_icafe_status != item[19]) or (_icafe_createtime != item[20]):
+                    update_icafe_info(_id, _icafe_status, _icafe_createtime)
             if _icafe_status not in ["关闭", "测试完成"]:
                 icafe_res["fix"] += 1
         if _icafe_status not in ["关闭", "测试完成"]:
@@ -313,7 +324,6 @@ def create_table_day(total_res, fail_case, timeout_model, task_env, task_dt):
     """
     table html
     """
-    print(total_res)
     subject = "[TICP]{}执行结果".format(task_dt)
     content = """
         <html>
@@ -347,34 +357,36 @@ def create_table_day(total_res, fail_case, timeout_model, task_env, task_dt):
     """
 
     #table2
-    content += """
-        <table border="1" align=center>
-        <caption bgcolor="#989898">失败case列表</caption>
-        <tr><td>链条</td><td>套件</td><td>模型</td><td>case</td><td>icafe</td></tr>
-    """
-    for item in fail_case:
+    if len(fail_case) > 0:
         content += """
-            <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>
-        """.format(item[0], item[1], item[2], item[3], item[4])
-    content += """
-        </table>
-        <br><br>
-    """
+            <table border="1" align=center>
+            <caption bgcolor="#989898">失败case列表</caption>
+            <tr><td>链条</td><td>套件</td><td>模型</td><td>case</td><td>icafe</td></tr>
+        """
+        for item in fail_case:
+            content += """
+                <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>
+            """.format(item[0], item[1], item[2], item[3], item[4])
+        content += """
+            </table>
+            <br><br>
+        """
 
     #table3
-    content += """
-        <table border="1" align=center>
-        <caption bgcolor="#989898">超时模型列表</caption>
-        <tr><td>链条</td><td>套件</td><td>模型</td></tr>
-    """
-    for item in timeout_model:
+    if len(timeout_model) > 0:
         content += """
-            <tr><td>{}</td><td>{}</td><td>{}</td></tr>
-        """.format(item[0], item[1], item[2])
-    content += """
-        </table>
-        <br><br>
-    """
+            <table border="1" align=center>
+            <caption bgcolor="#989898">超时模型列表</caption>
+            <tr><td>链条</td><td>套件</td><td>模型</td></tr>
+        """
+        for item in timeout_model:
+            content += """
+                <tr><td>{}</td><td>{}</td><td>{}</td></tr>
+            """.format(item[0], item[1], item[2])
+        content += """
+            </table>
+            <br><br>
+        """
 
     #table4
     content += """
@@ -481,13 +493,13 @@ def report_day(sender, reciver, proxy):
     天级报告
     """
     get_db_info()
-    task_dt = "2022-08-19"
+    task_dt = datetime.date.today()
     total_res, fail_case, timeout_model, task_env = select_data_day(task_dt)
     subject, content = create_table_day(total_res, fail_case, timeout_model, task_env, task_dt)
     mail(sender, reciver, subject, content, proxy)
 
 
-def report_week():
+def report_week(sender, reciver, proxy):
     """
     周级报告
     """
@@ -502,4 +514,4 @@ if __name__ == "__main__":
     sender=sys.argv[1]
     reciver=sys.argv[2]
     proxy=sys.argv[3]
-    report_week(sender, reciver, proxy)
+    report_day(sender, reciver, proxy)

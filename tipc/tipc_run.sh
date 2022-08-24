@@ -373,6 +373,7 @@ do
     pdc_job_id=`cat log.pdc | grep "jobId = job-" | awk -F ',' '{print $1}' | awk -F '= ' '{print $2}'`
     # todo 判断pdc任务是否提交成功
     echo ${model_name},${pdc_job_id} >> pdc_job_id
+    mkdir -p test_tipc/output/${model_name}/${mode}
   else
     start=`date +%s`
     echo "==START=="$config_file

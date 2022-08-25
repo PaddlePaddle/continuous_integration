@@ -97,6 +97,7 @@ then
     cd paddlecloud-cli
     python setup.py install
     cat pdc_conf.ini > ~/.paddlecli/config 
+    cd -
     bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else
 cd ./AutoLog

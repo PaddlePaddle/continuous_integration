@@ -98,7 +98,7 @@ then
     python setup.py install
     cd -
     cat pdc_conf.ini > ~/.paddlecli/config 
-    sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
+    bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else
 cd ./AutoLog
 python -m pip install --retries 10 -r requirements.txt

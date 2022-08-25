@@ -97,8 +97,9 @@ then
     cd paddlecloud-cli
     python setup.py install
     cat pdc_conf.ini > ~/.paddlecli/config 
-    echo 'export PATH=~/.local/bin:$PATH' >> ~/.bashrc
-    source ~/.bashrc
+    #echo 'export PATH=~/.local/bin:$PATH' >> ~/.bashrc
+    #source ~/.bashrc
+    export PATH=~/.local/bin:$PATH
     cd -
     sh tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else

@@ -47,6 +47,7 @@ then
     cp -r ../continuous_integration/tipc/* .
     cp ${ROOT_PATH}/config.ini .
     cp ${ROOT_PATH}/pdc.sh .
+    cp ${ROOT_PATH}/pdc_conf.ini ./
     cd ..
     bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}  
 else

@@ -91,6 +91,12 @@ python -m pip install ./\`basename ${PADDLE_WHL}\`
 if [[ ${CHAIN} == "chain_distribution" ]]
 then
     cd ${REPO}
+    ## 拉取pdc安装包 , 安装pdc client
+    wget -q --no-proxy https://paddle-qa.bj.bcebos.com/fullchain_test/tools/paddlecloud-cli.tar.gz
+    tar -zxf paddlecloud-cli.tar.gz
+    cd paddlecloud-cli
+    python setup.py install
+    cat pdc_conf.ini > ~/.paddlecli/config 
     bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else
 cd ./AutoLog

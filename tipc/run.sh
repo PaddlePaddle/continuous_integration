@@ -49,7 +49,7 @@ then
     cp ${ROOT_PATH}/pdc.sh .
     cp ${ROOT_PATH}/pdc_conf.ini .
     cd ..
-    bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE_PDC} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}  
+    bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}  
 else
     bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 fi

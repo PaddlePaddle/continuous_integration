@@ -367,7 +367,7 @@ do
     JOB_NAME=tipc-${model_name}-${mode}
     JOB_NAME=`echo ${JOB_NAME//./_}`
     PADDLE_WHL=$3
-    DOCKER_IMAGE=$4
+    DOCKER_IMAGE="registry.baidu.com/paddlecloud/base-images:paddlecloud-ubuntu18.04-gcc8.2-cuda11.0-cudnn8"
     CODE_BOS=$5
     bash pdc.sh ${JOB_NAME} ${REPO} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} $config_file ${mode} ${time_out} >log.pdc 2>&1
     pdc_job_id=`cat log.pdc | grep "jobId = job-" | awk -F ',' '{print $1}' | awk -F '= ' '{print $2}'`

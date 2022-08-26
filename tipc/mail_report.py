@@ -7,8 +7,10 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header    import Header
 import datetime
+import time
 
 import icafe_conf
+import mail_conf
 
 
 db_info = {
@@ -64,6 +66,7 @@ def get_icafe_info(icafe_sequence):
         if content.status_code == 200:
             res = content.json()
             break
+        time.sleep(5)
     return res
 
 
@@ -300,8 +303,9 @@ def select_data_week():
             # 查询卡片，更新_icafe_status, _icafe_createtime
             # 查询 http://hetu.baidu.com/api/platform/api/show?apiId=540&platformId=1615
             icafe_info = get_icafe_info(_icafe_sequence)
+            time.sleep(5)
             if icafe_info == None:
-                break
+                continue
             if icafe_info["code"] == 200:
                 _icafe_status = icafe_info["cards"][0]["status"]
                 _icafe_createtime = icafe_info["cards"][0]["createdTime"]
@@ -509,9 +513,16 @@ def report_week(sender, reciver, proxy):
     mail(sender, reciver, subject, content, proxy)
 
 
+def run(mode):
+    sender = mail_conf.SENDER
+    reciver = mail_conf.RECIVER
+    proxy = mail_conf.PROXY
+    if mode == "day":
+        report_day(sender, reciver, proxy)
+    if mode == "week":
+        report_week(sender, reciver, proxy)
+
 if __name__ == "__main__":
     #report_day()
-    sender=sys.argv[1]
-    reciver=sys.argv[2]
-    proxy=sys.argv[3]
-    report_day(sender, reciver, proxy)
+    mode=sys.argv[1] 
+    run(mode)

@@ -83,10 +83,17 @@ def relative_link_check(file_path):
     regex = r"\[.*?\]\((.*?)\)"
     link_list = re.findall(regex, data)
 
+    reg_a_label = r'<a name="(.*?)"> *</a>'
+    a_label_list = re.findall(reg_a_label, data)
+
     relative_links = []
+    a_label_links = []
     for link in link_list:
         if link.startswith("http") is False:
-            relative_links.append(link)
+            if "#" in link:
+                a_label_links.append(link)
+            else:
+                relative_links.append(link)
 
     relative_files = [f"{file_dir}/{link}" for link in relative_links]
     for i, file in enumerate(relative_files):
@@ -94,6 +101,24 @@ def relative_link_check(file_path):
             dead_links.append(f"[404 Not Found]:{file_path}:{relative_links[i]}")
         else:
             print(f"{relative_files[i]} check passed")
+
+    for i, link in enumerate(a_label_links):
+        file_name, a_label_name = link.split("#")
+        if file_name:
+            file = f"{file_dir}/{file_name}"
+            if os.path.exists(file) is False:
+                dead_links.append(f"[404 Not Found]:{file_path}:{a_label_links[i]}")
+                a_labels = []
+            else:
+                with open(f"{file_dir}/{file_name}", "r") as f:
+                    a_labels = re.findall(reg_a_label, f.read())
+        else:
+            a_labels = a_label_list
+
+        if a_label_name not in a_labels:
+            dead_links.append(f"[404 Not Found]:{file_path}:{a_label_links[i]}")
+        else:
+            print(f"{a_label_links[i]} check passed")
 
     for i in dead_links:
         print(i)

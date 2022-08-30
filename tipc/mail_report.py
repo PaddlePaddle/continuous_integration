@@ -1,3 +1,4 @@
+#coding=utf-8
 import os
 import sys
 import yaml
@@ -119,8 +120,6 @@ def select_data_day(task_dt):
     timeout_model = []
     task_env = {}
 
-    _model_failed = []
-    _model_total = []
     for item in res_case:
         _chain = item[5]
         _repo = item[2]
@@ -138,17 +137,12 @@ def select_data_day(task_dt):
         if _chain not in total_res.keys():
             total_res[_chain] = {}
         if _repo not in total_res[_chain].keys():
-            total_res[_chain][_repo] = {"case": {"success": 0, "failed": 0, "timeout": 0}, "model": {"success": 0, "failed": 0, "timeout": 0}}
+            total_res[_chain][_repo] = {}
+        if _model not in total_res[_chain][_repo].keys():
+            total_res[_chain][_repo][_model] = {"status": "success"}
         if _status == "failed":
              fail_case.append([_chain, _repo, _model, _case, _icafe_url])
-             total_res[_chain][_repo]["case"]["failed"] += 1
-        else:
-             total_res[_chain][_repo]["case"]["success"] += 1
-        _tmp = [_chain, _repo, _model]
-        if _tmp not in _model_total:
-            _model_total.append(_tmp)
-        if (_status == "failed") and (_tmp not in _model_failed):
-            _model_failed.append(_tmp)
+             total_res[_chain][_repo][_model]["status"] = "failed"
         task_env = {
              "frame_branch": _frame_branch,
              "frame_commit": _frame_commit,
@@ -158,8 +152,6 @@ def select_data_day(task_dt):
              "python_version": _python_version,
              "docker_image": _docker_image,
              }
-        total_res[_chain][_repo]["model"]["failed"] = len(_model_failed)
-        total_res[_chain][_repo]["model"]["success"] = len(_model_total) - len(_model_failed)
 
     for item in res_timeout:
         _chain = item[5]
@@ -178,8 +170,9 @@ def select_data_day(task_dt):
         if _chain not in total_res.keys():
             total_res[_chain] = {}
         if _repo not in total_res[_chain].keys():
-            total_res[_chain][_repo] = {"case": {"success": 0, "failed": 0, "timeout": 0}, "model": {"success": 0, "failed": 0, "timeout": 0}}
-        total_res[_chain][_repo]["model"]["timeout"] += 1
+            total_res[_chain][_repo] = {}
+        if _model not in total_res[_chain][_repo].keys():
+            total_res[_chain][_repo][_model] = {"status": "timeout"}
         task_env = {
              "frame_branch": _frame_branch,
              "frame_commit": _frame_commit,
@@ -193,8 +186,25 @@ def select_data_day(task_dt):
     db.commit()
     cursor.close()
     db.close()
-
-    return total_res, fail_case, timeout_model, task_env
+    
+    tongji_res = {}
+    for chain, info in total_res.items():
+        if chain not in tongji_res.keys():
+            tongji_res[chain] = {}
+        for repo, models in info.items():
+            if repo not in tongji_res[chain].keys():
+                tongji_res[chain][repo] = {"success": 0, "failed": 0, "timeout": 0}
+            for model, item in models.items():
+                if item["status"] == "success":
+                    tongji_res[chain][repo]["success"] += 1
+                elif item["status"] == "failed":
+                    tongji_res[chain][repo]["failed"] +=1
+                elif item["status"] == "timeout":
+                    tongji_res[chain][repo]["timeout"] +=1
+                else:
+                    pass
+            
+    return tongji_res, fail_case, timeout_model, task_env
 
 
 def select_data_week():
@@ -324,7 +334,7 @@ def select_data_week():
     return total_res, icafe_res
 
 
-def create_table_day(total_res, fail_case, timeout_model, task_env, task_dt):
+def create_table_day(tongji_res, fail_case, timeout_model, task_env, task_dt):
     """
     table html
     """
@@ -344,14 +354,14 @@ def create_table_day(total_res, fail_case, timeout_model, task_env, task_dt):
     total_success = 0
     total_failed = 0
     total_timeout = 0
-    for chain, infos in total_res.items():
+    for chain, infos in tongji_res.items():
         for repo, item in infos.items():
             content += """
                 <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>
-            """.format(chain, repo, item["model"]["success"], item["model"]["failed"], item["model"]["timeout"])
-            total_success += item["model"]["success"]
-            total_failed += item["model"]["failed"]
-            total_timeout += item["model"]["timeout"]
+            """.format(chain, repo, item["success"], item["failed"], item["timeout"])
+            total_success += item["success"]
+            total_failed += item["failed"]
+            total_timeout += item["timeout"]
     content += """
         <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>
     """.format("总计", "", total_success, total_failed, total_timeout)
@@ -498,6 +508,8 @@ def report_day(sender, reciver, proxy):
     """
     get_db_info()
     task_dt = datetime.date.today()
+    oneday=datetime.timedelta(days=1)
+    task_dt = task_dt - oneday
     total_res, fail_case, timeout_model, task_env = select_data_day(task_dt)
     subject, content = create_table_day(total_res, fail_case, timeout_model, task_env, task_dt)
     mail(sender, reciver, subject, content, proxy)

@@ -102,10 +102,12 @@ if __name__ == '__main__':
     merge_df["QPS_diff(%)"] = merge_df[["QPS", "QPS_last"]].apply(lambda x: (x["QPS"] - x["QPS_last"]) / x["QPS_last"] * 100, axis=1)
     merge_df["cpu_rss_diff(%)"] = merge_df[["cpu_rss(MB)", "cpu_rss(MB)_last"]].apply(lambda x: (x["cpu_rss(MB)_last"] - x["cpu_rss(MB)"]) / x["cpu_rss(MB)"] * 100, axis=1)
     merge_df["cpu_rss_diff(MB)"] = merge_df[["cpu_rss(MB)", "cpu_rss(MB)_last"]].apply(lambda x: x["cpu_rss(MB)_last"] - x["cpu_rss(MB)"], axis=1)
-    merge_df["gpu_used_diff(%)"] = merge_df[["gpu_used(MB)", "gpu_used(MB)_last"]].apply(lambda x: (x["gpu_used(MB)_last"] - x["gpu_used(MB)"]) / x["gpu_used(MB)"] * 100, axis=1)
-    merge_df["gpu_used_diff(MB)"] = merge_df[["gpu_used(MB)", "gpu_used(MB)_last"]].apply(lambda x: x["gpu_used(MB)_last"] - x["gpu_used(MB)"], axis=1)
+    merge_df["gpu_mem_diff(%)"] = merge_df[["gpu_mem(MB)", "gpu_mem(MB)_last"]].apply(lambda x: (x["gpu_mem(MB)_last"] - x["gpu_mem(MB)"]) / x["gpu_mem(MB)"] * 100, axis=1)
+    merge_df["gpu_mem_diff(MB)"] = merge_df[["gpu_mem(MB)", "gpu_mem(MB)_last"]].apply(lambda x: x["gpu_mem(MB)_last"] - x["gpu_mem(MB)"], axis=1)
     print(merge_df)
     merge_df.sort_values(by=["model_name", "batch_size", "trt_precision"], inplace=True)
+    merge_df = merge_df.dropna(subset=["model_name"])
     merge_df.to_excel(args.output_name)
     # postprocess
     set_style(args.output_name)
+

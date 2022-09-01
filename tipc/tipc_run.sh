@@ -138,6 +138,7 @@ then
 #sed -i '193 i ln -s paddle_inference_install_dir paddle_inference' test_tipc/test_inference_cpp.sh
 #sed -i '194 i fi' test_tipc/test_inference_cpp.sh
 sed -i 's#https://github.com/LDOUBLEV/AutoLog.git#https://gitee.com/Double_V/AutoLog#g' deploy/cpp_infer/external-cmake/auto-log.cmake
+sed -i 's#https://github.com/LDOUBLEV/AutoLog.git#https://gitee.com/Double_V/AutoLog#g' test_tipc/prepare.sh
 elif [[ ${REPO} == "PaddleClas" ]]
 then
 sed -i 's#https://github.com/LDOUBLEV/AutoLog.git#https://gitee.com/Double_V/AutoLog#g' deploy/cpp/external-cmake/auto-log.cmake

@@ -4,6 +4,7 @@ BRANCH=${BRANCH:-develop}
 #AGILE_PULL_ID=$3
 #AGILE_REVISION=$4
 ROOT_PATH=${ROOT_PATH:-/home/work/tipc/}
+paddle_package=${paddle_package:-xly-devops/PR/Paddle}
 
 work_dir=${ROOT_PATH}/${REPO}
 mkdir -p ${work_dir}
@@ -24,8 +25,17 @@ cd Paddle
 
 # download test model repo
 git clone --depth=100 https://github.com/LDOUBLEV/AutoLog;
-git clone --depth=100 https://github.com/PaddlePaddle/continuous_integration.git;
-git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
+#git clone --depth=100 https://github.com/PaddlePaddle/continuous_integration.git;
+git clone --depth=100 https://github.com/zhengya01/continuous_integration.git -b v1;
+if [[ $REPO == PaddleOCR ]]; then
+  #git clone https://github.com/huangjun12/PaddleVideo.git -b benchmark-0728 
+  git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
+  #git clone https://github.com/zhengya01/PaddleOCR.git -b tipc_log
+else
+  git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
+fi
+
+
 
 cd ${work_dir}
 tar -zcf ${REPO}.tar.gz Paddle

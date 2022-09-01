@@ -1,0 +1,7 @@
+chain_base:test_train_inference_python.sh:train_infer_python.txt
+chain_infer_cpp:test_inference_cpp.sh:inference_cpp.txt
+chain_serving_cpp:test_serving_infer_cpp.sh:serving_infer_cpp.txt
+chain_serving_python:test_serving_infer_python.sh:serving_infer_python.txt
+chain_paddle2onnx:test_paddle2onnx.sh:paddle2onnx_infer_python.txt
+chain_amp:test_train_inference_python.sh:train_amp_infer_python.txt
+chain_distribution:test_train_inference_python.sh:train_infer_python.txt

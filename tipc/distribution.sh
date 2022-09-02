@@ -51,7 +51,7 @@ fi
 python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro
-python -m pip install --retries 10 opencv-python
+python -m pip install --retries 10 opencv-python --force-reinstall
 python -m pip install --retries 10 wget
 python -m pip install --retries 10 pynvml
 python -m pip install --retries 10 cup
@@ -96,3 +96,4 @@ export FLAGS_START_PORT=17000
 #bash test_tipc/test_train_inference_python.sh test_tipc/configs/mobilenet_v3_small/train_fleet_infer_python.txt lite_train_lite_infer
 bash test_tipc/prepare.sh ${CONFIG_FILE} ${MODE}
 bash test_tipc/test_train_inference_python.sh ${CONFIG_FILE} ${MODE}
+

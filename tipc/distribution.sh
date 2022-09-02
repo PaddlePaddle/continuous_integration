@@ -51,7 +51,7 @@ fi
 python2 -m pip install --retries 10 pycrypto
 python -m pip install --retries 10 Cython
 python -m pip install --retries 10 distro
-python -m pip install --retries 10 opencv-python --force-reinstall
+python -m pip install --retries 10 opencv-python
 python -m pip install --retries 10 wget
 python -m pip install --retries 10 pynvml
 python -m pip install --retries 10 cup
@@ -65,7 +65,7 @@ python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 visualdl
 python -c 'from visualdl import LogWriter'
-python -m pip install --retries 10 -r requirements.txt
+python -m pip install --retries 10 -r requirements.txt --force-reinstall
 wget -q --no-proxy ${PADDLE_WHL}
 #python -m pip install ./\`basename ${PADDLE_WHL}\`
 #python -m pip install paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl 

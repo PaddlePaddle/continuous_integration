@@ -157,7 +157,7 @@ touch TIMEOUT
 touch RESULT
 if [[ $CHAIN == "chain_paddle2onnx" ]]; then
     pip install onnx==1.9.0
-    pip install paddle2onnx==0.9.8
+    pip install paddle2onnx
     pip install onnxruntime
 fi
 

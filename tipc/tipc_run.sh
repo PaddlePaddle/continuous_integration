@@ -431,7 +431,7 @@ then
   export http_proxy=
   export https_proxy=
   python get_pdc_job_result.py pdc_job_id $REPO
-  #python get_pdc_job_log.py $REPO
+  python get_pdc_job_log.py $REPO
   
   
 fi

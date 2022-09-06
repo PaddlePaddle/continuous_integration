@@ -96,6 +96,7 @@ def get_info():
             res["failed_models"].append(model)
         else:
             res["success_num"] += 1
+            res["success_models"].append(model)
     #res["success_num"] = res["total_num"] - res["timeout_num"] - res["failed_num"]
 
 
@@ -106,6 +107,8 @@ def print_result():
     msg += "\n"
     msg += "TOTAL: {} models\n\n".format(str(res["total_num"]))
     msg += "SUCCESS: {} models\n\n".format(str(res["success_num"]))
+    msg += " ".join(res["success_models"])
+    msg += "\n\n"
     msg += "TIMEOUT: {} models:\n".format(str(res["timeout_num"]))
     msg += " ".join(res["timeout_models"])
     msg += "\n\n"
@@ -117,8 +120,8 @@ def print_result():
         #    for item in res["models_status"][model]:
         #        if item["status"] == "failed":
         #            msg += "Failed: {} {} {}\n".format(model, item["stage"], item["case"])
+    msg += "=" * 50
     print(msg)
-    msg = "=" * 50
 
 
 def send_mail(sender_addr, receiver_addr, repo, chain, proxy):

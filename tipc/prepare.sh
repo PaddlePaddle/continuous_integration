@@ -31,7 +31,7 @@ if [[ $REPO == PaddleClas ]]; then
   #git clone https://github.com/huangjun12/PaddleVideo.git -b benchmark-0728 
   #git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
   #git clone https://github.com/zhengya01/PaddleOCR.git -b tipc_log
-  git clone https://github.com/TingquanGao/PaddleClas.git -b tipc_fix_log_path
+  git clone https://github.com/TingquanGao/PaddleClas.git -b dev/tipc_fix_log_path
 else
   git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
 fi

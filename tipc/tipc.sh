@@ -85,7 +85,7 @@ if [[ $REPO == "PaddleRec" ]]; then
 fi
 if [[ $REPO == "PARL" ]]; then
     pip uninstall protobuf -y
-    pip install protobuf=3.19.0
+    pip install protobuf==3.19.0
     export http_proxy=${HTTP_PROXY}
     export https_proxy=${HTTPS_PROXY}
     pip install git+https://github.com/rail-berkeley/d4rl@master#egg=d4rl

@@ -225,7 +225,7 @@ class Predictor(object):
             predictor0 = fluid.core.create_paddle_predictor(
                 analysis_predictor_config)
             # clone main predictor to test predictor.clone api
-            self.predictor = predictor0.clone()
+            self.predictor = predictor0.clone(None)
             logger.info("analysis predictor create and clone successful")
         elif predictor_mode == "Native":
             native_predictor_config = DeployConfig(model_path).native_config(

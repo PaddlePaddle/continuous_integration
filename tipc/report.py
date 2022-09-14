@@ -107,13 +107,13 @@ def print_result():
     msg += "\n"
     msg += "TOTAL: {} models\n\n".format(str(res["total_num"]))
     msg += "SUCCESS: {} models\n\n".format(str(res["success_num"]))
-    msg += " ".join(res["success_models"])
+    msg += " ".join(res["success_models"].sort())
     msg += "\n\n"
     msg += "TIMEOUT: {} models:\n".format(str(res["timeout_num"]))
-    msg += " ".join(res["timeout_models"])
+    msg += " ".join(res["timeout_models"].sort())
     msg += "\n\n"
     msg += "FAILED: {} models:\n".format(str(res["failed_num"]))
-    msg += " ".join(res["failed_models"])
+    msg += " ".join(res["failed_models"].sort())
     if res["failed_cases_num"] > 0:
         msg += "\n{} cases failed:\n".format(str(res["failed_cases_num"]))
         #for model in res["failed_models"]:

@@ -31,7 +31,7 @@ paddle_commit=`git rev-parse HEAD`
 cd -
 model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | head -n 1`
 echo ${model_name}
-output_dir="test_tipc/output/${model_name}"
+output_dir="test_tipc/output/"
 if [[ ${REPO} == "PaddleDetection" ]]; then
     output_dir="test_tipc/output"
 fi

@@ -166,6 +166,9 @@ fi
 if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp
 fi
+if [[ $REPO == "PaddleOCR" ]]; then
+    python -m pip install --retries 10 paddlenlp
+fi
 if [[ $REPO == "PaddleVideo" ]]; then
     python -m pip install --retries 10 paddlenlp
     python -m pip install --retries 10 SimpleITK

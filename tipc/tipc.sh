@@ -13,6 +13,7 @@ RECVIER=$8
 MAIL_PROXY=$9
 DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
 PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxCentos_Gcc82_Cuda10.1_cudnn7.6_trt6015_onort_Py38_Compile_H/latest/paddle_inference.tgz}
+#PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz}
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
 CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1}
 DEBUG=${DEBUG:-False}
@@ -163,6 +164,9 @@ if [[ $REPO == "PaddleSeg" ]]; then
     fi
 fi
 if [[ $REPO == "PaddleNLP" ]]; then
+    python -m pip install --retries 10 paddlenlp
+fi
+if [[ $REPO == "PaddleOCR" ]]; then
     python -m pip install --retries 10 paddlenlp
 fi
 if [[ $REPO == "PaddleVideo" ]]; then

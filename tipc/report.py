@@ -69,7 +69,7 @@ def get_info():
             stage = ""
             if ("train.py --test-only" in case) or ("main.py --test" in case):
                 stage = "eval"
-            elif ("train.py" in case) or ("main.py --validat" in case):
+            elif ("train.py" in case) or ("main.py --validat" in case) or ("tools/main.py" in case):
                 stage = "train"
             elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case):
                 stage = "dygraph2static"
@@ -96,7 +96,11 @@ def get_info():
             res["failed_models"].append(model)
         else:
             res["success_num"] += 1
+            res["success_models"].append(model)
     #res["success_num"] = res["total_num"] - res["timeout_num"] - res["failed_num"]
+    res["success_models"].sort()
+    res["failed_models"].sort()
+    res["timeout_models"].sort()
 
 
 def print_result():
@@ -106,6 +110,8 @@ def print_result():
     msg += "\n"
     msg += "TOTAL: {} models\n\n".format(str(res["total_num"]))
     msg += "SUCCESS: {} models\n\n".format(str(res["success_num"]))
+    msg += " ".join(res["success_models"])
+    msg += "\n\n"
     msg += "TIMEOUT: {} models:\n".format(str(res["timeout_num"]))
     msg += " ".join(res["timeout_models"])
     msg += "\n\n"
@@ -117,8 +123,8 @@ def print_result():
         #    for item in res["models_status"][model]:
         #        if item["status"] == "failed":
         #            msg += "Failed: {} {} {}\n".format(model, item["stage"], item["case"])
+    msg += "=" * 50
     print(msg)
-    msg = "=" * 50
 
 
 def send_mail(sender_addr, receiver_addr, repo, chain, proxy):

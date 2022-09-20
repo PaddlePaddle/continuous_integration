@@ -6,10 +6,13 @@ DOCKER_IMAGE_PDC=${DOCKER_IMAGE:-registry.baidu.com/paddlecloud/base-images:padd
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/develop-gpu-cuda10.1-cudnn7-mkl-gcc8.2/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
 ##PADDLE_WHL和FRAME_BRANCH需同步更新
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/develop-gpu-cuda10.1-cudnn7-mkl-gcc8.2/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
-PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/fullchain_test/whl/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
-FRAME_BRANCH=${FRAME_BRANCH:-develop}
+##PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/fullchain_test/whl/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
+##FRAME_BRANCH=${FRAME_BRANCH:-develop}
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/release-gpu-cuda10.1-cudnn7-mkl-gcc8.2/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl}
 #FRAME_BRANCH=${FRAME_BRANCH:-release/2.3}
+PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
+##PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/xieyunshen/InstallPackageCombine/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl}
+FRAME_BRANCH=${FRAME_BRANCH:-release/2.4}
 
 work_dir=${ROOT_PATH}/${REPO}
 mkdir -p ${work_dir}

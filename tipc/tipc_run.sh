@@ -163,7 +163,7 @@ fi
 
 if [[ $CHAIN == "chain_serving_python" ]]; then
   if [[ $REPO != "PaddleOCR" ]]; then
-    pip install paddle-serving-server-gpu==0.9.0.post101
+    pip install paddle-serving-server-gpu==0.9.0.post102
     pip install paddle_serving_client==0.9.0
     pip install paddle-serving-app==0.9.0
   fi
@@ -431,7 +431,7 @@ then
   export http_proxy=
   export https_proxy=
   python get_pdc_job_result.py pdc_job_id $REPO
-  #python get_pdc_job_log.py $REPO
+  python get_pdc_job_log.py $REPO
   
   
 fi
@@ -446,7 +446,7 @@ done
 python report.py ${REPO} ${CHAIN} ${sender} ${reciver} ${mail_proxy}
 if [[ "${DEBUG}" == "False" ]]
 then
-if [[ "$REPO" == "PaddleOCR" ]] || [[ "$REPO" == "PaddleSeg" ]] || [[ "$REPO" == "PaddleDetection" ]]
+if [[ "$REPO" == "PaddleOCR" ]] || [[ "$REPO" == "PaddleSeg" ]] || [[ "$REPO" == "PaddleDetection" ]] || [[ "$REPO" == "PaddleClas" ]] || [[ "$REPO" == "PaddleVideo" ]]
 then
     python writedb.py $task_dt $repo $repo_branch $repo_commit $chain $paddle_whl $frame_branch $frame_commit $docker_image $cuda_version $cudnn_version $python_version 
 fi

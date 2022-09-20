@@ -104,7 +104,7 @@ def select_data_day(task_dt):
 
     # 查询策略todo，问题：任务时间不在一天、paddle包不确定更新时间，每天跑的paddle包可能不同
     # 查询超时模型
-    sql_str = "select * from timeout_model where task_dt='{}' order by chain, repo".format(task_dt)
+    sql_str = "select * from timeout_model where task_dt='{}' order by chain desc, repo desc".format(task_dt)
     cursor.execute(sql_str)
     res_timeout = cursor.fetchall()
 
@@ -187,7 +187,406 @@ def select_data_day(task_dt):
     cursor.close()
     db.close()
     
-    tongji_res = {}
+    tongji_res = {
+        "chain_base": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleRec": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PARL": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PASSL": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PGL": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+        "chain_amp": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+        "chain_pact_infer_python": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+        "chain_ptq_infer_python": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+        "chain_distribution": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+        "chain_infer_cpp": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+        "chain_serving_cpp": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+        "chain_serving_python": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+        "chain_paddle2onnx": {
+            "PaddleClas": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleDetection": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleGAN": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleNLP": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleOCR": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSeg": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleSpeech": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+            "PaddleVideo": {
+                "success": 0,
+                "failed": 0,
+                "timeout": 0
+            },
+        },
+    }
     for chain, info in total_res.items():
         if chain not in tongji_res.keys():
             tongji_res[chain] = {}
@@ -204,6 +603,7 @@ def select_data_day(task_dt):
                 else:
                     pass
             
+    
     return tongji_res, fail_case, timeout_model, task_env
 
 
@@ -220,7 +620,7 @@ def select_data_week():
     cursor = db.cursor()
 
     # 查询本周数据
-    sql_str = "select * from tipc_case where yearweek(date_format(task_dt, '%Y-%m-%d')) = yearweek(now()) order by chain, repo"
+    sql_str = "select * from tipc_case where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(task_dt) order by task_dt"
     cursor.execute(sql_str)
     res = cursor.fetchall()
 
@@ -292,7 +692,7 @@ def select_data_week():
     total_res["case_fail_ratio"] = total_res["case_fail_num"] / total_res["case_total_num"]
 
     # 查询全部失败case
-    sql_str = "select * from tipc_case where status='failed' order by task_dt, chain, repo"
+    sql_str = "select * from tipc_case where status='failed' order by task_dt desc, chain desc, repo desc"
     cursor.execute(sql_str)
     res = cursor.fetchall()
 
@@ -309,7 +709,7 @@ def select_data_week():
         _icafe_sequence = item[22]
         _icafe_title = item[23]
         _log = item[11]
-        if _icafe_status not in ["关闭", "测试完成"]:
+        if _icafe_status not in ["关闭", "已关闭", "已关闭_非bug", "测试完成"]:
             # 查询卡片，更新_icafe_status, _icafe_createtime
             # 查询 http://hetu.baidu.com/api/platform/api/show?apiId=540&platformId=1615
             icafe_info = get_icafe_info(_icafe_sequence)
@@ -324,7 +724,7 @@ def select_data_week():
                     update_icafe_info(_id, _icafe_status, _icafe_createtime)
             if _icafe_status not in ["关闭", "测试完成"]:
                 icafe_res["fix"] += 1
-        if _icafe_status not in ["关闭", "测试完成"]:
+        if _icafe_status not in ["关闭", "已关闭", "已关闭_非bug", "测试完成"]:
             _fixed = "否"
         else:
             _fixed = "是"
@@ -349,24 +749,29 @@ def create_table_day(tongji_res, fail_case, timeout_model, task_env, task_dt):
     content += """
         <table border="1" align=center>
         <caption bgcolor="#989898">模型整体运行情况</caption>
-        <tr><td>链条</td><td>套件</td><td>成功</td><td>失败</td><td>超时</td></tr>
+        <tr><td>编号</td><td>链条</td><td>套件</td><td>成功</td><td>失败</td><td>超时</td></tr>
     """
     total_success = 0
     total_failed = 0
     total_timeout = 0
+    count = 1
     for chain, infos in tongji_res.items():
         for repo, item in infos.items():
             content += """
-                <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>
-            """.format(chain, repo, item["success"], item["failed"], item["timeout"])
+                <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>
+            """.format(count, chain, repo, item["success"], item["failed"], item["timeout"])
             total_success += item["success"]
             total_failed += item["failed"]
             total_timeout += item["timeout"]
+            count += 1
     content += """
-        <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>
-    """.format("总计", "", total_success, total_failed, total_timeout)
+        <tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>
+    """.format("总计", "", "", total_success, total_failed, total_timeout)
     content += """
         </table>
+        <br>
+        目前只有OCR、Seg、Detection、Clas、Video(chain_base)相关链条日志符合标准，其他套件日志未标准化，无法接入统计报表<br>
+        日志规范文档：https://ku.baidu-int.com/knowledge/HFVrC7hq1Q/t7n0qKWNJW/QMxJ7wiFu-/aGeuaCrVKznaoM
         <br><br>
     """
 

@@ -28,10 +28,7 @@ fi
 time_stamp=`date +%Y_%m_%d`
 model_name=`cat ${config_file} | grep model_name | awk -F ":" '{print $NF}' | head -n 1`
 echo ${model_name}
-output_dir="test_tipc/output/"
-if [[ ${REPO} == "PaddleDetection" ]]; then
-    output_dir="test_tipc/output"
-fi
+output_dir="test_tipc/output/${model_name}/${mode}"
 echo ${output_dir}
 if [ ! -d ${output_dir} ]; then
     echo "output_dir not found"

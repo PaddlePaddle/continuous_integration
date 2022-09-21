@@ -166,7 +166,7 @@ fi
 if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp
 fi
-if [[ $REPO == "PaddleOCR" ]]; then
+if [[ $REPO == "PaddleOCR" ]] && [[ $CHAIN == "chain_pact_infer_python" ]]; then
     python -m pip install --retries 10 paddlenlp
 fi
 if [[ $REPO == "PaddleVideo" ]]; then

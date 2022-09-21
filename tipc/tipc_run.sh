@@ -401,6 +401,10 @@ do
     then
         time_out=180
     fi
+    if [[ $config_file =~ "test_tipc/configs/transformer/" ]]
+    then
+        time_out=1800
+    fi
     run run_model $config_file $mode $time_out $model_name
 
     #    bash test_tipc/prepare.sh $config_file $mode

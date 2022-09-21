@@ -27,10 +27,10 @@ cd Paddle
 git clone --depth=100 https://github.com/LDOUBLEV/AutoLog;
 #git clone --depth=100 https://github.com/PaddlePaddle/continuous_integration.git;
 git clone --depth=100 https://github.com/zhengya01/continuous_integration.git -b v1;
-if [[ $REPO == PaddleNLP ]]; then
+if [[ $REPO == PaddleRec ]]; then
   #git clone https://github.com/huangjun12/PaddleVideo.git -b benchmark-0728 
   #git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
-  git clone https://github.com/zhengya01/PaddleNLP.git -b develop
+  git clone https://github.com/zhengya01/PaddleRec.git -b master
   #git clone https://github.com/TingquanGao/PaddleClas.git -b dev/tipc_fix_log_path
 else
   git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};

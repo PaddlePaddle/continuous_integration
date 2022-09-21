@@ -40,23 +40,32 @@ wget -q --no-proxy -O $PWD/bce_whl.tar.gz  https://paddle-docker-tar.bj.bcebos.c
 #cp continuous_integration/tipc/checkout_result.sh .
 cp -r continuous_integration/tipc/* .
 cd ${REPO}
+if [[ $REPO == "PaddleNLP" ]]; then
+    cd tests
+fi
 cp ${ROOT_PATH}/db_info.yaml ./
 cp ${ROOT_PATH}/icafe_conf.py ./
-cp ../continuous_integration/tipc/checkout_result.sh ./
-cp ../continuous_integration/tipc/report.py ./
-cd -
+cp ${work_dir}/Paddle/continuous_integration/tipc/checkout_result.sh ./
+cp ${work_dir}/Paddle/continuous_integration/tipc/report.py ./
+cd ${work_dir}/Paddle
 if [[ ${CHAIN} == "chain_distribution" ]]
 then
     cd ${REPO}
+    if [[ $REPO == "PaddleNLP" ]]; then
+        cd tests
+    fi
     cp -r ../continuous_integration/tipc/* .
     cp ${ROOT_PATH}/config.ini .
     cp ${ROOT_PATH}/pdc.sh .
     cp ${ROOT_PATH}/pdc_conf.ini .
-    cd ..
+    cd ${work_dir}/Paddle
     bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}  
 else
     bash tipc.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${DOCKER_IMAGE} ${CODE_BOS} ${FRAME_BRANCH} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 fi
 
 cd ${REPO}
+if [[ $REPO == "PaddleNLP" ]]; then
+    cd tests
+fi
 bash checkout_result.sh

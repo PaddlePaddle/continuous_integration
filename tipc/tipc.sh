@@ -96,6 +96,9 @@ then
     python setup.py install
     cd -
     cat pdc_conf.ini > ~/.paddlecli/config 
+    if [[ $REPO == "PaddleNLP" ]]; then
+        cd tests
+    fi
     bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else
 cd ./AutoLog

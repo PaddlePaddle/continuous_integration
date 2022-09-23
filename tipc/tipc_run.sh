@@ -450,7 +450,7 @@ done
 python report.py ${REPO} ${CHAIN} ${sender} ${reciver} ${mail_proxy}
 if [[ "${DEBUG}" == "False" ]]
 then
-if [[ "$REPO" == "PaddleOCR" ]] || [[ "$REPO" == "PaddleSeg" ]] || [[ "$REPO" == "PaddleDetection" ]] || [[ "$REPO" == "PaddleClas" ]] || [[ "$REPO" == "PaddleVideo" ]]
+if [[ "$REPO" == "PaddleOCR" ]] || [[ "$REPO" == "PaddleSeg" ]] || [[ "$REPO" == "PaddleDetection" ]] || [[ "$REPO" == "PaddleClas" ]] || [[ "$REPO" == "PaddleVideo" ]] || [[ "$REPO" == "PaddleGAN" ]] || [[ "$REPO" == "PaddleNLP" ]]
 then
     python writedb.py $task_dt $repo $repo_branch $repo_commit $chain $paddle_whl $frame_branch $frame_commit $docker_image $cuda_version $cudnn_version $python_version 
 fi

@@ -34,6 +34,8 @@ if [[ $REPO == PaddleRec ]]; then
   #git clone https://github.com/TingquanGao/PaddleClas.git -b dev/tipc_fix_log_path
 elif [[ $REPO == PaddleGAN ]]; then 
   git clone https://github.com/Birdylx/PaddleGAN -b tipc_bug_fix
+elif [[ $REPO == PaddleClas ]]; then 
+  git clone https://github.com/zhengya01/PaddleClas -b develop
 else
   git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
 fi

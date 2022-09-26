@@ -167,12 +167,15 @@ if [[ $REPO == "PaddleSeg" ]]; then
     fi
 fi
 if [[ $REPO == "PaddleNLP" ]]; then
+    python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
 fi
 if [[ $REPO == "PaddleOCR" ]] && [[ $CHAIN == "chain_pact_infer_python" ]]; then
+    python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
 fi
 if [[ $REPO == "PaddleVideo" ]]; then
+    python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
     python -m pip install --retries 10 SimpleITK
     python -m pip install --retries 10 lmdb 

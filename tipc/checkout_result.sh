@@ -6,14 +6,14 @@ EXIT_CODE=0
 
 
 zero=0
-if [[ -f TIMEOUT ]];then
-  timeout_number=$(cat TIMEOUT | wc -l)
-  if [ $timeout_number -ne $zero ];then
-      #echo "[TIMEOUT] There are $timeout_number models timeout:"
-      #cat TIMEOUT
-      EXIT_CODE=1
-  fi
-fi
+#if [[ -f TIMEOUT ]];then
+#  timeout_number=$(cat TIMEOUT | wc -l)
+#  if [ $timeout_number -ne $zero ];then
+#      #echo "[TIMEOUT] There are $timeout_number models timeout:"
+#      #cat TIMEOUT
+#      EXIT_CODE=0
+#  fi
+#fi
 
 log_file=RESULT
 if [[ ! -f ${log_file} ]];then

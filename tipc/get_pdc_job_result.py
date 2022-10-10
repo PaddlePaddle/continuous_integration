@@ -52,6 +52,7 @@ def get_pdc_log(job_id, REPO):
     #此处需要按照jobName找到相应的log
     result_addr = ("http://" + ip + "/filetree?action=cat&path=/home/work/containers_backup/" +
                code + "/root/paddlejob/workspace/log/train.log")
+    print(result_addr)
     try:
         result_data = requests.get(result_addr).content
     except Exception as e:
@@ -96,7 +97,7 @@ def get_job_status(pdc_job_id):
            break
        except Exception as e:
            print("watch_job_thread:paddlecloud job state except:", e)
-           time.sleep(300)
+           time.sleep(180)
            continue
     status = output_dict["jobStatus"]
     #print(status)
@@ -110,6 +111,12 @@ def update_job():
     for model, infos in JOBS_INFO.items():
         status, used_time = get_job_status(infos["job_id"])
         JOBS_INFO[model]["used_time"] = used_time
+        usetime_list = used_time.split(" hour")
+        if len(usetime_list) > 1:
+            hour = usetime_list[0]
+            if int(hour) >= 2:
+                os.popen("paddlecloud job kill %s" % (job_id))
+                print("watch_job_thread:kill jobid is %s" % (job_id))
         if status.find("success") != -1:
             JOBS_INFO[model]["status"] = "success"
         elif status.find("fail") != -1:
@@ -126,12 +133,6 @@ def update_job():
             JOBS_INFO[model]["status"] = "queue"
         elif status.find("running") != -1:
             JOBS_INFO[model]["status"] = "running"
-            usetime_list = used_time.split(" hour")
-            if len(usetime_list) > 1:
-                hour = usetime_list[0]
-                if int(hour) >= 2:
-                    os.popen("paddlecloud job kill %s" % (job_id))
-                    print("watch_job_thread:kill jobid is %s" % (job_id))
         else:
             pass
 
@@ -156,7 +157,7 @@ def watch_job():
         if not watch_job_thread_finished():
             print("watch job thread running...")
             update_job()
-            time.sleep(300)
+            time.sleep(180)
         else:
             break
 

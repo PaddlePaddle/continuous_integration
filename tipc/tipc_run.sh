@@ -148,7 +148,7 @@ fi
 
 if [[ ${REPO} == "PaddleDetection" ]]
 then
-sed -i 's/sleep 2s/sleep 5s/g' test_tipc/test_serving_infer_python.sh
+sed -i 's/sleep 2s/sleep 10s/g' test_tipc/test_serving_infer_python.sh
 fi
 
 
@@ -163,7 +163,7 @@ fi
 
 if [[ $CHAIN == "chain_serving_python" ]]; then
   if [[ $REPO != "PaddleOCR" ]]; then
-    pip install paddle-serving-server-gpu==0.9.0.post102
+    pip install paddle-serving-server-gpu==0.9.0.post101
     pip install paddle_serving_client==0.9.0
     pip install paddle-serving-app==0.9.0
   fi
@@ -401,6 +401,10 @@ do
     then
         time_out=180
     fi
+    if [[ $config_file =~ "test_tipc/configs/transformer/" ]]
+    then
+        time_out=1800
+    fi
     run run_model $config_file $mode $time_out $model_name
 
     #    bash test_tipc/prepare.sh $config_file $mode
@@ -446,7 +450,7 @@ done
 python report.py ${REPO} ${CHAIN} ${sender} ${reciver} ${mail_proxy}
 if [[ "${DEBUG}" == "False" ]]
 then
-if [[ "$REPO" == "PaddleOCR" ]] || [[ "$REPO" == "PaddleSeg" ]] || [[ "$REPO" == "PaddleDetection" ]] || [[ "$REPO" == "PaddleClas" ]] || [[ "$REPO" == "PaddleVideo" ]]
+if [[ "$REPO" == "PaddleOCR" ]] || [[ "$REPO" == "PaddleSeg" ]] || [[ "$REPO" == "PaddleDetection" ]] || [[ "$REPO" == "PaddleClas" ]] || [[ "$REPO" == "PaddleVideo" ]] || [[ "$REPO" == "PaddleGAN" ]] || [[ "$REPO" == "PaddleNLP" ]]
 then
     python writedb.py $task_dt $repo $repo_branch $repo_commit $chain $paddle_whl $frame_branch $frame_commit $docker_image $cuda_version $cudnn_version $python_version 
 fi

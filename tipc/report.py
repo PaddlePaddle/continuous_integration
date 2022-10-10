@@ -67,7 +67,7 @@ def get_info():
             model_name = tmp[1].strip()
             case = tmp[2]
             stage = ""
-            if ("train.py --test-only" in case) or ("main.py --test" in case):
+            if ("train.py --test-only" in case) or ("main.py --test" in case) or ("eval.py" in case):
                 stage = "eval"
             elif ("train.py" in case) or ("main.py --validat" in case) or ("tools/main.py" in case):
                 stage = "train"

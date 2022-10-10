@@ -11,7 +11,8 @@ FRAME_BRANCH=$6
 SENDER=$7
 RECVIER=$8
 MAIL_PROXY=$9
-DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
+#DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
+DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test}
 PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxCentos_Gcc82_Cuda10.1_cudnn7.6_trt6015_onort_Py38_Compile_H/latest/paddle_inference.tgz}
 #PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz}
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
@@ -96,6 +97,9 @@ then
     python setup.py install
     cd -
     cat pdc_conf.ini > ~/.paddlecli/config 
+    if [[ $REPO == "PaddleNLP" ]]; then
+        cd tests
+    fi
     bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else
 cd ./AutoLog
@@ -164,12 +168,19 @@ if [[ $REPO == "PaddleSeg" ]]; then
     fi
 fi
 if [[ $REPO == "PaddleNLP" ]]; then
+    python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
 fi
-if [[ $REPO == "PaddleOCR" ]]; then
+if [[ $REPO == "PaddleOCR" ]] && [[ $CHAIN == "chain_pact_infer_python" ]]; then
+    python -m pip install --retries 10 seqeval
+    python -m pip install --retries 10 paddlenlp
+fi
+if [[ $REPO == "PaddleOCR" ]] && [[ $CHAIN == "chain_ptq_infer_python" ]]; then
+    python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
 fi
 if [[ $REPO == "PaddleVideo" ]]; then
+    python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
     python -m pip install --retries 10 SimpleITK
     python -m pip install --retries 10 lmdb 

@@ -163,7 +163,7 @@ fi
 
 if [[ $CHAIN == "chain_serving_python" ]]; then
   if [[ $REPO != "PaddleOCR" ]]; then
-    pip install paddle-serving-server-gpu==0.9.0.post101
+    pip install paddle-serving-server-gpu==0.9.0.post102
     pip install paddle_serving_client==0.9.0
     pip install paddle-serving-app==0.9.0
   fi

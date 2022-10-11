@@ -121,6 +121,7 @@ def get_model_info():
                 icafe_params["detail"] = "套件：{}\r\n链条：{}\r\n模型：{}\r\ncase：{}\r\n日志：{}".format(task_env["repo"], task_env["chain"], model_name, case, log_path)
                 icafe_params["repo"] = task_env["repo"]
                 icafe_params["rd"] = icafe_conf.RD[task_env["repo"]]
+                icafe_params["qa"] = icafe_conf.QA[task_env["repo"]]
                 icafe_url, icafe_createtime, icafe_sequence, icafe_title, icafe_status = create_icafe(icafe_params)
                 icafe_rd = icafe_params["rd"]
             if model_name not in res["models_status"].keys():
@@ -164,7 +165,7 @@ def create_icafe(icafe_params):
             'repo': icafe_params['repo'],
             '需求来源': 'QA团队',
             '负责人': 'zhengya01',
-            'QA负责人': 'zhengya01',
+            'QA负责人': 'zhengya01,{}'.format(icafe_params['qa']),
             'RD负责人': icafe_params['rd'],
             '负责人所属团队': 'QA团队',
             'bug发现方式': '模型套件',

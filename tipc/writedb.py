@@ -293,5 +293,4 @@ def test():
     create_icafe(icafe_params)
 
 if __name__ == "__main__":
-    #run()
-    test()
+    run()

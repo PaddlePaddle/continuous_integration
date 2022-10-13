@@ -43,8 +43,6 @@ def select_icafe_sequence(key_str):
                          database=db_info["database"])
     cursor = db.cursor()
 
-    # 查询策略todo，问题：任务时间不在一天、paddle包不确定更新时间，每天跑的paddle包可能不同
-    # 查询超时模型
     sql_str = "select icafe_sequence from tipc_case where icafe_title like '%{}%'".format(key_str)
     print(sql_str)
     cursor.execute(sql_str)
@@ -52,6 +50,8 @@ def select_icafe_sequence(key_str):
     icafe_sequences = []
     for item in res:
         icafe_sequences.append(item[0])
+    cursor.close()
+    db.close()
     return icafe_sequences
 
 
@@ -84,6 +84,25 @@ def update_icafe(icafe_sequence, status, type_1, type_2, type_q):
     print(res)
 
 
+def update_db(key_str, icafe_status, icafe_cause):
+    """
+    更新数据库中icafe卡片的信息
+    """
+    db = pymysql.connect(host=db_info["host"],
+                         port=db_info["port"],
+                         user=db_info["user"],
+                         password=db_info["password"],
+                         database=db_info["database"])
+    cursor = db.cursor()
+
+    sql_str = "update tipc_case set icafe_status='{}', icafe_cause='{}' where icafe_title like '%{}%'".format(icafe_status, icafe_cause, key_str)
+    cursor.execute(sql_str)
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+
 def run():
     """
     """
@@ -104,6 +123,7 @@ def run():
     for icafe_sequence in icafe_sequences:
         update_icafe(icafe_sequence, status, type_1, type_2, type_q)
         time.sleep(2)
+    update_db(key_str, status, type_1)
 
 
 if __name__ == "__main__":

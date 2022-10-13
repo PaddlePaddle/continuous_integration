@@ -144,6 +144,30 @@ def upload_log(model_name, log_path, chain):
     return log_path
 
 
+def get_icafe_createtime(icafe_sequence):
+    """
+    获取icafe卡片的createdTime
+    """
+    get_data = "/{}?".format(icafe_sequence)
+    get_data += "&u={}".format(icafe_conf.ICAFE_USERNAME)
+    get_data += "&pw={}".format(icafe_conf.ICAFE_PASSWORD)
+    icafe_info = None
+    count = 3
+    while count > 0:
+        count -= 1
+        content = requests.get(icafe_conf.ICAFE_API_GETCARD_ONLINE+get_data)
+        if content.status_code == 200:
+            icafe_info = content.json()
+            break
+        time.sleep(5)
+    icafe_createtime = None
+    if icafe_info == None:
+        pass
+    if icafe_info["code"] == 200:
+        icafe_createtime = icafe_info["cards"][0]["createdTime"]
+    return icafe_createtime
+
+
 def create_icafe(icafe_params):
     """
     失败case创建icafe bug卡片
@@ -187,6 +211,7 @@ def create_icafe(icafe_params):
         icafe_sequence = res_json["issues"][0]["sequence"]
         icafe_title = res_json["issues"][0]["title"]
         icafe_status = "新建"
+        icafe_createtime = get_icafe_createtime(icafe_sequence)
     else:
         print("failed")
         print(res_json)
@@ -255,6 +280,18 @@ def run():
     get_db_info()
     write()
 
+def test():
+    """
+    """
+    get_db_info()
+    icafe_params = {"title": "", "detail": "", "repo": "", "rd": ""}
+    icafe_params["title"] = "[auto][tipc][test]"
+    icafe_params["detail"] = "zytest"
+    icafe_params["repo"] = "PaddleOCR"
+    icafe_params["rd"] = "zhengya01"
+    icafe_params["qa"] = ""
+    create_icafe(icafe_params)
 
 if __name__ == "__main__":
-    run()
+    #run()
+    test()

@@ -96,11 +96,11 @@ def get_model_info():
             if model_name in res["timeout_models"]:
                 continue
             stage = ""
-            if ("train.py --test-only" in case) or ("main.py --test" in case):
+            if ("train.py --test-only" in case) or ("main.py --test" in case) or ("qat_val.py" in case):
                 stage = "eval"
-            elif ("train.py" in case) or ("main.py --validat" in case) or ("train_copy.py" in case) or ("tools/main.py" in case):
+            elif ("train.py" in case) or ("main.py --validat" in case) or ("train_copy.py" in case) or ("tools/main.py" in case) or ("qat_train.py" in case):
                 stage = "train"
-            elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case):
+            elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case) or ("qat_export.py" in case):
                 stage = "dygraph2static"
             elif ("infer.py" in case) or ("predict_det.py" in case):
                 stage = "inference"

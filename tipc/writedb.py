@@ -89,7 +89,7 @@ def get_model_info():
             log_path = tmp[3].split(" ")[0].strip() ## 计划在RESULT中加上日志地址tmp[3]
             icafe_url = ""
             icafe_createtime = None
-            icafe_sequence = 0
+            icafe_sequence = ""
             icafe_title = ""
             icafe_status = ""
             icafe_rd = ""
@@ -177,6 +177,12 @@ def create_icafe(icafe_params):
         repo
         rd
     """
+    icafe_url = ""
+    icafe_createtime = None
+    icafe_sequence = ""
+    icafe_title = ""
+    icafe_status = ""
+
     icafe_dict = {'username': icafe_conf.ICAFE_USERNAME, 'password': icafe_conf.ICAFE_PASSWORD, 'issues': []}
     item_dict = {
          'title': icafe_params['title'],
@@ -198,23 +204,23 @@ def create_icafe(icafe_params):
     }
     icafe_dict['issues'].append(item_dict)
 
-    r = requests.post(icafe_conf.ICAFE_API_NEWCARD_ONLINE, data=json.dumps(icafe_dict))
-    print(r)
-    res_json = r.json()
-    icafe_url = ""
-    icafe_createtime = None
-    icafe_sequence = ""
-    icafe_title = ""
-    icafe_status = ""
-    if res_json["status"] == 200:
-        icafe_url = res_json["issues"][0]["url"]
-        icafe_sequence = res_json["issues"][0]["sequence"]
-        icafe_title = res_json["issues"][0]["title"]
-        icafe_status = "新建"
-        icafe_createtime = get_icafe_createtime(icafe_sequence)
-    else:
-        print("failed")
-        print(res_json)
+    try:
+        r = requests.post(icafe_conf.ICAFE_API_NEWCARD_ONLINE, data=json.dumps(icafe_dict))
+        print(r)
+        res_json = r.json()
+        if res_json["status"] == 200:
+            icafe_url = res_json["issues"][0]["url"]
+            icafe_sequence = res_json["issues"][0]["sequence"]
+            icafe_title = res_json["issues"][0]["title"]
+            icafe_status = "新建"
+            icafe_createtime = get_icafe_createtime(icafe_sequence)
+        else:
+            print("failed")
+            print(res_json)
+    except Exception as e:
+        print(e)
+        print(icafe_dict)
+        print(json.dumps(icafe_dict))
 
     return icafe_url, icafe_createtime, icafe_sequence, icafe_title, icafe_status
 
@@ -238,7 +244,6 @@ def write():
                          docker_image, cuda_version, cudnn_version, python_version, \
                          model, stage, cmd, status, icafe_url, log, icafe_status, icafe_createtime, icafe_rd, icafe_sequence, icafe_title) \
                         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    print("insert tipc_case:", sql_str)
     val = []
     for model, infos in res["models_status"].items():
         for item in infos:
@@ -260,7 +265,6 @@ def write():
                          docker_image, cuda_version, cudnn_version, python_version, \
                          model) \
                         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    print("insert timeout_model:", sql_str)
     val = []
     for model in res["timeout_models"]:
          val.append((task_env["task_dt"],

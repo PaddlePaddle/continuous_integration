@@ -238,6 +238,7 @@ def write():
                          docker_image, cuda_version, cudnn_version, python_version, \
                          model, stage, cmd, status, icafe_url, log, icafe_status, icafe_createtime, icafe_rd, icafe_sequence, icafe_title) \
                         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    print("insert tipc_case:", sql_str)
     val = []
     for model, infos in res["models_status"].items():
         for item in infos:
@@ -259,6 +260,7 @@ def write():
                          docker_image, cuda_version, cudnn_version, python_version, \
                          model) \
                         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    print("insert timeout_model:", sql_str)
     val = []
     for model in res["timeout_models"]:
          val.append((task_env["task_dt"],

@@ -107,6 +107,9 @@ python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
 
+cd ./PaddleSlim
+python setup.py install
+cd -
 
 cd ./${REPO}
 REPO_PATH=\`pwd\`
@@ -141,7 +144,7 @@ python -m pip install --retries 10 pandas
 python -m pip install --retries 10 openpyxl
 python -m pip install --retries 10 psutil
 python -m pip install --retries 10 GPUtil
-python -m pip install --retries 10 paddleslim
+#python -m pip install --retries 10 paddleslim
 #python -m pip install --retries 10 paddlenlp
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml

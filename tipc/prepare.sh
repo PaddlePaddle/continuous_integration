@@ -34,6 +34,8 @@ else
   git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
 fi
 
+# Slim develop
+git clone https://github.com/PaddlePaddle/PaddleSlim.git
 
 
 cd ${work_dir}

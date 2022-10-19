@@ -115,6 +115,7 @@ def update_job():
     for model, infos in JOBS_INFO.items():
         status, used_time = get_job_status(infos["job_id"])
         JOBS_INFO[model]["used_time"] = used_time
+        """
         #usetime_list = used_time.split(" hour")
         usetime_list = used_time.strip().split(" ")
         print("usetime_list")
@@ -124,6 +125,7 @@ def update_job():
             if int(hour) >= 2:
                 os.popen("paddlecloud job kill %s" % (infos["job_id"]))
                 print("watch_job_thread:kill jobid is %s" % (infos["job_id"]))
+        """
         if status.find("success") != -1:
             JOBS_INFO[model]["status"] = "success"
         elif status.find("fail") != -1:
@@ -165,6 +167,10 @@ def watch_job():
             print("watch job thread running...")
             update_job()
             time.sleep(180)
+            END_TIME = time.time()
+            used_time = END_TIME - START_TIME
+            if used_time > 72:
+                kill_job()
         else:
             break
 

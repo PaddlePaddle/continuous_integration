@@ -101,7 +101,7 @@ def get_job_status(pdc_job_id):
            break
        except Exception as e:
            print("watch_job_thread:paddlecloud job state except:", e)
-           time.sleep(180)
+           time.sleep(30)
            continue
     status = output_dict["jobStatus"]
     #print(status)
@@ -115,11 +115,12 @@ def update_job():
     for model, infos in JOBS_INFO.items():
         status, used_time = get_job_status(infos["job_id"])
         JOBS_INFO[model]["used_time"] = used_time
-        usetime_list = used_time.split(" hour")
+        #usetime_list = used_time.split(" hour")
+        usetime_list = used_time.strip().split(" ")
         print("usetime_list")
         print(usetime_list)
-        if len(usetime_list) > 1:
-            hour = usetime_list[0]
+        if len(usetime_list) > 3:
+            hour = usetime_list[2]
             if int(hour) >= 2:
                 os.popen("paddlecloud job kill %s" % (infos["job_id"]))
                 print("watch_job_thread:kill jobid is %s" % (infos["job_id"]))

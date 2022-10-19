@@ -166,7 +166,7 @@ def watch_job():
         if not watch_job_thread_finished():
             print("watch job thread running...")
             update_job()
-            time.sleep(180)
+            time.sleep(18)
             END_TIME = time.time()
             used_time = END_TIME - START_TIME
             if used_time > 72:

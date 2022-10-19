@@ -457,6 +457,8 @@ fi
 fi
 
 # update model_url latest
+if [[ "${DEBUG}" == "False" ]]
+then
 if [ -f "tipc_models_url_${REPO}_${CHAIN}.txt" ];then
     date_stamp=`date +%m_%d`
     push_file=./bce-python-sdk-0.8.27/BosClient.py
@@ -464,6 +466,7 @@ if [ -f "tipc_models_url_${REPO}_${CHAIN}.txt" ];then
     cp "tipc_models_url_${REPO}_${CHAIN}.txt" "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt"
     python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_latest.txt" paddle-qa/fullchain_ce_test/model_download_link
     python2 ${push_file} "tipc_models_url_${REPO}_${CHAIN}_${date_stamp}.txt" paddle-qa/fullchain_ce_test/model_download_link
+fi
 fi
 
 exit 0

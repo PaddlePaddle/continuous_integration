@@ -3,8 +3,12 @@ import sys
 import json
 import time
 import requests
+import time
 
 JOBS_INFO = {}
+START_TIME = time.time() 
+END_TIME = time.time() 
+
 
 def get_pdc_job_id(model_job_file):
     """
@@ -112,11 +116,13 @@ def update_job():
         status, used_time = get_job_status(infos["job_id"])
         JOBS_INFO[model]["used_time"] = used_time
         usetime_list = used_time.split(" hour")
+        print("usetime_list")
+        print(usetime_list)
         if len(usetime_list) > 1:
             hour = usetime_list[0]
             if int(hour) >= 2:
-                os.popen("paddlecloud job kill %s" % (job_id))
-                print("watch_job_thread:kill jobid is %s" % (job_id))
+                os.popen("paddlecloud job kill %s" % (infos["job_id"]))
+                print("watch_job_thread:kill jobid is %s" % (infos["job_id"]))
         if status.find("success") != -1:
             JOBS_INFO[model]["status"] = "success"
         elif status.find("fail") != -1:
@@ -162,10 +168,26 @@ def watch_job():
             break
 
 
+def kill_job():
+    """
+    """
+    for model, infos in JOBS_INFO.items():
+        job_id = infos["job_id"]
+        try:
+            os.popen("paddlecloud job kill %s" % (job_id))
+            print("watch_job_thread:kill jobid is %s" % (job_id))
+        except:
+            pass
+
+
 if __name__ == "__main__":
     model_job_file = sys.argv[1]
     REPO = sys.argv[2]
     get_pdc_job_id(model_job_file)
+    print("JOBS_INFO-1")
+    print(JOBS_INFO)
     watch_job() 
     get_log(REPO)
+    print("JOBS_INFO-2")
+    print(JOBS_INFO)
     

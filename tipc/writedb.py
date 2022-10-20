@@ -31,7 +31,6 @@ task_env = {
     "python_version": sys.argv[12],
 }
 
-
 db_info = {
     "host": "",
     "port": 1,
@@ -188,7 +187,7 @@ def create_icafe(icafe_params):
     item_dict = {
          'title': icafe_params['title'],
          'detail': icafe_params['detail'],
-         'type': 'Bug',
+         'type': 'TIPC',
          'parent': '55012',
          'fields': {
             '流程状态': '新建',
@@ -287,6 +286,7 @@ def run():
     get_db_info()
     write()
 
+
 def test():
     """
     """
@@ -301,3 +301,4 @@ def test():
 
 if __name__ == "__main__":
     run()
+    #test()

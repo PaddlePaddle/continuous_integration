@@ -107,9 +107,11 @@ python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
 
+if [[ "${DEBUG}" == "False" ]]; then
 cd ./PaddleSlim
 python setup.py install
 cd -
+fi
 
 cd ./${REPO}
 REPO_PATH=\`pwd\`
@@ -149,7 +151,7 @@ python -m pip install --retries 10 GPUtil
 python -m pip install --retries 10 attrdict
 python -m pip install --retries 10 pyyaml
 python -m pip install --retries 10 visualdl 
-python -m pip install --retries 10 scikit-learn
+python -m pip install --retries 10 scikit-learn==0.22.0
 python -m pip install --retries 10 swig
 python -c 'from visualdl import LogWriter'
 #git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git

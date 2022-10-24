@@ -101,6 +101,26 @@ then
     fi
     bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else
+python2 -m pip install --retries 10 pycrypto
+python -m pip install --retries 10 Cython
+python -m pip install --retries 10 distro
+python -m pip install --retries 10 opencv-python
+python -m pip install --retries 10 wget
+python -m pip install --retries 10 pynvml
+python -m pip install --retries 10 cup
+python -m pip install --retries 10 pandas
+python -m pip install --retries 10 openpyxl
+python -m pip install --retries 10 psutil
+python -m pip install --retries 10 GPUtil
+#python -m pip install --retries 10 paddleslim
+#python -m pip install --retries 10 paddlenlp
+python -m pip install --retries 10 attrdict
+python -m pip install --retries 10 pyyaml
+python -m pip install --retries 10 visualdl 
+python -m pip install --retries 10 scikit-learn==0.22.0
+python -m pip install --retries 10 swig
+python -c 'from visualdl import LogWriter'
+
 cd ./AutoLog
 python -m pip install --retries 10 -r requirements.txt
 python setup.py bdist_wheel
@@ -135,30 +155,6 @@ if [[ $REPO == "PARL" ]]; then
     export http_proxy=
     export https_proxy=
 fi
-python2 -m pip install --retries 10 pycrypto
-python -m pip install --retries 10 Cython
-python -m pip install --retries 10 distro
-python -m pip install --retries 10 opencv-python
-python -m pip install --retries 10 wget
-python -m pip install --retries 10 pynvml
-python -m pip install --retries 10 cup
-python -m pip install --retries 10 pandas
-python -m pip install --retries 10 openpyxl
-python -m pip install --retries 10 psutil
-python -m pip install --retries 10 GPUtil
-#python -m pip install --retries 10 paddleslim
-#python -m pip install --retries 10 paddlenlp
-python -m pip install --retries 10 attrdict
-python -m pip install --retries 10 pyyaml
-python -m pip install --retries 10 visualdl 
-python -m pip install --retries 10 scikit-learn==0.22.0
-python -m pip install --retries 10 swig
-python -c 'from visualdl import LogWriter'
-#git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
-#cd PaddleSlim     
-#python -m pip install -r requirements.txt
-#python setup.py install
-#cd ..
 python -m pip install --retries 10 -r requirements.txt
 
 if [[ $REPO == "PaddleSeg" ]]; then

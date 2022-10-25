@@ -128,9 +128,11 @@ cd -
 python -m pip install ./AutoLog/dist/*.whl
 
 if [[ "${DEBUG}" == "False" ]]; then
-cd ./PaddleSlim
-python setup.py install
-cd -
+    if [[ $CHAIN == "chain_pact_infer_python" ]] || [[ $CHAIN == "chain_ptq_infer_python" ]]; then
+        cd ./PaddleSlim
+        python setup.py install
+        cd -
+    fi
 fi
 
 cd ./${REPO}

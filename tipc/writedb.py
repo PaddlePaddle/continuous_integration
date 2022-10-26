@@ -67,12 +67,71 @@ def get_db_info():
         db_info["database"] = file_date["database"]
 
 
+def get_stage(case):
+    """
+    """
+    stage = ""
+    if ("train.py --test-only" in case) or ("main.py --test" in case) or ("qat_val.py" in case):
+        stage = "eval"
+    elif ("train.py" in case) or ("main.py --validat" in case) or ("train_copy.py" in case) or ("tools/main.py" in case) or ("qat_train.py" in case):
+        stage = "train"
+    elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case) or ("qat_export.py" in case):
+        stage = "dygraph2static"
+    elif ("infer.py" in case) or ("predict_det.py" in case):
+        stage = "inference"
+    else:
+        stage = "inference"
+    return stage
+
+
+def get_tag(res_str):
+    """
+    """
+    if "successfully" in res_str:
+        tag = "success"
+    else:
+        tag = "failed" 
+    return tag
+
+
+def case_status():
+    """
+    """
+    with open("RESULT", "r") as fin:
+        lines = fin.readlines()
+        """
+        todo: 提前统计出每个模型各阶段case的执行状态，以及依赖链，在后面建卡时先查询改依赖链来确定是否对本case建卡
+        """
+        case_depence = {}
+        for line in lines:
+            tmp = line.split(" - ")
+            stage = stage(tmp)
+            tag = tag(tmp[0])
+            model_name = tmp[1].strip()
+            card = "S"
+            if "gpus_0,1_" in line:
+                card = "M"
+            if model_name not in case_depence.keys():
+                case_depence.setdefault(model_name, {})
+            if stage not in case_depence[model_name].keys():
+                case_depence[model_name].setdefault(stage, {"S": [], "M": []})
+            case_depence[model_name][stage][card].append(tag)
+        return case_depence
+
+
+def need_icafe(model_name, stage, tag, card, case_depence):
+    """
+    """
+    stage_list = case_depence[model_name].keys()
+
+
 def get_model_info():
     """
     """
     with open("full_chain_list_all", "r") as fin:
         lines = fin.readlines()
         res["total_num"] = len(lines)
+
     with open("TIMEOUT", "r") as fin:
         lines = fin.readlines()
         res["timeout_num"] = len(lines)
@@ -80,6 +139,9 @@ def get_model_info():
             tmp = line.split(" ")
             model_name = tmp[0]
             res["timeout_models"].append(model_name)
+
+    need_icafe = {}
+
     with open("RESULT", "r") as fin:
         lines = fin.readlines()
         for line in lines:
@@ -95,35 +157,32 @@ def get_model_info():
             icafe_rd = ""
             if model_name in res["timeout_models"]:
                 continue
-            stage = ""
-            if ("train.py --test-only" in case) or ("main.py --test" in case) or ("qat_val.py" in case):
-                stage = "eval"
-            elif ("train.py" in case) or ("main.py --validat" in case) or ("train_copy.py" in case) or ("tools/main.py" in case) or ("qat_train.py" in case):
-                stage = "train"
-            elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case) or ("qat_export.py" in case):
-                stage = "dygraph2static"
-            elif ("infer.py" in case) or ("predict_det.py" in case):
-                stage = "inference"
-            else:
-                stage = "inference"
-            if "successfully" in tmp[0]:
-                tag = "success"
+            stage = get_stage(case)
+            tag = get_tag(tmp[0])
+
+            if model_name not in need_icafe.keys():
+                need_icafe.setdefault(model_name, True)
+
+            if tag == "success":
                 res["success_cases_num"] += 1
                 log_path = ""
             else:
-                tag = "failed"
                 res["failed_cases_num"] += 1
-                # upload log to bos
-                log_path = upload_log(model_name, log_path, task_env["chain"]) # 上传log到bos
-                # create icafe
-                icafe_params = {"title": "", "detail": "", "repo": "", "rd": ""}
-                icafe_params["title"] = "[auto][tipc][{}]{} {} {} {} 失败".format(task_env["task_dt"], task_env["repo"], task_env["chain"], model_name, stage)
-                icafe_params["detail"] = "套件：{}\r\n链条：{}\r\n模型：{}\r\ncase：{}\r\n日志：{}".format(task_env["repo"], task_env["chain"], model_name, case, log_path)
-                icafe_params["repo"] = task_env["repo"]
-                icafe_params["rd"] = icafe_conf.RD[task_env["repo"]]
-                icafe_params["qa"] = icafe_conf.QA[task_env["repo"]]
-                icafe_url, icafe_createtime, icafe_sequence, icafe_title, icafe_status = create_icafe(icafe_params)
-                icafe_rd = icafe_params["rd"]
+                if need_icafe[model_name] == True:
+                    # upload log to bos
+                    log_path = upload_log(model_name, log_path, task_env["chain"]) # 上传log到bos
+                    # create icafe
+                    icafe_params = {"title": "", "detail": "", "repo": "", "rd": ""}
+                    icafe_params["title"] = "[auto][tipc][{}]{} {} {} {} 失败".format(task_env["task_dt"], task_env["repo"], task_env["chain"], model_name, stage)
+                    icafe_params["detail"] = "套件：{}\r\n链条：{}\r\n模型：{}\r\ncase：{}\r\n日志：{}".format(task_env["repo"], task_env["chain"], model_name, case, log_path)
+                    icafe_params["repo"] = task_env["repo"]
+                    icafe_params["rd"] = icafe_conf.RD[task_env["repo"]]
+                    icafe_params["qa"] = icafe_conf.QA[task_env["repo"]]
+                    icafe_url, icafe_createtime, icafe_sequence, icafe_title, icafe_status = create_icafe(icafe_params)
+                    icafe_rd = icafe_params["rd"]
+                    need_icafe[model_name] = False
+                else:
+                    log_path = ""
             if model_name not in res["models_status"].keys():
                 res["models_status"].setdefault(model_name, [])
             res["models_status"][model_name].append({"status": tag, "case": case, "stage": stage, "icafe_url": icafe_url, "icafe_status": icafe_status, "icafe_createtime": icafe_createtime, "icafe_rd": icafe_rd, "icafe_sequence": icafe_sequence, "icafe_title": icafe_title, "log": log_path})

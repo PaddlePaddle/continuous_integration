@@ -184,7 +184,7 @@ if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 paddlenlp
 fi
 if [[ $REPO == "PaddleOCR" ]]; then
-    python -m pip instal --retries 10 yacs
+    python -m pip install --retries 10 yacs
     python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
 fi

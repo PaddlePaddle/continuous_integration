@@ -137,6 +137,11 @@ if [[ $REPO == "PaddleDetection" ]] && [[ $CHAIN == "chain_base" ]]; then
     python setup.py install
     cd -
 fi
+if [[ $REPO == "PaddleDetection" ]] && [[ $CHAIN == "chain_infer_cpp" ]]; then 
+    cd ./PaddleSlim
+    python setup.py install
+    cd -
+fi
 
 cd ./${REPO}
 REPO_PATH=\`pwd\`

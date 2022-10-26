@@ -127,12 +127,15 @@ python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
 
-if [[ "${DEBUG}" == "False" ]]; then
-    if [[ $CHAIN == "chain_pact_infer_python" ]] || [[ $CHAIN == "chain_ptq_infer_python" ]]; then
-        cd ./PaddleSlim
-        python setup.py install
-        cd -
-    fi
+if [[ $CHAIN == "chain_pact_infer_python" ]] || [[ $CHAIN == "chain_ptq_infer_python" ]]; then
+    cd ./PaddleSlim
+    python setup.py install
+    cd -
+fi
+if [[ $REPO == "PaddleDetection" ]] && [[ $CHAIN == "chain_base" ]]; then 
+    cd ./PaddleSlim
+    python setup.py install
+    cd -
 fi
 
 cd ./${REPO}

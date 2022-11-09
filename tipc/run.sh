@@ -7,6 +7,11 @@ DOCKER_IMAGE_PDC=${DOCKER_IMAGE:-registry.baidu.com/paddlecloud/base-images:padd
 PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 FRAME_BRANCH=${FRAME_BRANCH:-release/2.4}
 
+if [[ ${CHAIN} == "chain_serving_cpp" ]]
+then
+    DOCKER_IMAGE="registry.baidubce.com/paddlepaddle/serving:0.9.0-cuda10.2-cudnn8-devel"
+fi
+
 work_dir=${ROOT_PATH}/${REPO}
 mkdir -p ${work_dir}
 cd ${work_dir} && rm -rf *

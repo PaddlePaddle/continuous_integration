@@ -274,7 +274,9 @@ if [[ $chain == chain_serving_cpp ]]; then
         export CUDNN_LIBRARY='/usr/local/cuda/lib64/'
         export CUDA_CUDART_LIBRARY='/usr/local/cuda/lib64/'
         #export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT6-cuda10.1-cudnn7/targets/x86_64-linux-gnu/'
-        export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT-6.0.1.8/targets/x86_64-linux-gnu/'
+        #export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT-6.0.1.8/targets/x86_64-linux-gnu/'
+        #registry.baidubce.com/paddlepaddle/serving:0.9.0-cuda10.2-cudnn8-devel
+        export TENSORRT_LIBRARY_PATH='/usr/local/TensorRT-7.1.3.4/targets/x86_64-linux-gnu/'
         cd ..
 
         # cp 自定义op代码

@@ -73,7 +73,7 @@ def get_stage(case):
     stage = ""
     if ("train.py --test-only" in case) or ("main.py --test" in case) or ("qat_val.py" in case):
         stage = "eval"
-    elif ("train.py" in case) or ("main.py --validat" in case) or ("train_copy.py" in case) or ("tools/main.py" in case) or ("qat_train.py" in case):
+    elif ("train.py" in case) or ("main.py --validat" in case) or ("train_copy.py" in case) or ("tools/main.py" in case) or ("qat_train.py" in case) or ("tools/trainer.py" in case):
         stage = "train"
     elif ("export_model.py" in case) or ("export.py" in case) or ("to_static.py" in case) or ("qat_export.py" in case):
         stage = "dygraph2static"

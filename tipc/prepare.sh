@@ -28,8 +28,8 @@ git clone --depth=100 https://github.com/LDOUBLEV/AutoLog;
 #git clone --depth=100 https://github.com/PaddlePaddle/continuous_integration.git;
 git clone --depth=100 https://github.com/zhengya01/continuous_integration.git -b v1;
 if [[ $REPO == PaddleRec ]]; then
-  git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
-  #git clone https://github.com/zhengya01/PaddleRec.git -b master
+  #git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
+  git clone https://github.com/wangzhen38/PaddleRec.git -b fix_tipc_log
 else
   git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
 fi

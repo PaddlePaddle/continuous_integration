@@ -292,6 +292,7 @@ if [[ $chain == chain_serving_cpp ]]; then
             cp deploy/paddleserving/preprocess/preprocess_op.* ${Serving_repo_path}/core/predictor/tools/pp_shitu_tools
         elif [[ $repo == PaddleOCR ]]
         then
+            rm -rf Serving/core/general-server/op/general_detection_op.cpp
             cp -rf deploy/pdserving/general_detection_op.cpp Serving/core/general-server/op
         else
             rm -f ${Serving_repo_path}/core/general-server/op/general_clas_op.*

@@ -30,8 +30,8 @@ git clone --depth=100 https://github.com/zhengya01/continuous_integration.git -b
 if [[ $REPO == PaddleRec ]]; then
   #git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
   git clone https://github.com/wangzhen38/PaddleRec.git -b fix_tipc_log
-elif [[ $REPO == PaddleOCR ]]; then
-  git clone https://github.com/zhengya01/PaddleOCR.git -b tipc_log
+elif [[ $REPO == PaddleSeg ]]; then
+  git clone https://github.com/zhengya01/PaddleSeg.git -b tipc_log
 else
   git clone --depth=2 https://github.com/PaddlePaddle/${REPO}.git -b ${BRANCH};
 fi

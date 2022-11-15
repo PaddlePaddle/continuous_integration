@@ -32,7 +32,7 @@ nv_docker_version=`nvidia-docker version | grep NVIDIA | cut -d" " -f3`
 if version_lt ${nv_docker_version} 2.0.0; then
    echo -e "nv docker version ${nv_docker_version} is less than 2.0.0, should map CUDA_SO and DEVICES to docker"
    export CUDA_SO="$(\ls /usr/lib64/libcuda* | xargs -I{} echo '-v {}:{}') $(\ls /usr/lib64/libnvidia* | xargs -I{} echo '-v {}:{}')"
-   export DEVICES=$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
+   export DEVICES=$(\ls -d /dev/nvidia* | xargs -I{} echo '--device {}:{}')
 fi
 
 docker rm -f ${DOCKER_NAME} || echo "remove docker ""${DOCKER_NAME}"" failed"

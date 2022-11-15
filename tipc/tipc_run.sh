@@ -74,6 +74,18 @@ function run_model()
         fi
         bash test_tipc/test_train_inference_python.sh $config_file $mode 
         ;;
+    chain_dy2static)
+        bash test_tipc/prepare.sh $config_file $mode
+        last_status=${PIPESTATUS[0]}
+        if [[ ${last_status} -ne 0 ]]
+        then
+           #if NEED_ICAFE==1:
+           #create icafe
+           #NEED_ICAFE=0
+           exit ${last_status}
+        fi
+        bash test_tipc/test_train_dy2static_python.sh $config_file $mode 
+        ;;
     chain_infer_cpp)
         if [[ $repo == PaddleDetection ]]; then
             bash test_tipc/prepare.sh $config_file $mode $PADDLE_INFERENCE_TGZ
@@ -91,11 +103,11 @@ function run_model()
                exit ${last_status}
             fi
             if [[ $config_file =~ "test_tipc/config/PP-ShiTu/PPShiTu_linux_gpu_normal_normal_infer_cpp_linux_gpu_cpu.txt" ]]; then
-                set http_proxy=${HTTP_PROXY}
-                set https_proxy=${HTTPS_PROXY}
+                export http_proxy=${HTTP_PROXY}
+                export https_proxy=${HTTPS_PROXY}
                 bash test_tipc/test_inference_cpp.sh $config_file cpp_infer 0
-                set http_proxy=
-                set https_proxy=
+                export http_proxy=
+                export https_proxy=
             else
                 bash test_tipc/test_inference_cpp.sh $config_file cpp_infer 0
             fi
@@ -253,14 +265,14 @@ if [[ $chain == chain_serving_cpp ]]; then
         export OPENCV_DIR=$PWD/opencv3
 
         # clone Serving
-        set http_proxy=${HTTP_PROXY}
-        set https_proxy=${HTTPS_PROXY}
+        export http_proxy=${HTTP_PROXY}
+        export https_proxy=${HTTPS_PROXY}
         git clone https://github.com/PaddlePaddle/Serving.git -b v0.9.0 --depth=1
         cd Serving
         export Serving_repo_path=$PWD
         git submodule update --init --recursive
-        set http_proxy=
-        set https_proxy=
+        export http_proxy=
+        export https_proxy=
 
         python -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
         python -m pip install --retries 10 -r python/requirements.txt
@@ -307,8 +319,8 @@ if [[ $chain == chain_serving_cpp ]]; then
         cd Serving/
         rm -rf server-build-gpu-opencv
         mkdir server-build-gpu-opencv && cd server-build-gpu-opencv
-        set http_proxy=${HTTP_PROXY}
-        set https_proxy=${HTTPS_PROXY}
+        export http_proxy=${HTTP_PROXY}
+        export https_proxy=${HTTPS_PROXY}
         cmake -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_DIR \
             -DPYTHON_LIBRARIES=$PYTHON_LIBRARIES \
             -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE \
@@ -323,7 +335,7 @@ if [[ $chain == chain_serving_cpp ]]; then
         make -j32
 
         # 安装serving ， 设置环境变量
-        python -m pip install python/dist/paddle*
+        python -m pip install python/dist/paddle* --force-reinstall
         export SERVING_BIN=$PWD/core/general-server/serving
         unset http_proxy
         unset https_proxy
@@ -336,6 +348,11 @@ chain_base)
     file_txt=*train_infer_python.txt
     mode=lite_train_lite_infer
     time_out=600
+    ;;
+chain_dy2static) 
+    file_txt=*train_infer_python.txt
+    mode=lite_train_lite_infer
+    time_out=1200
     ;;
 chain_infer_cpp)
     file_txt=*_infer_cpp_*

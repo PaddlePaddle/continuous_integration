@@ -11,8 +11,7 @@ FRAME_BRANCH=$6
 SENDER=$7
 RECVIER=$8
 MAIL_PROXY=$9
-#DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
-DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test}
+DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
 PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxCentos_Gcc82_Cuda10.1_cudnn7.6_trt6015_onort_Py38_Compile_H/latest/paddle_inference.tgz}
 #PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz}
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
@@ -33,7 +32,7 @@ nv_docker_version=`nvidia-docker version | grep NVIDIA | cut -d" " -f3`
 if version_lt ${nv_docker_version} 2.0.0; then
    echo -e "nv docker version ${nv_docker_version} is less than 2.0.0, should map CUDA_SO and DEVICES to docker"
    export CUDA_SO="$(\ls /usr/lib64/libcuda* | xargs -I{} echo '-v {}:{}') $(\ls /usr/lib64/libnvidia* | xargs -I{} echo '-v {}:{}')"
-   export DEVICES=$(\ls /dev/nvidia* | xargs -I{} echo '--device {}:{}')
+   export DEVICES=$(\ls -d /dev/nvidia* | xargs -I{} echo '--device {}:{}')
 fi
 
 docker rm -f ${DOCKER_NAME} || echo "remove docker ""${DOCKER_NAME}"" failed"
@@ -102,12 +101,47 @@ then
     fi
     bash tipc_run.sh ${REPO} ${CHAIN} ${PADDLE_WHL} ${FRAME_BRANCH} ${DOCKER_IMAGE} ${CODE_BOS} ${SENDER} ${RECVIER} ${MAIL_PROXY}
 else
+python2 -m pip install --retries 10 pycrypto
+python -m pip install --retries 10 Cython
+python -m pip install --retries 10 distro
+python -m pip install --retries 10 opencv-python
+python -m pip install --retries 10 wget
+python -m pip install --retries 10 pynvml
+python -m pip install --retries 10 cup
+python -m pip install --retries 10 pandas
+python -m pip install --retries 10 openpyxl
+python -m pip install --retries 10 psutil
+python -m pip install --retries 10 GPUtil
+#python -m pip install --retries 10 paddleslim
+#python -m pip install --retries 10 paddlenlp
+python -m pip install --retries 10 attrdict
+python -m pip install --retries 10 pyyaml
+python -m pip install --retries 10 visualdl 
+python -m pip install --retries 10 scikit-learn==0.22.0
+python -m pip install --retries 10 swig
+python -c 'from visualdl import LogWriter'
+
 cd ./AutoLog
 python -m pip install --retries 10 -r requirements.txt
 python setup.py bdist_wheel
 cd -
 python -m pip install ./AutoLog/dist/*.whl
 
+if [[ $CHAIN == "chain_pact_infer_python" ]] || [[ $CHAIN == "chain_ptq_infer_python" ]]; then
+    cd ./PaddleSlim
+    python setup.py install
+    cd -
+fi
+if [[ $REPO == "PaddleDetection" ]] && [[ $CHAIN == "chain_base" ]]; then 
+    cd ./PaddleSlim
+    python setup.py install
+    cd -
+fi
+if [[ $REPO == "PaddleDetection" ]] && [[ $CHAIN == "chain_infer_cpp" ]]; then 
+    cd ./PaddleSlim
+    python setup.py install
+    cd -
+fi
 
 cd ./${REPO}
 REPO_PATH=\`pwd\`
@@ -131,28 +165,6 @@ if [[ $REPO == "PARL" ]]; then
     export http_proxy=
     export https_proxy=
 fi
-python2 -m pip install --retries 10 pycrypto
-python -m pip install --retries 10 Cython
-python -m pip install --retries 10 distro
-python -m pip install --retries 10 opencv-python
-python -m pip install --retries 10 wget
-python -m pip install --retries 10 pynvml
-python -m pip install --retries 10 cup
-python -m pip install --retries 10 pandas
-python -m pip install --retries 10 openpyxl
-python -m pip install --retries 10 psutil
-python -m pip install --retries 10 GPUtil
-python -m pip install --retries 10 paddleslim
-#python -m pip install --retries 10 paddlenlp
-python -m pip install --retries 10 attrdict
-python -m pip install --retries 10 pyyaml
-python -m pip install --retries 10 visualdl 
-python -c 'from visualdl import LogWriter'
-#git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
-#cd PaddleSlim     
-#python -m pip install -r requirements.txt
-#python setup.py install
-#cd ..
 python -m pip install --retries 10 -r requirements.txt
 
 if [[ $REPO == "PaddleSeg" ]]; then
@@ -171,14 +183,19 @@ if [[ $REPO == "PaddleNLP" ]]; then
     python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
 fi
-if [[ $REPO == "PaddleOCR" ]] && [[ $CHAIN == "chain_pact_infer_python" ]]; then
+if [[ $REPO == "PaddleOCR" ]]; then
+    python -m pip install --retries 10 yacs
     python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp
 fi
-if [[ $REPO == "PaddleOCR" ]] && [[ $CHAIN == "chain_ptq_infer_python" ]]; then
-    python -m pip install --retries 10 seqeval
-    python -m pip install --retries 10 paddlenlp
-fi
+#if [[ $REPO == "PaddleOCR" ]] && [[ $CHAIN == "chain_pact_infer_python" ]]; then
+#    python -m pip install --retries 10 seqeval
+#    python -m pip install --retries 10 paddlenlp
+#fi
+#if [[ $REPO == "PaddleOCR" ]] && [[ $CHAIN == "chain_ptq_infer_python" ]]; then
+#    python -m pip install --retries 10 seqeval
+#    python -m pip install --retries 10 paddlenlp
+#fi
 if [[ $REPO == "PaddleVideo" ]]; then
     python -m pip install --retries 10 seqeval
     python -m pip install --retries 10 paddlenlp

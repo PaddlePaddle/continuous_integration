@@ -350,7 +350,7 @@ chain_base)
     time_out=600
     ;;
 chain_dy2static) 
-    file_txt=*train_infer_python.txt
+    file_txt=*train_dy2static_python.txt
     mode=lite_train_lite_infer
     time_out=1200
     ;;

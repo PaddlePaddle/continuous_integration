@@ -4,8 +4,8 @@ DOCKER_IMAGE_PDC=${DOCKER_IMAGE:-registry.baidu.com/paddlecloud/base-images:padd
 ##PADDLE_WHL和FRAME_BRANCH需同步更新
 #PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/fullchain_test/whl/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
 #FRAME_BRANCH=${FRAME_BRANCH:-develop}
-PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
-FRAME_BRANCH=${FRAME_BRANCH:-release/2.4}
+PADDLE_WHL=${PADDLE_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl}
+FRAME_BRANCH=${FRAME_BRANCH:-develop}
 
 if [[ ${CHAIN} == "chain_serving_cpp" ]]
 then

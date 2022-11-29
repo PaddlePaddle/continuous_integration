@@ -179,7 +179,7 @@ function run_model()
         bash test_tipc/test_train_inference_python.sh $config_file $mode
         ;;
     *)
-        echo "chain must be chain_base chain_infer_cpp chain_amp chain_serving_cpp chain_serving_python chain_paddle2onnx chain_distribution chain_pact_infer_python chain_ptq_infer_python"
+        echo "chain must be chain_base chain_infer_cpp chain_amp chain_serving_cpp chain_serving_python chain_paddle2onnx chain_distribution chain_pact_infer_python chain_ptq_infer_python chain_dy2static"
         echo "$chain not supported at the moment"
         exit 2
         ;;
@@ -187,7 +187,9 @@ function run_model()
     esac
 }
 
-#if [[ $repo == "PaddleOCR" ]]; then
+sed -i "s/paddleslim --force-reinstall/paddleslim/g" test_tipc/prepare.sh
+
+if [[ $repo == "PaddleOCR" ]]; then
 #sed -i "s/GPUID=\$2/GPUID=\$3/g" test_tipc/test_serving_infer_python.sh
 #sed -i "s/web_service|pipeline/web_service/g" test_tipc/test_serving_infer_python.sh
 #sed -i "s/ps ux/#ps ux/g" test_tipc/test_serving_infer_python.sh
@@ -395,7 +397,7 @@ chain_ptq_infer_python)
     time_out=1800
     ;;
 *)
-    echo "chain must be chain_base chain_infer_cpp chain_amp chain_serving_cpp chain_serving_python chain_paddle2onnx chain_distribution chain_pact_infer_python chain_ptq_infer_python"
+    echo "chain must be chain_base chain_infer_cpp chain_amp chain_serving_cpp chain_serving_python chain_paddle2onnx chain_distribution chain_pact_infer_python chain_ptq_infer_python chain_dy2static"
     echo "$chain not supported at the moment"
     exit 1
     ;;

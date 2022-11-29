@@ -189,7 +189,7 @@ function run_model()
 
 sed -i "s/paddleslim --force-reinstall/paddleslim/g" test_tipc/prepare.sh
 
-if [[ $repo == "PaddleOCR" ]]; then
+#if [[ $repo == "PaddleOCR" ]]; then
 #sed -i "s/GPUID=\$2/GPUID=\$3/g" test_tipc/test_serving_infer_python.sh
 #sed -i "s/web_service|pipeline/web_service/g" test_tipc/test_serving_infer_python.sh
 #sed -i "s/ps ux/#ps ux/g" test_tipc/test_serving_infer_python.sh

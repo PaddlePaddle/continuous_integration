@@ -12,8 +12,7 @@ SENDER=$7
 RECVIER=$8
 MAIL_PROXY=$9
 DOCKER_NAME=${DOCKER_NAME:-paddle_tipc_test_${REPO}_${CHAIN}}
-PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Master_GpuAll_LinuxCentos_Gcc82_Cuda10.1_cudnn7.6_trt6015_onort_Py38_Compile_H/latest/paddle_inference.tgz}
-#PADDLE_INFERENCE_TGZ=${PADDLE_INFERENCE_TGZ:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz}
+PADDLE_WHL=${PADDLE_WHL:-https://paddle-wheel.bj.bcebos.com/develop/linux/gpu-cuda10.2-cudnn7-mkl_gcc8.2/paddlepaddle_gpu-0.0.0.post102-cp37-cp37m-linux_x86_64.whl}
 BCE_CLIENT_PATH=${BCE_CLIENT_PATH:-/home/work/bce-client}
 CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1}
 DEBUG=${DEBUG:-False}
@@ -129,16 +128,19 @@ python -m pip install ./AutoLog/dist/*.whl
 
 if [[ $CHAIN == "chain_pact_infer_python" ]] || [[ $CHAIN == "chain_ptq_infer_python" ]]; then
     cd ./PaddleSlim
+    python -m pip install -r requirements.txt
     python setup.py install
     cd -
 fi
 if [[ $REPO == "PaddleDetection" ]] && [[ $CHAIN == "chain_base" ]]; then 
     cd ./PaddleSlim
+    python -m pip install -r requirements.txt
     python setup.py install
     cd -
 fi
 if [[ $REPO == "PaddleDetection" ]] && [[ $CHAIN == "chain_infer_cpp" ]]; then 
     cd ./PaddleSlim
+    python -m pip install -r requirements.txt
     python setup.py install
     cd -
 fi
@@ -158,7 +160,7 @@ if [[ $REPO == "PaddleRec" ]]; then
 fi
 if [[ $REPO == "PARL" ]]; then
     pip uninstall protobuf -y
-    pip install protobuf=3.19.0
+    pip install protobuf==3.19.0
     export http_proxy=${HTTP_PROXY}
     export https_proxy=${HTTPS_PROXY}
     pip install git+https://github.com/rail-berkeley/d4rl@master#egg=d4rl

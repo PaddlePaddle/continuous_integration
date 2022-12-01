@@ -38,7 +38,6 @@ unset https_proxy
 
 python2 -m pip install --retries 10 pycrypto
 
-wget -q --no-proxy  https://paddle-docker-tar.bj.bcebos.com/home/bce_whl.tar.gz --no-check-certificate
 tar -zxf bce_whl.tar.gz
 wget -q --no-proxy https://paddle-qa.bj.bcebos.com/develop-gpu-cuda10.1-cudnn7-mkl-gcc8.2/paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl
 python2 bce-python-sdk-0.8.27/BosClient.py paddlepaddle_gpu-0.0.0.post101-cp37-cp37m-linux_x86_64.whl paddle-qa/fullchain_test/whl

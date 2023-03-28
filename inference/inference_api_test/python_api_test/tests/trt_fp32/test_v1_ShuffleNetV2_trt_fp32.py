@@ -40,13 +40,13 @@ def inference_ShuffleNetV2(img, model_path, params_path):
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)
     config.enable_memory_optim()
-    config.enable_tensorrt_engine(1 << 30,    # workspace_size
-            10,    # max_batch_size
-            30,    # min_subgraph_size
-            PrecisionType.Float32,    # precision
-            True,    # use_static
-            False,    # use_calib_mode
-            )
+    config.enable_tensorrt_engine(1 << 30,  # workspace_size
+                                  10,  # max_batch_size
+                                  30,  # min_subgraph_size
+                                  PrecisionType.Float32,  # precision
+                                  True,  # use_static
+                                  False,  # use_calib_mode
+                                  )
     predictor = create_predictor(config)
     input_names = predictor.get_input_names()
 
@@ -56,7 +56,7 @@ def inference_ShuffleNetV2(img, model_path, params_path):
     for i, name in enumerate(input_names):
         input_tensor = predictor.get_input_handle(name)
         input_tensor.reshape(data_input[i].shape)
-        input_tensor.copy_from_cpu(data_input[i].copy())
+        input_tensor.copy_from_cpu(data_input[i])
 
     # do the inference
     predictor.run()

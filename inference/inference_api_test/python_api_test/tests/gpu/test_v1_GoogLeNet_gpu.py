@@ -49,7 +49,7 @@ def inference_GoogLeNet(img, model_path, params_path):
     for i, name in enumerate(input_names):
         input_tensor = predictor.get_input_handle(name)
         input_tensor.reshape(data_input[i].shape)
-        input_tensor.copy_from_cpu(data_input[i].copy())
+        input_tensor.copy_from_cpu(data_input[i])
 
     # do the inference
     predictor.run()
@@ -62,7 +62,8 @@ def inference_GoogLeNet(img, model_path, params_path):
         output_data = output_tensor.copy_to_cpu()
         results.append(output_data)
     return results
-    
+
+
 @pytest.mark.p0
 def test_GoogLeNet():
     """
@@ -87,4 +88,3 @@ def test_GoogLeNet():
     # for test
     # np.save("GoogLeNet.npy",with_lr_data[0])
     # print(np.argmax(with_lr_data[0][0]))
-

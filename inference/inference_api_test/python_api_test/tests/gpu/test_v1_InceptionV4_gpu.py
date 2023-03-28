@@ -49,7 +49,7 @@ def inference_InceptionV4(img, model_path, params_path):
     for i, name in enumerate(input_names):
         input_tensor = predictor.get_input_handle(name)
         input_tensor.reshape(data_input[i].shape)
-        input_tensor.copy_from_cpu(data_input[i].copy())
+        input_tensor.copy_from_cpu(data_input[i])
 
     # do the inference
     predictor.run()
@@ -62,7 +62,8 @@ def inference_InceptionV4(img, model_path, params_path):
         output_data = output_tensor.copy_to_cpu()
         results.append(output_data)
     return results
-    
+
+
 @pytest.mark.p0
 def test_InceptionV4():
     """
@@ -83,8 +84,7 @@ def test_InceptionV4():
     with_lr_data = inference_InceptionV4(img, model_path, params_path)
     npy_result = test_model.npy_result_path("cv_class_model")
     test_model.test_diff(npy_result, with_lr_data[0], diff_standard)
-    
+
     # for test
     # np.save("InceptionV4.npy",with_lr_data[0])
     # print(np.argmax(with_lr_data[0][0]))
-

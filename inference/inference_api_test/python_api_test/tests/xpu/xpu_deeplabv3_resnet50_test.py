@@ -23,6 +23,7 @@ from paddle.inference import create_predictor
 
 from test_src import test_gpu_model_jetson
 
+
 def inference_deeplabv3_resnet50(img, model_path, params_path):
     """
     inference_deeplabv3_resnet50
@@ -44,7 +45,7 @@ def inference_deeplabv3_resnet50(img, model_path, params_path):
 
     mean = [0.5, 0.5, 0.5]
     std = [0.5, 0.5, 0.5]
-    data = image_preprocess.normalize(img,mean,std)
+    data = image_preprocess.normalize(img, mean, std)
     data_input = np.array([data]).transpose([0, 3, 1, 2])
 
     predictor = create_predictor(config)
@@ -61,6 +62,7 @@ def inference_deeplabv3_resnet50(img, model_path, params_path):
     output_data = output_handle.copy_to_cpu()
 
     return output_data
+
 
 @pytest.mark.p0
 @pytest.mark.p1

@@ -35,7 +35,7 @@ def inference_ssd_mobilenet(img, model_path, params_path):
     """
     config = Config(model_path, params_path)
     config.enable_xpu(10 * 1024 * 1024)
-    config.enable_lite_engine(PrecisionType.Float32, True) 
+    config.enable_lite_engine(PrecisionType.Float32, True)
     config.switch_ir_optim(True)
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)
@@ -47,14 +47,14 @@ def inference_ssd_mobilenet(img, model_path, params_path):
     im_size = 300
     data = image_preprocess.preprocess(img, im_size)
     scale_factor = np.array([im_size * 1. / img.shape[0], im_size *
-                            1. / img.shape[1]]).reshape((1, 2)).astype(np.float32)
+                             1. / img.shape[1]]).reshape((1, 2)).astype(np.float32)
     im_shape = np.array([im_size, im_size]).reshape((1, 2)).astype(np.float32)
     data_input = [im_shape, data, scale_factor]
 
     for i, name in enumerate(input_names):
         input_tensor = predictor.get_input_handle(name)
         input_tensor.reshape(data_input[i].shape)
-        input_tensor.copy_from_cpu(data_input[i].copy())
+        input_tensor.copy_from_cpu(data_input[i])
 
     # do the inference
     predictor.run()
@@ -93,4 +93,4 @@ def test_ssd_mobilenet():
     test_model.test_diff(npy_result, with_lr_data[0], diff_standard)
 
     # det image with box
-    #image_preprocess.draw_bbox(image_path, with_lr_data[0], save_name="ssd_mobilenet.jpg")
+    # image_preprocess.draw_bbox(image_path, with_lr_data[0], save_name="ssd_mobilenet.jpg")

@@ -32,6 +32,7 @@ FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(level=logging.INFO, format=FORMAT)
 logger = logging.getLogger(__name__)
 
+
 def prepare_predictor(model_path, trt_max_batch_size=1):
     """
     prepare predictor
@@ -68,7 +69,7 @@ def run_inference(predictor, img):
     for i, name in enumerate(input_names):
         input_tensor = predictor.get_input_handle(name)
         input_tensor.reshape(img[i].shape)
-        input_tensor.copy_from_cpu(img[i].copy())
+        input_tensor.copy_from_cpu(img[i])
 
     # do the inference
     predictor.run()

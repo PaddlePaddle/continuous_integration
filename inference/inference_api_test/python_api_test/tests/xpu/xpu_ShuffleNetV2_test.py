@@ -36,7 +36,7 @@ def inference_ShuffleNetV2(img, model_path, params_path):
     """
     config = Config(model_path, params_path)
     config.enable_xpu(10 * 1024 * 1024)
-    config.enable_lite_engine(PrecisionType.Float32, True) 
+    config.enable_lite_engine(PrecisionType.Float32, True)
     config.switch_ir_optim(True)
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)
@@ -51,7 +51,7 @@ def inference_ShuffleNetV2(img, model_path, params_path):
     for i, name in enumerate(input_names):
         input_tensor = predictor.get_input_handle(name)
         input_tensor.reshape(data_input[i].shape)
-        input_tensor.copy_from_cpu(data_input[i].copy())
+        input_tensor.copy_from_cpu(data_input[i])
 
     # do the inference
     predictor.run()

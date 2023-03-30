@@ -36,7 +36,7 @@ def inference_fcn_hrnetw18(img, model_path, params_path):
     batch_size = 1
     config = Config(model_path, params_path)
     config.enable_xpu(10 * 1024 * 1024)
-    config.enable_lite_engine(PrecisionType.Float32, True) 
+    config.enable_lite_engine(PrecisionType.Float32, True)
     config.switch_ir_optim(True)
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)

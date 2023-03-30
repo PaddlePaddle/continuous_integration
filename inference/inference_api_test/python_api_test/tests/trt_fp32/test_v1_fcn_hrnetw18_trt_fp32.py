@@ -40,13 +40,13 @@ def inference_fcn_hrnetw18(img, model_path, params_path):
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)
     config.enable_memory_optim()
-    config.enable_tensorrt_engine(1 << 30,    # workspace_size
-            1,    # max_batch_size
-            50,    # min_subgraph_size
-            PrecisionType.Float32,    # precision
-            False,    # use_static
-            False,    # use_calib_mode
-            )
+    config.enable_tensorrt_engine(1 << 30,  # workspace_size
+                                  1,  # max_batch_size
+                                  50,  # min_subgraph_size
+                                  PrecisionType.Float32,  # precision
+                                  False,  # use_static
+                                  False,  # use_calib_mode
+                                  )
     mean = [0.5, 0.5, 0.5]
     std = [0.5, 0.5, 0.5]
     data = image_preprocess.normalize(img, mean, std)

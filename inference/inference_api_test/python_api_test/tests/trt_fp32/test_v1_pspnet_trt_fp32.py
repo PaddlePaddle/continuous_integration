@@ -40,13 +40,13 @@ def inference_pspnet(img, model_path, params_path):
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)
     config.enable_memory_optim()
-    config.enable_tensorrt_engine(1 << 30,    # workspace_size
-            10,    # max_batch_size
-            30,    # min_subgraph_size
-            PrecisionType.Float32,    # precision
-            True,    # use_static
-            False,    # use_calib_mode
-            )
+    config.enable_tensorrt_engine(1 << 30,  # workspace_size
+                                  10,  # max_batch_size
+                                  30,  # min_subgraph_size
+                                  PrecisionType.Float32,  # precision
+                                  True,  # use_static
+                                  False,  # use_calib_mode
+                                  )
     mean = [0.5, 0.5, 0.5]
     std = [0.5, 0.5, 0.5]
     data = image_preprocess.normalize(img, mean, std)

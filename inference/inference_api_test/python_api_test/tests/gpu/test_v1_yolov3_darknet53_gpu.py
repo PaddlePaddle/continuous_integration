@@ -47,14 +47,14 @@ def inference_yolov3_darknet53(img, model_path, params_path):
     im_size = 608
     data = image_preprocess.preprocess(img, im_size)
     scale_factor = np.array([im_size * 1. / img.shape[0], im_size *
-                            1. / img.shape[1]]).reshape((1, 2)).astype(np.float32)
+                             1. / img.shape[1]]).reshape((1, 2)).astype(np.float32)
     im_shape = np.array([im_size, im_size]).reshape((1, 2)).astype(np.float32)
     data_input = [im_shape, data, scale_factor]
 
     for i, name in enumerate(input_names):
         input_tensor = predictor.get_input_handle(name)
         input_tensor.reshape(data_input[i].shape)
-        input_tensor.copy_from_cpu(data_input[i].copy())
+        input_tensor.copy_from_cpu(data_input[i])
 
     # do the inference
     predictor.run()
@@ -83,7 +83,7 @@ def test_yolov3_darknet53():
     test_model = test_gpu_model_jetson(model_name=model_name)
     model_path, params_path = test_model.test_comb_model_path(
         "cv_detect_model")
-    #with_lr_data = inference_yolov3_r50vd(model_path,params_path,ir_optim=True)
+    # with_lr_data = inference_yolov3_r50vd(model_path,params_path,ir_optim=True)
     img_name = 'kite.jpg'
     image_path = test_model.test_readdata(
         path="cv_detect_model", data_name=img_name)

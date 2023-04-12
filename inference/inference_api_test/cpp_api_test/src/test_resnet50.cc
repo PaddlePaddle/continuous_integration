@@ -17,8 +17,10 @@
 
 #include "gtest/gtest.h"
 #include "test_helper.h" //NOLINT
+#include <gflags/gflags.h>
 
 DEFINE_bool(disable_mkldnn_fc, false, "Disable usage of MKL-DNN's FC op");
+DEFINE_int32(paddle_num_threads, 1, "Number of threads for CPU inference");
 
 namespace paddle {
 namespace test {

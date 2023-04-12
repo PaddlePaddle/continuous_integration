@@ -27,6 +27,8 @@
 #include "test_helper.h"
 #include "bert_test_helper.h"
 
+DEFINE_int32(paddle_num_threads, 1, "Number of threads for CPU inference");
+
 namespace paddle {
 namespace test {
 void SetConfig(AnalysisConfig *config) {

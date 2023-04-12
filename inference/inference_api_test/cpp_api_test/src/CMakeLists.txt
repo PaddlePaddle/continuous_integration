@@ -47,7 +47,7 @@ link_directories("${PADDLE_LIB_THIRD_PARTY_PATH}onnxruntime/lib")
 link_directories("${PADDLE_LIB}/paddle/lib")
 
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -std=c++14")
 message("flags" ${CMAKE_CXX_FLAGS})
 
 if (USE_TENSORRT AND WITH_GPU)

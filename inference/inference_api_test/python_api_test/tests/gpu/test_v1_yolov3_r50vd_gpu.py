@@ -23,7 +23,7 @@ from paddle.inference import create_predictor
 from test_src import test_gpu_model_jetson
 
 
-def inference_yolov3_r50vd(img, model_path, params_path):
+def inference_yolov3_r50vd(img, model_path, params_path, with_ir=True):
     """
     inference_ttfnet
     Args:
@@ -36,7 +36,7 @@ def inference_yolov3_r50vd(img, model_path, params_path):
     batch_size = 1
     config = Config(model_path, params_path)
     config.enable_use_gpu(0)
-    config.switch_ir_optim(True)
+    config.switch_ir_optim(with_ir)
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)
     config.enable_memory_optim()
@@ -88,9 +88,10 @@ def test_yolov3_r50vd():
     image_path = test_model.test_readdata(
         path="cv_detect_model", data_name=img_name)
     img = cv2.imread(image_path)
-    with_lr_data = inference_yolov3_r50vd(img, model_path, params_path)
-    npy_result = test_model.npy_result_path("cv_detect_model")
-    test_model.test_diff(npy_result, with_lr_data[0], diff_standard)
+    with_ir_data = inference_yolov3_r50vd(img, model_path, params_path)
+    no_ir_data = inference_yolov3_r50vd(img, model_path, params_path, with_ir=False)
+    # npy_result = test_model.npy_result_path("cv_detect_model")
+    test_model.test_diff(no_ir_data[0], with_ir_data[0], diff_standard)
 
     # det image with box
     # np.save("yolov3_r50vd.npy",with_lr_data[0])

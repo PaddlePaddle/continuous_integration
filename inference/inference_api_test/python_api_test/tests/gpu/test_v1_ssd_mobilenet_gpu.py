@@ -22,7 +22,7 @@ from paddle.inference import create_predictor
 from test_src import test_gpu_model_jetson
 
 
-def inference_ssd_mobilenet(img, model_path, params_path):
+def inference_ssd_mobilenet(img, model_path, params_path, with_ir=True):
     """
     inference_ttfnet
     Args:
@@ -34,7 +34,7 @@ def inference_ssd_mobilenet(img, model_path, params_path):
     """
     config = Config(model_path, params_path)
     config.enable_use_gpu(0)
-    config.switch_ir_optim(True)
+    config.switch_ir_optim(with_ir)
     config.switch_use_feed_fetch_ops(False)
     config.switch_specify_input_names(True)
     config.enable_memory_optim()
@@ -85,10 +85,10 @@ def test_ssd_mobilenet():
     image_path = test_model.test_readdata(
         path="cv_detect_model", data_name=img_name)
     img = cv2.imread(image_path)
-    npy_result = test_model.npy_result_path("cv_detect_model")
-    with_lr_data = inference_ssd_mobilenet(img,
-                                           model_path, params_path)
-    test_model.test_diff(npy_result, with_lr_data[0], diff_standard)
+    # npy_result = test_model.npy_result_path("cv_detect_model")
+    with_ir_data = inference_ssd_mobilenet(img, model_path, params_path)
+    no_ir_data = inference_ssd_mobilenet(img, model_path, params_path, with_ir=False)
+    test_model.test_diff(no_ir_data[0], with_ir_data[0], diff_standard)
 
     # det image with box
     # image_preprocess.draw_bbox(image_path, with_lr_data[0], save_name="ssd_mobilenet.jpg")

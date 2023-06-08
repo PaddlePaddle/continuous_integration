@@ -97,7 +97,7 @@ if(WITH_GPU)
       set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer${CMAKE_SHARED_LIBRARY_SUFFIX})
       set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer_plugin${CMAKE_SHARED_LIBRARY_SUFFIX})
     endif()
-    set(DEPS ${DEPS} $ENV{CUDA_LIB})
+    set(DEPS ${DEPS} $ENV{CUDA_LIB}/lib64/libcudart${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
 
 include(ExternalProject)
@@ -113,15 +113,15 @@ endif()
 
 set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")
 
-set(TestFiles "test_resnet50.cc";
-              "test_bert.cc";
-              "test_ocr.cc";
-              "test_text_classification.cc";
+set(TestFiles "test_resnet50.cc"
+              "test_bert.cc"
+              "test_ocr.cc"
+              "test_text_classification.cc"
               "test_multi_thread.cc")
-set(NewApiFiles "test_clas_model.cc";
-                "test_yolo_model.cc";
-                "test_rcnn_model.cc";
-                "test_solo_model.cc";
+set(NewApiFiles "test_clas_model.cc"
+                "test_yolo_model.cc"
+                "test_rcnn_model.cc"
+                "test_solo_model.cc"
                 "test_disable_trt.cc")
 
 foreach(testsourcefile ${TestFiles})

@@ -44,7 +44,7 @@ DEFINE_string(image_shape, "3,224,224",
 
 DEFINE_bool(use_gpu, false, "use_gpu or not");
 DEFINE_bool(use_trt, false, "use trt or not");
-DECLARE_bool(use_mkldnn, false, "use mkldnn or not");
+DECLARE_bool(use_mkldnn);
 
 DEFINE_int32(thread_num, 1, "num of threads");
 DEFINE_int32(batch_size, 2, "batch size");

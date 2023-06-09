@@ -14,7 +14,7 @@
 
 #include "./new_api_config.h"
 
-namespace paddle_test {
+namespace paddle_infer {
 
 template<typename T = float>
 std::vector<T> Inference(Predictor* pred, int tid) {
@@ -95,7 +95,7 @@ TEST(test_pdclas_model, ir_compare) {
     }
 }
 
-}  // namespace paddle_test
+}  // namespace paddle_infer
 
 
 int main(int argc, char** argv) {

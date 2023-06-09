@@ -52,7 +52,7 @@ DEFINE_bool(warmup, false,
             "To reduce CI time, it sets false in default.");
 DEFINE_bool(use_gpu, false, "Whether use gpu.");
 DEFINE_bool(use_trt, false, "Whether use trt.");
-DEFINE_bool(use_mkldnn, false, "Whether use mkldnn.");
+DEFINE_bool(test_mkldnn, false, "Whether use mkldnn.");
 
 DECLARE_bool(profile);
 DECLARE_int32(paddle_num_threads);

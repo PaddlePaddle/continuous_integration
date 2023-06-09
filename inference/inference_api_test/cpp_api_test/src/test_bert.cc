@@ -44,13 +44,13 @@ void SetConfig(AnalysisConfig *config) {
 }
 
 // Compare result of NativeConfig and AnalysisConfig
-void compare(bool use_mkldnn = false) {
+void compare(bool test_mkldnn = false) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
     if (FLAGS_use_gpu) {
         cfg.EnableMemoryOptim();
     } else {
-        if (use_mkldnn) {
+        if (test_mkldnn) {
             cfg.EnableMKLDNN();
             cfg.SetCpuMathLibraryNumThreads(FLAGS_paddle_num_threads);
         }
@@ -61,10 +61,10 @@ void compare(bool use_mkldnn = false) {
         reinterpret_cast<const PaddlePredictor::Config *>(&cfg), inputs);
 }
 
-void profile(bool use_mkldnn = false) {
+void profile(bool test_mkldnn = false) {
     AnalysisConfig config;
     SetConfig(&config);
-    if (use_mkldnn) {
+    if (test_mkldnn) {
         config.EnableMKLDNN();
     }
     std::vector<std::vector<PaddleTensor>> outputs;

@@ -85,13 +85,13 @@ void SetInput(std::vector<std::vector<PaddleTensor>> *inputs) {
 }
 // Easy for profiling independently.
 // ocr, mobilenet and se_resnext50
-void profile(bool use_mkldnn = false) {
+void profile(bool test_mkldnn = false) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
     if (FLAGS_use_gpu) {
         cfg.EnableMemoryOptim();
     } else {
-        if (use_mkldnn) {
+        if (test_mkldnn) {
             cfg.EnableMKLDNN();
             cfg.SetCpuMathLibraryNumThreads(FLAGS_paddle_num_threads);
         }
@@ -120,13 +120,13 @@ void profile(bool use_mkldnn = false) {
     }
 }
 // Compare result of NativeConfig and AnalysisConfig
-void compare(bool use_mkldnn = false) {
+void compare(bool test_mkldnn = false) {
     AnalysisConfig cfg;
     SetConfig(&cfg);
     if (FLAGS_use_gpu) {
         cfg.EnableMemoryOptim();
     } else {
-        if (use_mkldnn) {
+        if (test_mkldnn) {
             cfg.EnableMKLDNN();
             cfg.SetCpuMathLibraryNumThreads(4);
         }
@@ -141,11 +141,11 @@ void compare(bool use_mkldnn = false) {
 // comapre native and analysis predictor
 TEST(Analyzer_vis, compare) { compare(); }
 // comapre native and analysis predictor with mkldnn
-TEST(Analyzer_vis, compare_mkldnn) { compare(true /* use_mkldnn */); }
+TEST(Analyzer_vis, compare_mkldnn) { compare(true /* test_mkldnn */); }
 // multithreading
 TEST(Analyzer_vis, profile) { profile(); }
 // multithreading with mkldnn
-TEST(Analyzer_vis, profile_mkldnn) { profile(true /* use_mkldnn */); }
+TEST(Analyzer_vis, profile_mkldnn) { profile(true /* test_mkldnn */); }
 
 }  // namespace test
 }  // namespace paddle

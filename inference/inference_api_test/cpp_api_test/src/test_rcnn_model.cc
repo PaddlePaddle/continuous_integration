@@ -14,7 +14,7 @@
 
 #include "./new_api_config.h"
 
-namespace paddle_test {
+namespace paddle_infer {
 
 std::vector<float> Inference(Predictor* pred, int tid) {
 // parse FLAGS_image_shape to vector
@@ -108,7 +108,7 @@ TEST(test_rcnn_model, ir_compare) {
     CompareVectors(out_data1, out_data2);
 }
 
-}  // namespace paddle_test
+}  // namespace paddle_infer
 
 
 int main(int argc, char** argv) {

@@ -36,7 +36,7 @@ void SetConfig(AnalysisConfig *cfg,
                int batch_size,
                bool use_gpu,
                bool use_trt,
-               bool use_mkldnn) {
+               bool test_mkldnn) {
     cfg->SetModel(FLAGS_infer_model + "/__model__",
                   FLAGS_infer_model + "/__params__");
     if (use_gpu) {
@@ -50,11 +50,11 @@ void SetConfig(AnalysisConfig *cfg,
     }
     cfg->SwitchIrOptim();
     cfg->SwitchSpecifyInputNames();
-    if (!use_mkldnn) {
+    if (!test_mkldnn) {
         cfg->EnableMemoryOptim();
     }
     if (!use_gpu) {
-        if (use_mkldnn) {
+        if (test_mkldnn) {
             cfg->SetCpuMathLibraryNumThreads(FLAGS_paddle_num_threads);
             cfg->EnableMKLDNN();
         }

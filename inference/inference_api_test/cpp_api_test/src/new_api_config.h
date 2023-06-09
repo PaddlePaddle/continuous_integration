@@ -44,7 +44,7 @@ DEFINE_string(image_shape, "3,224,224",
 
 DEFINE_bool(use_gpu, false, "use_gpu or not");
 DEFINE_bool(use_trt, false, "use trt or not");
-DECLARE_bool(use_mkldnn);
+DEFINE_bool(test_mkldnn, false, "test mkldnn or not");
 
 DEFINE_int32(thread_num, 1, "num of threads");
 DEFINE_int32(batch_size, 2, "batch size");
@@ -84,7 +84,7 @@ void PrepareConfig(paddle_infer::Config *config) {
   }else {
     config->DisableGpu();
     config->SetCpuMathLibraryNumThreads(FLAGS_cpu_math_library_num_threads);
-    if (FLAGS_use_mkldnn) {
+    if (FLAGS_test_mkldnn) {
       config->EnableMKLDNN();
       LOG(INFO) << "mkldnn enabled";
     }

@@ -33,11 +33,11 @@ void SetConfig(AnalysisConfig *cfg) {
   }
   cfg->SwitchIrOptim();
   cfg->SwitchSpecifyInputNames();
-  if (!FLAGS_use_mkldnn) {
+  if (!FLAGS_test_mkldnn) {
       cfg->EnableMemoryOptim();
   }
   if (!FLAGS_use_gpu) {
-      if (FLAGS_use_mkldnn) {
+      if (FLAGS_test_mkldnn) {
           cfg->SetCpuMathLibraryNumThreads(FLAGS_paddle_num_threads);
           cfg->EnableMKLDNN();
       }
@@ -115,10 +115,10 @@ void SetInput(std::vector<std::vector<PaddleTensor>> *inputs,
 }
 
 // Compare result of NativeConfig and AnalysisConfig
-void compare(bool use_mkldnn = false) {
+void compare(bool test_mkldnn = false) {
   AnalysisConfig cfg;
   SetConfig(&cfg);
-  if (use_mkldnn) {
+  if (test_mkldnn) {
     cfg.EnableMKLDNN();
     if (!FLAGS_disable_mkldnn_fc)
       cfg.pass_builder()->AppendPass("fc_mkldnn_pass");

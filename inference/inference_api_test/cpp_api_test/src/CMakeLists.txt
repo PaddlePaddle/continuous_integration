@@ -97,14 +97,7 @@ if(WITH_GPU)
       set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer${CMAKE_SHARED_LIBRARY_SUFFIX})
       set(DEPS ${DEPS} ${TENSORRT_LIB_DIR}/libnvinfer_plugin${CMAKE_SHARED_LIBRARY_SUFFIX})
     endif()
-
-    execute_process(
-      COMMAND find -L $ENV{CUDA_LIB} -name "libcudart${CMAKE_SHARED_LIBRARY_SUFFIX}"
-      OUTPUT_VARIABLE cuda_path
-      RESULT_VARIABLE cuda_result
-      ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-    set(DEPS ${DEPS} ${cuda_path})
+    set(DEPS ${DEPS} $ENV{CUDA_LIB})
 endif()
 
 include(ExternalProject)

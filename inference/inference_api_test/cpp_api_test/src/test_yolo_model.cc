@@ -14,7 +14,7 @@
 
 #include "./new_api_config.h"
 
-namespace paddle_infer {
+namespace paddle_test {
 
 std::vector<float> Inference(Predictor* pred, int tid) {
   int channels = 3;
@@ -91,7 +91,7 @@ TEST(test_yolo_model, ir_compare) {
     CompareVectors(out_data1, out_data2);
 }
 
-}  // namespace paddle_infer
+}  // namespace paddle_test
 
 
 int main(int argc, char** argv) {

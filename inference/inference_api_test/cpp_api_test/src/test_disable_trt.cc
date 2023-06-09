@@ -14,7 +14,7 @@
 
 #include "./new_api_config.h"
 
-namespace paddle_infer {
+namespace paddle_test {
 
 std::vector<std::string> trt_ops_lists{
     "mul",
@@ -123,7 +123,7 @@ TEST(test_pdclas_model, disable_trt_tester) {
     }
 }
 
-}  // namespace paddle_infer
+}  // namespace paddle_test
 
 
 int main(int argc, char** argv) {

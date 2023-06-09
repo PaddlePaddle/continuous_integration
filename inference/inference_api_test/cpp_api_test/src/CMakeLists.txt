@@ -120,12 +120,12 @@ endif()
 
 set(gtest_src_dir "${CMAKE_CURRENT_BINARY_DIR}/install/gtest/include")
 
-set(TestFiles "test_resnet50.cc"
+list(APPEND TestFiles "test_resnet50.cc"
               "test_bert.cc"
               "test_ocr.cc"
               "test_text_classification.cc"
               "test_multi_thread.cc")
-set(NewApiFiles "test_clas_model.cc"
+list(APPEND NewApiFiles "test_clas_model.cc"
                 "test_yolo_model.cc"
                 "test_rcnn_model.cc"
                 "test_solo_model.cc"

@@ -126,7 +126,8 @@ class DeployConfig(object):
             raise Exception('Config type [%s] invalid!' % config_type)
         # predictor_config.switch_ir_optim(True) # default is enabled, no need to enable
         predictor_config.switch_specify_input_names(True)
-        predictor_config.enable_memory_optim()  # enable temporarily
+        if config_type != 'mkldnn':
+            predictor_config.enable_memory_optim()
         predictor_config.switch_use_feed_fetch_ops(False)
         return predictor_config
 

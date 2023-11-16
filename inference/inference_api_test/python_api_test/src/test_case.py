@@ -86,16 +86,24 @@ class DeployConfig(object):
 
         if self.combined_model:
             predictor_config = base.core.AnalysisConfig(self.model_file,
-                                                         self.param_file)
+                                                        self.param_file)
         else:
             predictor_config = base.core.AnalysisConfig(self.param_file)
 
         if config_type == 'cpu':
             predictor_config.disable_gpu()
+            try:
+                predictor_config.disable_mkldnn()
+            except AttributeError:
+                pass
         elif config_type == 'cpu_no_ir':
             predictor_config.disable_gpu()
             predictor_config.switch_ir_optim(False)
             predictor_config.disable_glog_info()
+            try:
+                predictor_config.disable_mkldnn()
+            except AttributeError:
+                pass
         elif config_type == 'mkldnn':
             predictor_config.disable_gpu()
             predictor_config.enable_mkldnn()

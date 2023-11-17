@@ -84,6 +84,8 @@ else()
   set(DEPS ${PADDLE_LIB}/paddle/lib/libpaddle_inference${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
 
+set(DEPS ${PADDLE_LIB}/paddle/lib/libcommon${CMAKE_SHARED_LIBRARY_SUFFIX})
+
 set(EXTERNAL_LIB "-lrt -ldl -lpthread -lprotobuf")
 set(DEPS ${DEPS}
   ${MATH_LIB} ${MKLDNN_LIB} ${NGRAPH_LIB}

@@ -16,7 +16,7 @@ import os
 import sys
 import numpy as np
 import yaml
-import paddle.fluid as fluid
+import paddle.base as base
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from helper import Record, JsonInfo
@@ -79,23 +79,31 @@ class DeployConfig(object):
         """
         # following configs are only allowed to be used in analysis mode
         trt_precision_map = {
-            'trt_fp32': fluid.core.AnalysisConfig.Precision.Float32,
-            'trt_fp16': fluid.core.AnalysisConfig.Precision.Half,
-            'trt_int8': fluid.core.AnalysisConfig.Precision.Int8
+            'trt_fp32': base.core.AnalysisConfig.Precision.Float32,
+            'trt_fp16': base.core.AnalysisConfig.Precision.Half,
+            'trt_int8': base.core.AnalysisConfig.Precision.Int8
         }
 
         if self.combined_model:
-            predictor_config = fluid.core.AnalysisConfig(self.model_file,
-                                                         self.param_file)
+            predictor_config = base.core.AnalysisConfig(self.model_file,
+                                                        self.param_file)
         else:
-            predictor_config = fluid.core.AnalysisConfig(self.param_file)
+            predictor_config = base.core.AnalysisConfig(self.param_file)
 
         if config_type == 'cpu':
             predictor_config.disable_gpu()
+            try:
+                predictor_config.disable_mkldnn()
+            except AttributeError:
+                pass
         elif config_type == 'cpu_no_ir':
             predictor_config.disable_gpu()
             predictor_config.switch_ir_optim(False)
             predictor_config.disable_glog_info()
+            try:
+                predictor_config.disable_mkldnn()
+            except AttributeError:
+                pass
         elif config_type == 'mkldnn':
             predictor_config.disable_gpu()
             predictor_config.enable_mkldnn()
@@ -139,7 +147,7 @@ class DeployConfig(object):
         Returns:
             predictor_config(NativeConfig) : configuration
         """
-        predictor_config = fluid.core.NativeConfig()
+        predictor_config = base.core.NativeConfig()
         predictor_config.prog_file = self.model_file
         predictor_config.param_file = self.param_file
         if config_type == 'cpu':
@@ -160,8 +168,8 @@ class DeployConfig(object):
         Returns:
             [type]: [description]
         """
-        if type(predictor_config) is not fluid.core.AnalysisConfig:
-            raise Exception('Config [%s] is not fluid.core.AnalysisConfig' %
+        if type(predictor_config) is not base.core.AnalysisConfig:
+            raise Exception('Config [%s] is not base.core.AnalysisConfig' %
                             predictor_config)
         else:
             summary_info = {}
@@ -223,7 +231,7 @@ class Predictor(object):
 
         if predictor_mode == "Analysis":
             logger.info("current config is Analysis config")
-            predictor0 = fluid.core.create_paddle_predictor(
+            predictor0 = base.core.create_paddle_predictor(
                 analysis_predictor_config)
             # clone main predictor to test predictor.clone api
             self.predictor = predictor0.clone()
@@ -235,10 +243,10 @@ class Predictor(object):
             logger.info("current config is Native config")
             # use analysis predictor to retrive number of inputs
             analysis_predictor_config.disable_glog_info()
-            self.analysis_predictor = fluid.core.create_paddle_predictor(
+            self.analysis_predictor = base.core.create_paddle_predictor(
                 analysis_predictor_config)
             # use native predictor to predict
-            self.native_predictor = fluid.core.create_paddle_predictor(
+            self.native_predictor = base.core.create_paddle_predictor(
                 native_predictor_config)
             logger.info("native predictor create successful")
 
@@ -310,7 +318,7 @@ class Predictor(object):
             record = next(record)
             logger.info("====> input_names[{0}] = {1} <====".format(
                 i, input_data_name))
-            input_tensor = fluid.core.PaddleTensor(
+            input_tensor = base.core.PaddleTensor(
                 name=input_data_name, data=record.data)
             if hasattr(record, 'lod'):
                 input_tensor.set_lod(record.lod)

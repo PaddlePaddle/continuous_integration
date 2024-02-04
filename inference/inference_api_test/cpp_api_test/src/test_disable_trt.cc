@@ -88,7 +88,7 @@ std::vector<T> Inference(Predictor* pred, int tid) {
     auto output_t = pred->GetOutputHandle(out_names[0]);
 
     std::vector<int> output_shape = output_t->shape();
-    // retrive date to output vector
+    // retrieve date to output vector
     out_num = std::accumulate(output_shape.begin(),
                               output_shape.end(), 1,
                               std::multiplies<int>());
@@ -109,7 +109,7 @@ TEST(test_pdclas_model, disable_trt_tester) {
     PrepareConfig(&no_ir_config);
     no_ir_config.SwitchIrOptim(false); 
     services::PredictorPool pred_pool_noir(no_ir_config, 1);
-    auto out_data_noir = Inference(pred_pool_noir.Retrive(0), 0);
+    auto out_data_noir = Inference(pred_pool_noir.Retrieve(0), 0);
 
     for (int i=0; i < trt_ops_lists.size(); ++i){
         Config config;
@@ -117,7 +117,7 @@ TEST(test_pdclas_model, disable_trt_tester) {
         LOG(INFO) << "====> Exp_DisableTensorRtOPs : " << trt_ops_lists[i];
         config.Exp_DisableTensorRtOPs({trt_ops_lists[i]});
         services::PredictorPool pred_pool(config, 1);
-        auto out_data = Inference(pred_pool.Retrive(0), 0);
+        auto out_data = Inference(pred_pool.Retrieve(0), 0);
         SummaryConfig(&config);
         CompareVectors(out_data, out_data_noir);
     }

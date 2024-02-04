@@ -57,7 +57,7 @@ std::vector<T> Inference(Predictor* pred, int tid) {
     auto output_t = pred->GetOutputHandle(out_names[0]);
 
     std::vector<int> output_shape = output_t->shape();
-    // retrive date to output vector
+    // retrieve date to output vector
     out_num = std::accumulate(output_shape.begin(),
                               output_shape.end(), 1,
                               std::multiplies<int>());
@@ -83,13 +83,13 @@ TEST(test_pdclas_model, ir_compare) {
 
     if (FLAGS_model_name == "ch_ppocr_mobile_v1.1_rec_infer"){
       LOG(INFO) << "run ch_ppocr_mobile_v1.1_rec_infer model";
-      auto out_data1 = Inference<int64_t>(pred_pool.Retrive(0), 0);
-      auto out_data2 = Inference<int64_t>(pred_pool2.Retrive(0), 0);
+      auto out_data1 = Inference<int64_t>(pred_pool.Retrieve(0), 0);
+      auto out_data2 = Inference<int64_t>(pred_pool2.Retrieve(0), 0);
       SummaryConfig(&config);
       CompareVectors(out_data1, out_data2);
     } else {
-      auto out_data1 = Inference(pred_pool.Retrive(0), 0);
-      auto out_data2 = Inference(pred_pool2.Retrive(0), 0);
+      auto out_data1 = Inference(pred_pool.Retrieve(0), 0);
+      auto out_data2 = Inference(pred_pool2.Retrieve(0), 0);
       SummaryConfig(&config);
       CompareVectors(out_data1, out_data2);
     }

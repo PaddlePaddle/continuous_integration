@@ -93,7 +93,7 @@ def josn_file(key_log):
 def read_commit_id(inference_path):
     version_path = os.path.join(inference_path, "version.txt")
     with open(version_path) as f:
-        first_line = f.readlines()[0]
+        first_line = f.readlines()[1]
         f.close()
     return first_line.split()[-1]
 
@@ -138,6 +138,7 @@ def send(args, josn_file, failed_num, commit_id):
             "job_id": args.job_id,
             "repo": args.repo,
             "branch": args.branch,
+            "created": time.time(),
             "commit_id": commit_id,
             "commit_time": des_dict["commit_time"],
             "status": status,

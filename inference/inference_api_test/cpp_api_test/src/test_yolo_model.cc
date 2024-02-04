@@ -61,7 +61,7 @@ std::vector<float> Inference(Predictor* pred, int tid) {
     auto output_t = pred->GetOutputHandle(out_names[0]);
 
     std::vector<int> output_shape = output_t->shape();
-    // retrive date to output vector
+    // retrieve date to output vector
     out_num = std::accumulate(output_shape.begin(),
                               output_shape.end(), 1,
                               std::multiplies<int>());
@@ -79,13 +79,13 @@ TEST(test_yolo_model, ir_compare) {
     Config config;
     PrepareConfig(&config);
     services::PredictorPool pred_pool(config, 1);
-    auto out_data1 = Inference(pred_pool.Retrive(0), 0);
+    auto out_data1 = Inference(pred_pool.Retrieve(0), 0);
 
     Config no_ir_config;
     PrepareConfig(&no_ir_config);
     no_ir_config.SwitchIrOptim(false); 
     services::PredictorPool pred_pool2(no_ir_config, 1);
-    auto out_data2 = Inference(pred_pool2.Retrive(0), 0);
+    auto out_data2 = Inference(pred_pool2.Retrieve(0), 0);
 
     SummaryConfig(&config);
     CompareVectors(out_data1, out_data2);
